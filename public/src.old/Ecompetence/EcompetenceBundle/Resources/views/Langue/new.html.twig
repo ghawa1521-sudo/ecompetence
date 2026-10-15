@@ -1,0 +1,517 @@
+{% extends '::base.html.twig' %}
+{%from "EcompetenceBundle:macro:macro.html.twig" import recursiveDomaine,recursiveDomaineAff%}
+
+
+{% block body %}
+      
+          <!-- page content -->
+               <div>
+                            <div class="x_panel" style="background-color:white;border-radius: 4px;">
+                             
+                                <div class="x_content">
+
+                                    <div class="col-md-8 col-sm-3 col-xs-12 profile_left">
+                    {#  {% set entity=null %}
+  
+                      {% if (modif==false) %}
+                        {% set entity=entities %}  
+                      {% else %}
+                         {% set entity=niveaulangue%} 
+                      {% endif %}
+                      {%dump(entity)%}#}
+                           
+                          <table>                 
+                         
+                          <tr>  
+                         
+                                    <td style="font-weight: bold;font-size:20px; border:0px"> <b>
+                                        {% if (entity.nom) %}
+                                        {{ entity.nom }}
+                                        {% endif %}
+                                        {% if (entity.prenoms) %}
+                                        {{ entity.prenoms }}
+                                        {% endif %}</b>
+                                        {% if (entity.matricule) %}
+                                            <b  style="color: red;" >{{ ' ('~entity.matricule~')' }} </b>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>                                      
+                                      <td style="font-size:16px; border:0px;font-weight:normal;">{% if (entity.emploi) %}
+                                        {{ entity.emploi.libEmpl }}
+                                        {% endif %}
+                                    </td>
+                            
+                                 <tr>
+                                   <td style="font-size:16px; border:0px;font-weight:normal;">
+                                        {% if (entity.dateNaiss) %}
+                                        Né le {{ entity.dateNaiss|date('d-m-Y') }} 
+                                        {% endif %}
+                                        {% if (entity.LieuNaissance) %}
+                                         à {{entity.LieuNaissance.lieuNaiss}} 
+                                        {% endif %}</td>
+                                </tr>
+                                 <tr>
+                                   
+                                    <td style="font-size:16px; border:0px;font-weight:normal;">
+                                        {% if (entity.telPort) %}
+                                        Tèl:{{entity.telPort}}</td>
+                                        {% endif %}
+                                </tr>
+
+                                <tr>
+                                    
+                                    <td style="font-size:16px; border:0px;font-weight:normal;">Email :
+                                        {% if (entity.email) %}{{entity.email}}{% endif %}</td>
+                                </tr>
+                                <tr>
+                                  
+                                    <td style="font-size:16px; border:0px;font-weight:normal;">{% if (entity.emailPerso) %}{{entity.emailPerso}}{% endif %}
+                                    {%for adr in entity.adresse%}
+                                        {{adr.email}} / 
+                                    {% endfor %}
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                  
+                                    <td style="font-size:16px; border:0px;font-weight:normal;">{% if (entity.situationMatri) %}{{ entity.situationMatri }}{% endif %} 
+                                        {% if (entity.nbEnf) %}/ {{ entity.nbEnf }} enfant(s){% endif %} </td>
+                                </tr>
+                          </table> 
+                           
+                               
+          {#     {% if (entity.imageName) %}
+             <img src="{{ vich_uploader_asset(entity, 'imageFile') }}" alt="{{ entity.imageName }} Avatar">
+             
+          {% elseif (entity.sexe.id == 1 ) %}
+                <img src="{{ asset('images/img_test_agent.png')}}" Avatar>
+            {% elseif (entity.sexe.id == 2 ) %}
+                <img src="{{ asset('images/woman.png')}}" Avatar>
+            {% endif %}
+             #}                                     
+                                                    
+       
+                                           <!-- end of image cropping -->
+       </div>  
+            
+             <div class="col-lg-offset-1 col-md-3  profile_left">
+
+                                        <div class="profile_img">
+
+                                            
+           <div id="cropE-avatar">
+                                            
+          <div class="avatar-view" title="Change the avatar">                                      
+           {% if (entity.imageName) %}
+             <img src="{{ vich_uploader_asset(entity, 'imageFile') }}" alt="{{ entity.imageName }} Avatar">
+             
+          {% elseif (entity.sexe.id == 1 ) %}
+                <img src="{{ asset('images/img_test_agent.png')}}" Avatar>
+            {% elseif (entity.sexe.id == 2 ) %}
+                <img src="{{ asset('images/woman.png')}}" Avatar>
+            {% endif %}
+                                                
+                                                    
+             </div>                                          
+      </div>
+          </div>
+        </div>
+       </div>
+      </div>
+ </div>
+
+       {# {{ form_start(form) }}
+        {{ form_errors(form) }}#}
+        <style>
+        th{
+        color:white;
+        border:1px solid white;
+        font-weight:bold;
+        }
+        td{
+         color:black;
+         font-weight:bold; 
+         border:1px solid lightgray
+        }
+        thead{border:1px solid white;background-color: #008080;
+        }
+       
+         </style>
+    
+        <div class="x_panel">
+      
+          
+                        
+          <div class="row"> 
+          <div class=""> </div>
+          <div class="col-md-12"> 
+          <div class="panel panel-success">
+             
+          <div class="panel-heading"> <h2  style="color:orangered">Langues pratiquées</h2></div>
+          <div class="panel-body">
+
+          <form method='POST' action="{{ path('langue_new', { 'id':ag }) }}">
+         <div id="example-5" class="content">
+	         <div class="row col-md-12 ">
+               <div class="row col-md-10 "> </div>
+		        <div class="col-md-2"><button type="button" id="btnAdd-5" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span><b> Ajouter une langue</b></button></div>
+              <br>  
+             </div> 
+             
+         
+	         <div class="row group">
+                   <div class="form-group col-md-3">
+                        <label for="langue" class='control-label col-md-3 col-sm-3 col-xs-12'> Langue </label> 
+                        <select name="langue[]" class="form-control col-md-7 col-xs-12" required>
+                        <option value="" disabled selected>Langue</option>
+                        {% for lang in langue%}
+                            <option value="{{lang.id}}">{{lang.liblangue}}</option>
+				          {% endfor %}
+		            	</select>
+                       {# {{ form_label(form.langue, 'Langue', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form.langue) }}
+                        {{ form_widget(form.langue, {'attr':{'class': 'form-control col-md-7 col-xs-12'}}) }}#}
+                    </div>
+                    
+                    {#<div class="form-group col-md-2">
+                       <label for="TypeLangue" class='control-label col-md-3 col-sm-3 col-xs-12'>TypeLangue </label>
+                       <select name="TypeLangue[]" class='form-control col-md-7 col-xs-12' required>
+				          <option value=""disabled selected>Type Langue</option>
+                          {% for typeLang in typeLangues%}
+                            <option value="{{typeLang.libelle}}">{{typeLang.libelle}}</option>
+				          {% endfor %}
+                           <option value="Internationale">Internationale</option>
+				          <option value="Locale">Locale</option> 
+		            	</select>
+                        
+                    </div>#}
+                    <div class="form-group col-md-2">
+                       <label for="Lire" class='control-label col-md-3 col-sm-3 col-xs-12'> Lire </label>
+                       <select name="lire[]" class='form-control col-md-7 col-xs-12' required>
+				          <option value=""disabled selected>Niveau</option>
+                          <option value="Faible">Faible</option>
+				          <option value="Passable">Passable</option>
+				          <option value="Courant">Courant</option>
+                          <option value="Excellent">Excellent</option>
+		            	</select>
+                        {#{{ form_label(form.lire, 'Lire', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.lire) }}
+                        {{ form_widget(form.lire, {'attr':{'class': 'form-control col-md-7 col-xs-12','name':'lire[]'}})}}#}
+                    </div>
+                    <div class="form-group col-md-2">
+                          <label for="Ecrire" class='control-label col-md-3 col-sm-3 col-xs-12'> Ecrire </label>
+                          <select name="ecrire[]"class='form-control col-md-7 col-xs-12' required>
+                          <option value="" disabled selected>Niveau</option>
+				          <option value="Faible">Faible</option>
+				          <option value="Passable">Passable</option>
+				          <option value="Courant">Courant</option>
+                          <option value="Excellent">Excellent</option>
+		            	  </select>
+                           {# {{ form_label(form.ecrire, 'Ecrire', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                           {{ form_errors(form.ecrire) }}
+                          {{ form_widget(form.ecrire, {'attr':{'class': 'form-control col-md-7 col-xs-12','name':'ecrire[]'}})}}
+                          #}
+                    </div>
+                    <div class="form-group col-md-2">
+                         <label for="Parler" class='control-label col-md-3 col-sm-3 col-xs-12'> Parler </label>
+                         <select name="parler[]" class='form-control col-md-7 col-xs-12' required>
+                          <option value=""disabled selected>Niveau</option>
+				          <option value="Faible">Faible</option>
+				          <option value="Passable">Passable</option>
+				          <option value="Courant">Courant</option>
+                          <option value="Excellent">Excellent</option>
+		            	</select>
+                     {#   {{ form_label(form.parler, 'Parler', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form.parler) }}
+                        {{ form_widget(form.parler, {'attr':{'class': 'form-control col-md-7 col-xs-12','name':'parler[]'}}) }}
+                      #}
+                      
+                    </div>
+	            	<div class="form-group col-md-3" style='margin-top:24px;'>
+			          <button type="button" class="btn btn-danger btnRemove">Supprimer</button>
+	                </div>
+	            </div>     
+            </div>
+          
+            
+             
+
+
+         
+         
+           
+               {# {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                 {{ form_errors(form) }}
+               <div class="row">
+              
+                    <div class="form-group col-sm-3">
+                        {{ form_label(form.langue, 'Langue', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form.langue) }}
+                        {{ form_widget(form.langue, {'attr':{'class': 'form-control col-md-7 col-xs-12'}}) }}
+                    </div>
+                     <div class="form-group col-sm-3">
+                        {{ form_label(form.lire, 'Lire', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.lire) }}
+                        {{ form_widget(form.lire, {'attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                    </div>
+                    <div class="form-group col-sm-3">
+                        {{ form_label(form.ecrire, 'Ecrire', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.ecrire) }}
+                        {{ form_widget(form.ecrire, {'attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                    </div>
+                    <div class="form-group col-sm-3">
+                        {{ form_label(form.parler, 'Parler', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form.parler) }}
+                        {{ form_widget(form.parler, {'attr':{'class': 'form-control col-md-7 col-xs-12'}}) }}
+                    </div>
+                   </div>
+                   <div class="form-group row">
+                       &nbsp;&nbsp;
+                        {{ form_row(form._token) }}
+                        {{ form_widget(form.enregistrer, {'attr':{'class': 'btn btn-primary'}}) }}
+                        <input type="hidden" name="bouton" value="2">
+                    </div> #}
+                    
+                   
+                <hr>
+                <button class='btn btn-success col-md-3 '>  <span class="glyphicon glyphicon-floppy-disk"></span>  <b>  Enregistrer</b></button> 
+                <input type="hidden" name="bouton" value="2">
+           </form>
+                 
+
+                
+
+<br>
+                  <table class="table dataTable" id="table-editable"> 
+                  <thead>
+                  <tr role="row">  
+                  <th> Langue</th>
+                  <th> Type Langue </th>
+                  <th> Lire</th>
+                  <th> Ecrire </th>
+                  <th> Parler</th>
+                  <th> Action</th>
+                
+             
+                
+               </tr>  
+             </thead>
+             <tbody>
+                 
+              
+                {%if(niveaulangue)%}
+                 {% for aglangue in niveaulangue%}
+               <tr>
+                 <td style="border:1px solid gray;color:#002a80;">
+                       {%if(aglangue.langue.liblangue)%}<b>{{aglangue.langue.liblangue}} <b>{%endif%}
+                 </td>
+
+                 <td style="border:1px solid gray;color:orangered;">
+                       {%if(aglangue.langue.TypeLangue)%}{{aglangue.langue.TypeLangue}}{%endif%}
+                 </td>
+                
+                 <td style="border:1px solid gray;color:orangered;">
+                       {%if(aglangue.lire)%}{{aglangue.lire}}{%endif%}
+                 </td>
+                  
+                 <td style="border:1px solid gray;color:orangered;">
+                       {%if(aglangue.ecrire)%}{{aglangue.ecrire}}{%endif%}
+                 </td>
+                   
+                 <td style="border:1px solid gray;color:orangered;">
+                      {%if(aglangue.parler)%}{{aglangue.parler}}{%endif%}
+                 </td>
+                
+                 <td style="border:1px solid gray;width: 60px">
+                   <a class="btn btn-primary" href="{{ path('langue_supp', { 'id': aglangue.id,'ag':aglangue.agent.id }) }}">Retirer</a>
+                 </td>
+               </tr>  
+    
+                
+               {%endfor%}
+               
+               {%else%}
+                   <td colspan="5"> Aucune langue enrégistrée
+                   </td>
+               {%endif%}
+              
+             </tbody>
+
+          </table> 
+                     </div>
+                   
+                </div>
+                </div>
+
+                <div class="row">
+                <div class="col-md-2"> </div>
+                <div class="col-md-4">
+                <a class="btn btn-primary btn-block col-lg-4" href="{{ path('agent_cv1', { 'id': entity.id }) }}">Visualiser le CV</a>
+                </div>
+                {#<div class="col-md-4">
+                <a class="btn btn-info btn-block col-lg-4" style="background-color:#20B2AA; color:white;font-weight:bold; font-size:16px;" href="{{ path('experience_new', { 'id':id }) }}">
+                                   ➕ Ajouter une experience</a>
+                </div>
+                <div class="col-md-2"> </div>
+                </div>
+                
+                <div class="row">
+               <div class="col-md-2"> </div>
+               <div class="col-md-4">
+               <a class="btn btn-info btn-block col-lg-4" style="background-color:#20B2AA; color:white;font-weight:bold; font-size:16px;" href="{{ path('formation_liste', { 'id':id }) }}">
+                  ➕ Ajouter une formation</a>
+               </div>
+               <div class="col-md-4">
+               <a class="btn btn-info btn-block col-lg-4" style="background-color:#20B2AA; color:white;font-weight:bold; font-size:16px;" href="{{ path('competence_new', { 'id':id }) }}"> ➕ Ajouter une compétence</a>
+               </div>
+               <div class="col-md-2"> </div>
+               </div>#}
+
+                 <div class="col-md-2"> </div>
+                    <div class="col-md-8">
+                    <a class="btn btn-warning btn-block col-lg-4" href="{{ path('agent_cv', { 'id':id }) }}">Retour</a>
+                    </div>
+                    <div class="col-md-2"> </div>
+                    </div>
+                </div>
+
+           </div>            
+                
+                
+<style>
+.help-block{
+color:red;
+font-weight:bold;
+}
+</style>
+{% endblock %}
+
+{% block javascript %}
+
+<script type="text/javascript" src="{{ asset('design/js/wizard/jquery.smartWizard.js') }}"></script>
+<script src="{{ asset('design/js/nicescroll/jquery.nicescroll.min.js') }}"></script>
+
+<script type="text/javascript">
+        $(document).ready(function () {
+            // Smart Wizard
+            $('#wizard').smartWizard();
+
+            function onFinishCallback() {
+                $('#wizard').smartWizard('showMessage', 'Finish Clicked');
+                //alert('Finish Clicked');
+            }
+        });
+
+        $(document).ready(function () {
+            // Smart Wizard
+            $('#wizard_verticle').smartWizard({
+                transitionEffect: 'slide'
+            });
+
+        });
+        
+      
+                
+</script>
+
+ <script type="text/javascript">
+            $(document).ready(function () {
+                var tree = $('#tree').tree({
+                    primaryKey: 'id',
+                    uiLibrary: 'bootstrap',
+                    dataSource: Routing.generate('agent_cv_api'),
+                    checkboxes: true
+                });
+
+                $.ajax({
+                    type: "GET",
+                    url: Routing.generate('agent_cv_api'),
+                    dataType: "json",
+                    success: function(data) { 
+                        console.log(data);
+                    }   
+                });
+            });
+    </script>
+
+<script>
+$('#example-5').multifield({
+	section: '.group',
+	btnAdd:'#btnAdd-5',
+	btnRemove:'.btnRemove',
+});
+</script>
+
+<script type="text/javascript">
+function searchList($sourceval, $route, $destval, $div)
+{
+    $source = $($sourceval).val();
+  
+    if($sourceval=='#sec')
+    { 
+        if($source==1)
+      {   
+        $('#viewtxtpo').hide();
+        $('#viewoptpo').show();
+      }
+      else
+      {
+       $('#viewtxtpo').show(); 
+       $('#viewoptpo').hide();
+      }
+    }
+    //alert($source);
+    if ($source.length > 0 ){
+
+        $source=$source;
+        //showloader('#cacher');
+    }else{
+            $source=0;
+        }
+    
+    $paramroute = {'id': $source};
+   
+    //alert(Routing.generate($route, $paramroute));
+    //alert($div); exit;
+    //console.log($div);
+
+    $.ajax({
+       type: 'GET',
+       url: Routing.generate($route, $paramroute),
+       dataType: 'json',
+       success: function(data) {
+        //console.log(data);
+          // alert(jQuery.isEmptyObject(data));
+           
+
+           if (jQuery.isEmptyObject(data) == false){
+            //  alert("ok");
+               $($destval).children('option:not(:first)').remove();
+               //$($destval).append('<option>---- Choisir un Service-----</option>');
+               $.each(data, function(key, value) {
+                
+                    //console.log(value);
+                 $($destval).append('<option value= "' + key + '">' + value[0] + '</option>');
+
+                // $($destval).html("ggggg");
+               
+               });
+               
+                 
+               
+            
+           }
+           else{
+               //console.log($sourceval);
+              //  alert("no");
+               $($destval).children('option:not(:first)').remove();
+              
+           }
+       }
+       });
+   
+}
+
+             </script>    
+{% endblock %}

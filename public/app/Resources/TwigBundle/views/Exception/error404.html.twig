@@ -1,0 +1,28 @@
+{% extends 'error.root.html.twig' %}
+
+{% block root %}
+
+        {% block body %}
+            <body class="page-error page-error-404 layout-full">
+            <!--[if lt IE 8]>
+                    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+                <![endif]-->
+            <!-- Page -->
+            <div class="page animsition vertical-align text-center" data-animsition-in="fade-in"
+                 data-animsition-out="fade-out">
+                <div class="page-content vertical-align-middle">
+                    <header>
+                        <h1 class="animation-slide-top">PAGE INDISPONIBLE</h1>
+                        <p><img src="{{ asset('images/logoDGE.png') }}" height="200"/></p>
+                    </header>
+                    <p class="error-advise">Veuillez contacter l'administrateur</p>
+                    <a class="btn btn-success btn-round" href="{{path('agent_homepage')}}">Acceuil</a>
+                    <footer class="page-copyright">
+                        <p>Design By <a href="https://www.dge.ci">Direction Générale de l'Economie</a></p>
+                    </footer>
+                </div>
+            </div>
+            <!-- End Page -->
+        </body>
+        {% endblock %}
+    {% endblock %}

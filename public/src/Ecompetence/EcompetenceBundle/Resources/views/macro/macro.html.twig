@@ -1,0 +1,89 @@
+{% macro recursiveDomaine(domaine) %}
+    <li data-value="{{domaine.id}}">
+        <b>{{domaine}}</b>
+
+        {% if domaine.children|length %}
+            <ul>
+                {% for child in domaine.children %}
+                    {{ _self.recursiveDomaine(child) }}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </li>
+    
+{% endmacro %}
+
+{% macro recursiveDomaineTableIndent(domaine, niveau) %}
+    <tr>
+        <td>
+            {% for i in 0..(niveau-1) %}
+    &nbsp;&nbsp;&nbsp;
+{% endfor %}
+{% if niveau > 0 %}└── {% endif %}
+
+{# style différent entre racine et enfants #}
+            {% if niveau == 0 %}
+                <span style="font-weight: bold; font-size: 16px;">
+                    {{ domaine.libDomaine }}
+                </span>
+            {% else %}
+                <span style="font-weight: normal; font-size: 14px;">
+                    {{ domaine.libDomaine }}
+                </span>
+            {% endif %}
+
+        </td>
+        <td>
+            {% if niveau == 0 %}
+                <a class="btn btn-success btn-xs" href="{{ path('domaine_show', { 'id': domaine.id }) }}">Afficher</a>
+                <a class="btn btn-primary btn-xs" href="{{ path('domaine_edit', { 'id': domaine.id }) }}">Modifier</a>
+               {#<a class="btn btn-info btn-xs" href="{{ path('domaine_fils', { 'id': domaine.id }) }}">Créer sous-domaine</a>#}
+            {% else %}
+                -
+            {% endif %}
+        </td>
+    </tr>
+
+    {% if domaine.children|length %}
+        {% for child in domaine.children %}
+            {{ _self.recursiveDomaineTableIndent(child, niveau+1) }}
+        {% endfor %}
+    {% endif %}
+{% endmacro %}
+
+
+{% macro recursiveDomaineAff(domaine,cp) %}
+   
+     {% if domaine.id in cp %}
+    <li data-value="{{domaine.id}}">
+        <b>{{domaine}}</b>
+
+        {% if domaine.children|length %}
+            <ul>
+                {% for child in domaine.children %} 
+                    {{ _self.recursiveDomaineAff(child,cp) }}
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+    </li>{% endif %}
+{% endmacro %}
+    
+{# {% macro recursiveDomaineselect(domaine,cp) %}
+   
+     {% if domaine.id in cp %}
+     
+     {% set ob = "'"~domaine.id~"',"%}
+     {{ob}}
+
+        {% if domaine.children|length %}
+        
+                {% for child in domaine.children %} 
+                    {{ _self.recursiveDomaineselect(child,cp) }}
+                {% endfor %}
+          
+        {% endif %}
+
+   {% endif %}
+{% endmacro %}#}
+

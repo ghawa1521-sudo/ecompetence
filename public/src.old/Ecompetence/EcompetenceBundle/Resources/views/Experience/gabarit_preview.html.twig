@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block bootstrap %}{% endblock %}
+    <style>
+    @media print {
+
+                #printa { /* Or specify a table class */
+                    height: 100% !important;
+                    overflow: hidden;
+                    page-break-after: always;
+
+                }
+                  table{
+                    height: 99%;
+                  }
+                  footer{
+                    color: white !important;
+                  }
+                body{
+                    -webkit-print-color-adjust:exact !important;
+                    color-adjust:exact !important;
+                    width:210mm !important; 
+                    height:300mm !important;
+                    margin-top: 5px !important;
+                    margin-bottom: 2px !important;
+                    
+                    
+                    font-size: 16pt;
+                }
+               
+                #footer {
+                    position: fixed;
+                    bottom: 0;
+                    width: 100%;
+                    color: #ffffff !important;
+                    text-decoration-color: white !important;
+                    font-size: 12pt;
+                }
+                #footer-right {
+                    position: fixed;
+                    bottom: 0;
+                    right: 0;
+                }
+            }
+    @font-face {
+     font-family: 'CenturyFont';
+        src:  url("{{app.request.getSchemeAndHttpHost() ~ asset('design/fonts/CenturyGothicRegular.ttf') }}") format('truetype');
+   }
+    @font-face {
+        font-family: 'CenturyFontBold';
+        src:  url("{{app.request.getSchemeAndHttpHost() ~ asset('design/fonts/Century-gothic-bold.ttf') }}") format('truetype');
+    }
+    .gras{
+        font-family: CenturyFontBold !important;
+        font-weight: bold;
+    }
+
+   @page{
+     margin-top: 2px;
+     margin-bottom: 10px !important;
+    
+
+   }
+       #entete{
+         position: relative;
+         margin-left: -50px;
+         margin-right: 10px;
+       }
+      #footer {
+        -webkit-print-color-adjust:exact !important;
+        color-adjust:exact !important;
+    
+        margin-left: 0px;
+        margin-right: 0px;
+        color: rgb(255,255,255) !important;;
+        background-color: #65e43b;
+        bottom: 0px;
+        height: 50px;
+        width: 100%;
+        font-size: 12pt;
+      }
+
+
+
+    </style>
+</head>
+<body>
+  <div  style="font-family: CenturyFont; height:300mm;">
+  
+  
+
+ 
+   </div>
+</body>
+
+</html>

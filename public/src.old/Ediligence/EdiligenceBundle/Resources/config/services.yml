@@ -1,0 +1,7 @@
+services:
+    ediligence.board:
+        class: Ediligence\EdiligenceBundle\Controller\DefaultController
+#        arguments: [@service_id, "plain_value", %parameter%]
+    ediligence.fonctiondebase:
+        class: Ediligence\EdiligenceBundle\Fonctiondebase\Fonctions
+        arguments: [ '@doctrine.orm.default_entity_manager', '@security.context','@request_stack', '@fos_user.user_manager', '@service_container']

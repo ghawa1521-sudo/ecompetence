@@ -1,0 +1,124 @@
+{% extends '::base.html.twig' %}
+
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+{% endblock %}
+
+{% block titre_page %}
+    <div><h1>Joindre la note de mutation</h1></div>
+{% endblock %}
+{% block body %}
+	<ul class="nav nav-tabs bar_tabs" role="tablist">
+
+
+  
+  {% if is_granted('ROLE_RESPO_SRHMG') %}
+
+  <li role="presentation" class="active"><a href="#home" aria-controls="#home" role="tab" data-toggle="tab">Ressources humaines</a></li>
+
+{% endif %}
+
+</ul>
+
+	
+
+
+
+ {% if is_granted('ROLE_RESPO_SRHMG') %}
+ 	<div class="tab-content">
+	<div role="tabpanel" class="tab-pane  active" id="home">
+	       <table class="records_list table table-striped responsive-utilities jambo_table bulk_action">
+        <thead>
+            <tr>
+                <th rowspan="2">Date Demande</th>
+                <th rowspan="2">Matricule</th>
+                <th rowspan="2">Nom et Prénoms</th>
+               
+                <th rowspan="2">Motif</th>
+                <th rowspan="2">Service d'origine</th>
+                <th rowspan="2">Service Souhaité</th>
+                <th colspan="3">ETAT VALIDATION</th>
+                <th rowspan="2">Actions</th>
+            </tr>
+            <tr>
+              <th>Service d'origine</th>
+              <th>Service Souhaité</th>
+              
+              <th>Ressources Humaine</th>
+            </tr>
+        </thead>
+    {% for entity in scan %}
+        
+        <tr>
+            <td>{% if entity.datecreation %}{{ entity.datecreation|date('d-m-Y H:i:s') }}{% endif %}</td>
+            <td>{{ entity.emmeteur.matricule }}</td>
+            <td>{{ entity.emmeteur.nom }} {{ entity.emmeteur.prenoms }}</td>
+            
+            <td>{{ entity.Observ }}</td>
+            <td>{{ entity.origine }}</td>
+            <td>{{ entity.destination }}</td>
+            
+            
+            <td align="center">{% if (entity.Etatrepsupdir == 0 and entity.etatRepDest == 1) %}En Attente{# Etat 0  En attente#}
+                <span class="label label-warning"></span>
+                {% elseif (entity.Etatrepsupdir == 1) %}Validé
+                <span class="label label-success"></span>
+                {% elseif (entity.Etatrepsupdir == 2) %}Refusé
+                <span class="label label-danger"></span>
+                <br>
+                {#{{entity.motifRejet}}#}
+            {% endif %}
+                {% if entity.dateRepSupDir %}<br>{{ entity.dateRepSupDir|date('d-m-Y H:i:s') }}{% endif %}
+            </td>
+            
+        <td align="center">{% if(entity.etatRepDest == 0  ) %}Nouveau{# Etat 0  En attente#}
+            <span class="label label-warning"></span>
+            {% elseif (entity.etatRepDest == 1) %}Validé
+            <span class="label label-success"></span>
+            {% elseif (entity.etatRepDest == 2) %}Refusé
+            <span class="label label-danger"></span>
+           
+            {% endif %}
+            {% if entity.dateRepDest %}<br>{{ entity.dateRepDest|date('d-m-Y H:i:s') }}{% endif %}
+
+    </td>
+    
+            <td align="center">{% if (entity.etatRepGrh == 0 and entity.Etatrepsupdir == 1) %}En Attente{# Etat 0  En attente#}
+                <span class="label label-warning"></span>
+                {% elseif (entity.etatRepGrh == 1) %}Validé
+                <span class="label label-success"></span>
+                {% elseif (entity.etatRepGrh == 2) %}Refusé
+                <span class="label label-danger"></span>
+                <br>
+                {#{{entity.motifRejet}}#}
+            {% endif %}
+                {% if entity.dateRepGrh %}<br>{{ entity.dateRepGrh|date('d-m-Y H:i:s') }}{% endif %}
+            </td>
+    <td valign="middle">
+
+    {% if (entity.grh is not null and entity.grh.id == app.user.agent.id) and (entity.etatRepGrh == 1) %}
+        <a href="{{ path('mutation_scan', { 'id': entity.id }) }}" class="btn btn-success btn-sm col-md-12">JOINDRE</a>
+    {% endif %}
+
+                    <!--
+                    <li>
+                        <a href="{{ path('demande_valid', { 'id': entity.id }) }}">Valider</a>
+                    </li>
+                -->
+
+            </td>
+        </tr>
+        
+    {% endfor %}
+    </table>
+    </div>
+
+
+  
+{% endif %}
+
+{% endblock %}
+
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}

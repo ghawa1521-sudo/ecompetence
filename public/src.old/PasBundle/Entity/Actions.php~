@@ -1,0 +1,113 @@
+<?php
+
+namespace PasBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Actions
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="PasBundle\Repository\ActionsRepository")
+ */
+class Actions
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="libelleaction", type="string", length=500)
+     */
+    private $libelleaction;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datecreation", type="datetime")
+     */
+    private $datecreation;
+
+/**
+     * @ORM\ManyToOne(targetEntity="PasBundle\Entity\Objectifs", inversedBy="actions", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    
+    private $objectifs;
+    
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="calendar", type="string", length=500,nullable=true)
+     */
+    private $calendar;
+    
+     /**
+     * @ORM\ManyToOne(targetEntity="PasBundle\Entity\Indicateurs", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    
+    private $indicateurs;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="PasBundle\Entity\Budget", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    
+    private $budget;
+    /**
+     * @ORM\ManyToOne(targetEntity="PasBundle\Entity\Partenaires", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    
+    private $partenaires;
+    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="PasBundle\Entity\Resultats", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    
+    private $resultats;
+    /**
+     * @ORM\ManyToOne(targetEntity="PasBundle\Entity\Sources", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    
+    private $sources;
+    
+    /**
+     * @ORM\Column(name="criterenote", type="integer",nullable=true)
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $criterenote;
+    
+   /**
+     * @ORM\OneToMany(targetEntity="Notes",mappedBy="actions", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    
+    private $notes;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Agent\AgentBundle\Entity\Pj", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $piecejointe;
+    
+    
+    public function __construct()
+    {
+        $this->datecreation = new \DateTime();
+    }
+
+
+    
+}

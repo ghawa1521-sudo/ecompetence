@@ -1,0 +1,136 @@
+{% extends '::ediligence/base.html.twig' %}
+{% block javascripts %}
+{#  
+{% if (recover_enr is defined) and (recover_enr > 0) %}{% set recover_enr = '(Dernier numéro: '~recover_enr~')' %}{% else %}{% set recover_enr = '(Dernier numéro: aucun)' %}{% endif %}
+    #}
+  {#<script>
+        $('#exterieur').hide();
+        var typecourrier = $('.typecourrier');
+        
+        typecourrier.change(function () {
+            $('#ediligence_ediligencebundle_tcourrier_objet').val(" ");
+            $('#ediligence_ediligencebundle_tcourrier_objet').html(" ");
+            $('.wysihtml5-editor').html(" ");
+            if(typecourrier.val()==1){   
+                //provenance expediteur destinataire dateorigine reforigine
+                $('#ediligence_ediligencebundle_tcourrier_piecejointe_imageFile_file').prop('required',true);
+                $('#ediligence_ediligencebundle_tcourrier_reforigine').prop('required',true);
+                $('#ediligence_ediligencebundle_tcourrier_dateorigine').prop('required',true);
+                $('#ediligence_ediligencebundle_tcourrier_sourceCour').prop('required',true);
+                $('#ediligence_ediligencebundle_tcourrier_adresseenreg').prop('required',true);
+                $('#ediligence_ediligencebundle_tcourrier_texterieur').prop('required',false);
+                $('#numlib').html("Numero D\'enregistrement du courrier arrivée {{recover_enr.courrierarrive}}");
+                $('#provenance').show();
+                $('#expediteur').show();
+                $('#destinataire').show();
+                $('#dateorigine').show();
+                $('#reforigine').show();
+                $('#exterieur').hide();
+            }else if(typecourrier.val()==2){ 
+                $('#ediligence_ediligencebundle_tcourrier_piecejointe_imageFile_file').prop('required',false);
+                $('#ediligence_ediligencebundle_tcourrier_reforigine').prop('required',false);
+                $('#ediligence_ediligencebundle_tcourrier_dateorigine').prop('required',false);
+                $('#ediligence_ediligencebundle_tcourrier_sourceCour').prop('required',false);
+                $('#ediligence_ediligencebundle_tcourrier_adresseenreg').prop('required',false);
+                $('#ediligence_ediligencebundle_tcourrier_texterieur').prop('required',false);
+                $('#numlib').html("Numero D\'enregistrement du courrier départ {{recover_enr.diligence}}");
+                $('#provenance').hide();
+                $('#expediteur').hide();
+                $('#destinataire').hide();
+                $('#dateorigine').hide();
+                $('#reforigine').hide();
+                $('#exterieur').hide();
+            }else if(typecourrier.val()==3){ 
+                $('#ediligence_ediligencebundle_tcourrier_piecejointe_imageFile_file').prop('required',true);
+                $('#ediligence_ediligencebundle_tcourrier_reforigine').prop('required',false);
+                $('#ediligence_ediligencebundle_tcourrier_dateorigine').prop('required',false);
+                $('#ediligence_ediligencebundle_tcourrier_sourceCour').prop('required',false);
+                $('#ediligence_ediligencebundle_tcourrier_adresseenreg').prop('required',false);
+                $('#ediligence_ediligencebundle_tcourrier_texterieur').prop('required',true);
+                $('#numlib').html("Numero D\'enregistrement du courrier départ {{recover_enr.courrierdepart}}");
+                $('#provenance').hide();
+                $('#expediteur').hide();
+                $('#destinataire').hide();
+                $('#dateorigine').hide();
+                $('#reforigine').hide();
+                $('#exterieur').show();
+            }
+
+        });
+    </script>#}
+{% endblock %}
+
+{% block body %}
+   
+{% if (recover_enr is defined) and (recover_enr > 0) %}{% set recover_enr = '(Dernier numéro: '~recover_enr~')' %}{% else %}{% set recover_enr = '(Dernier numéro: aucun)' %}{% endif %}
+    
+  <div class="content-header">
+        <div class="header-section">
+            <h1>
+                <i class="gi gi-notes_2"></i>Transmettre courrier<br><small>Veuillez remplir les champs ci-dessous</small>
+            </h1>
+        </div>
+    </div>
+    <ul class="breadcrumb breadcrumb-top">
+        <li>Transmettre</li>
+        <li><a href="">Nouveau</a></li>
+    </ul>
+    <div class="row">
+        <div class="col-md-offset-2 col-md-8">
+            <div class="block">
+                <!-- Basic Form Elements Title -->
+                <div class="block-title">
+
+                    <h2><strong>Nouveau Courrier</strong></h2>
+                </div>
+                <!-- END Form Elements Title -->
+                {{ form_start(form) }}
+                
+                {{ form_end(form) }}
+                {#
+                {{ form_row(form.typecourrier) }}
+                
+                <div id="provenance">
+                    {{ form_row(form.sourceCour) }}
+                </div>
+                <div id="expediteur">
+                    {{ form_row(form.adresseenreg) }}
+                </div>
+                {{ form_row(form.objet) }}
+                <div id="reforigine">
+                    {{ form_row(form.reforigine) }}
+                </div>
+                <div id="dateorigine">
+                    {{ form_row(form.dateorigine) }}
+                </div>
+                
+                <label id="numlib">Numero D'enregistrement du courrier arrivée {{recover_enr.courrierarrive}}</label>
+                
+                
+                    {{ form_widget(form.numenregistrements) }}
+              
+
+                {{ form_row(form.observationscecour,{'attr':{'required':false}}) }}
+
+                {{form_widget(form.piecejointe.imageFile,{'attr':{'required':true}})}}
+                <i style="margin-bottom: 5px;">Format du Fichier (jpg, png, pdf, doc ou docx | max. 50 Mo)</i><br><br><br>
+                
+                <div id="destinataire">
+                    {{ form_row(form.destCour) }}
+                </div>
+                
+                <div id="exterieur">
+                    {{ form_row(form.texterieur) }}
+                </div> #}
+                
+
+            </div>
+
+        </div>
+    </div>
+    <ul>
+        <li>
+            <a href="{{ path('courrier') }}">Retour</a>
+        </li>
+    </ul>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends '::base.html.twig' %}
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+{% block title %}
+Imprimer les Certificats de Prises de Services
+{% endblock %}
+{% block titre_page %}
+    <div>Imprimer les Certificats de Prises de Services</div>
+{% endblock %}
+{% block body -%}
+
+    <br>
+
+
+    <table class="records_list table table-striped responsive-utilities jambo_table bulk_action">
+        <thead>
+
+            <tr>
+
+                <td><b>Matricule</td>
+                <td><b>Nom et Prénoms</b></td>
+                
+                <td><b>Direction</b></td>
+                <td><b>Date prise de Service</b></td>
+                <td><b>Etat affectation</b></td>
+                <td><b>Acte Administratif</b></td>
+                <td><b>Actions</b></td>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in valider %}
+        {% if entity.matricule is defined and entity.signeCertificat == 0 %}
+            <tr>
+                {#<td><a href="{{ path('affecter_edit', { 'id': entity.id }) }}">{{ entity.id }}</a></td>#}
+
+                <td>{{ entity.matricule }}</td>
+                <td>{{entity.nom}} {{entity.prenoms}}
+                </td>
+                
+                <td>{{ entity.direction }}</td>
+                <td>{% if entity.datePriseServiceDge %}{{ entity.datePriseServiceDge|date('d-m-Y') }}{% endif %}</td>
+                <td>
+                    {% if entity.affecter_etat==0 %}En Attente d'Affectation
+                            <label class="label label-info"></label>
+                        {% elseif entity.affecter_etat==1 %}Affecté(e) dans un Service
+                            <label class="label label-success"></label>
+                            {% elseif entity.affecter_etat==2 %}Prise de Service Validée
+                                <label class="label label-success"></label>
+                    {% endif %}
+                </td>
+                <td>
+              {% if entity.affecter_etat==1 and entity.signeNote==0 %}Note d'Affectation / non encore Signé <label class="label label-warning"></label> {% endif %}
+              {% if entity.affecter_etat==1 and entity.signeNote==1 %}Note d'Affectation /  Signé <label class="label label-success"></label> {% endif %}
+              {% if entity.affecter_etat==2 and entity.signeCertificat==0 %}Certificat de Prise de Service / non encore Signé <label class="label label-warning"></label> {% endif %}
+              {% if entity.affecter_etat==2 and entity.signeCertificat==1 %}Certificat de Prise de Service / Signé <label class="label label-success"></label> {% endif %}
+              </td>
+                <td>
+
+                      {% if  is_granted('ROLE_RESPO_SRHMG') or deleguation == 0%}
+
+                          <a class="btn btn-success" href="{{ path('affecter_view', { 'id': entity.id }) }}">
+                           IMPRIMER
+                          </a>
+                          {#<a class="btn btn-success" href="{{ path('affecter_print', { 'id': entity.id }) }}">
+                           IMPRIMER
+                          </a>#}
+
+
+
+                    {% endif %}
+
+                </td>
+            </tr>
+             {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+    {% endblock %}

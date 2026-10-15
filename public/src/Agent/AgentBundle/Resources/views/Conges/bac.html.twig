@@ -1,0 +1,178 @@
+{% extends '::base.html.twig' %}
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+    <style>
+        .dataTables_filter{
+            width: auto !important;
+        }
+        .records_list{
+            width:100% !important;
+        }
+    </style>
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+{% block body -%}
+
+    <ul class="nav nav-tabs bar_tabs" role="tablist">
+
+        <li role="presentation">
+            <a href="#bac" aria-controls="profile" role="tab" data-toggle="tab">Bac à impression <span class="label label-danger">{{bac|length}}</span></a>
+        </li>
+        <li role="presentation">
+            <a href="#bacold" aria-controls="profile" role="tab" data-toggle="tab">Bac à réimpression </a>
+        </li>
+
+    </ul>
+
+    <div class="tab-content">
+
+        <div role="tabpanel" class="tab-pane active" id="bac">
+            <div class="x_title">
+                <h2>Bac à impression<small> </small></h2>
+                <div class="clearfix"></div>
+            </div>
+
+            <table class="records_list table table-striped responsive-utilities jambo_table bulk_action" style="width: 100% !important;">
+                <thead>
+                    <tr>
+                        <th>Date de création</th>
+                        <th>Service / Direction</th>
+                        <th>Type de Congés</th>
+                        <th>Nom & Prénoms</th>
+                        <th>Date de départ</th>
+                        <th>Date de fin</th>
+                        <td>Nombre jours</td>
+                        <th>Date reprise</th>
+                        <th>Etat</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entitiesService in bac %}
+                        <tr>
+                            <td>{% if entitiesService.datecreation %}{{ entitiesService.datecreation|date('H:i:s d-m-Y') }}{% endif %}</td>
+                            <td>{% if entitiesService.agent.Direction %}{{entitiesService.agent.Direction.sigle}}{% endif %}</td>
+                            <td>{{entitiesService.typeConges.libelle}}</td>
+                            <td>{% if entitiesService.agent %}{{entitiesService.agent.matricule}}|{{entitiesService.agent.nom}} {{entitiesService.agent.prenoms}}{% endif %}</td>
+                            <td>{% if entitiesService.datedebut %}{{ entitiesService.datedebut|date('d-m-Y') }}{% endif %}</td>
+                            <td>{% if entitiesService.datefin %}{{ entitiesService.datefin|date('d-m-Y') }}{% endif %}</td>
+                            <td>{{entitiesService.nbrejours}}</td>
+
+                            <td>
+
+                                {% if (entitiesService.numReprise is defined) and (entitiesService.numReprise is not null) %}
+
+                                    {{ entitiesService.numReprise.date|date('d-m-Y') }}
+                                {% endif %}
+
+                            </td>
+                            <td>
+
+                                {% if (entitiesService.agent.Fonction.id in [5,7]) %}
+                                    {{macro.EtatCongeResponsable(entitiesService.etat,entitiesService.niveau,entitiesService.agent.retour_service.tab_lib[entitiesService.niveau])}}
+                                {% elseif entitiesService.niveau == 0 %}
+                                    {{macro.EtatConge(entitiesService.etat,entitiesService.niveau,entitiesService.agent.retour_service.tab_lib[entitiesService.niveau])}}
+                                {% elseif( entitiesService.niveau > 0) %}
+                                    {{macro.EtatConge(entitiesService.etat,entitiesService.niveau,entitiesService.agent.retour_service.tab_lib[entitiesService.niveau-1])}}
+                                {% endif %}
+                            </td>
+                            <td>
+                            {% if is_granted('ROLE_RESPO_SRHMG') %}{% endif %}
+                            {% if entitiesService.niveau ==0 and entitiesService.etat == 1 %}
+                                <a href="{{ path('conges_view', { 'id': entitiesService.id }) }}" class="btn  btn-primary col-md-12">
+                                    Imprimer cessation
+                                </a>
+                            {% endif %}
+                            {% if entitiesService.niveau ==0 and entitiesService.etat == 3 %}
+                                <a href="{{ path('conges_view', { 'id': entitiesService.id }) }}" class="btn  btn-primary col-md-12">
+                                    Imprimer reprise
+                                </a>
+                            {% endif %}
+
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+    <div role="tabpanel" class="tab-pane " id="bacold">
+        <div class="x_title">
+            <h2>Bac à réimpression<small> </small></h2>
+            <div class="clearfix"></div>
+        </div>
+
+        <table class="records_list table table-striped responsive-utilities jambo_table bulk_action" style="width: 100% !important;">
+            <thead>
+                <tr>
+                    <th>Date de création</th>
+                    <th>Service / Direction</th>
+                    <th>Type de Congés</th>
+                    <th>Matricule</th>
+                    <th>Nom et Prénoms</th>
+                    <th>Date de départ</th>
+                    <th>Date de fin</th>
+                    <td>Nombre jours</td>
+                    <th>Date reprise</th>
+                    <th>Etat</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entitiesService in bacold %}
+                    <tr>
+                        <td>{% if entitiesService.datecreation %}{{ entitiesService.datecreation|date('H:i:s d-m-Y') }}{% endif %}</td>
+                        <td>{% if entitiesService.agent.Direction %}{{entitiesService.agent.Direction.sigle}}{% endif %}</td>
+                        <td>{{entitiesService.typeConges.libelle}}</td>
+                        <td>{% if entitiesService.agent %}{{entitiesService.agent.matricule}}{% endif %}</td>
+                        <td>{% if entitiesService.agent %}{{entitiesService.agent.nom}} {{entitiesService.agent.prenoms}}{% endif %}</td>
+                        <td>{% if entitiesService.datedebut %}{{ entitiesService.datedebut|date('d-m-Y') }}{% endif %}</td>
+                        <td>{% if entitiesService.datefin %}{{ entitiesService.datefin|date('d-m-Y') }}{% endif %}</td>
+                        <td>{{entitiesService.nbrejours}}</td>
+
+                        <td>
+
+                            {% if (entitiesService.numReprise is defined) and (entitiesService.numReprise is not null) %}
+
+                                {{ entitiesService.numReprise.date|date('d-m-Y') }}
+                            {% endif %}
+
+                        </td>
+                        <td>
+
+                            {% if (entitiesService.agent.Fonction.id in [5,7]) %}
+                                {{macro.EtatCongeResponsable(entitiesService.etat,entitiesService.niveau,entitiesService.agent.retour_service.tab_lib[entitiesService.niveau])}}
+                            {% elseif entitiesService.niveau == 0 %}
+                                {{macro.EtatConge(entitiesService.etat,entitiesService.niveau,entitiesService.agent.retour_service.tab_lib[entitiesService.niveau])}}
+                            {% elseif( entitiesService.niveau > 0) %}
+                                {{macro.EtatConge(entitiesService.etat,entitiesService.niveau,entitiesService.agent.retour_service.tab_lib[entitiesService.niveau-1])}}
+                            {% endif %}
+                        </td>
+                        <td>
+                        {% if is_granted('ROLE_RESPO_SRHMG') %}{% endif %}
+                        {% if entitiesService.niveau ==0 and entitiesService.etat == 1 %}
+                            <a href="{{ path('conges_view', { 'id': entitiesService.id }) }}" class="btn  btn-primary col-md-12">
+                                Réimprimer cessation
+                            </a>
+                        {% endif %}
+                        {% if entitiesService.niveau ==0 and entitiesService.etat == 3 %}
+                            <a href="{{ path('conges_view', { 'id': entitiesService.id }) }}" class="btn  btn-primary col-md-12">
+                                Réimprimer reprise
+                            </a>
+                        {% endif %}
+
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+
+
+
+</div>
+{% endblock %}

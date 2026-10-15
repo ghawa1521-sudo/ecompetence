@@ -1,0 +1,10 @@
+agent_identification:
+    resource: "@AgentIdentificationBundle/Resources/config/routing/agent.yml"
+    prefix:   /agent
+    #methods:  [POST, PUT]
+
+
+
+#soutrat:
+#    path:     /soutra
+#    defaults: { _controller: AgentBundle:Agent:soutra }

@@ -1,0 +1,159 @@
+{% extends '::base.html.twig' %}
+
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+{% block css %}
+    <link href="{{ asset('design/css/style.css') }}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{{asset('ediligence/assets/css/bootstrap-select.min.css')}}">
+{% endblock %}
+{% block titre_page %}
+    <div>Administration
+    </div>
+{% endblock %}
+{% block body -%}
+    <div>
+
+        <h4>Etat  des demandes de  l'agent:
+        </h4>
+        <div class="row" style="demandeskground-color: #f7f7f7;">
+            <form method="post" {{ form_enctype(form) }}>
+                <div class="col-md-4">
+
+                    {{ form_row(form.agent) }}
+
+
+                    {{ form_row(form._token) }}
+                    <input class="btn btn-success col-md-8" type="submit" value="RECHERCHER"/>
+                </div>
+            </form>
+        </div>
+        <div class="tab-content">
+
+
+            <div class="tab-pane active">
+                <div class="x_title">
+                    <h2>Les Demandes<small></small>
+                    </h2>
+                    <div class="clearfix"></div>
+                </div>
+
+                <table class="records_list table table-striped responsive-utilities jambo_table bulk_action" style="width: 100% !important;">
+                    <thead>
+                        <tr>
+                            <th>Date de création</th>
+                            <th>Service / Direction</th>
+                            <th>Type de demandes</th>
+                            <th>Nom & Prénoms</th>
+                            <th>Date de départ</th>
+                            <th>Date de fin</th>
+                            <th>Etat</th>
+                            {#
+                            <th>Actions</th>
+                            #}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for demande in demandes %}
+                            <tr>
+                                <td>
+                                    {% if demande.datecreation %}
+                                        {{ demande.datecreation|date('H:i:s d-m-Y') }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if demande.emmeteur.Direction %}
+                                        {{demande.emmeteur.Direction.sigle}}
+                                    {% endif %}
+                                </td>
+                                <td>{{demande.typeDemande}}</td>
+
+                                <td>
+                                    {% if demande.emmeteur %}
+                                        {{demande.emmeteur.matricule}}|{{demande.emmeteur.nom}}
+                                        {{demande.emmeteur.prenoms}}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if demande.dateDeb %}
+
+                                        {{ demande.dateDeb|date('d-m-Y') }}
+
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if demande.dateFin %}
+
+                                        {{ demande.dateFin|date('d-m-Y') }}
+
+                                    {% endif %}
+                                </td>
+
+                                <td>
+
+{% if (demande.etatRepGrh == 2 or (demande.etatRepSupDir2 ==2 or demande.etatRepSupDir ==2 )) %}
+
+
+
+<span class="label label-danger">Refusé</span>
+<br>
+
+{{demande.motifRejet}}
+
+                                        
+                                        
+                                        {% elseif (demande.etatRepGrh == 0) and (demande.etatRepSupDir2 == 1) %}
+                                        <br>
+<span class="label label-warning">En Attente</span>
+
+                                        {% elseif (demande.etatRepGrh == 1) %}
+                                        
+<span class="label label-info">Validé</span>
+
+                                        
+                                    {% endif %}
+
+
+                                    {#
+                                                                        <label class="label label-success">
+                                                                            {{demande.getValidateur(0)|replace({"DIRECTION": 'au DIRECTEUR',"DIRECTION GENERALE DE L'ECONOMIE": 'au DGE','Direction': 'Directeur', 'Service': 'Chef du Service'})}}
+                                    
+                                                                        </label>#}
+                                    <br>
+
+                                    {% if(demande.signeActe == 1) %}
+                                    <br>
+<label class="label label-warning">en ligne</label>
+<i>depuis le
+    {{demande.dateNumActe|date('d-m-Y')}}</i>
+                                        <button value="{{ vich_uploader_asset( demande.demandeActe, 'docFile')}}" class="btn btn-success btnShow">Visualiser</button>
+
+                                    {% endif %}
+
+
+
+                                </td>
+{#
+                                <td>
+
+
+
+
+                                </td>
+                                #}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+
+        </ul>
+    {% endblock %}
+    {% block javascript %}
+        <script src="{{ asset('ediligence/assets/js/bootstrap-select.min.js') }}"></script>
+
+    {% endblock %}

@@ -1,0 +1,257 @@
+<?php
+
+namespace Annuaire\AnnuaireBundle\Controller;
+
+use Agent\AgentBundle\Entity\Agent;
+use Annuaire\AnnuaireBundle\Entity\Contact;
+use Annuaire\AnnuaireBundle\Form\ContactType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+use Symfony\Component\HttpFoundation\Request;
+
+/**
+ * Contact controller.
+ *
+ */
+
+class ContactController extends Controller {
+
+	/**
+	 * Lists all Contact entities.
+	 *
+	 */
+	public function indexAction() {
+
+		$em = $this->getDoctrine()->getManager();
+
+		$entities = $em->getRepository('AgentBundle:Agent')->findAll();
+		/*
+		$this->container->get('alertify')->success([
+		'engine' => 'alert',
+		'title' => "Password successfully changed",
+		]);
+		 */
+		$this->get('session')
+		     ->getFlashBag('success')
+		     ->set('callback', array(
+				'engine'       => 'modal',
+				'title'        => 'Wow',
+				'action'       => 'AcmeBundle:Default:hello',
+				'button_class' => 'btn btn-primary btn-large',
+				'body'         => '<p>Yeah that\'s crazy !</p>'));
+
+		return $this->render('AnnuaireBundle:Contact:index.html.twig', array(
+				'entities' => $entities
+			));
+		/*
+	$datatable = $this->get('annuaire.datatable.contact');
+	$datatable->buildDatatable();
+
+	return $this->render('AgentBundle:Agent:index.html.twig', array(
+	'entities' => $datatable,
+	));*/
+
+	}
+
+	public function madirAction() {
+		$em       = $this->getDoctrine()->getManager();
+		$entities = $em->getRepository('AgentBundle:Agent')->agentMadir($this->getUser()->getAgent()->getDirection()->getId());
+
+		return $this->render('AnnuaireBundle:Contact:index_madir.html.twig', array(
+				'entities' => $entities));
+	}
+
+	/**
+	 * Creates a new Contact entity.
+	 *
+	 */
+	public function createAction(Request $request) {
+		$entity = new Contact();
+		$form   = $this->createCreateForm($entity);
+		$form->handleRequest($request);
+
+		if ($form->isValid()) {
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($entity);
+			$em->flush();
+
+			return $this->redirect($this->generateUrl('contact_show', array('id' => $entity->getId())));
+		}
+
+		return $this->render('AnnuaireBundle:Contact:new.html.twig', array(
+				'entity' => $entity,
+				'form'   => $form->createView(),
+			));
+	}
+
+	/**
+	 * Creates a form to create a Contact entity.
+	 *
+	 * @param Contact $entity The entity
+	 *
+	 * @return \Symfony\Component\Form\Form The form
+	 */
+	private function createCreateForm(Contact $entity) {
+		$form = $this->createForm(new ContactType(), $entity, array(
+				'action' => $this->generateUrl('contact_create'),
+				'method' => 'POST',
+			));
+
+		$form->add('submit', 'submit', array('label' => 'Create'));
+
+		return $form;
+	}
+
+	/**
+	 * Displays a form to create a new Contact entity.
+	 *
+	 */
+	public function newAction() {
+		$entity = new Contact();
+		$form   = $this->createCreateForm($entity);
+
+		return $this->render('AnnuaireBundle:Contact:new.html.twig', array(
+				'entity' => $entity,
+				'form'   => $form->createView(),
+			));
+	}
+
+	/**
+	 * Finds and displays a Contact entity.
+	 *
+	 */
+	public function showAction($id) {
+		$em = $this->getDoctrine()->getManager();
+
+		$entity = $em->getRepository('AnnuaireBundle:Contact')->find($id);
+
+		if (!$entity) {
+			throw $this->createNotFoundException('Unable to find Contact entity.');
+		}
+
+		$deleteForm = $this->createDeleteForm($id);
+
+		return $this->render('AnnuaireBundle:Contact:show.html.twig', array(
+				'entity'      => $entity,
+				'delete_form' => $deleteForm->createView(),
+			));
+	}
+
+	/**
+	 * Displays a form to edit an existing Contact entity.
+	 *
+	 */
+	public function editAction($id) {
+		$em = $this->getDoctrine()->getManager();
+
+		$entity = $em->getRepository('AgentBundle:Agent')->find($id);
+
+		if (!$entity) {
+			throw $this->createNotFoundException('Unable to find Agent entity.');
+		}
+
+		$editForm   = $this->createEditForm($entity);
+		$deleteForm = $this->createDeleteForm($id);
+
+		return $this->render('AnnuaireBundle:Contact:edit.html.twig', array(
+				'entity'      => $entity,
+				'edit_form'   => $editForm->createView(),
+				'delete_form' => $deleteForm->createView(),
+			));
+	}
+
+	/**
+	 * Creates a form to edit a Contact entity.
+	 *
+	 * @param Contact $entity The entity
+	 *
+	 * @return \Symfony\Component\Form\Form The form
+	 */
+	private function createEditForm(Agent $entity) {
+		$form = $this->createForm(new ContactType(), $entity, array(
+				'action' => $this->generateUrl('contact_update', array('id' => $entity->getMatricule())),
+				'method' => 'PUT',
+			));
+
+		$form->add('submit', 'submit', array('label' => 'Mettre à jour'));
+
+		return $form;
+	}
+	/**
+	 * Edits an existing Contact entity.
+	 *
+	 */
+	public function updateAction(Request $request, $id) {
+		$em = $this->getDoctrine()->getManager();
+
+		$entity = $em->getRepository('AgentBundle:Agent')->find($id);
+
+		if (!$entity) {
+			throw $this->createNotFoundException('Unable to find Contact entity.');
+		}
+
+		$deleteForm = $this->createDeleteForm($id);
+		$editForm   = $this->createEditForm($entity);
+		$editForm->handleRequest($request);
+
+		if ($editForm->isValid()) {
+			$em->flush();
+
+			$msg = "Contact de l'agent matricule: ".$entity->getMatricule()." modifié avec succès";
+
+			$this->get('session')->getFlashBag()->set('notice', $msg);
+			//var_dump($this->get('session')->getFlashBag());
+			die;
+			if ($this->getUser()->is_granted('ROLE_AGENT')) {
+				return $this->redirect($this->generateUrl('contact_in'));
+			} else {
+				return $this->redirect($this->generateUrl('contact'));
+			}
+		}
+
+		return $this->render('AnnuaireBundle:Contact:edit.html.twig', array(
+				'entity'      => $entity,
+				'edit_form'   => $editForm->createView(),
+				'delete_form' => $deleteForm->createView(),
+			));
+
+	}
+	/**
+	 * Deletes a Contact entity.
+	 *
+	 */
+	public function deleteAction(Request $request, $id) {
+		$form = $this->createDeleteForm($id);
+		$form->handleRequest($request);
+
+		if ($form->isValid()) {
+			$em     = $this->getDoctrine()->getManager();
+			$entity = $em->getRepository('AnnuaireBundle:Contact')->find($id);
+
+			if (!$entity) {
+				throw $this->createNotFoundException('Unable to find Contact entity.');
+			}
+
+			$em->remove($entity);
+			$em->flush();
+		}
+
+		return $this->redirect($this->generateUrl('contact'));
+	}
+
+	/**
+	 * Creates a form to delete a Contact entity by id.
+	 *
+	 * @param mixed $id The entity id
+	 *
+	 * @return \Symfony\Component\Form\Form The form
+	 */
+	private function createDeleteForm($id) {
+		return $this->createFormBuilder()
+		            ->setAction($this->generateUrl('contact_delete', array('id' => $id)))
+		->setMethod('DELETE')
+		->add('submit', 'submit', array('label' => 'Delete'))
+		->getForm()
+		;
+	}
+}

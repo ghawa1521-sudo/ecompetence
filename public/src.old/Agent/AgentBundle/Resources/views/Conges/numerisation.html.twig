@@ -1,0 +1,144 @@
+{% extends '::base.html.twig' %}
+{% block datatableCss %}
+    <style>
+        th{
+            text-align: left !important;
+        }
+    </style>
+{% endblock %}
+{% block body -%}
+    <div class="row">
+        <div>
+            <div class="x_title">
+                <h2>Joindre l'acte de cessation ou de reprise
+                    <small> </small></h2>
+                <div class="clearfix"></div>
+            </div>
+            {#{dump(form.vars)}#}
+            <div class="col-md-push-3 col-md-6">
+                {{ form_start(edit_form) }}
+                {{ form_errors(edit_form) }}
+                <table class="table table-striped responsive-utilities jambo_table bulk_action">
+                    <tbody>
+                        <tr>
+                            <th>Matricule</th>
+                            <td>{{ entity.agent.matricule }}</td>
+                        </tr>
+                        <tr>
+                            <th>Nom & Prénoms</th>
+                            <td>{{ entity.agent.nom}} {{ entity.agent.prenoms}}</td>
+                        </tr>
+                        <tr>
+                            <th>Date de départ</th>
+                            <td>{{ entity.datedebut|date('d-m-Y') }}</td>
+                        </tr>
+                        <tr>
+                            <th>Date du dernier jour de congé</th>
+                            <td>{{ entity.datefin|date('d-m-Y') }}</td>
+                        </tr>
+                        <tr>
+                            <th>Nombre de Jours</th>
+                            <td>{{ entity.nbrejours }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Date de reprise théorique</th>
+                            <td>{{ entity.datefin|date_modify('+1 day')|date('d-m-Y') }}</td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>Date de reprise effective</th>
+                            <td>{% if entity.datereprise %}{{ entity.datereprise|date('Y-m-d') }}{% endif %}</td>
+                        </tr>
+                        {% if entity.externe==1 %}
+                            <tr>
+                                <th>Destination</th>
+                                <td>Hors Côte d'Ivoire</td>
+                            </tr>
+                        {% endif %}
+                        {% if entity.etat==2 %}
+                            <tr>
+                                <th>Raison refus</th>
+                                <td>{{entity.objetRefus}}</td>
+                            </tr>
+                        {% endif %}
+                        <tr>
+                            <th>Exercice</th>
+                            <td>{{ entity.exercice }}</td>
+                        </tr>
+                        <tr>
+                            <th>Etat</th>
+                            <td>
+                                {% if entity.etat == 0%}
+                                    <label class="label label-warning">En attente</label>
+                                {% elseif entity.etat == 1%}
+                                    <label class="label label-success">Transmis au RH</label>
+                                {% elseif entity.etat == 2%}
+                                    <label class="label label-danger">Refusé</label>
+                                {% elseif entity.etat == 3%}
+                                    <label class="label label-success">Cessation généré</label>
+                                {% elseif entity.etat == 4%}
+                                    <label class="label label-success">Reprise généré</label>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Date de soumission</th>
+                            <td>{{ entity.datecreation|date('d-m-Y H:i:s ') }}</td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                {{ form_label(edit_form.numCessation.date, 'Date Signature' ) }}
+                                {{ form_widget(edit_form.numCessation.date) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                {#{% dump(edit_form.numCessation.pj.imageFile)%}#}
+                                {{ form_label(edit_form.numCessation.pj, 'Pièce Jointe' ) }}
+                                {{ form_widget(edit_form.numCessation.pj.imageFile,{'attr': {'required' : 'required'}}) }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                {#
+        {{form_row(edit_form.datereprise)}}#}
+
+
+
+
+
+
+                {{ form_widget(edit_form._token) }}
+                <input type="submit" class="btn btn-success" value="Joindre" />
+            </div>
+
+
+            {{ form_end(edit_form, {'render_rest': false}) }}
+
+        </div>
+    </div>
+    {#
+    <div class="row">
+        {% for flashMessage in app.session.flashbag.get('success') %}
+            <div class="alert alert-danger"> {{flashMessage}} </div>
+        {% endfor %}
+    </div>
+    #}
+    <ul class="record_actions">
+
+        <li>
+            <a href="{{ path('conges_active') }}">
+                Retour à la liste
+            </a>
+        </li>
+    </ul>
+{% endblock %}
+

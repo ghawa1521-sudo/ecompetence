@@ -1,0 +1,74 @@
+{% extends '::ediligence/base.html.twig' %}
+
+{% block body %}
+<div class="content-header">
+    <div class="header-section">
+        <h1>
+            <i class="gi gi-notes_2"></i>Diligences imputées<br><small>Veuillez remplir les champs ci-dessous</small>
+        </h1>
+    </div>
+</div>
+<ul class="breadcrumb breadcrumb-top">
+    <li>Enregistrer</li>
+    <!--<li><a href="">Nouveau</a></li>-->
+</ul>
+<div class="row">
+    <div class="col-md-offset-2 col-md-8">
+        <div class="block">
+            <!-- Basic Form Elements Title -->
+            <div class="block-title">
+
+                <h2><strong>Nouvelle diligence</strong></h2>
+            </div>
+
+            <div style="float:right;" class="bien2">
+                <b>COURRIER:N° &nbsp; {{imputation.courrier.id}}</b>
+            </div>
+            <div class="bien">
+                <b>Par: <font color="#000000">&nbsp;{{imputation.matriculeImput.nom}}&nbsp;{{imputation.matriculeImput.prenoms}}</font></b><br>
+                <b>A: <font color="#000000">&nbsp;&nbsp;{{imputdir[0].matriculeimpute.nom}}&nbsp;{{imputdir[0].matriculeimpute.prenoms}}</font></b><br>
+                <b>OBJET:<font color="#000000">&nbsp;{{imputation.courrier.objet|raw|striptags|slice(0, 150) }}</font></b>
+            </div>
+            <div class="form-group bien">
+                <font size="+1"><b>INSTRUCTIONS</b></font><br>
+                <font color="#000000">
+                  {% set val=0 %}
+                  {% for entitie in entities%}
+                  {% set val=val +1%}
+                <br>
+                  {{val}} - {{entitie.instImput.libIbstruction|raw}}<br>    
+                  {% endfor %}
+                  {% if imputation.instPart %}
+                  <br>
+                  {{val + 1}} - Cas particulier: {{imputation.instPart|raw}}<br>
+                  {% endif %}
+                   
+                </font>
+            </div>
+            <!-- END Form Elements Title -->
+                {{ form_start(form) }}
+                {{ form_row(form.datereception) }}
+                {% if (nbredossier is defined) and (nbredossier > 0) %}
+                    {{ form_row(form.chrono, {'label':'Chrono (Dernier numero : '~nbredossier~')'}) }}
+                {% else %}
+                    {{ form_row(form.chrono, {'label':'Chrono (Dernier numero : Aucun)'}) }}
+                {% endif %}
+                
+                {#{ form_row(form.courrier,  {'attr': {'value': imputation.courrier.id }} ) }#}
+                {{ form_row(form.idImput,  {'attr': {'value': imputation.id }} ) }}
+                {#{ form_row(form.typecourrier,  {'attr': {'value': imputation.courrier.typecourrier.id }} ) }#}
+                {#<input type="hidden" name="id_imput" value="{{imputation.id}}">
+                <input type="hidden" name="id_courrier" value="{{imputation.courrier.id}}">
+                <input type="hidden" name="typ_courrier" value="{{imputation.courrier.typecourrier.id}}">#}
+                {{ form_end(form) }}
+                
+        </div>
+
+    </div>
+</div>
+<ul>
+    <li>
+        <a href="{{ path('courrier_int') }}">Retour</a>
+    </li>
+</ul>
+{% endblock %}

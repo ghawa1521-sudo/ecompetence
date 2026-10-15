@@ -1,0 +1,7 @@
+biblio_bouquin:
+    resource: "@BiblioBundle/Resources/config/routing/bouquin.yml"
+    prefix:   /bouquin
+
+biblio_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: BiblioBundle:Default:index }

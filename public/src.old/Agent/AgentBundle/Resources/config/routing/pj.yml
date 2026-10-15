@@ -1,0 +1,30 @@
+pj:
+    path:     /
+    defaults: { _controller: "AgentBundle:Pj:index" }
+
+pj_show:
+    path:     /{id}/show
+    defaults: { _controller: "AgentBundle:Pj:show" }
+
+pj_new:
+    path:     /new
+    defaults: { _controller: "AgentBundle:Pj:new" }
+
+pj_create:
+    path:     /create
+    defaults: { _controller: "AgentBundle:Pj:create" }
+    methods:  POST
+
+pj_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AgentBundle:Pj:edit" }
+
+pj_update:
+    path:     /{id}/update
+    defaults: { _controller: "AgentBundle:Pj:update" }
+    methods:  [POST, PUT]
+
+pj_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AgentBundle:Pj:delete" }
+    methods:  [POST, DELETE]

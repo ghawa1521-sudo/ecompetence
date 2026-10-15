@@ -1,0 +1,340 @@
+{% extends '::base.html.twig' %}
+{%from "EcompetenceBundle:macro:macro.html.twig" import recursiveDomaine,recursiveDomaineAff%}
+
+
+{% block body %}
+      
+          <!-- page content -->
+  <div>
+                            <div class="x_panel" style="background-color:white;border-radius: 4px;">
+                             
+                                <div class="x_content">
+
+                                    <div class="col-md-8 col-sm-3 col-xs-12 profile_left">
+                     
+                          <table>                 
+                         
+                          <tr>  
+                         
+                                    <td style="font-weight: bold;font-size:20px; border:0px"> <b>
+                                        {% if (entity.nom) %}
+                                        {{ entity.nom }}
+                                        {% endif %}
+                                        {% if (entity.prenoms) %}
+                                        {{ entity.prenoms }}
+                                        {% endif %}</b>
+                                        {% if (entity.matricule) %}
+                                            <b  style="color: red;" >{{ ' ('~entity.matricule~')' }} </b>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>                                      
+                                      <td style="font-size:16px; border:0px;font-weight:normal;">{% if (entity.emploi) %}
+                                        {{ entity.emploi.libEmpl }}
+                                        {% endif %}
+                                    </td>
+                            
+                                 <tr>
+                                   <td style="font-size:16px; border:0px;font-weight:normal;">
+                                        {% if (entity.dateNaiss) %}
+                                        Né le {{ entity.dateNaiss|date('d-m-Y') }} 
+                                        {% endif %}
+                                        {% if (entity.LieuNaissance) %}
+                                         à {{entity.LieuNaissance.lieuNaiss}} 
+                                        {% endif %}</td>
+                                </tr>
+                                 <tr>
+                                   
+                                    <td style="font-size:16px; border:0px;font-weight:normal;">
+                                        {% if (entity.telPort) %}
+                                        Tèl:{{entity.telPort}}</td>
+                                        {% endif %}
+                                </tr>
+
+                                <tr>
+                                    
+                                    <td style="font-size:16px; border:0px;font-weight:normal;">Email :
+                                        {% if (entity.email) %}{{entity.email}}{% endif %}</td>
+                                </tr>
+                                <tr>
+                                  
+                                    <td style="font-size:16px; border:0px;font-weight:normal;">{% if (entity.emailPerso) %}{{entity.emailPerso}}{% endif %}
+                                    {%for adr in entity.adresse%}
+                                        {{adr.email}} / 
+                                    {% endfor %}
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                  
+                                    <td style="font-size:16px; border:0px;font-weight:normal;">{% if (entity.situationMatri) %}{{ entity.situationMatri }}{% endif %} 
+                                        {% if (entity.nbEnf) %}/ {{ entity.nbEnf }} enfant(s){% endif %} </td>
+                                </tr>
+                          </table> 
+                           
+                               
+       
+       </div>  
+            
+             <div class="col-lg-offset-1 col-md-3  profile_left">
+
+                <div class="profile_img">                           
+                    <div id="cropE-avatar">                                
+                       <div class="avatar-view" title="Change the avatar">                                      
+                         {% if (entity.imageName) %}
+                            <img src="{{ vich_uploader_asset(entity, 'imageFile') }}" alt="{{ entity.imageName }} Avatar">
+                         {% elseif (entity.sexe.id == 1 ) %}
+                           <img src="{{ asset('images/img_test_agent.png')}}" Avatar>
+                            {% elseif (entity.sexe.id == 2 ) %}
+                              <img src="{{ asset('images/woman.png')}}" Avatar>
+                         {% endif %}
+                         </div>                                          
+                     </div>
+                 </div>
+             </div>
+           </div>
+      </div>
+ </div>
+
+    
+        <style>
+        th{
+        color:white;
+        border:1px solid white;
+        font-weight:bold;
+        }
+        td{
+         color:black;
+         font-weight:bold; 
+         border:1px solid lightgray
+        }
+        thead{border:1px solid white;background-color: #008080;
+        }
+       
+         </style>
+    
+        <div class="x_panel">
+          {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+          {{ form_errors(form) }}
+          
+                        
+          <div class="row"> 
+          <div class=""> </div>
+          <div class="col-md-12"> 
+          <div class="panel panel-success">
+             
+          <div class="panel-heading"> <h2  style="color:orangered"> {#{%if(modif==false)%}Nouvelle langue{%else%}Modification du niveau de la langue{%endif%}#}</h2></div>
+          <div class="panel-body">
+           
+            <div class="row">
+             <div class="col-md-1"></div>
+             <div class="col-md-10">
+             <div class="container">
+             <h2>Activités extra-professionnellles</h2>
+             <div class="panel panel-default">
+             <div class="panel-body">
+             </br>
+               <div>
+                <ul class="tags1" data-prototype="{{'<div class="col-md-11">'|e}}{{ form_widget(form.responsabilite.vars.prototype.librespo)|e('html_attr') }}{{'</div>'|e}}">
+        
+                 {% for respo in form.responsabilite %}
+                 <li><div class="col-md-11">{{ form_widget(respo.librespo) }}</div></li>
+                 {% endfor %}
+                 </ul>
+                </div>
+             </div>
+             </div>
+             </div>
+             </div> 
+
+             <div class="col-md-1">
+           {#  <div class="container">
+             <h2>Autres atouts</h2>
+             <div class="panel panel-default">
+             <div class="panel-body"></div>
+             </div>#}
+             </div>
+          </div>
+                 
+            
+               
+               
+               
+               
+              
+                    {# <div class="form-group col-sm-3">
+                        {{ form_label(form.lire, 'Lire', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.lire) }}
+                        {{ form_widget(form.lire, {'attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                    </div>
+                    <div class="form-group col-sm-3">
+                        {{ form_label(form.ecrire, 'Ecrire', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.ecrire) }}
+                        {{ form_widget(form.ecrire, {'attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                    </div>
+                    <div class="form-group col-sm-3">
+                        {{ form_label(form.parler, 'Parler', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form.parler) }}
+                        {{ form_widget(form.parler, {'attr':{'class': 'form-control col-md-7 col-xs-12'}}) }}
+                    </div>
+                   </div>
+                   <div class="form-group row">
+                       &nbsp;&nbsp;
+                        {{ form_row(form._token) }}
+                        {{ form_widget(form.enregistrer, {'attr':{'class': 'btn btn-primary'}}) }}
+                        <input type="hidden" name="bouton" value="2">#}
+            </div> 
+                    
+                   
+                     
+               {#  <table class="table dataTable" id="table-editable"> 
+                  <thead>
+                  <tr role="row">  
+                  <th> Langue</th>
+                  <th> Lire</th>
+                  <th> Ecrire </th>
+                  <th> Parler</th>
+                  <th> Action</th>
+                
+             
+                
+               </tr>  
+             </thead>
+             <tbody>
+                 
+              
+                {%if(niveaulangue)%}
+                 {% for aglangue in niveaulangue%}
+               <tr>
+                 <td style="border:1px solid gray;color:#002a80;">
+                       {%if(aglangue.langue.liblangue)%}<b>{{aglangue.langue.liblangue}} <b>{%endif%}
+                 </td>
+                
+                 <td style="border:1px solid gray;color:orangered;">
+                       {%if(aglangue.lire)%}{{aglangue.lire}}{%endif%}
+                 </td>
+                  
+                 <td style="border:1px solid gray;color:orangered;">
+                       {%if(aglangue.ecrire)%}{{aglangue.ecrire}}{%endif%}
+                 </td>
+                   
+                 <td style="border:1px solid gray;color:orangered;">
+                      {%if(aglangue.parler)%}{{aglangue.parler}}{%endif%}
+                 </td>
+                
+                 <td style="border:1px solid gray;width: 60px">
+                   <a class="btn btn-primary" href="{{ path('langue_edit', { 'id': aglangue.id,'ag':aglangue.agent.id }) }}">Modifier</a>
+                 </td>
+               </tr>  
+    
+                
+               {%endfor%}
+               
+               {%else%}
+                   <td colspan="5"> Aucune langue enrégistrée
+                   </td>
+               {%endif%}
+              
+             </tbody>
+
+              </table> #}
+          </div>
+                   
+                </div>
+                </div>
+                 
+                 <div class="col-md-4">
+                      {{ form_row(form._token) }}
+                      {{ form_widget(form.enregistrer, {'attr':{'class': 'btn btn-primary  btn-block col-md-1'}}) }}
+                 </div>
+                    <div class="col-md-4">
+                    <a class="btn btn-warning btn-block col-md-1" href="{{ path('agent_cv', { 'id':id }) }}">Retour</a>
+                    </div>
+                   
+                    <div class="col-md-2"> </div>
+           
+             {{ form_end(form,{render_rest:false}) }}
+        </div>
+                   
+                </div>
+    
+           </div>            
+                
+                
+<style>
+.help-block{
+color:red;
+font-weight:bold;
+}
+</style>
+{% endblock %}
+
+{% block javascript %}
+
+<script type="text/javascript" src="{{ asset('design/js/wizard/jquery.smartWizard.js') }}"></script>
+<script src="{{ asset('design/js/nicescroll/jquery.nicescroll.min.js') }}"></script>
+
+
+
+<script type="text/javascript">                 
+var $collectionHolder1;
+
+// setup an "add a tag" link
+var $addTagButton1 = $('<button class="btn btn-info add_tag_link" type="button"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <small><em>Ajouter une activité extra-professionnelle</small></em></button></div>');
+var $newLinkLi1 = $('<div>&nbsp;&nbsp;&nbsp;</div>').append($addTagButton1);
+
+jQuery(document).ready(function() {
+    // Get the ul that holds the collection of tags
+    $collectionHolder1 = $('ul.tags1');
+    $collectionHolder1.css("list-style-type","none");
+    // add the "add a tag" anchor and li to the tags ul
+    $collectionHolder1.append($newLinkLi1);
+    
+    // add a delete link to all of the existing tag form li elements
+    $collectionHolder1.find('li').each(function() {
+        addTagFormDeleteLink1($(this));
+    });
+
+    // count the current form inputs we have (e.g. 2), use that as the new
+    // index when inserting a new item (e.g. 2)
+    $collectionHolder1.data('index', $collectionHolder1.find(':input').length);
+
+    $addTagButton1.on('click', function(e) {
+        // add a new tag form (see next code block)
+        addTagForm1($collectionHolder1, $newLinkLi1);
+    });
+}); 
+
+/////////////////////
+function addTagForm1($collectionHolder1, $newLinkLi1) {
+    // Get the data-prototype explained earlier
+    var prototype = $collectionHolder1.data('prototype');
+
+    // get the new index
+    var index = $collectionHolder1.data('index');
+
+    var newForm1 = prototype;
+    
+    newForm1 = newForm1.replace(/__name__/g, index);
+
+    // increase the index with one for the next item
+    $collectionHolder1.data('index', index + 1);
+
+    // Display the form in the page in an li, before the "Add a tag" link li
+    var $newFormLi1 = $('<li></li>').append(newForm1);
+    $newLinkLi1.before($newFormLi1);
+    
+    addTagFormDeleteLink1($newFormLi1);
+}   
+
+function addTagFormDeleteLink1($tagFormLi1) {
+    var $removeFormButton1 = $('<button class="btn btn-danger" type="button"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> <small><em></small></em></button></div>');
+    $tagFormLi1.append($removeFormButton1);
+
+    $removeFormButton1.on('click', function(e) {
+        // remove the li for the tag form
+        $tagFormLi1.remove();
+    });
+}
+</script>
+{% endblock %}

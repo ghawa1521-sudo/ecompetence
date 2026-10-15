@@ -1,0 +1,268 @@
+{% extends '::ediligence/base.html.twig' %}
+
+{#{ macro.Service_agent('DG0001') }#}
+{#{dump(app.user.agent.retour_service())}#}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{asset('ediligence/assets/css/bootstrap-select.min.css')}}">
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('ediligence/assets/js/bootstrap-select.min.js') }}"></script>
+
+    <script>
+        function libDest(val, val_id)
+        {
+            //vall=parseInt(val);
+            // console.log(val);
+            // console.log(val_id);
+            var position = val_id.indexOf("Z1");
+            if (parseInt(position) != -1)
+            {
+                val_id = val_id.replace('1', '');
+            }
+            valeur = val_id + val;
+            console.log(valeur);
+            console.log(val_id);
+            switch (valeur)
+            {
+        {% set p=1 %}
+        {% for linedg in dg_imput %}
+                    case 'A{{linedg.codeDc}}':
+                        return "{{linedg.sigle}}";
+                        break;
+        {% endfor %}
+
+        {% for linedc in dc_imput %}
+                    case 'B{{linedc.codeDc}}':
+                        return "{{linedc.sigle}}";
+                        break;
+        {% endfor %}
+
+        {% for linert in scerattache_imput %}
+                    case 'D{{linert.codeDc}}':
+                        return "{{linert.sigle}}"; break;
+        {% endfor %}
+        {% for linert in conseiller_imput %}
+                    case 'Z{{linert.matricule}}':
+                        return "{{linert.nom}} {{linert.prenoms}} {{linert.nomJeuneFille}}"; break;
+        {% endfor %}
+
+                    default:
+                        return "Non&nbsp;Défini";
+                }
+            }
+    </script>
+{% endblock %}
+
+
+{% block body %} 
+    <div class="content-header">
+        <div class="header-section">
+            <h1>
+                <i class="gi gi-notes_2"></i>Transmettre courrier<br><small>Veuillez remplir les champs ci-dessous</small>
+            </h1>
+        </div>
+    </div>
+    <ul class="breadcrumb breadcrumb-top">
+        <li>Transmettre</li>
+        <li><a href="">Nouveau</a></li>
+    </ul>
+    <div class="row">
+        <div class="col-md-offset-1 col-md-10">
+
+            <form method="post" class="form-vertical col-md-12" style="color:#006;" name="frm_imputer" enctype="multipart/form-data" id="form_Imputation">
+                <div class="block">
+                    <!-- Basic Form Elements Title -->
+                    <div class="block-title" >
+
+                        <h2><strong>FICHE DE TRANSMISSION</strong></h2>
+
+
+                    </div>
+                    <!-- END Form Elements Title -->
+                    <div class="row" >
+                        <div class="col-md-12">
+                            <div class="bien">
+                                <table border="0" width="100%">
+                                    <tr>
+                                        <td width="60%">
+                                            <table>
+                                                <tr >
+                                                    <td align="right"  width="50%"><b>COURRIER N°:&nbsp;&nbsp;&nbsp;</b></td>
+                                                    <td align="left"><b>{{ entity.id}}</b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="right" width="50%"><b>OBJET:&nbsp;&nbsp;&nbsp;</b></td>
+                                                    <td align="left" ><b>{{ entity.objet|raw|striptags|slice(0, 150) }}</b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="right" width="50%"><b>DE:&nbsp;&nbsp;&nbsp;</b></td>
+                                                    <td>
+                                                        <input id="De1" name="De" value="{{app.user.agent.codeDg.codeDg}}" checked="" disabled="" type="checkbox">
+                                                        <label for="De1">{{app.user.agent.retour_service.abrv}}</label>
+                                                    </td>
+                                                </tr>
+                                            </table>                     
+                                        </td> 
+                                        <td width="40%" align="left">
+                                               <table>
+                                                <tr >
+                                                    <td align="right"  width="50%"><b>PROVENANCE:&nbsp;&nbsp;&nbsp;</b></td>
+                                                    <td align="left"><b>{{ entity.sourceCour}}</b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="right" width="50%"><b>EXPEDITEUR:&nbsp;&nbsp;&nbsp;</b></td>
+                                                    <td align="left" ><b>{{ entity.adresseenreg }}</b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="right" width="50%"><b>LE:&nbsp;&nbsp;&nbsp;</b></td>
+                                                    <td>
+                                                        <b>{{ entity.dateorigine|date('d/m/Y') }}&nbsp;&nbsp;&nbsp;SN:</b>
+                                                    </td>
+                                                </tr>
+                                            </table>                          
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="right">Dossier/N° {{"%04d"|format(entity.numenregistrement)}} du {{entity.dateCreat|date('d/m/Y')}}</td>
+                                    </tr>
+                                </table> 
+                        </div>
+                    </div>
+                </div>
+                <div class="row" >
+                    <div class="col-md-6" id="GDestt">
+                        {#{ macro.entete_imput(app.user.agent.fonction.typeCompte.roleBase, dg_imput, dc_imput, scerattache_imput, scerattache_imput) }#}
+                        
+                        {{macro.entete_imput(app.user.agent.fonction.typeCompte.roleBase, dg_imput, conseiller_imput) }}
+                        {{macro.conseiller(app.user.agent.fonction.typeCompte.roleBase,dc_imput, scerattache_imput, scerattache_imput)}}
+
+
+                        <!--  
+                         <div class="form-group bien">
+                            <font size="+1"><b>A</b></font>
+                             <br>
+                             <input id="A1" name="Dest" value="DG0002" onclick="return checkboxhide('A1', 'A1h');" type="checkbox">
+                             <input id="A1h" name="DestHide[]" value="DG0002" style="display:none;" type="checkbox">
+                             <label for="A1">DGA 1</label>
+                             <input id="A2" name="Dest" value="DG0003" onclick="return checkboxhide('A2', 'A2h');" type="checkbox">
+                             <input id="A2h" name="DestHide[]" value="DG0003" style="display:none;" type="checkbox">
+                             <label for="A2">DGA 2</label>
+                             <input id="A3" name="Dest" value="DG0004" onclick="return checkboxhide('A3', 'A3h');" type="checkbox">
+                             <input id="A3h" name="DestHide[]" value="DG0004" style="display:none;" type="checkbox">
+                             <label for="A3">SECRETARIAT</label>
+                             <input id="A4" name="Dest" value="DG0005" onclick="return checkboxhide('A4', 'A4h');" type="checkbox">
+                             <input id="A4h" name="DestHide[]" value="DG0005" style="display:none;" type="checkbox">
+                             <label for="A4">SGVM</label>
+                         </div>-->
+                        <!--  <div class="form-group bien">
+                                        <font size="+1"><b>DIRECTIONS CENTRALES</b></font>
+                                        <br>
+                                        <input id="B1" name="Dest" value="DC0001" onclick="return checkboxhide('B1', 'B1h');" type="checkbox">
+                                        <input id="B1h" name="DestHide[]" value="DC0001" style="display:none;" type="checkbox">
+                                        <label for="B1">DESDP</label>
+                                        <br>
+                                        <input id="B2" name="Dest" value="DC0002" onclick="return checkboxhide('B2', 'B2h');" type="checkbox">
+                                        <input id="B2h" name="DestHide[]" value="DC0002" style="display:none;" type="checkbox">
+                                        <label for="B2">DPPSE</label>
+                                        <br>
+                                        <input id="B3" name="Dest" value="DC0003" onclick="return checkboxhide('B3', 'B3h');" type="checkbox">
+                                        <input id="B3h" name="DestHide[]" value="DC0003" style="display:none;" type="checkbox">
+                                        <label for="B3">DAFER</label>
+                                        <br>
+                                        <input id="B4" name="Dest" value="DC0004" onclick="return checkboxhide('B4', 'B4h');" type="checkbox">
+                                        <input id="B4h" name="DestHide[]" value="DC0004" style="display:none;" type="checkbox">
+                                        <label for="B4">DPCEI</label>
+                                        <br>
+                                    </div>-->
+
+                        <!-- <div class="form-group bien">
+                              <font size="+1"><b>CADRES TECHNIQUES</b></font>
+                             <br>
+                             <input id="C1" name="Dest" value="DC0005" onclick="return checkboxhide('C1', 'C1h');" type="checkbox">
+                             <input id="C1h" name="DestHide[]" value="DC0005" style="display:none;" type="checkbox">
+                             <label for="C1">CONSEILLERS</label>
+                             <br>
+                             <input id="C2" name="Dest" value="DC0006" onclick="return checkboxhide('C2', 'C2h');" type="checkbox">
+                             <input id="C2h" name="DestHide[]" value="DC0006" style="display:none;" type="checkbox">
+                             <label for="C2">ASSISTANTS</label>
+                             <br>
+                             <input id="C3" name="Dest" value="DC0007" onclick="return checkboxhide('C3', 'C3h');" type="checkbox">
+                             <input id="C3h" name="DestHide[]" value="DC0007" style="display:none;" type="checkbox">
+                             <label for="C3">CHARGES D'ETUDES</label>
+                             <br>
+                         </div>-->
+
+                        <!-- <div class="form-group bien">
+                              <font size="+1"><b>SERVICES RATTACHES</b></font>
+                             <br>
+                             <input id="D1" name="Dest" value="DC0008" onclick="return checkboxhide('D1', 'D1h');" type="checkbox">
+                             <input id="D1h" name="DestHide[]" value="DC0008" style="display:none;" type="checkbox">
+                             <label for="D1">SSDSPP</label>
+                             <br>
+                             <input id="D2" name="Dest" value="DC0009" onclick="return checkboxhide('D2', 'D2h');" type="checkbox">
+                             <input id="D2h" name="DestHide[]" value="DC0009" style="display:none;" type="checkbox">
+                             <label for="D2">SRHMG</label>
+                             <br>
+                             <input id="D3" name="Dest" value="DC00010" onclick="return checkboxhide('D3', 'D3h');" type="checkbox">
+                             <input id="D3h" name="DestHide[]" value="DC00010" style="display:none;" type="checkbox">
+                             <label for="D3">SIM</label>
+                             <br>
+                             <input id="D4" name="Dest" value="DC00011" onclick="return checkboxhide('D4', 'D4h');" type="checkbox">
+                             <input id="D4h" name="DestHide[]" value="DC00011" style="display:none;" type="checkbox">
+                             <label for="D4">SCD</label>
+                             <br>
+                             <input id="D5" name="Dest" value="DC00012" onclick="return checkboxhide('D5', 'D5h');" type="checkbox">
+                             <input id="D5h" name="DestHide[]" value="DC00012" style="display:none;" type="checkbox">
+                             <label for="D5">SQN</label>
+                             <br>
+                             <input id="D6" name="Dest" value="DC00013" onclick="return checkboxhide('D6', 'D6h');" type="checkbox">
+                             <input id="D6h" name="DestHide[]" value="DC00013" style="display:none;" type="checkbox">
+                             <label for="D6">SAJRE</label>
+                             <br>
+                         </div>-->    
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group bien">
+                            <font size="+1"><b>INSTRUCTIONS</b></font>
+                            {% for line in instruction %}
+                                <br>
+                                <input id="In{{line.id}}" name="In[]" value="{{line.id}}" onclick="return popupchk('In{{line.id}}');" type="checkbox">
+                                <label for="In{{line.id}}" id="lIn{{line.id}}">{{line.libIbstruction|raw}} </label><div id="dIn{{line.id}}" style="float:right; width:100%; display:block;"></div>
+                            {% endfor %}
+
+                            <br><br><br>
+                            <label for="InP" id="lInP">INSTRUCTIONS&nbsp;PARTICULIERES:</label><div id="dIn00" style="float:right;"></div>
+                            <textarea id="InP" class="form-control" name="txtInstr" value="15"></textarea>
+                        </div>
+                        <button id="btnp" type="button" value="eff_imputation" class="btn btn-primary pull-right form-control" name="a_eff_imputatio" onclick="prioritedefine()"><span class="glyphicon glyphicon-ok-sign"> EFFECTUER L'IMPUTATION</span>
+                        </button>
+                    </div>
+
+                    <div style="display:none">
+                        <div id="val_check"></div>
+                        <div id="div_delais"></div>
+                        <div id="div_select"></div>
+                    </div>
+
+                    <div id="titlediv">
+                        <a id="alg1" href="#lg1" title=""></a>
+                    </div>
+                    <div id="lg1" style="display:none" >
+
+                    </div> 
+
+                </div>
+        </div>
+
+    </form>
+</div>
+</div>
+<ul>
+    <li>
+        <a href="{{ path('courrier') }}">Retour</a>
+    </li>
+
+</ul>
+{% endblock %}

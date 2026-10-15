@@ -1,0 +1,152 @@
+{% extends app.request.attributes.get('_route')=='conges_print'
+? '::gabarit_print.html.twig'
+: '::gabarit_preview.html.twig' %}
+{% block service %}
+    <span class="gras">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Le Directeur Général</span>
+
+
+{% endblock %}
+
+{% block ref %}N°____________MEF/DGE/SRHMG{% endblock %}
+{% block titre %}
+    <div align="center" style="font-size:20px; font-family:CenturyFontBold !important; border: solid; border-radius: 15px; width: 60%; margin: auto;">
+        <span class="gras">CERTIFICAT DE CESSATION DE SERVICE</span>
+    </div>
+
+{% endblock %}
+{#{% block datePdf %}{% if entity.datecreation %}{{ entity.datecreation|date('d-m-Y') }}{% endif %}{% endblock %}#}
+{% block contenuPdf -%}
+
+    {% set daycess=entity.datedebut|date_modify('+ '~(entity.nbrejours-1) ~' day')|localizeddate('none', 'none', app.request.locale, "Europe/Paris", "cccc dd MMMM Y") %}
+    {% if entity.datedebut|date_modify('+ '~(entity.nbrejours-1) ~' day')|localizeddate('none', 'none', app.request.locale, "Europe/Paris", "cccc")=="samedi" %}
+        {% set daycess=entity.datedebut|date_modify('+ '~(entity.nbrejours-2) ~' day')|localizeddate('none', 'none', app.request.locale, "Europe/Paris", "cccc dd MMMM Y") %}
+    {% elseif entity.datedebut|date_modify('+ '~(entity.nbrejours-1) ~' day')|localizeddate('none', 'none', app.request.locale, "Europe/Paris", "cccc")=="dimanche" %}
+        {% set daycess=entity.datedebut|date_modify('+ '~(entity.nbrejours-3) ~' day')|localizeddate('none', 'none', app.request.locale, "Europe/Paris", "cccc dd MMMM Y") %}
+    {% endif %}
+    <div style="background-color: white; color:black; line-height:35px;">
+
+        {{entity.agent.getCivilite.libsitf}}
+        {#
+        {% if entity.agent.sexe.id == 1 %}
+
+            Monsieur
+        {% elseif entity.agent.sexe.id == 2 %}
+            {% if  entity.agent.situationMatri.id == 1  %}Mademoiselle {% endif %}
+            {% if  entity.agent.situationMatri.id == 2  %}Madame {% endif %}
+
+        {% endif %}
+        #}
+        {{entity.agent.nom}} {{entity.agent.prenoms}}, matricule {{entity.agent.matricule}}, {{entity.agent.emploi.libEmpl}},
+        {#
+        {% if entity.agent.direction.id in [12,13,14,15,16,17,19] %}à {% elseif entity.agent.direction.id in [18] %} à  {% elseif entity.agent.direction.id in [11] %}à la {{entity.agent.direction}} ({{entity.agent.direction.Sigle}}) de {% else %}{% if entity.agent.direction.etatDirection==0 %}au {{entity.agent.direction}} ({{entity.agent.direction.Sigle}}) de {% elseif entity.agent.direction.etatDirection==1 %}à la {{entity.agent.direction}} ({{entity.agent.direction.Sigle}}) de{% endif %}
+        {% endif %}
+
+        #}
+{% if entity.agent.direction.id in [12,13,14,15,16,17,19] %}
+à
+        {% elseif entity.agent.direction %}
+{{entity.agent.direction.article }} {{entity.agent.direction}} ({{entity.agent.direction.Sigle}}) de
+
+
+        {% endif %}
+        
+        la Direction Générale de l'Economie (DGE), est {% if entity.agent.sexe.id == 1 %} autorisé {% else %} autorisée {% endif %} à cesser le service du {% if entity.datedebut %}{{ entity.datedebut|localizeddate('none', 'none', app.request.locale, "Europe/Paris", "cccc dd MMMM Y")|replace({" 01 ": "&nbsp;1<sup>er</sup>&nbsp;"})|raw  }}{% endif %} au {% if entity.datedebut %}{{ daycess|replace({" 01 ": "&nbsp;1<sup>er</sup>&nbsp;"})|raw  }} inclus.{% endif %}
+    </strong>
+    <br/>
+
+    <div align="center" style="font-size:15px; text-decoration: underline;">
+        <h3><b style="font-family: 'CenturyFont';">MOTIF DE CESSATION</b></h3>
+    </div>
+    {#
+        {% if entity.agent.sexe.id == 1 %}
+
+            Monsieur
+        {% elseif entity.agent.sexe.id == 2 %}
+            {% if  entity.agent.situationMatri.id == 1  %}Mademoiselle {% endif %}
+            {% if  entity.agent.situationMatri.id == 2  %}Madame {% endif %}
+
+
+        {% endif %}
+        #}
+    {{entity.agent.getCivilite.libsitf}}
+{{entity.agent.nom}} {{entity.agent.prenoms}} est bénéficiaire de {{ entity.nbrejours }} jours de congé {{entity.typeConges.getRealLibelle(entity.nbrejours)|lower}} {% if entity.typeConges.id == 1 %}au titre de l'année {% if entity.exercice %}{{ entity.exercice }}{% endif %}{% endif %} et reprendra le service le  {% if entity.datefin %}  {{fonctionbase.getWorkDays(entity.datefin)|localizeddate('none', 'none', app.request.locale, "Europe/Paris", "cccc dd MMMM Y")|replace({" 01 ": "&nbsp;1<sup>er</sup>&nbsp;"})|raw   }}.{% endif %}
+</div>
+</div>
+
+</div>
+<br/><br/><br/>
+
+
+<div style="font-size:1em;">
+<table border="0" width="100%">
+    <tr>
+        <td>
+            <table cellsapcing="5">
+                <tr>
+                    <td>
+                        <strong>Ampliations :</strong>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>MEF/DRH</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>MEF/DGE</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>SRHMG</td>
+                    <td>1</td>
+                </tr>
+                {% if entity.agent.direction.sigle != 'SRHMG' and entity.agent.direction.id in [1,2,3,4,5,6,7,8,9,10] %}
+                    <tr>
+                        <td>{{entity.agent.direction.sigle}}</td>
+                        <td>1</td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <td>INTERESSE(E)</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>DOSSIER</td>
+                    <td>1</td>
+                </tr>
+
+            </table>
+        </td>
+        <td valign="top" width="50%">
+
+            <div class="gras" style="font-size:12pt; float:right;">
+
+
+                {% if fonctionbase.getSignataireDg(date()) and fonctionbase.getSignataireDg(date())==1 %}
+
+                    {% else %}
+
+                        {#
+                                                                                {{fonctionbase.getSignataireDg(date())['entete'] | raw}}
+                                                                                <br>  <br><br><br><br><br>
+                                                                                {{fonctionbase.getSignataireDg(date())['signataire'] | raw}}
+                                                                                #}
+                        <u>{{fonctionbase.getSignataireDg(date())['entete'] | raw}}</u>
+                        <br><br>
+                        P.I Le
+                        {{fonctionbase.getSignataireDg(date())['directeur'] | raw}}
+
+                {% endif %}
+
+            </div>
+        </td>
+    </tr>
+</table>
+
+
+              
+    </div>
+</div>
+<script src="{{ asset('design/js/style.js') }}"></script>
+
+{% endblock %}

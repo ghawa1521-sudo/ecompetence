@@ -1,0 +1,30 @@
+pasc:
+    path:     /
+    defaults: { _controller: "PasBundle:Pas:index" }
+
+pasc_show:
+    path:     /{id}/show
+    defaults: { _controller: "PasBundle:Pas:show" }
+
+pasc_new:
+    path:     /new
+    defaults: { _controller: "PasBundle:Pas:new" }
+
+pasc_create:
+    path:     /create
+    defaults: { _controller: "PasBundle:Pas:create" }
+    methods:  POST
+
+pasc_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "PasBundle:Pas:edit" }
+
+pasc_update:
+    path:     /{id}/update
+    defaults: { _controller: "PasBundle:Pas:update" }
+    methods:  [POST, PUT]
+
+pasc_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "PasBundle:Pas:delete" }
+    methods:  [POST, DELETE]

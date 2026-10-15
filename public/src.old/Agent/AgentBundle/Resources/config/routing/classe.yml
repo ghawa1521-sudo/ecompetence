@@ -1,0 +1,30 @@
+classe:
+    path:     /
+    defaults: { _controller: "AgentBundle:Classe:index" }
+
+classe_show:
+    path:     /{id}/show
+    defaults: { _controller: "AgentBundle:Classe:show" }
+
+classe_new:
+    path:     /new
+    defaults: { _controller: "AgentBundle:Classe:new" }
+
+classe_create:
+    path:     /create
+    defaults: { _controller: "AgentBundle:Classe:create" }
+    methods:  POST
+
+classe_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AgentBundle:Classe:edit" }
+
+classe_update:
+    path:     /{id}/update
+    defaults: { _controller: "AgentBundle:Classe:update" }
+    methods:  [POST, PUT]
+
+classe_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AgentBundle:Classe:delete" }
+    methods:  [POST, DELETE]

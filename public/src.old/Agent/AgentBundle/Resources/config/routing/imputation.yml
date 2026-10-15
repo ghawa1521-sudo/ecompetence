@@ -1,0 +1,65 @@
+imputation:
+    path:     /
+    defaults: { _controller: "AgentBundle:Imputation:index" }
+
+imputation_suivi:
+    path:     /suivi
+    defaults: { _controller: "AgentBundle:Imputation:suivi" }
+
+imputation_demande:
+    path:     /demande
+    defaults: { _controller: "AgentBundle:Imputation:demande" }
+
+imputation_affecter:
+    path:     /affecter
+    defaults: { _controller: "AgentBundle:Imputation:affecter" }
+
+imputation_conges:
+    path:     /conges
+    defaults: { _controller: "AgentBundle:Imputation:conges" }
+imputation_mutation:
+    path:     /mutation
+    defaults: { _controller: "AgentBundle:Imputation:mutation" }
+
+imputation_show:
+    path:     /{id}/show
+    defaults: { _controller: "AgentBundle:Imputation:show" }
+
+imputation_new:
+    path:     /new
+    defaults: { _controller: "AgentBundle:Imputation:new" }
+
+imputation_create:
+    path:     /create
+    defaults: { _controller: "AgentBundle:Imputation:create" }
+    methods:  POST
+
+imputation_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AgentBundle:Imputation:edit" }
+
+imputation_update:
+    path:     /{id}/update
+    defaults: { _controller: "AgentBundle:Imputation:update" }
+    methods:  [POST, PUT]
+
+imputation_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AgentBundle:Imputation:delete" }
+    methods:  [POST, DELETE]
+
+imputation_receive:
+    path:     /receive
+    defaults: { _controller: "AgentBundle:Imputation:receive" }
+
+imputation_send:
+    path:     /send
+    defaults: { _controller: "AgentBundle:Imputation:send" }
+
+imputation_reject:
+    path:     /{id}/reject
+    defaults: { _controller: "AgentBundle:Imputation:reject" }
+
+imputation_valid:
+    path:     /{id}/valid
+    defaults: { _controller: "AgentBundle:Imputation:valid" }

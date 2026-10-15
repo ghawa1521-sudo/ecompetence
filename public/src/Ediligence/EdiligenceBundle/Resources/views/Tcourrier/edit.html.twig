@@ -1,0 +1,54 @@
+{% extends '::ediligence/base.html.twig' %}
+
+{% block body %}
+<div class="content-header">
+    <div class="header-section">
+        <h1>
+            <i class="gi gi-notes_2"></i>Modifier courrier<br><small>Veuillez remplir les champs ci-dessous</small>
+        </h1>
+    </div>
+</div>
+<ul class="breadcrumb breadcrumb-top">
+    <li>Transmettre</li>
+    <li><a href="">Courrier</a></li>
+</ul>
+<div class="row">
+    <div class="col-md-offset-2 col-md-8">
+        <div class="block">
+            <!-- Basic Form Elements Title -->
+            <div class="block-title">
+
+                <h2><strong>Modifier Courrier N° {{entity.id}}</strong></h2>
+            </div>
+            <!-- END Form Elements Title -->
+                {{ form_start(edit_form) }}
+                {#
+                {{ form_row(edit_form.sourceCour) }}
+                {{ form_row(edit_form.adresseenreg) }}
+                {{ form_row(edit_form.objet) }}
+                {{ form_row(edit_form.reforigine) }}
+                {{ form_row(edit_form.dateorigine) }}
+            
+                {% if (recover_enr is defined) and (recover_enr > 0) %}
+                    {{ form_row(edit_form.numenregistrement, {'label':'Numero D\'enregistrement (Dernier numero : '~recover_enr~')'}) }}
+                {% else %}
+                    {{ form_row(edit_form.numenregistrement, {'label':'Numero D\'enregistrement (Dernier numero : Aucun)'}) }}
+                {% endif %}
+            
+                {{ form_row(edit_form.observationscecour) }}
+                {{form_widget(edit_form.piecejointe.imageFile,{'attr':{'required':true}})}}
+                <a class="red" href="{{vich_uploader_asset(entity.piecejointe, 'imageFile')}}" title="Télécharger"  class="tooltip-info" data-rel="tooltip" data-original-title="Télécharger"><i class="ace-icon fa fa-download bigger-130"></i></a>
+                <br><br> , {'render_rest':true} #}
+                {{ form_end(edit_form) }}
+
+        </div>
+
+    </div>
+</div>
+<ul>
+    <li>
+        <a href="{{ path('courrier') }}">Retour</a>
+    </li>
+</ul>
+{% endblock %}
+

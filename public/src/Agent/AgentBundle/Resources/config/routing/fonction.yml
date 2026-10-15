@@ -1,0 +1,30 @@
+fonction:
+    path:     /
+    defaults: { _controller: "AgentBundle:Fonction:index" }
+
+fonction_show:
+    path:     /{id}/show
+    defaults: { _controller: "AgentBundle:Fonction:show" }
+
+fonction_new:
+    path:     /new
+    defaults: { _controller: "AgentBundle:Fonction:new" }
+
+fonction_create:
+    path:     /create
+    defaults: { _controller: "AgentBundle:Fonction:create" }
+    methods:  POST
+
+fonction_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AgentBundle:Fonction:edit" }
+
+fonction_update:
+    path:     /{id}/update
+    defaults: { _controller: "AgentBundle:Fonction:update" }
+    methods:  [POST, PUT]
+
+fonction_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AgentBundle:Fonction:delete" }
+    methods:  [POST, DELETE]

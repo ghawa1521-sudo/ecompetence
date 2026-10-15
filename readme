@@ -1,0 +1,228 @@
+# 🚀 INFRA-WEB — Environnement Docker Symfony (Legacy)
+
+![Docker](https://img.shields.io/badge/Docker-ready-blue)
+![Symfony](https://img.shields.io/badge/Symfony-2.x%20legacy-orange)
+![PHP](https://img.shields.io/badge/PHP-7.2-green)
+![Status](https://img.shields.io/badge/status-dev-lightgrey)
+
+---
+
+## 📦 Présentation
+
+Ce projet fournit une **infrastructure Docker complète** pour exécuter une application **Symfony legacy (2.x)** avec :
+
+- ⚙️ PHP-FPM
+- 🌐 Nginx
+- 🗄️ MariaDB
+- ⚡ Redis
+- 📊 phpMyAdmin / Adminer
+
+Objectif : **lancer rapidement l’application en local avec un minimum de configuration.**
+
+---
+
+## ⚙️ Prérequis
+
+- WSL2 (Ubuntu recommandé)
+- Docker & Docker Compose installés
+- Accès root
+
+---
+
+## 🚀 Installation rapide
+
+### 1. Passer en root (si nécessaire)
+
+```bash
+wsl -u root
+wsl -d Ubuntu -u root
+```
+
+---
+
+### 2. Donner les droits sur le projet
+
+```bash
+chown -R $(whoami):$(whoami) public/
+chown -R gbane:gbane public/
+```
+
+---
+
+### 3. Donner les droits sur le cache
+
+```bash
+chmod -R 777 public/app/cache/
+```
+
+---
+
+### 4. Lancer l’infrastructure
+
+```bash
+docker compose up -d --build
+```
+
+---
+
+## 🌐 Accès aux services
+
+| Service       | URL |
+|--------------|-----|
+| Application  | http://localhost:8888 |
+| phpMyAdmin   | http://localhost:8081 |
+| Adminer      | http://localhost:8082 |
+
+---
+
+## 🗄️ Gestion de la base de données
+
+### 📥 Import automatique
+
+La base est importée automatiquement via :
+
+```text
+db/00-import-bd_grh.sh
+db/zz_bd_grh.sql
+```
+
+⚠️ L’import ne se fait **qu’au premier lancement**.
+
+---
+
+### 🔄 Réinitialiser la base
+
+```bash
+docker compose down -v
+docker compose up -d --build
+```
+
+---
+
+### 🔁 Mettre à jour la base
+
+#### ✔️ Via SQL
+
+1. Modifier :
+
+```text
+db/zz_bd_grh.sql
+```
+
+2. Recréer :
+
+```bash
+docker compose down -v
+docker compose up -d --build
+```
+
+---
+
+#### ✔️ Via Symfony
+
+```bash
+docker exec -it apache_php73 bash
+php app/console doctrine:schema:update --force
+```
+
+---
+
+## 🧑‍💻 Commandes Symfony
+
+### Accéder au conteneur
+
+```bash
+docker exec -it apache_php73 bash
+```
+
+### Commandes utiles
+
+```bash
+# Console Symfony
+php app/console
+
+# Mise à jour base
+php app/console doctrine:schema:update --force
+
+# Cache
+php app/console cache:clear --env=prod
+php app/console cache:clear --env=dev
+```
+
+---
+
+## 📁 Structure du projet
+
+```text
+apache/     → PHP + entrypoint
+nginx/      → configuration serveur
+db/         → scripts SQL (import auto)
+public/     → code Symfony
+```
+
+---
+
+## 🛠️ Stack technique
+
+- Docker / Docker Compose
+- Nginx
+- PHP 7.2 FPM
+- MariaDB
+- Redis
+- Symfony 2.x
+
+---
+
+## 🐛 Debug & logs
+
+```bash
+docker logs -f nginx
+docker logs -f apache_php73
+docker logs -f mariadb
+```
+
+---
+
+## ⚠️ Bonnes pratiques
+
+- Toujours donner les droits avant lancement
+- Éviter `777` en production
+- Recréer la base avec `down -v` si nécessaire
+- Vérifier les logs en cas d’erreur
+
+---
+
+## 🧠 Astuces
+
+### Vérifier les ports
+
+```bash
+docker compose port nginx 80
+```
+
+---
+
+## 🎯 Résumé rapide
+
+```bash
+wsl -u root
+chown -R $(whoami):$(whoami) public/
+chmod -R 777 public/app/cache/
+docker compose up -d --build
+```
+
+---
+
+## 👨‍💻 Auteur
+
+Projet interne DGE — Infrastructure Docker Symfony Legacy
+
+---
+
+## 📄 Licence
+
+Usage interne / projet privé
+
+Aller dans termina apache_php via docker desktop
+/var/www/html # chmod -R 777 app/cache/
+/var/www/html # chmod -R 777 app/logs/

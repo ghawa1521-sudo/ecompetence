@@ -1,0 +1,48 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Joindre l'acte</h1>
+
+        <div class="col-md-push-2 col-md-8">
+            <table class="table table-bordered col-md-12">
+                <tr>
+                    <td width="35%">matricule</td>
+                    <td>{{entity.emmeteur.matricule}}</td>
+                </tr>
+                <tr>
+                    <td>Nom</td>
+                    <td>{{entity.emmeteur.nom}} {{entity.emmeteur.prenoms}}</td>
+                    
+                </tr>
+                {% if entity.dateRepSupDir %}
+                <tr>
+                    <td>Supérieur 1</td>
+                    <td>{{entity.dateRepSupDir|date('d-m-y')}} à {{entity.dateRepSupDir|date('h:m:s')}}</td>  
+                </tr>
+                {% endif %}
+                {% if entity.dateRepSupDir2 %}
+                <tr>
+                    <td>Supérieur 2</td>
+                    <td>{{entity.dateRepSupDir2|date('d-m-y')}} à {{entity.dateRepSupDir2|date('h:m:s')}}</td>  
+                </tr>
+                {% endif %}
+                
+                <tr>
+                    <td>Ressources Humaines</td>
+                    <td>validé le  {% if entity.dateRepGrh %}{{entity.dateRepGrh|date('d-m-y')}} à  {{entity.dateRepGrh|date('h:m:s')}}{% endif %}</td>  
+                </tr>
+                
+            </table>
+               
+                    {{ form_start(form) }}
+                    {{ form_errors(form) }}
+                    {{ form_row(form.dateNumActe, {'label_attr': {'class': ''}}) }}
+                    {{ form_row(form.numActe, {'label_attr': {'class': ''}}) }}
+                    {{ form_row(form.demandeActe.docFile, {'label_attr': {'class': ''}}) }}
+                    {{ form_row(form._token) }}
+                    
+                    <input type='submit' value='JOINDRE LA DEMANDE' class='col-md-6 btn btn-success'/>
+        </div>
+
+    
+{% endblock %}

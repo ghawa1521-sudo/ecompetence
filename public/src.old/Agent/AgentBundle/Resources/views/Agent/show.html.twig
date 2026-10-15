@@ -1,0 +1,416 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+
+
+
+
+
+            <!-- page content -->
+
+                            <div class="x_panel">
+
+                                <div class="x_content">
+
+                                    <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
+
+                                        <div class="profile_img">
+
+                                            <!-- end of image cropping RETIRE LE E MAJUSCULE POUR AFFICHER L'IMAGE -->
+                                            <div id="cropE-avatar">
+                                                <!-- Current avatar -->
+                                                <div class="avatar-view" title="Change the avatar">
+
+                                                   
+                                                {% if (entity.imageName) %}
+        
+              
+             <img src="{{ vich_uploader_asset(entity, 'imageFile') }}" alt="{{ entity.imageName }} Avatar">
+             
+          {% elseif (entity.sexe.id == 1 ) %}
+                <img src="{{ asset('images/img_test_agent.png')}}" Avatar>
+            {% elseif (entity.sexe.id == 2 ) %}
+                <img src="{{ asset('images/woman.png')}}" Avatar>
+            {% endif %}
+                                                
+                                                    
+                                                </div>
+
+                                                <!-- Cropping modal -->
+                                                <div class="modal fade" id="avatar-modal" aria-hidden="true" aria-labelledby="avatar-modal-label" role="dialog" tabindex="-1">
+                                                    <div class="modal-dialog modal-lg">
+                                                        <div class="modal-content">
+                                                            <form class="avatar-form" action="crop.php" enctype="multipart/form-data" method="post">
+                                                                <div class="modal-header">
+                                                                    <button class="close" data-dismiss="modal" type="button">&times;</button>
+                                                                    <h4 class="modal-title" id="avatar-modal-label">Change Avatar</h4>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="avatar-body">
+
+                                                                        <!-- Upload image and data -->
+                                                                        <div class="avatar-upload">
+                                                                            <input class="avatar-src" name="avatar_src" type="hidden">
+                                                                            <input class="avatar-data" name="avatar_data" type="hidden">
+                                                                            <label for="avatarInput">Local upload</label>
+                                                                            <input class="avatar-input" id="avatarInput" name="avatar_file" type="file">
+                                                                        </div>
+
+                                                                        <!-- Crop and preview -->
+                                                                        <div class="row">
+                                                                            <div class="col-md-9">
+                                                                                <div class="avatar-wrapper"></div>
+                                                                            </div>
+                                                                            <div class="col-md-3">
+                                                                                <div class="avatar-preview preview-lg"></div>
+                                                                                <div class="avatar-preview preview-md"></div>
+                                                                                <div class="avatar-preview preview-sm"></div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="row avatar-btns">
+                                                                            <div class="col-md-9">
+                                                                                <div class="btn-group">
+                                                                                    <button class="btn btn-primary" data-method="rotate" data-option="-90" type="button" title="Rotate -90 degrees">Rotate Left</button>
+                                                                                    <button class="btn btn-primary" data-method="rotate" data-option="-15" type="button">-15deg</button>
+                                                                                    <button class="btn btn-primary" data-method="rotate" data-option="-30" type="button">-30deg</button>
+                                                                                    <button class="btn btn-primary" data-method="rotate" data-option="-45" type="button">-45deg</button>
+                                                                                </div>
+                                                                                <div class="btn-group">
+                                                                                    <button class="btn btn-primary" data-method="rotate" data-option="90" type="button" title="Rotate 90 degrees">Rotate Right</button>
+                                                                                    <button class="btn btn-primary" data-method="rotate" data-option="15" type="button">15deg</button>
+                                                                                    <button class="btn btn-primary" data-method="rotate" data-option="30" type="button">30deg</button>
+                                                                                    <button class="btn btn-primary" data-method="rotate" data-option="45" type="button">45deg</button>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-3">
+                                                                                <button class="btn btn-primary btn-block avatar-save" type="submit">Done</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- <div class="modal-footer">
+                                                  <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+                                                </div> -->
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- /.modal -->
+
+                                                <!-- Loading state -->
+                                                <div class="loading" aria-label="Loading" role="img" tabindex="-1"></div>
+                                            </div>
+                                            <!-- end of image cropping -->
+
+                                        </div>
+                                        <h3 style="color:#d6841b;">{% if (entity.nom) %}{{entity.concatNom}} {% endif %} 
+                                            </h3>
+
+                                        <ul class="list-unstyled user_data">
+                                            <li><i class="fa fa-map-marker user-profile-icon"></i> {{entity.quartier}}
+                                            </li>
+
+                                            <li>
+                                                <i class="fa fa-briefcase user-profile-icon"></i> {{entity.emploi.libEmpl}}
+                                            </li>
+
+                                            <li class="m-top-xs">
+                                                <i class="fa fa-external-link user-profile-icon"></i>
+                                                <a href="#">{{entity.email}}</a>
+                                            </li>
+                                        </ul>
+
+                                        <a href="{{ path('agent_edit_profil', { 'id': entity.id}) }}" class="btn btn-success"><i class="fa fa-edit m-right-xs"></i>Modifier Profil</a>
+                                        <br />
+
+                                        <!-- start skills -->
+
+                                        <!-- end of skills -->
+
+                                    </div>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+
+
+                                        <!-- start of user-activity-graph -->
+
+                                        <!-- end of user-activity-graph -->
+
+                                        <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                                            <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                                                <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Civilité</a>
+                                                </li>
+                                                <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Emploi</a>
+                                                </li>
+                                                <li role="presentation" class=""><a href="#tab_content3" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">Autres Informations</a>
+                                                </li>
+                                                <li role="presentation" class=""><a href="#tab_content4" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">Actes à télécharger</a>
+                                                </li>
+                                            </ul>
+                                            <div id="myTabContent" class="tab-content">
+                                                <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+
+                                                    <!-- start recent activity -->
+                                                    <table class="data table table-striped no-margin" width="100%" >
+                                <tbody>
+                                <tr>
+                                    <td width="40%" align="left"><b> MATRICULE </b></td>
+                                    <td style="color: red;" width="60%"> 
+                                        {% if (entity.matricule) %}
+                                            {{ entity.matricule }} 
+                                        {% endif %}
+                                        </td>
+                                </tr>
+                                <tr>
+                                    <td><b>NOM et PRENOMS:</b></td>
+                                    <td style="font-weight: bold;">
+                                        {% if (entity.nom) %}
+                                        {{ entity.nom }}
+                                        {% endif %}
+                                        {% if (entity.prenoms) %}
+                                        {{ entity.prenoms }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+
+                              
+                                
+                                <tr>
+                                    <td><b>NE LE  :</b></td>
+                                    <td>
+                                        {% if (entity.dateNaiss) %}
+                                        {{ entity.dateNaiss|date('d-m-Y') }} 
+                                        {% endif %}
+                                        {% if (entity.LieuNaissance) %}
+                                         à {{entity.LieuNaissance.lieuNaiss}} 
+                                        {% endif %}</td>
+                                </tr>
+
+                                <tr>
+                                    <td><b>TELEPHONE :</b></td>
+                                    <td>{% if (entity.telPort) %}
+                                        {{entity.telPort}}</td>
+                                        {% endif %}
+                                </tr>
+
+                                <tr>
+                                    <td><b>ADRESSE MAIL PROFESSIONNEL:</b></td>
+                                    <td>{% if (entity.email) %}{{entity.email}}{% endif %}</td>
+                                </tr>
+                                <tr>
+                                    <td><b>ADRESSE MAIL PERSONNEL:</b></td>
+                                    <td>{% if (entity.emailPerso) %}{{entity.emailPerso}}{% endif %}
+                                    {%for adr in entity.adresse%}
+                                        {{adr.email}} / 
+                                    {% endfor %}
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td><b>SITUATION MATRIMONIALE :</b></td>
+                                    <td>{% if (entity.situationMatri) %}{{ entity.situationMatri }}{% endif %} 
+                                        {% if (entity.nbEnf) %}/ {{ entity.nbEnf }} enfant(s){% endif %} </td>
+                                </tr>
+                            </tbody></table>
+
+                        </td>
+                        <td style="text-align: right; vertical-align: top;">
+                                                    </td>
+                    </tr>
+
+                </tbody>
+            </table>
+                                                    <!-- end recent activity -->
+
+                                                </div>
+                                                <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+
+                                                    <!-- start user projects -->
+                                                    <table class="data table table-striped no-margin" width="100%" >
+                                <tbody>
+                                <tr>
+                                    <td width="40%" align="left"><b> TYPE AGENT </b></td>
+                                    <td style="color: red;" width="60%"> {{ entity.type.libType }} </td>
+                                </tr>
+                                {% if (entity.type.id == 1) %}
+                                <tr>
+                                    <td><b>GRADE / CLASSE / ECHELON :</b></td>
+                                    <td> {% if ((entity.emploi.grade)) %}
+                                        {{entity.emploi.grade.libGrade}}
+                                        {% endif %}
+                                            {% if (entity.classe) %}
+                                        / {{entity.classe.libClas}} 
+                                            {% endif %}
+                                            {% if (entity.echelon) %}
+                                        / {{entity.echelon.libEchelon}}
+                                            {% endif %}
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td><b>INDICE :</b></td>
+                                    <td>{% if (entity.indice) %}{{ entity.indice }}{% endif %}</td>
+                                </tr>
+                                {% endif %}
+                                <tr>
+                                    <td><b>EMPLOI :</b></td>
+                                    <td>{% if (entity.emploi) %}
+                                        {{ entity.emploi.libEmpl }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td><b>FONCTION :</b></td>
+                                    <td>{% if (entity.fonction) %}{{ entity.fonction.libFonc }}{% endif %}</td>
+                                </tr>
+                                <tr>
+                                    <td><b>DIRECTION  :</b></td>
+
+                                    <td>{% if (entity.direction) %}{{ entity.direction.libDirect}}{% endif %}</td>
+                                </tr>
+                                {% if (entity.type.id == 1) %}
+                                <tr>
+                                    <td><b>DATE 1ère PRISE DE SERVICE :</b></td>
+                                    <td>{% if (entity.datePremierService) %}{{entity.datePremierService|date('d-m-Y')}}{% endif %}</td>
+                                </tr>
+                                {% endif %}
+                                <tr>
+                                    <td><b>DATE PRISE DE SERVICE DGE :</b></td>
+                                    <td>{% if (entity.datePriseServiceDge) %}{{entity.datePriseServiceDge|date('d-m-Y')}}{% endif %}</td>
+                                </tr>
+
+
+                                                            </tbody></table>
+
+                        </td>
+                        <td style="text-align: right; vertical-align: top;">
+                                                    </td>
+                    </tr>
+
+                </tbody>
+            </table>
+                                                    <!-- end user projects -->
+
+                                                </div>
+                                                <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
+                                                    <table class="data table table-striped no-margin" width="100%" >
+                                <tbody>
+                                <tr>
+                                    <td width="40%" align="left"><b>NOM ET PRENOMS DU PERE :</b></td>
+                                    <td width="60%">{% if (entity.nomPere) %}{{ entity.nomPere }} {% endif %}</td>
+                                </tr>
+                                <tr>
+                                    <td><b>NOM ET PRENOMS DE LA MERE  :</b></td>
+                                    <td>{% if (entity.nomMere) %}{{ entity.nomMere}}{% endif %}</td>
+                                </tr>
+
+                                <tr>
+                                    <td><b>NOM ET PRENOMS DU CONJOINT :</b></td>
+                                    <td>{% if (entity.nomConjoint) %}{{entity.nomConjoint}}{% endif %}</td>
+                                </tr>
+                                <tr>
+                                    <td><b>SYNDICAT :</b></td>
+                                    <td>{% if (entity.syndicat) %} {{entity.syndicat.libSynd}}{% endif %}</td>
+                                </tr>
+
+                                
+
+
+
+                                <tr>
+                                    <td><b>TELEPHONE PERSONNEL:</b></td>
+                                    <td>{% if (entity.telDom) %}{{entity.telDom}} {% endif %} {% if (entity.telPort) %}/ {{entity.telPort}} {% endif %}</td>
+                                </tr>
+
+                                <tr>
+                                    <td><b>TELEPHONE BUREAU:</b></td>
+                                    <td>{% if (entity.telBur) %}{{entity.telBur}} {% endif %} {% if (entity.numPoste) %} /{{entity.numPoste}} {% endif %}</td>
+                                </tr>
+                                
+                                    <tr>
+                                        <td><b>
+                                    PERSONNE À CONTACTER EN CAS D'URGENCE:
+                                            </b>
+                                        </td>
+                                        <td>
+                                        {% if (entity.telUrgent1) %}
+                                            {{entity.telUrgent1}}
+                                        {% endif %}&nbsp;
+                                        {% if (entity.persUrgent1) %}
+                                            {{entity.persUrgent1}}
+                                        {% endif %}
+                                        {% if (entity.telUrgent2) %}
+                                            {{entity.telUrgent2}}
+                                        {% endif %}
+                                        {% if (entity.persUrgent1) %}
+                                            {{entity.persUrgent2}}
+                                        {% endif %}
+                                        </td>
+                                    </tr>
+                                
+
+                                                            </tbody></table>
+                                                </div>
+
+
+                                                <div role="tabpanel" class="tab-pane fade" id="tab_content4" aria-labelledby="profile-tab">
+                                                    <table class="data table table-striped no-margin" width="100%" >
+                                <tbody>
+                                  
+                                    {% for doc in document %}
+                                <tr>
+                                    <td width="40%" align="left"><b>{{doc.libelle|upper}}</b></td>
+                                    <td width="60%"><button value="{{ vich_uploader_asset(doc, 'docFile')}}" class="btn btn-success btnShow"> Visualiser</button></td>
+                                </tr>
+                                  {% endfor %}
+
+                                  {% if (entity.cvName) %}
+                                <tr>
+                                    <td><b>CURRICULUM VITAE :</b></td>
+                                    <td><button value="{{ vich_uploader_asset(entity, 'cvFile')}}" class="btn btn-success btnShow"> Visualiser</button></td>
+                                </tr>
+                                {% endif %}
+
+
+
+                                
+                                
+                                
+                                                            </tbody></table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+    <!-- ok -->
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+            <ul class="record_actions">
+                <li>
+                    <a href="{{ path('agent') }}">
+                        Retour à la liste
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('agent_edit', { 'id': entity.id}) }}">
+                        Edit
+                    </a>
+                </li>
+                <li>{{ form(delete_form) }}</li>
+            </ul>
+
+        {% endif %}
+{% endblock %}
+{% block javascript %}
+
+
+
+
+    <script src="{{ asset('design/js/icheck/icheck.min.js') }}"></script>
+    <script src="{{ asset('design/js/cropping/cropper.min.js') }}"></script>
+    <script src="{{ asset('design/js/cropping/main.js') }}"></script>
+    <script src="{{ asset('design/js/moris/raphael-min.js')}}"></script>
+    <script src="{{ asset('design/js/moris/morris.js')}}"></script>
+{% endblock %}

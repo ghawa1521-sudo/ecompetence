@@ -1,0 +1,91 @@
+{% extends app.request.attributes.get('_route')=='affecter_print' 
+? '::gabarit_print.html.twig' 
+: '::gabarit_preview.html.twig' %}
+{% block bootstrap %}
+    {% if app.request.attributes.get('_route')=='affecter_print'%}
+    <link href="{{app.request.getSchemeAndHttpHost() ~ asset('design/css/bootstrap.min.css') }}" rel="stylesheet"/>
+    
+{% endif %}
+{% endblock %}
+{% block service %}
+<span class="gras">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Le Directeur Général</span>
+{% endblock %}
+
+{% block ref %}N°:_____________MEF/DGE/SRHMG{% endblock %}
+{% block titre %}
+    <div align="center" style="font-size:30px; font-family:CenturyFontBold !important; border: solid; border-radius: 15px; width: 80%; margin: auto;">
+        <span class="gras">CERTIFICAT DE CESSATION DE SERVICE</span>
+
+    </div>
+{% endblock %}
+
+    {% block contenuPdf -%}
+        <div style="background-color: white; color:black; line-height: 2em;">
+            <p>
+                {{entity[0]['detachement'].agent.getCivilite.libsitf}} {{entity[0]['detachement'].agent.concatNom}}, matricule {{entity[0]['detachement'].agent.matricule}}, {{entity[0]['detachement'].agent.Emploi.libEmpl}}, en service à la Direction Générale de l'Economie (DGE), a cessé le service le {{entity[0]['detachement'].dateDetachement|localizeddate('none', 'none', app.request.locale, "Europe/Paris", "cccc dd MMMM y") }}.
+            </p><p> </p>
+    </div>
+    <br>
+    <center><span class="gras" style="text-decoration:underline;">MOTIF DE LA CESSATION</span></center>
+    <div style="line-height: 2em;">
+    {{entity[0]['detachement'].agent.getCivilite.libsitf}}
+    {{entity[0]['detachement'].agent.concatNom}}
+    est
+
+    {% if entity[0]['detachement'].naturedetachement.id == 1 %}
+
+        mis à la disposition
+        {% if entity[0]['detachement'].Provenance %}
+            du {{ entity[0]['detachement'].Provenance.ministere }}
+        {% endif %}
+
+    {% elseif entity[0]['detachement'].naturedetachement.id == 2 %}
+
+        admis{% if (entity[0]['detachement'].agent.sexe.id == 2) %}e{% endif %}
+        à faire valoir ses droits à la retraite
+
+    {% else %}
+
+        {{ entity[0]['detachement'].objetnote }}
+
+    {% endif %}
+</div>
+    
+  
+    
+          <br><br>  
+   <div style="font-size: 16pt;">
+    <div class="col-md-6">
+        <table cellsapcing="5">
+            <tr><td>
+            <span class="gras">AMPLIATIONS&nbsp;:</span>
+                </td>
+                <td></td>
+            </tr>
+                        <tr>
+            <td>MEF/DRH</td><td>1</td>
+            </tr>
+            <tr>
+           
+            </tr>
+            <tr>
+            <td>{{entity[0]['detachement'].agent.direction.sigle}}</td><td>1</td>
+            </tr>
+            
+
+            <tr>
+            <td>INTERESSE(E)</td><td>1</td>
+            </tr>
+
+            <tr>
+            <td>DOSSIER</td><td>1</td>
+            </tr>
+             
+        </table>
+    </div>
+</div>
+      <script src="{{ asset('design/js/style.js') }}"></script>
+   {% endblock %}
+{% block ampliationPdf %}
+    
+        {% endblock %}

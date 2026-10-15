@@ -1,0 +1,205 @@
+{% extends '::base.html.twig' %}
+        {% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+    <style>
+        th{
+            text-align: left !important;
+        }
+        .dataTables_filter{
+            width: auto !important;
+        }
+    </style>
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+{% block title %}
+Affecter un Agent
+{% endblock %}
+{% block titre_page %}
+    Affecter un Agent
+    {% endblock %}
+{% block body -%}
+    {#
+    <script type="text/javascript">
+
+        $(document).ready(
+                function(){
+                    $(".jlo").empty();
+                    $(".jlo").removeClass("dt-checkboxes-cell")
+                }
+            );
+    }
+</script>#}
+
+    <ul class="nav nav-tabs bar_tabs" role="tablist">
+
+      <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Agent à Affecter</a></li>
+      {#<li role="presentation"><a href="#serv1" aria-controls="message" role="tab" data-toggle="tab">Dossier Imputés</a></li>#}
+      <li role="presentation"><a href="#serv2" aria-controls="message" role="tab" data-toggle="tab">Archives</a></li>
+
+    </ul>
+<div class="tab-content">
+
+  <div role="tabpanel" class="tab-pane active" id="home">
+
+    <table class="records_list table table-striped responsive-utilities jambo_table" id="datatable">
+        <thead>
+
+            <tr  class="headings" align="center">
+               
+               <th><b>Matricule</b></th>
+                <th><b>Nom et Prénom(s)</b></th>
+                <th><b>Etat affectation</b></th>
+                
+                <th><b>Actions</b></th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            
+        {% for entity in attente %}
+        
+            <tr>
+                {#<td><a href="{{ path('affecter_edit', { 'id': entity.id }) }}">{{ entity.id }}</a></td>{% if entity.imputation_etat == 1 %}
+                                    <td  class="jlo">
+                                   
+                                    </td>
+                                {% else %}  {% endif %}<td>
+                                    {{entity.id}}
+                                    </td>
+                                    #}
+                                
+                              
+                                
+                                <td>{{ entity.matricule }}</td>
+
+                
+                <td>{{entity.nom_celibataire}} {{entity.nom_marie}} 
+                    {#{% if entity.agent.sexe.id == 1 %}
+                        Monsieur <span class="gras">{{entity.nom}} {{entity.prenoms}}</span>
+                    {% elseif entity.agent.sexe.id == 2 %}
+                        {% if  entity.agent.situationMatri.id == 1  %}Mademoiselle <span class="gras">{{entity.agent.nom}} {{entity.agent.prenoms}}</span> {% endif %}
+                        {% if  entity.agent.situationMatri.id == 2  %}Madame <span class="gras">{{entity.agent.nom}}</span> née <span class="gras">{{entity.agent.nomJeuneFille}}</span>{% endif %}
+                    {% endif %}#}
+                </td>
+                <td>
+                    {% if entity.affecter_etat==0 %}En Attente d'Affectation
+                            <label class="label label-info"></label>
+                        {% elseif entity.affecter_etat==1 %}Affecté(e) dans un Service
+                            <label class="label label-success"></label>
+                            {% elseif entity.affecter_etat==2 %}Prise de Service Validée
+                                <label class="label label-success"></label>
+                    {% endif %}
+                </td>
+                {#
+                <td>
+              {% if entity.etatAffectation==1 and entity.signeNote==0 %} <label class="label label-warning">Note d'Affectation / non encore Signé</label> {% endif %}
+              {% if entity.etatAffectation==1 and entity.signeNote==1 %} <label class="label label-success">Note d'Affectation /  Signé</label> {% endif %}
+              {% if entity.etatAffectation==2 and entity.signeCertificat==0 %} <label class="label label-warning">Certificat de Prise de Service / non encore Signé</label> {% endif %}
+              {% if entity.etatAffectation==2 and entity.signeCertificat==1 %} <label class="label label-success">Certificat de Prise de Service / Signé</label> {% endif %}
+              </td>#}
+                <td align="center">
+
+                      {% if  is_granted('ROLE_RESPO_SRHMG') or deleguation == 0 %}
+                      {% if (entity.affecter_etat==0) %}
+
+                          <a class="btn btn-success" href="{{ path('affecter_direction', { 'id': entity.id }) }}">AFFECTER</a>
+
+
+                    {% endif %}
+                    {% endif %}
+
+                </td>
+            </tr>
+            
+           
+        {% endfor %}
+        </tbody>
+    </table>
+    <br><br><br><br>
+
+    
+</div>
+{#}
+<div role="tabpanel" class="tab-pane" id="serv1">
+<table class="records_list table table-striped responsive-utilities jambo_table" id="datatable">
+        <thead>
+
+            <tr  class="headings" align="center">
+                
+               <th><b>Matricule</b></th>
+                <th><b>Nom & Prénom(s)</b></th>
+                <th><b>Date Imputation</b></th>
+                <th><b>Etat Traitement</b></th>
+                <th><b>Date Traitement</b></th>
+                <th><b>Coolaborateur en charge du dossier</b></th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            
+        {% for entity in attente_imputer %}
+        
+                <td>{{entity.matAffecter}}</td>
+                <td>{{entity.nomAffecter}} {{entity.prenomsAffecter}} {{entity.prenomsAffecter}}</td>
+                <td align="center">{{entity.date_imputation|date('d/m/Y')}} <br> {{entity.date_imputation|date('H:i:s')}}</td>
+                <td>
+                    {% if entity.imputation_etat_trt==0 %}Dossier en cours de Traitement
+                            <label class="label label-info"></label>
+                        {% elseif entity.imputation_etat_trt==1 %}Dossier Traiter
+                            <label class="label label-success"></label>
+                            
+                    {% endif %}
+                </td>
+                <td>
+                    {% if entity.date_trt %}
+                        {{entity.date_trt|date('d/m/Y')}} <br> {{entity.date_trt|date('H:i:s')}}
+                    {% endif %}
+                </td>
+                <td align="center">
+                    {{entity.nomImputer}} {{entity.prenomsImputer}}
+                     
+                </td>
+            </tr>
+            
+           
+        {% endfor %}
+        </tbody>
+    </table>
+</div>#}
+<div role="tabpanel" class="tab-pane" id="serv2">
+<table class="records_list table table-striped responsive-utilities jambo_table" id="datatable">
+        <thead>
+
+            <tr  class="headings" align="center">
+                
+               <th><b>Matricule</b></th>
+                <th><b>Nom & Prénom(s)</b></th>
+                <th><b>Direction</b></th>
+                <th><b>Action</b></th>
+
+            </tr>
+        </thead>
+        <tbody>
+            
+            
+        {% for entity in archive %}
+        
+                <td>{{entity.matricule}}</td>
+                <td>{{entity.nom_marie}} {{entity.nom_celibataire}}</td>
+                <td align="center">{{entity.direction}}</td>
+                
+                <td>
+                    
+                </td>
+                
+            </tr>
+            
+           
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+    {% endblock %}

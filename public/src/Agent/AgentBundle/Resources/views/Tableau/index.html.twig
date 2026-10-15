@@ -1,0 +1,485 @@
+{% extends '::base.html.twig' %}
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+     <style>
+        .dataTables_filter{
+            width: auto !important;
+        }
+       
+        div > i{
+            color:orange;{#1abc9c;#}
+        }
+        .details{
+            color:red; font-weight: bold;
+        }
+    </style>
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+{% block body -%}  
+    <div class="row top_tiles">
+              <a href="{{path('stat_details', { 'id': 3 })}}">
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="tile-stats">
+                  <div class="icon"><i class="fa fa-users"></i></div>
+                  <div class="count">{% if(stats.effectif[0]is defined) %}{{stats.effectif[0].total}}{%else%}0{% endif%}</div>
+                  <h3>Effectif global</h3>
+                  <p><i class="fa fa-male"></i>&nbsp;Homme: <span class="details">{% if(stats.effectif[0]is defined) %}{{stats.effectif[0].m}}{%else%}0{% endif%}</span> &nbsp;<i class="fa fa-female"></i>&nbsp;Femme: <span class="details">{% if(stats.effectif[0]is defined) %}{{stats.effectif[0].f}}{%else%}0{% endif%}</span></p>
+                </div>
+              </div>
+              </a>
+            <a href="{{path('stat_details', { 'id': 4 })}}">
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="tile-stats">
+                    <div class="icon"><i class="fa fa-briefcase"></i></div>
+                  <div class="count">&nbsp;</div>
+                  <h3 >Stat. par emploi</h3>
+                  <p>&nbsp;</p>
+                </div>
+              </div>
+            </a>
+                  <a href="{{path('stat_details', { 'id': 2 })}}">
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="tile-stats">
+                  <div class="icon"><i class="fa fa-cubes"></i></div>
+                  <div class="count">&nbsp;</div>
+                  <h3>Stat. par Categorie</h3>
+                  <p>A:<span class="details">{% if(stats.categorie[0].total is defined) %}{{stats.categorie[0].total}}{% else%} 0 {% endif%}</span> &nbsp; B:<span class="details">{% if(stats.categorie[1].total)is defined %}{{stats.categorie[1].total}}{% else%} 0{% endif%}</span> &nbsp; C:<span class="details">{% if(stats.categorie[2].total)is defined %}{{stats.categorie[2].total}}{% else%} 0{% endif%}</span> &nbsp; D:<span class="details">{% if(stats.categorie[3].total is defined) %}{{stats.categorie[3].total}}{% else%} 0{% endif%}</span></p>
+                </div>
+              </div>
+                  </a>
+              <a href="{{path('stat_details', { 'id': 1 })}}">
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="tile-stats">
+                  <div class="icon"><i class="fa fa-mortar-board"></i></div>
+                  <div class="count">&nbsp;</div>
+                  <h3>Stat. par grade</h3>
+                  <p>&nbsp;</p>
+                </div>
+              </div>
+              </a>
+               
+              <a href="{{path('stat_details', { 'id': 5 })}}">
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="tile-stats">
+                  <div class="icon"><i class="fa fa-sitemap"></i></div>
+                  <div class="count">&nbsp;</div>
+                  <h3>Stat. par Direction</h3>
+                  <p>&nbsp;</p>
+                </div>
+              </div>
+              </a>
+
+              <a href="{{path('stat_details', { 'id': 8 })}}">
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="tile-stats">
+                  <div class="icon"><i class="fa fa-newspaper-o"></i></div>
+                  <div class="count">&nbsp;</div>
+                  <h3>Stat. par type d'acte</h3>
+                  <p>&nbsp;</p>
+                </div>
+              </div>
+               </a>
+
+              <a href="{{path('stat_details', { 'id': 7 })}}">
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="tile-stats">
+                  <div class="icon"><i class="fa fa-comments-o"></i></div>
+                  <div class="count">&nbsp;</div>
+                  <h3>Stat. par syndicat</h3>
+                  <p>&nbsp;</p>
+                </div>
+              </div>
+              </a>
+             {# <a href="{{path('stat_details', { 'id': 3 })}}">#}
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="tile-stats">
+                  <div class="icon"><i class="fa fa-line-chart"></i></div>
+                  <div class="count">&nbsp;</div>
+                  <h3>Courbes d'évolutions</h3>
+                  <p>&nbsp;</p>
+                </div>
+              </div>
+              {#</a>#}
+            </div>
+              
+              
+              {#
+    <h2>Statistiques de l'année {{ "now"|date("Y") }}</h2>
+ {#
+    <div class="col-md-6 col-sm-6 col-xs-12">
+    <table class="records_list table table-striped responsive-utilities jambo_table bulk_action">
+        <thead>
+            <tr>
+                <th>N°</th>
+                <th>Type de Demande</th>
+                <th>Nombre de demande effectuer</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% set i = 1 %}
+        {% for entity in entities %}
+            <tr>
+                <td>{{i}}</td>
+                <td>{{entity.libelle}}</td>
+                <td align="center" width="30%">{{entity.compt}}</td>
+            </tr>
+            {% set i = i + 1 %}
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+#
+
+<div class="col-xs-12">
+    <div class="col-xs-3">
+        <table class="table table-striped responsive-utilities jambo_table ">
+         <thead>
+            <tr>
+                <th >Grade</th>
+                <th >Détail</th>
+            </tr>
+        </thead>
+            <tbody>
+            {% for grade in stats.grade %}
+            <tr>
+                <th>{{grade.lib}}</th>
+                <th>Total: {{grade.total}}<br>Homme: {{grade.m}}<br>Femme: {{grade.f}}</th>
+            </tr>
+            {% endfor %}
+        </tbody>
+     </table>
+    </div>
+     <table class="table table-striped responsive-utilities jambo_table ">
+         <thead>
+            <tr>
+                <th>Grade</th>
+                 {% for grade in stats.grade %}
+            
+                <th>{{grade.lib}}</th>
+             
+            {% endfor %}
+            </tr>
+        </thead>
+            <tbody>
+                <tr>
+                 <th>Homme<br>Femme<br>Total</th>
+            {% for grade in stats.grade %}
+           
+            
+                <th>{{grade.m}}<br>{{grade.f}}<br>{{grade.total}}<br></th>
+            
+            {% endfor %}
+        </tr>
+        </tbody>
+     </table>
+     <table class="table table-striped responsive-utilities jambo_table ">
+        <tr>
+        <th>Catégorie</th>
+        {% for categorie in stats.categorie %}
+                <th>{{categorie.lib}}</th>
+            {% endfor %}
+        </tr>
+        <tr>
+        <th>Homme</th>
+        {% for categorie in stats.categorie %}
+                <th>{{categorie.m}}</th>
+            {% endfor %}
+        </tr>
+        <tr>
+        <th>Femme</th>
+        {% for categorie in stats.categorie %}
+                <th>{{categorie.f}}</th>
+            {% endfor %}
+        </tr>
+        <tr>
+      <tr>
+        <th>Total</th>
+        {% for categorie in stats.categorie %}
+                <th>{{categorie.total}}</th>
+            {% endfor %}
+        </tr>
+        <tr>
+     </table>
+     <table class="table table-striped responsive-utilities jambo_table ">
+        <tr>
+            <th colspan="3">Effectif</th>
+            <th colspan="3">Fonctionnaire</th>
+            <th colspan="3">Contractuel</th>
+        </tr>
+       
+        <tr>
+             <th>Total</th>
+             <th>Homme</th>
+             <th>Femme</th>
+             <th>Total</th>
+             <th>Homme</th>
+             <th>Femme</th>
+             <th>Total</th>
+             <th>Homme</th>
+             <th>Femme</th>
+        </tr>
+         <tr>
+             <th>{{stats.effectif[0].total}}</th>
+             <th>{{stats.effectif[0].m}}</th>
+             <th>{{stats.effectif[0].f}}</th>
+             <th>{{stats.effectif[0].fonctionnairetotal}}</th>
+             <th>{{stats.effectif[0].fonctionnairehomme}}</th>
+             <th>{{stats.effectif[0].fonctionnairefemme}}</th>
+             <th>{{stats.effectif[0].contractueltotal}}</th>
+             <th>{{stats.effectif[0].contractuelhomme}}</th>
+             <th>{{stats.effectif[0].contractuelfemme}}</th>
+        
+        </tr>
+     </table>
+
+
+
+ <table class="table table-striped responsive-utilities jambo_table ">
+        <tr>
+            <th>Emploi</th>
+            <th>Total</th>
+            <th>Homme</th>
+            <th>Femme</th>
+        </tr>
+        {% for emploi in stats.emploi %}
+        <tr>
+            <th>{{emploi.lib}}</th>
+            <th>{{emploi.total}}</th>
+            <th>{{emploi.m}}</th>
+            <th>{{emploi.f}}</th>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+     <table class="table table-striped responsive-utilities jambo_table ">
+        <tr>
+            <th>Direction</th>
+            <th>Total</th>
+            <th>Homme</th>
+            <th>Femme</th>
+            <th colspan="3">Fonctionnaire</th>
+            <th colspan="3">Contractuel</th>
+        </tr>
+        <tr>
+            <th colspan="4"></th>
+            <th>Total</th>
+            <th>Homme</th>
+            <th>Femme</th>
+            <th>Total</th>
+            <th>Homme</th>
+            <th>Femme</th>
+        </tr>
+        {% for direction in stats.direction %}
+        <tr>
+            <th>{{direction.lib}}</th>
+            <th>{{direction.total}}</th>
+            <th>{{direction.m}}</th>
+            <th>{{direction.f}}</th>
+            <th>{{direction.fonctionnairetotal}}</th>
+            <th>{{direction.fonctionnairehomme}}</th>
+            <th>{{direction.fonctionnairefemme}}</th>
+            <th>{{direction.contractueltotal}}</th>
+            <th>{{direction.contractuelhomme}}</th>
+            <th>{{direction.fonctionnairefemme}}</th>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+
+
+    </div>
+
+<div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Graphe d'Illustration</h2>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content2">
+                    <div id="graph_donut" style="width:100%; height:300px;"></div>
+                  </div>
+                </div>
+              </div>
+<br>
+<div class="col-xs-12">
+
+ <table class="table table-striped responsive-utilities jambo_table ">
+        <thead>
+            <tr>
+                <th colspan="4">Personne en attente d’affectation depuis un mois </th>
+            </tr>
+            <tr>
+                <th>&nbsp;</th>
+                <th>Matricule</th>
+                <th>Nom et Prénoms</th>
+                <th>Date enregistrement</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if attente_affectation is defined and attente_affectation != null %}
+            {% set i = 1 %}
+            {% for affectation in attente_affectation %}
+                <tr>
+                    <td>{{i}}</td>
+                    <td>{{affectation.agent.matricule}}</td>
+                    <td>{{affectation.agent.nom}} {{affectation.agent.prenoms}} {{affectation.agent.nomJeuneFille}}</td>
+                    <td>{{affectation.dateEnregAgt|date('d-m-Y')}}</td>
+                </tr>
+                {% set i = i + 1 %}
+            {% endfor %}
+        {% endif %}
+        </tbody>
+</table>
+</div>
+<br>
+<div class="col-xs-12">
+ 
+ <table class="table table-striped responsive-utilities jambo_table ">
+        <thead>
+            <tr>
+                <th  colspan="4">Personnes affecter dans un service et n’ayant pas encore pris service </th>
+            </tr>
+             <tr>
+                <th>&nbsp;</th>
+                <th>Matricule</th>
+                <th>Nom et Prénoms</th>
+                <th>Date affectation</th>
+            </tr>
+        </thead>
+         <tbody>
+        {% if affectation_sansprise is defined and affectation_sansprise != null %}
+            {% set i = 1 %}
+            {% for affectation_sansprises in affectation_sansprise %}
+                <tr>
+                    <td>{{i}}</td>
+                    <td>{{affectation_sansprises.agent.matricule}}</td>
+                <td> 
+                {{affectation_sansprises.agent.nom}} {{affectation_sansprises.agent.prenoms}} {{affectation_sansprises.agent.nomJeuneFille}}</td>
+                    <td>{{affectation_sansprises.dateMiseService|date('d-m-Y H:i:s')}}</td>
+                </tr>
+                {% set i = i + 1 %}
+            {% endfor %}
+        {% endif %}
+        </tbody>
+</table>
+</div>
+
+<br> 
+<div class="col-xs-12">
+ 
+ <table class="table table-striped responsive-utilities jambo_table ">
+        <thead>
+            <tr>
+                <th  colspan="4">Personnes affecter dans un service ayant pris service et en attente de signature du certificat </th>
+            </tr>
+             <tr>
+                <th>&nbsp;</th>
+                <th>Matricule</th>
+                <th>Nom et Prénoms</th>
+                <th>Date prise de service</th>
+            </tr>
+        </thead>
+         <tbody>
+        {% if certificat is defined and certificat != null %}
+            {% set i = 1 %}
+            {% for certificats in certificat %}
+                <tr>
+                    <td>{{i}}</td>
+                    <td>{{certificats.agent.matricule}}</td>
+                <td> 
+                {{certificats.agent.nom}} {{certificats.agent.prenoms}} {{certificats.agent.nomJeuneFille}}</td>
+                    <td>{{certificats.dateprise|date('d-m-Y H:i:s')}}</td>
+                </tr>
+                {% set i = i + 1 %}
+            {% endfor %}
+        {% endif %}
+        </tbody>
+</table>
+</div>
+<br>
+<div class="col-xs-12">
+ 
+ <table class="table table-striped responsive-utilities jambo_table ">
+        <thead>
+            <tr>
+                <th  colspan="5">Liste des demandes d'actes en cours de traitement par la Grh</th>
+            </tr>
+             <tr>
+                <th>&nbsp;</th>
+                <th>Matricule</th>
+                <th>Nom et Prénoms</th>
+                <th>Date demande</th>
+                <th>Type acte</th>
+            </tr>
+        </thead>
+         <tbody>
+        {% if demande is defined and demande != null %}
+            {% set i = 1 %}
+            {% for demandes in demande %}
+                <tr>
+                    <td>{{i}}</td>
+                    <td>{{demandes.emmeteur.matricule}}</td>
+                <td> 
+                {{demandes.emmeteur.nom}} {{demandes.emmeteur.prenoms}} {{demandes.emmeteur.nomJeuneFille}}</td>
+                    <td>{{demandes.datecreation|date('d-m-Y H:i:s')}}</td>
+                    <td>{{demandes.typeDemande.libelle}}</td>
+                </tr>
+                {% set i = i + 1 %}
+            {% endfor %}
+        {% endif %}
+        </tbody>
+</table>
+</div>
+
+<br>
+<div class="col-xs-12">
+ 
+ <table class="table table-striped responsive-utilities jambo_table ">
+        <thead>
+            <tr>
+                <th  colspan="5">Liste des demandes de mutation en cours de traitement par la Grh</th>
+            </tr>
+             <tr>
+                <th>&nbsp;</th>
+                <th>Matricule</th>
+                <th>Nom et Prénoms</th>
+                <th>Date demande</th>
+            </tr>
+        </thead>
+         <tbody>
+        {% if mutation is defined and mutation != null %}
+            {% set i = 1 %}
+            {% for mutations in mutation %}
+                <tr>
+                    <td>{{i}}</td>
+                    <td>{{mutations.emmeteur.matricule}}</td>
+                <td> 
+                {{mutations.emmeteur.nom}} {{mutations.emmeteur.prenoms}} {{mutations.emmeteur.nomJeuneFille}}</td>
+                    <td>{{mutations.datecreation|date('d-m-Y H:i:s')}}</td>
+                </tr>
+                {% set i = i + 1 %}
+            {% endfor %}
+        {% endif %}
+        </tbody>
+</table>
+</div>#}
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript">
+
+
+$("#graph_donut").length&&Morris.Donut({element:"graph_donut",
+    data:[
+            {% for entity in entities %}
+            {label:"{{entity.libelle|raw}}",value:{{entity.compt}}},
+            {% endfor %}],
+    colors:["#26B99A","#34495E","#ACADAC"],
+    formatter:function(a){return a},
+    resize:!0})
+</script>
+{% endblock %}

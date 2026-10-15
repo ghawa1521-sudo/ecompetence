@@ -1,0 +1,113 @@
+<?php
+
+namespace Ediligence\EdiligenceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Ttraitement
+ *
+ * @ORM\Table(name="ttraitement")
+ * @ORM\Entity(repositoryClass="Ediligence\EdiligenceBundle\Repository\TtraitementRepository")
+ */
+class Ttraitement
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    
+    
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="DateTraitement", type="datetime", nullable=false)
+     */
+    private $datetraitement = 'CURRENT_TIMESTAMP';
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Agent\AgentBundle\Entity\Pj", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $pjtraitement;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="libTraitement", type="text", length=65535, nullable=false)
+     */
+    private $libtraitement;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="txtTraitement", type="string", length=50, nullable=false)
+     */
+    private $txttraitement;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="EtatTraitement", type="integer", nullable=false)
+     */
+    private $etattraitement = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="numTraitement", type="integer", nullable=false)
+     */
+    private $numtraitement;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="matriculeImpute", type="string", length=5, nullable=false)
+     */
+    private $matriculeimpute;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="matriculeImputeur", type="string", length=5, nullable=false)
+     */
+    private $matriculeimputeur;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="CodeCourrier", type="integer", nullable=false)
+     */
+    private $codecourrier;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="Id_imput", type="integer", nullable=false)
+     */
+    private $idImput = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="etataff", type="integer", nullable=false)
+     */
+    private $etataff = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="modif", type="integer", nullable=false)
+     */
+    private $modif = '0';
+
+    
+
+
+    
+}

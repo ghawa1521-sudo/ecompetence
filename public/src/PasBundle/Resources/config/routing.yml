@@ -1,0 +1,41 @@
+pas_pasc:
+    resource: "@PasBundle/Resources/config/routing/pas.yml"
+    prefix:   /pasc
+
+pas_homepage:
+    path:     /
+    defaults: { _controller: PasBundle:Default:index }
+    
+pas_ajout:
+    path:     /ajouter
+    defaults: { _controller: PasBundle:Default:ajout }
+    methods: [POST, GET]
+    
+pas_evaluer:
+    path:     /{id}/evaluer
+    defaults: { _controller: PasBundle:Default:evaluer }
+    methods: [POST, GET]
+    
+pas_fiche:
+    path:     /{id}/fiche
+    defaults: { _controller: PasBundle:Default:fiche }
+    methods: [POST, GET]
+    
+pas_bareme:
+    path:     /{id}/bareme
+    defaults: { _controller: PasBundle:Default:bareme }
+    methods: [POST, GET]
+    
+pas_noter:
+    path:     /{id}/noter
+    defaults: { _controller: PasBundle:Default:noter }
+    methods: POST
+    
+pas_preuve:
+    path:     /{id}/preuve
+    defaults: { _controller: PasBundle:Default:preuve }
+    methods: [POST, GET]
+  
+pas_bilan:
+    path:     /bilan
+    defaults: { _controller: PasBundle:Default:bilan }

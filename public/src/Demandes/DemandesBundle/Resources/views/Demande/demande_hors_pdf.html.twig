@@ -1,0 +1,89 @@
+{% extends app.request.attributes.get('_route')=='demande_print'
+? '::gabarit_print.html.twig'
+: '::gabarit_cabinet.html.twig' %}
+
+{% block bootstrap %}
+    {% if app.request.attributes.get('_route')=='demande_print'%}
+        <link href="{{app.request.getSchemeAndHttpHost() ~ asset('design/css/bootstrap.min.css') }}" rel="stylesheet"/>
+
+    {% endif %}
+{% endblock %}
+{% block service %}
+    <span class="gras" align="center"></span>
+
+{% endblock %}
+{% block titre %}
+    <div align="center" style="font-size:23px; font-family:CenturyFontBold !important; border-radius: 5px; width: 40%; margin: auto; text-decoration:underline; ">
+        {{entity.typedemande.libelle}}
+    </div>
+
+{% endblock %}
+
+{% block ref %}N°____________MEF/DGE/SRHMG/{{app.user.agent.nom|slice(0,1)~app.user.agent.prenoms|slice(0,1)~app.user.agent.nomJeuneFille|slice(0,1)}}{% endblock %}
+{% block datePdf %}{#{% if entity.datecreation %}{{ entity.datecreation|date('d-m-Y H:i:s') }}{% endif %}#}{% endblock %}
+{% block contenuPdf -%}
+
+    <div style="background-color: white; color:black; line-height:2em;">
+        Je soussigné <span id="signe"><span class="gras">{{dirCabCivil}} {{dirCabName}}</span>, Directeur de Cabinet du Ministre de l'Economie et des Finances</span>,   autorise:
+        <br>
+
+        <table width="100%" style="font-size: 14pt !important;">
+            <tr><td width="15%"> {{entity.emmeteur.getCivilite.libsitf}}</td><td class="gras">:{{entity.emmeteur.concatNom|striptags}}</td></tr>
+            <tr><td >  Matricule</td><td class="gras">:{{entity.emmeteur.matricule}}</td></tr>
+            <tr><td>  Service</td><td class="gras">:Direction Générale de l'Economie</td></tr>
+            <tr><td>  Emploi </td><td class="gras">:{{entity.emmeteur.emploi.libEmpl}},</td></tr>
+        </table>
+        à sortir du territoire, en vue de se rendre {{entity.destination}} du
+        {% if entity.dateDeb %}{{ entity.dateDeb|localizeddate('none', 'none', app.request.locale, "Europe/Paris", "cccc d MMMM Y") }}{% endif %}
+        au {% if entity.dateFin %} {{ entity.dateFin|localizeddate('none', 'none', app.request.locale, "Europe/Paris", "cccc d MMMM Y") }}{% endif %} inclus, pour jouir de son congé annuel.
+
+
+        <br/>
+        En foi de quoi,
+        la présente autorisation lui est délivrée pour servir et valoir ce que de droit.
+    </div>
+</div>
+
+
+<script src="{{ asset('design/js/style.js') }}"></script>
+<script type="text/javascript">
+$("#dircab").change(function(){
+    $("#signe").html('');
+    $("#signe").html($(this).val());
+  console.log($(this).val());
+}); 
+</script>
+{% endblock %}
+{% block ampliationPdf %}
+
+    <b><u class="gras">AMPLIATIONS</u></b>
+    <table style="width: 120px; height:100px;">
+        <tr>
+            <td>-MEF/CAB</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>-INTERESSE(E)</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>-DOSSIER</td>
+            <td>1</td>
+        </tr>
+    </table>
+    {#<div style="width: 120px;">
+        <div style="float: left; width: 90px;">
+            -MEF/CAB
+            <br>-INTERESSE(E)
+            <br>-DOSSIER
+        </div>
+        <div style="float: left; width: 30px; text-align: right;">
+            1
+            <br>1
+            <br>1
+        </div>
+
+    </div>#}
+
+
+{% endblock %}

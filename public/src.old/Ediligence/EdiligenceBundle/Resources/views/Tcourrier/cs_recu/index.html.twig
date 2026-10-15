@@ -1,0 +1,123 @@
+{% extends '::ediligence/base.html.twig' %}
+
+{% block body %}
+
+     <div class="content-header">
+        <div class="header-section">
+            <h1><i class="gi gi-envelope"></i> Dossier<br><small>Mes diligences</small></h1>
+        </div>
+    </div>
+    <ul class="breadcrumb breadcrumb-top">
+        <li>Actions</li>
+        <li><a href="">Mes Dossiers</a></li>
+    </ul>
+    <div class="block full">
+        <div class="block-title">
+            <h2><strong>Liste</strong> dossiers</h2>
+        </div>{#
+        <p><a href="https://dge.ci" target="_blank">DataTables</a> is a plug-in for the Jquery Javascript library. It is a highly flexible tool, based upon the foundations of progressive enhancement, which will add advanced interaction controls to any HTML table. It is integrated with template's design and it offers many features such as on-the-fly filtering and variable length pagination.</p>
+#}
+
+        <div class="table-responsive">
+            <table id="example-datatable" class="table table-vcenter table-condensed table-bordered">
+                <thead>
+                    <tr>
+                        <th>Num</th>
+                        <th>Exp</th>
+                        <th>Nature Courrier</th>
+                        <th>Objet</th>
+                        <th>Date imputation</th>
+                        <th>Delai</th>
+                        <th>Télécharger</th>
+                        <th>Etat Diligence</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody> 
+                    {% set i = 0 %}
+                    {% for entity in entities %}
+                         {% set i = i + 1 %}
+                        <tr>
+                            <td><a href="{{ path('courrier_show', { 'id': entity[0].id}) }}">{{ i }}</a></td>
+                            <td>{{ entity[0].matriculeImput.nom }} {{ entity[0].matriculeImput.prenoms }}</td>
+                            <td>{{ entity[0].courrier.typecourrier.libcourrier }}</td>
+                            <td>{{ entity[0].courrier.objet|raw|striptags|slice(0, 150) }}</td>
+                            <td>{{ entity[0].dateImput|date('d-m-Y') }}</td>
+                            <td>
+                                {{ entity[0].delaiImput|date('d-m-Y') }}<font color="red">&nbsp;&nbsp;&nbsp;{{(date(entity[0].delaiImput).diff(date(entity[0].dateImput))).days}}&nbsp;jour(s)</font>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                {{jauge[entity[0].id]|raw}}
+                            </td>
+                            <td>{% if(entity[0].courrier.piecejointe !=null and entity[0].courrier.piecejointe is defined) %}
+                                {{ macro.apercu(entity[0].courrier.piecejointe) }}
+                                {#<a class="red" href="{{vich_uploader_asset(entity[0].courrier.piecejointe, 'imageFile')}}" title="Télécharger"  class="tooltip-info" data-rel="tooltip" data-original-title="Télécharger"><i class="ace-icon fa fa-download bigger-130"></i></a></td>#}
+                               {% endif %}
+                            <td>
+                             {% if entity.librejet!=null %}
+                                Dossier rejeté
+                             {% else %} 
+                                Diligence reçue
+                             {% endif %}
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group btn-group-xs">
+                                 
+                                 {% if entity[0].nbrePers > 1 %}
+                                   {% if entity[0].etatImput >=1 %} 
+                                      {#<a href="{{ path('courrier_cstraiter', { 'id': entity[0].id }) }}" data-toggle="tooltip" title="Traiter" class="btn btn-danger"><i class="fa fa-pencil"></i></a> #} 
+                                      <a href="{{ path('courrier_cstraiter', { 'id': entity[0].id }) }}" class="btn btn-success"><span class="glyphicon glyphicon-inbox"></span> Traiter</a>
+                                   {% else %}
+                                      {% if (entity.etatreception!=null or entity.etatreception==null) %} 
+                                        {#<a href="{{ path('courrier_cstraiter', { 'id': entity[0].id }) }}" data-toggle="tooltip" title="Traiter" class="btn btn-danger"><i class="fa fa-pencil"></i></a>#}
+                                        <a href="{{ path('courrier_cstraiter', { 'id': entity[0].id }) }}" class="btn btn-success"><span class="glyphicon glyphicon-inbox"></span> Traiter</a>
+                                       {% else %} 
+                                         {% if app.user.agent.fonction.id == 8 %}
+                                           {#<a href="{{ path('courrier_cstraiter', { 'id': entity[0].id }) }}" data-toggle="tooltip" title="Traiter" class="btn btn-danger"><i class="fa fa-pencil"></i></a> #} 
+                                           <a href="{{ path('courrier_cstraiter', { 'id': entity[0].id }) }}" class="btn btn-success"><span class="glyphicon glyphicon-inbox"></span> Traiter</a>
+                                         {% endif%}
+                                       {% endif%}  
+                                   {% endif%} 
+ 
+                                 {% else%} 
+                                   {% if entity[0].etatImput >=1 %} 
+                                     {# <a href="{{ path('courrier_cstraiter', { 'id': entity[0].id }) }}" data-toggle="tooltip" title="Traiter" class="btn btn-danger"><i class="fa fa-pencil"></i></a> #} 
+                                      <a href="{{ path('courrier_cstraiter', { 'id': entity[0].id }) }}" class="btn btn-success"><span class="glyphicon glyphicon-inbox"></span> Traiter</a>
+                                   {% else %}
+                                      {% if (entity.etatreception!=null or entity.etatreception==null) %} 
+                                        {#<a href="{{ path('courrier_cstraiter', { 'id': entity[0].id }) }}" data-toggle="tooltip" title="Traiter" class="btn btn-danger"><i class="fa fa-pencil"></i></a>#}
+                                        <a href="{{ path('courrier_cstraiter', { 'id': entity[0].id }) }}" class="btn btn-success"><span class="glyphicon glyphicon-inbox"></span> Traiter</a>
+                                       {% else %} 
+                                         {% if app.user.agent.fonction.id == 8 %}
+                                           {#<a href="{{ path('courrier_cstraiter', { 'id': entity[0].id }) }}" data-toggle="tooltip" title="Traiter" class="btn btn-danger"><i class="fa fa-pencil"></i></a> #}
+                                           <a href="{{ path('courrier_cstraiter', { 'id': entity[0].id }) }}" class="btn btn-success"><span class="glyphicon glyphicon-inbox"></span> Traiter</a>
+                                         {% endif%}
+                                       {% endif%}  
+                                   {% endif%} 
+
+                                 {% endif%}  
+                                 
+                                 {% if entity.coord==1 and entity[0].nbrePers>1 %} 
+                                  {#  <a href="{{ path('coordinateur_compile', { 'id': entity[0].id }) }}" data-toggle="tooltip" title="Coordonner" class="btn btn-success"><i class="fa fa-inbox"></i></a> #}
+                                  <a href="{{ path('coordinateur_compile', { 'id': entity[0].id }) }}" class="btn btn-danger"><span class="glyphicon glyphicon-inbox"></span> Coordonner</a>  
+                                 {% endif%}
+                                 
+                                {# {% if entity[0].nbrePers>1 %} 
+                                    <a href="{{ path('coordinateur_forum', { 'id': entity[0].id }) }}" data-toggle="tooltip" title="Forum" class="btn btn-warning"><i class="fa fa-envelope" style="width: 20px;"></i></a> 
+                                 {% endif%}#}
+                              
+                                </div>
+                            </td>
+                            
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <ul>
+            <li>
+                <a href="{{ path('courrier_new') }}">Transmettre diligence</a>
+            </li>
+        </ul>
+    </div>
+   {{macro.div_apercu() }}
+    {% endblock %}

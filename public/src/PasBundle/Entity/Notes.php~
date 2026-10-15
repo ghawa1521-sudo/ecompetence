@@ -1,0 +1,65 @@
+<?php
+
+namespace PasBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Notes
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="PasBundle\Repository\NotesRepository")
+ */
+class Notes {
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datecreation", type="datetime")
+     */
+    private $datecreation;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="matricule", type="string", length=50)
+     */
+    private $matricule;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="note", type="integer")
+     */
+    private $note;
+
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Agent\AgentBundle\Entity\Agent",  cascade={"persist"})
+     * @ORM\JoinColumn(name="validateur", referencedColumnName="matricule")
+     */
+    private $validateur; 
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="PasBundle\Entity\Actions", inversedBy="notes", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $actions;
+
+    
+    public function __construct() {
+        $this->datecreation = new \DateTime();
+    }
+
+
+    
+}

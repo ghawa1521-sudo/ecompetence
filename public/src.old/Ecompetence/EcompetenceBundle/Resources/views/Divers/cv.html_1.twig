@@ -1,0 +1,667 @@
+{% extends '::base.html.twig' %}
+{%from "EcompetenceBundle:macro:macro.html.twig" import recursiveDomaine,recursiveDomaineAff%}
+
+
+{% block body %}
+   
+
+       {# {{ form_start(form) }}
+        {{ form_errors(form) }}#}
+       
+       
+        <div class="x_panel">
+        <h2> CV de...........</h2>
+        <hr>
+          
+            <div>
+
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs bar_tabs" role="tablist">
+              <li class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Récaptulatif</a></li>
+              <li><a href="#expr" aria-controls="expr" role="tab" data-toggle="tab">Expériences Professionelles</a></li>
+              <li><a href="#format" aria-controls="format" role="tab" data-toggle="tab">Formations</a></li>
+              <li><a href="#cp" aria-controls="lang" role="tab" data-toggle="tab">Domaines de Compétences</a></li>
+               <li><a href="#lang" aria-controls="lang" role="tab" data-toggle="tab">Niveau de langue</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="home">
+                    
+                     <br>
+                         <h2> Domaines de compétence</h2>
+                          <hr>
+                         {# {% if listedomaines %}#}
+                            {% if competences %}
+                                <div id="">
+                                    <ul> 
+                                      
+                                        {% for pere in  peres %}
+                                           {{recursiveDomaineAff(pere.competence,cp)}}
+                                        {#{% for listedomaine in listedomaines %}
+                                           {% if (listedomaine.parent==null)%}
+                                            
+                                            {{recursiveDomaine(listedomaine)}}
+                                          {% endif %}#}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                {% endif %}
+                          
+                          
+                    <br>
+                         <h2> Expériences professionelles</h2>
+                          <hr>
+                          
+                          
+               
+                     <table class="records_list table table-striped responsive-utilities jambo_table bulk_action" style="text-align:center"> 
+             <thead>
+               <tr>  
+                 <th> Date de début</th>
+                 <th> Date de fin</th>
+                 <th> Poste occupé</th>
+                 <th> Structure</th>
+                 <th> Action</th>
+                </tr>         
+             </thead>
+             <tbody>
+              
+                 {% for entities in entity%}
+                
+               <tr>
+                <td>
+                       {%if(entities.dateDebExp)%}{{entities.dateDebExp|date('d-m-Y')}} {%endif%}
+                 </td>
+                 <td>
+                       {{entities.dateFinExp|date('d-m-Y')}} 
+                 </td>
+                 <td>
+                     {%if(entities.libExp)%}  {{entities.libExp}}{%else%}{{entities.fonction.LibFonc}} {%endif%}
+                  
+                 </td>
+                 <td>
+                    {%if(entities.structure.libStructure)%}{{entities.structure.libStructure}}{%endif%}
+                 </td>
+                 <td>
+                    <a class="btn btn-success" href="{{ path('experience_edit', { 'id': entities.id,'ag':entities.agent.id }) }}">Modifier</a>
+                 </td>
+               </tr>  
+        {# iterate over each existing tag and render its only field: name #}
+        
+                   {#  {% for adr in edit_form.adresse %}
+                       <li><div class="col-md-11">{{ form_widget(adr.email) }}</div></li>
+                      {% endfor %}
+                   </ul>
+                  {#   {{form(form.experience.vars.prototype.dateDebExp)}}
+                   {#
+                    {{ form_errors(form.experience.dateDebExp) }}
+                    {{ form_widget(form.experience.dateDebExp) }}#}
+                 
+               {#  <td>  
+                       <ul class="tags" data-prototype="{{ form_widget(form.experience.vars.prototype.dateFinExp)|e('html_attr') }}">
+    
+                  </ul>
+                    
+                 </td>
+                <td> 
+                        <ul class="tags" data-prototype="{{ form_widget(form.experience.vars.prototype.structure)|e('html_attr') }}">
+    
+                  </ul>
+                 </td>
+                        
+                  <td> 
+                  <ul class="tags" data-prototype="{{ form_widget(form.experience.vars.prototype.libExp)|e('html_attr') }}">
+    
+                  </ul>
+              
+                 </td> #}
+                
+               {%endfor%}
+             </tbody>
+
+                    </table> 
+             
+                        <h2> Formations</h2>
+                        <hr>
+                            
+             <table class="records_list table table-striped responsive-utilities jambo_table bulk_action" style="text-align:center"> 
+             <thead>
+               <tr>  
+                 <th> Date de début</th>
+                 <th> Titre</th>
+                 <th> Diplôme</th>
+                 <th> Option</th>
+                 <th> Institut</th>
+                  <th> Date du diplôme</th>
+                  <th> Action</th>
+                </tr>         
+             </thead>
+             <tbody>
+                
+                 {% for format in formation%}
+               <tr>
+               <td>
+                       {%if(format.dateDebFormation)%}{{format.dateDebFormation|date('d-m-Y')}} {%endif%}
+                 </td>
+                
+                 <td>
+                       {%if(format.libFormation)%}{{format.libFormation}}{%endif%}
+                 </td>
+                   </td>
+                 <td>
+                       {%if(format.diplome.libDiplome)%}{{format.diplome.libDiplome}}{%endif%}
+                 </td>
+                   </td>
+                 <td>
+                    {%if(format.OptionDiplome)%}{{format.OptionDiplome}}{%endif%}
+                 </td>
+                 <td>
+                   {%if(format.etablissement.nomEtablissement)%} {{format.etablissement.nomEtablissement}}{%endif%}
+                 </td>
+                 <td>
+                       {%if(format.dateObtentiondiplo)%} {{format.dateObtentiondiplo|date('d-m-Y')}}{%endif%} 
+                 </td>
+                 <td>
+                    <a class="btn btn-success" href="{{ path('formation_edit', { 'id': format.id,'ag':format.agent.id }) }}">Modifier</a>
+                 </td>
+               </tr>  
+    
+                
+               {%endfor%}
+             </tbody>
+
+          </table> 
+                    
+                
+             
+             <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h2 style="color:green;">Niveau de langue</h2></div>
+            <div class="panel-body">
+            {%if (niveaulangue)%}   
+            {%for nivlang in niveaulangue%}
+                <div class="row">
+                    <div class="col-md-5">
+                        <label>{{nivlang.langue.liblangue}}</label>
+                    </div>
+                    <div class="col-md-3">
+                       <label>Lire</label>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label style="color:orange;">
+                       
+                            {%if (nivlang.lire==1)%} Faibble
+                            {%elseif(nivlang.lire==2)%}Passable
+                            {%elseif(nivlang.lire==3)%}Courant
+                            {%else%}Excellent 
+                            {%endif%} </label><br>
+                        <label>Ecrire</label>:&nbsp;&nbsp;<label style="color:orange;">
+                          {%if (nivlang.ecrire==1)%}Faibble
+                            {%elseif(nivlang.ecrire==2)%}Passable
+                            {%elseif(nivlang.ecrire==3)%}Courant
+                            {%else%}Excellent 
+                            {%endif%}
+                                </label><br>
+                        <label>Parler</label>:&nbsp;&nbsp;<label style="color:orange;">
+                        {%if (nivlang.parler==1)%} Faibble
+                            {%elseif(nivlang.parler==2)%}Passable
+                            {%elseif(nivlang.parler==3)%}Courant
+                            {%else%}Excellent 
+                            {%endif%}
+                        </label><br>
+                    </div>
+                </div><hr>
+          {%endfor%}         
+          {%endif%} 
+            </div>
+        </div>
+   
+</div>   
+</div>
+             
+             
+             
+             
+             
+             
+          <div role="tabpanel" class="tab-pane" id="expr">
+          <br>
+                        
+          <div class="row"> 
+          <div class=""> </div>
+          <div class="col-md-12"> 
+          <div class="panel panel-success">
+          <div class="panel-heading"> <h2> Nouvelle expérience professionelle</h2></div>
+          <div class="panel-body">
+         
+             
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+        {{ form_errors(form) }}
+               
+                  <div class="col-md-5">
+                    <div class="form-group row">
+                        {{ form_label(form.dateDebExp, 'Date début', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form.dateDebExp) }}
+                        {{ form_widget(form.dateDebExp) }}
+                    </div>
+                    <div class="form-group row">
+                        {{ form_label(form.dateFinExp, 'Date fin', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form.dateFinExp) }}
+                        {{ form_widget(form.dateFinExp) }}
+                    </div>
+                    
+                     <div  id="viewsct" class="form-group row">
+                        {{ form_label(form.secteur, 'Secteur', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.secteur) }}
+                        {{ form_widget(form.secteur, {'id':'sec','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                    </div>
+                    
+                     <div  id="viewstr" class="form-group row">
+                        {{ form_label(form.structure, 'Nom Employeur', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.structure) }}
+                        {{ form_widget(form.structure, {'id':'str','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                      </div>
+                       <div id="viewautrestr" class="form-group row">
+                        {{ form_label(form.autrestructure, 'Autre', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.autrestructure) }}
+                        {{ form_widget(form.autrestructure, {'id':'autrestr','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                      </div>
+                      </div>
+                    <div class="col-lg-offset-2 col-md-5">
+                    <div id="viewcvdg" class="form-group row">
+                        {{ form_label(form.cvdirectiongle, 'Direction générale', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.cvdirectiongle) }}
+                        {{ form_widget(form.cvdirectiongle, {'id':'cvdg','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                       </div>
+                       <div  id="viewcvdc" class="form-group row">
+                        {{ form_label(form.cvdirection, 'Direction', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.cvdirection) }}
+                        {{ form_widget(form.cvdirection, {'id':'cvdc','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                       </div>
+
+                    <div id="viewtxtpo" class="form-group row">
+                        {{ form_label(form.libExp, 'Poste occupé', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.libExp) }}
+                        {{ form_widget(form.libExp, {'id':'txtpo','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                    </div>
+                    <div id="viewoptpo" class="form-group row">
+                        {{ form_label(form.fonction, 'Poste occupé', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.fonction) }}
+                        {{ form_widget(form.fonction, {'id':'optpo','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                    </div>
+                    </div>
+                     <div class="col-md-12">
+                      <div id="viewmission" class="form-group row">
+                        {{ form_label(form.mission, 'Missions', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.mission) }}
+                        {{ form_widget(form.mission, {'id':'optmis','attr':{'class': 'form-control col-md-7 col-xs-12 ckeditor'}})}}
+                    </div>
+                    </div>
+                   <div class="col-md-8">
+                   <div class="form-group row">
+                        {{ form_row(form._token) }}
+                        {{ form_widget(form.enregistrer, {'attr':{'class': 'btn btn-primary'}}) }}
+                        <input type="hidden" name="bouton" value="1">
+                    </div> 
+                    </div>     
+                           {{ form_end(form,{render_rest:false}) }}
+                    </div>
+                     </div>
+                     </div>
+                     </div>
+                    <div class=""> </div>
+                     </div>
+                    
+                    </div>
+                   
+                    
+                   
+                
+                <div role="tabpanel" class="tab-pane" id="format">
+                       <br>
+                         <h2> Nouvelle formation</h2>
+                          <hr>
+              <div id="wizard" class="form_wizard wizard_horizontal">
+            
+                 {{ form_start(form1, {'attr': {'novalidate': 'novalidate'}}) }}
+                 {{ form_errors(form1) }}
+                <div class="col-md-3">
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        {{ form_label(form1.typeformation, 'Type de formation', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form1.typeformation) }}
+                        {{ form_widget(form1.typeformation, {'attr':{'class': 'form-control col-md-7 col-xs-12'}}) }}
+                    </div>
+                     <div class="form-group row">
+                        {{ form_label(form1.libFormation, 'Titre de la formation', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form1.libFormation) }}
+                        {{ form_widget(form1.libFormation, {'attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                    </div>
+                    <div class="form-group row">
+                        {{ form_label(form1.niveauFormation, 'Niveau étude', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form1.niveauFormation) }}
+                        {{ form_widget(form1.niveauFormation, {'attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                    </div>
+                    <div class="form-group row">
+                        {{ form_label(form1.diplome, 'Diplôme', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form1.diplome) }}
+                        {{ form_widget(form1.diplome, {'attr':{'class': 'form-control col-md-7 col-xs-12'}}) }}
+                    </div>
+                     <div class="form-group row">
+                        {{ form_label(form1.autrediplome, 'Autrediplôme', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form1.autrediplome) }}
+                        {{ form_widget(form1.autrediplome, {'attr':{'class': 'form-control col-md-7 col-xs-12'}}) }}
+                    </div>
+                     <div class="form-group row">
+                        {{ form_label(form1.OptionDiplome, 'Option du diplôme', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form1.OptionDiplome) }}
+                        {{ form_widget(form1.OptionDiplome, {'attr':{'class': 'form-control col-md-7 col-xs-12'}}) }}
+                    </div>
+                    
+                    <div class="form-group row">
+                        {{ form_label(form1.dateDebFormation, 'Date de début', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form1.dateDebFormation) }}
+                        {{ form_widget(form1.dateDebFormation) }}
+                    </div>
+                    <div class="form-group row">
+                        {{ form_label(form1.dateObtentiondiplo, 'Date du diplôme', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form1.dateObtentiondiplo) }}
+                        {{ form_widget(form1.dateObtentiondiplo) }}
+                    </div>
+    
+                    
+                    <div class="form-group row">
+                        {{ form_label(form1.etablissement ,'Nom institut', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form1.etablissement) }}
+                        {{ form_widget(form1.etablissement, {'attr':{'class': 'form-control col-md-7 col-xs-12'}}) }}
+                    </div>
+                     <div class="form-group row">
+                        {{ form_label(form1.autreetablissement , NULL,{'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form1.autreetablissement) }}
+                        {{ form_widget(form1.autreetablissement, {'attr':{'class': 'form-control col-md-7 col-xs-12'}}) }}
+                    </div>
+                   <div class="form-group row">
+                        {{ form_row(form1._token) }}
+                        {{ form_widget(form1.enregistrer, {'attr':{'class': 'btn btn-primary'}}) }}
+                        <input type="hidden" name="bouton" value="2">
+                    </div> 
+                    
+                    </div>
+                    
+                     </div>
+                    {{ form_end(form1,{render_rest:false}) }}
+                </div>
+                
+                
+                 <div role="tabpanel" class="tab-pane" id="cp">
+                    <br>
+                         <h2> Sélectionner les domaines de compétences</h2>
+                          <hr>
+                          <form method='post' name='cp' >
+                               {% if domaines %}
+                                <div id="treeview-checkbox-demo">
+                                    <ul>
+                                        {% for domaine in domaines %}
+                                            {{recursiveDomaine(domaine)}}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                {% endif %}
+                        <input type="hidden" value="4" id="UD1Wbw13BW5aOwVo" name="bouton">       
+                        <button type='submit' class="btn btn-primary btn-large btn-block">Actualiser</button>
+                        
+                      </form>
+                </div>
+                
+                <div role="tabpanel" class="tab-pane" id="lang">
+                     <br>
+                         <h2> Niveau de langage </h2>
+                          <hr>
+                   {{ form_start(form2, {'attr': {'novalidate': 'novalidate'}}) }}
+                    {{ form_errors(form2) }}
+                       
+                            <div id="form3" name="form3">
+                                <div class="row form-group">
+                                    <div class="col-sm-2 border bg-light" style="text-align: left;">&nbsp;</div>
+                                    <div class="col-sm-2"><label class="h9">Lire</label></div>
+                                    <div class="col-sm-2"><label class="h9">Ecrire</label></div>
+                                    <div class="col-sm-2"><label class="h9">Parler</label></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-2" style="text-align: left;">
+                                        <label class="h9"> Français :</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                         <select class="form-control" name="frlire" id="lire">
+                                         <option value="0" selected="selected" disabled="disabled">Votre niveau</option>
+                                         <option value="1">Faible</option>
+                                         <option value="2">Passable</option>
+                                         <option value="3">Courant</option>
+                                           <option value="4">Excellent</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="form-control" name="frecrire" id="ecrire">
+                                            <option value="0" selected="selected" disabled="disabled">Votre niveau</option>
+                                            <option value="1">Faible</option>
+                                            <option value="2">Passable</option>
+                                            <option value="3">Courant</option>
+                                            <option value="4">Excellent</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="form-control" name="frparler" id="parler">
+                                            <option value="0" selected="selected" disabled="disabled">Votre niveau</option>
+                                            <option value="1">Faible</option>
+                                            <option value="2">Passable</option>
+                                            <option value="3">Courant</option>
+                                            <option value="4">Excellent</option>
+                                        </select>
+                                    </div>
+                                    
+                                </div><br>
+
+                                <div class="row">
+                                    <div class="col-sm-2" style="text-align: left;">
+                                        <label class="h9"> Anglais :</label>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="form-control" name="anglire" id="anglire">
+                                            <option value="0" selected="selected" disabled="disabled">Votre niveau</option>
+                                            <option value="1">Faible</option>
+                                            <option value="2">Passable</option>
+                                            <option value="3">Courant</option>
+                                            <option value="4">Excellent</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="form-control" name="angecrire" id="angecrire">
+                                            <option value="0" selected="selected" disabled="disabled">Votre niveau</option>
+                                            <option value="1">Faible</option>
+                                            <option value="2">Passable</option>
+                                            <option value="3">Courant</option>
+                                            <option value="4">Excellent</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="form-control" name="angparler" id="angparler">
+                                            <option value="0" selected="selected" disabled="disabled">Votre niveau</option>
+                                            <option value="1">Faible</option>
+                                            <option value="2">Passable</option>
+                                            <option value="3">Courant</option>
+                                            <option value="4">Excellent</option>
+                                        </select>
+                                    </div>
+                                    
+                                </div>
+
+                                <hr>
+                                   
+                                {{ form_row(form2._token) }}
+                                {{ form_widget(form2.enregistrer, {'attr':{'class': 'btn btn-primary'}}) }}
+                                <input type="hidden" value="3" id="UD1Wbw13BW5aOwVo" name="bouton">
+                                                            
+                            </div>
+                            
+                        {{ form_end(form2,{render_rest:false}) }}
+                </div>
+            </div>
+
+          </div>
+            
+        </div>
+       
+
+         
+  {#       {% if domaines %}
+    <div id="domaine">
+        <ul>
+            {% for domaine in domaines %}
+                {{recursiveDomaine(domaine)}}
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}#}
+ <div class="container-fluid">
+        <div class="row">
+            <div id="tree"></div>
+        </div>
+    </div>
+     
+
+
+
+        <ul class="record_actions">
+    <li>
+        
+    </li>
+</ul>
+<style>
+.help-block{
+color:red;
+font-weight:bold;
+}
+</style>
+{% endblock %}
+
+{% block javascript %}
+
+<script type="text/javascript" src="{{ asset('design/js/wizard/jquery.smartWizard.js') }}"></script>
+<script src="{{ asset('design/js/nicescroll/jquery.nicescroll.min.js') }}"></script>
+
+<script type="text/javascript">
+        $(document).ready(function () {
+            // Smart Wizard
+            $('#wizard').smartWizard();
+
+            function onFinishCallback() {
+                $('#wizard').smartWizard('showMessage', 'Finish Clicked');
+                //alert('Finish Clicked');
+            }
+        });
+
+        $(document).ready(function () {
+            // Smart Wizard
+            $('#wizard_verticle').smartWizard({
+                transitionEffect: 'slide'
+            });
+
+        });
+        
+      
+                
+</script>
+
+ <script type="text/javascript">
+            $(document).ready(function () {
+                console.log('ok');
+                var tree = $('#tree').tree({
+                    primaryKey: 'id',
+                    uiLibrary: 'bootstrap',
+                    dataSource: Routing.generate('agent_cv_api'),
+                    checkboxes: true
+                });
+/**
+                $.ajax({
+                    type: "GET",
+                    url: Routing.generate('agent_cv_api'),
+                    dataType: "json",
+                    success: function(data) { 
+                        console.log(data);
+                    }   
+                });
+                **/
+            });
+    </script>
+
+<script type="text/javascript">
+function searchList($sourceval, $route, $destval, $div)
+{
+    $source = $($sourceval).val();
+  
+    if($sourceval=='#sec')
+    { 
+        if($source==1)
+      {   
+        $('#viewtxtpo').hide();
+        $('#viewoptpo').show();
+      }
+      else
+      {
+       $('#viewtxtpo').show(); 
+       $('#viewoptpo').hide();
+      }
+    }
+    //alert($source);
+    if ($source.length > 0 ){
+
+        $source=$source;
+        //showloader('#cacher');
+    }else{
+            $source=0;
+        }
+    
+    $paramroute = {'id': $source};
+   
+    //alert(Routing.generate($route, $paramroute));
+    //alert($div); exit;
+    //console.log($div);
+
+    $.ajax({
+       type: 'GET',
+       url: Routing.generate($route, $paramroute),
+       dataType: 'json',
+       success: function(data) {
+        //console.log(data);
+          // alert(jQuery.isEmptyObject(data));
+           
+
+           if (jQuery.isEmptyObject(data) == false){
+            //  alert("ok");
+               $($destval).children('option:not(:first)').remove();
+               //$($destval).append('<option>---- Choisir un Service-----</option>');
+               $.each(data, function(key, value) {
+                
+                    //console.log(value);
+                 $($destval).append('<option value= "' + key + '">' + value[0] + '</option>');
+
+                // $($destval).html("ggggg");
+               
+               });
+               
+                 
+               
+            
+           }
+           else{
+               //console.log($sourceval);
+              //  alert("no");
+               $($destval).children('option:not(:first)').remove();
+              
+           }
+       }
+       });
+   
+}
+
+             </script>    
+{% endblock %}

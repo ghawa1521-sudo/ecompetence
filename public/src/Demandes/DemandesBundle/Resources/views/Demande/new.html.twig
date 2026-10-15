@@ -1,0 +1,105 @@
+{% extends '::base.html.twig' %}
+{% block css %}
+    <link href="{{ asset('design/css/style.css') }}" rel="stylesheet"/>
+{% endblock %}
+
+
+
+{% block body -%}
+    <div class="row" >
+        <div class="col-md-push-3 col-md-6">
+            <div align="center">
+                <h3>Demande d'acte</h3>
+            </div>
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {#{{ form(form) }}#}
+
+            {{ form_label(form.typeDemande)}} <label style="color:red;"><bold>***</bold></label>
+                    {{ form_errors(form.typeDemande) }}
+                    {{ form_widget(form.typeDemande, {'attr' : {'onClick' : 'openBlock()','onChange' : 'openBlock()'}}) }}
+
+            <div id="masquer1" style="display:none;">
+                {{ form_label(form.nbrecopie)}}
+                {{ form_errors(form.nbrecopie) }}
+                {{ form_widget(form.nbrecopie) }}
+            </div>
+            <div id="masquer" style="display:none;">
+
+
+                {{ form_label(form.dateDeb)}}
+                {{ form_errors(form.dateDeb) }}
+                {{ form_widget(form.dateDeb) }}
+
+                {{ form_label(form.dateFin)}}
+                {{ form_errors(form.dateFin) }}
+                {{ form_widget(form.dateFin) }}
+
+                {{ form_label(form.destination)}}
+                {{ form_errors(form.destination) }}
+                {{ form_widget(form.destination) }}
+
+            </div>
+            {{ form_label(form.objet)}}
+            {{ form_errors(form.objet) }}
+            {{ form_widget(form.objet) }}
+
+
+            {{ form_row(form._token) }}
+            <input type="submit" class="btn btn-success col-md-6" value="Enregistrer la Demande" />
+        </div>
+        <div class="col-md-push-3 col-md-3" style="color:red; margin-top:50px; background-color:#ededed;text-align:justify;">
+            ***<br> <b>Pour tous les types de demandes :</b> <br>
+            <ul>
+                <li>Vous ne pouvez pas faire de demandes lorsque vous avez déjà une demande en cours pour ce type;</li> <br>
+                <li>Vous ne pouvez pas faire de demandes lorsque votre quota est atteint.</li>
+            </ul>
+            <b>Pour les autorisations d'absences :</b> <br>
+            <ul>
+                <li>Faire sa demande au moins trois (03) jours avant son depart ;</li> <br>
+                <li style="text-align:justify;">La période d'absence ne peut excéder (03) jours consécutifs y compris les week-end et les jours fériés;</li> <br>
+
+            </ul>
+
+
+        </div>
+    </div>
+
+    {#
+            <ul class="record_actions">
+        <li>
+            <a href="{{ path('demande') }}">
+                Back to the list
+            </a>
+        </li>
+    </ul>#}
+{% endblock %}
+{% block javascript %}
+    <script type="text/javascript">
+        $(function () {
+            // On cache le div a afficher :
+    //  $("#masquer").hide();
+            openBlock();
+        });
+        function openBlock()
+        {
+            combo = document.getElementById('demandes_demandesbundle_demande_typeDemande');
+    //  alert(combo.value);
+            if (combo.value != "")
+            {
+                if (combo.value == 1 || combo.value == 5)
+                {
+                    document.getElementById('masquer').style.display = 'block';
+                    document.getElementById('masquer1').style.display = 'none';
+                } else {
+                    document.getElementById('masquer').style.display = 'none';
+                    document.getElementById('masquer1').style.display = 'block';
+                }
+            } else {
+                document.getElementById('masquer').style.display = 'none';
+                document.getElementById('masquer1').style.display = 'none';
+            }
+
+        }
+    </script>
+{% endblock %}

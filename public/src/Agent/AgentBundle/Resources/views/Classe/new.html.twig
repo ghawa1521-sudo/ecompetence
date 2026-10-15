@@ -1,0 +1,22 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Classe creation</h1>
+
+<div class="x_panel">
+    <h2> Classe</h2>
+    <hr>
+    <div class=" col-md-offset-3 col-md-6">
+
+        {{ form(form) }}
+    </div>
+
+</div>
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('classe') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}

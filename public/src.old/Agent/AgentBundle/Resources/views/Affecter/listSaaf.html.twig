@@ -1,0 +1,165 @@
+
+{% extends '::base.html.twig' %}
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+{% block titre_page %}
+  Affectation dans un service
+{% endblock %}
+{% block body -%}
+  <script src="{{ asset('design/js/jquery.fancybox.pack.js') }}" ></script>
+  <script src="{{ asset('design/js/jquery.fancybox.js') }}" ></script>
+
+<script type="text/javascript">
+        function pop_apercu(txt){
+            var chkbox=document.getElementById("lg1234");
+            var chks="<iframe style='height: 100% !important; width: 100% !important' class='iframepop' src='"+txt+"'></iframe>";
+            chkbox.innerHTML=chks;
+            $("a#alg123").fancybox({"hideOnContentClick":false}).trigger("click");
+        }
+    </script>
+    <br>
+  <ul class="nav nav-tabs bar_tabs" role="tablist">
+
+
+      <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Dossier</a></li>
+     {# <li role="presentation"><a href="#serv1" aria-controls="message" role="tab" data-toggle="tab">Dossier Imputés</a></li>#}
+      <li role="presentation"><a href="#serv2" aria-controls="message" role="tab" data-toggle="tab">Archives</a></li>
+
+    </ul>
+<div class="tab-content">
+
+  <div role="tabpanel" class="tab-pane active" id="home">
+  <table class="records_list table table-striped responsive-utilities jambo_table bulk_action">
+      <thead>
+
+          <tr>
+
+              <td><b>Matricule</td>
+              <td><b>Nom et Prénoms</b></td>
+              
+              {#<td><b>Direction</b></td>#}
+              
+              <td><b>Etat affectation</b></td>
+              <td><b>Services</b></td>
+             
+              <td><b>Actions</b></td>
+          </tr>
+      </thead>
+      <tbody>
+       
+      {% for entity in affecter %}
+      {% if entity.agent.matricule is defined  %}
+          <tr>
+              {#<td><a href="{{ path('affecter_edit', { 'id': entity.id }) }}">{{ entity.id }}</a></td>#}
+
+              <td>{{ entity.agent.matricule }}</td>
+              <td>{{ entity.agent.nom }} {{ entity.agent.prenoms }}</td>
+           
+
+              {#<td>{{ entity.agent.direction }}</td>#}
+              <td>
+                  {% if entity.etatAffectation==0 %}En Attente d'Affectation
+                          <label class="label label-info"></label>
+                      {% elseif entity.etatAffectation==1 %}Affecté(e) dans un Service
+                          <label class="label label-success"></label>
+                          {% elseif entity.etatAffectation==2 %}Prise de Service Validée
+                              <label class="label label-success"> </label>
+                  {% endif %}
+              </td>
+              <td>
+                {% if (entity.agent.codeSd) %}
+                {{entity.agent.codeSd.designation}}
+                {% endif %}
+
+                {% if (entity.agent.codeSc) %}
+                  <br>
+                {{entity.agent.codeSc.designation}}
+                {% endif %}
+              </td>
+            
+            
+              <td class="row"> 
+                            <a class="btn btn-success" href="{{ path('affecter_saaf_choix',{'id':entity.id}) }}">Affecter </a>
+                     {#} <button class="col-md-5 btn btn-primary btnShow" value="{{ vich_uploader_asset(entity.doc, 'docFile')}}">Visualiser </button>
+                      <a class="col-md-5 btn btn-success" href="{{ path('affecter_numerise', { 'id': entity.id }) }}">Valider </a>#}
+                  
+              </td>
+          </tr>
+          {% endif %}
+      {% endfor %}
+      </tbody>
+  </table>
+</div>
+<div role="tabpanel" class="tab-pane" id="serv2">
+      
+  <table width="100%" class="records_list table table-striped responsive-utilities jambo_table bulk_action">
+      <thead>
+
+          <tr>
+
+              <td><b>Matricule</td>
+              <td><b>Nom & Prénoms</b></td>
+              
+              {#<td><b>Direction</b></td>#}
+              
+              <td><b>Etat affectation</b></td>
+              <td><b>Acte Administratif</b></td>
+             
+              <td><b>Date Prise de Service</b></td>
+              <td><b>Action</b></td>
+          </tr>
+      </thead>
+      <tbody>
+          
+      {% for entity in archive %}
+      {% if entity.agent.matricule is defined and entity.signeNote == 1 and entity.etatAffectation > 1 %}
+          <tr>
+              {#<td><a href="{{ path('affecter_edit', { 'id': entity.id }) }}">{{ entity.id }}</a></td>#}
+
+              <td>{{ entity.agent.matricule }}</td>
+              <td>{{ entity.agent.nom }} {{ entity.agent.prenoms }}</td>
+           
+
+              {#<td>{{ entity.agent.direction }}</td>#}
+              <td>
+                  {% if entity.etatAffectation==0 %}En Attente d'Affectation
+                          <label class="label label-info"></label>
+                      {% elseif entity.etatAffectation==1 %}Affecté(e) dans un Service
+                          <label class="label label-success"></label>
+                          {% elseif entity.etatAffectation==2 %}Prise de Service Validée
+                              <label class="label label-success"></label>
+                  {% endif %}
+              </td>
+              <td>
+            {% if entity.etatAffectation==1 and entity.signeNote==0 %}Note d'Affectation / non encore Signé <label class="label label-warning"></label> {% endif %}
+            {% if entity.etatAffectation==1 and entity.signeNote==1 %}Note d'Affectation /  Signé <label class="label label-success"></label> {% endif %}
+            {% if entity.etatAffectation==2 and entity.signeCertificat==0 %}Certificat de Prise de Service / non encore Signé <label class="label label-warning"></label> {% endif %}
+            {% if entity.etatAffectation==2 and entity.signeCertificat==1 %}Certificat de Prise de Service / Signé <label class="label label-success"></label> {% endif %}
+            </td>
+            
+            
+              <td> 
+  
+                  {% if entity.agent.datePriseServiceDge %}
+                    {{entity.agent.datePriseServiceDge|date('d-m-Y')}}
+                  
+                  {% endif %}
+              </td>
+              <td>
+                  {% if entity.signeNote == 0 %}
+               <a class="btn btn-success" href="{{ path('affecter_numerise', { 'id': entity.id }) }}">Modifier</a> {% endif %}</td>
+          </tr>
+          {% endif %}
+      {% endfor %}
+      </tbody>
+  </table>
+</div>
+</div>
+<div id="titlediv123"><a id="alg123" href="#lg1234" title=""></div>
+<div id="lg1234" style="display: none; height: 1000px !important; width: 1000px !important"></div>
+
+    {% endblock %}

@@ -1,0 +1,45 @@
+{% extends '::ediligence/base.html.twig' %}
+
+{% block body %}
+<div class="content-header">
+    <div class="header-section">
+        <h1>
+            <i class="gi gi-notes_2"></i>Transmettre courrier interne<br><small>Veuillez remplir les champs ci-dessous</small>
+        </h1>
+    </div>
+</div>
+<ul class="breadcrumb breadcrumb-top">
+    <li>Transmettre</li>
+    <li><a href="">Nouveau</a></li>
+</ul>
+<div class="row">
+    <div class="col-md-offset-2 col-md-8">
+        <div class="block">
+            <!-- Basic Form Elements Title -->
+            <div class="block-title">
+
+                <h2><strong>Nouveau Courrier Interne</strong></h2>
+            </div>
+            <!-- END Form Elements Title -->
+                {{ form_start(form) }}
+                {{ form_row(form.objet) }}
+
+                {% if (recover_enr is defined) and (recover_enr > 0) %}
+                    {{ form_row(form.numenregistrement, {'label':'Numero D\'enregistrement (Dernier numero : '~recover_enr~')'}) }}
+                {% else %}
+                    {{ form_row(form.numenregistrement, {'label':'Numero D\'enregistrement (Dernier numero : Aucun)'}) }}
+                {% endif %}
+                {{form_widget(form.piecejointe.imageFile,{'attr':{'required':true}})}}
+            <i style="margin-bottom: 5px;">Format du Fichier (jpg, png, pdf, doc ou docx | max. 50 Mo)</i><br><br><br>
+                {{ form_end(form) }}
+
+        </div>
+
+    </div>
+</div>
+<ul>
+    <li>
+        <a href="{{ path('interne') }}">Retour</a>
+    </li>
+</ul>
+{% endblock %}

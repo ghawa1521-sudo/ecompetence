@@ -1,0 +1,51 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Treception list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Datereception</th>
+                <th>Etatreception</th>
+                <th>Matriculereception</th>
+                <th>Codecourrier</th>
+                <th>Idimput</th>
+                <th>Chrono</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('reception_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{% if entity.datereception %}{{ entity.datereception|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.etatreception }}</td>
+                <td>{{ entity.matriculereception }}</td>
+                <td>{{ entity.codecourrier }}</td>
+                <td>{{ entity.idImput }}</td>
+                <td>{{ entity.chrono }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('reception_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('reception_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('reception_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

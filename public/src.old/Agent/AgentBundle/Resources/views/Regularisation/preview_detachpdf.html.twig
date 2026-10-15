@@ -1,0 +1,40 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+ <div align="center">
+    <a class="btn btn-primary" href="#" target="blank" onClick="printElem('toprint');">
+        <span class="fa fa-print">Imprimer</span> <a class="btn btn-warning" href="{{path('regularisation_position', { 'id': entity[0]['detachement'].naturedetachement.id})}}"><span class="fa fa-arrow-circle-o-left"></span>RETOUR</a>
+    </a>
+</div>
+    <div id="toprint" style="width:210mm !important; height:297mm !important; color:black !important;">
+
+<div class="col-md-push-2 col-md-10" style="width:210mm !important; height:297mm !important; color:black !important; margin:auto; overflow:hidden;">
+{% include 'AgentBundle::Regularisation/regularisation_detachpdf.html.twig' %}
+    
+ </div>
+</div>
+    
+   {% block javascript %}
+        <script>
+   {#} $url=Routing.generate("affecter_print_etat", {id:{{entity.id}}});#}
+
+        function printElem(divId) {     
+            var nomPdf='ok';
+            var content = document.getElementById(divId).innerHTML;
+            var mywindow = window.open();
+          
+            mywindow.document.write(content);
+          
+
+            mywindow.document.close();
+            mywindow.focus()
+            mywindow.print();
+            mywindow.close();
+          }
+            
+           </script>
+    {% endblock %}
+{% endblock %}
+   
+
+

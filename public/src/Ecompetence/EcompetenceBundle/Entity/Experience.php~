@@ -1,0 +1,113 @@
+<?php
+
+namespace Ecompetence\EcompetenceBundle\Entity;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Experience
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Ecompetence\EcompetenceBundle\Repository\ExperienceRepository")
+ */
+class Experience
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="LibExp", type="string", length=255,nullable=true)
+     
+     */
+    private $libExp;
+
+     /**
+     * @var \DateTime
+     * 
+     * @ORM\Column(name="DateDebExp", type="date")
+     */
+    private $dateDebExp;
+
+        /**
+     * @var \Datetime
+     * @Assert\Type(
+     *      type = "\DateTime",
+     *      message = "vacancy.date.valid",
+     * )
+     * @Assert\GreaterThanOrEqual(
+     *      value = "today",
+     *      message = "vacancy.date.not_today"
+     * )
+     * @Assert\Expression(
+     *     "this. getDateFinExp() >= this.getDateDebExp()",
+     *     message="vacancy.date.not_more_than"
+     * )
+     * @ORM\Column(name="DateFinExp", type="date",nullable=true)
+     */
+    private $dateFinExp;
+    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Agent\AgentBundle\Entity\Agent", inversedBy="experience")
+     * @ORM\JoinColumn(name="agent_id", referencedColumnName="id", nullable=true)
+     */
+    private $agent;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Agent\AgentBundle\Entity\Fonction")
+     * @ORM\JoinColumn(name="fonction_id", referencedColumnName="id", nullable=true)
+     * @Assert\NotNull(message="choissez le poste occupé ")
+     */
+    private $fonction;
+   
+        /**
+     * @ORM\ManyToOne(targetEntity="Structure")
+     * @ORM\JoinColumn(name="structure_id", referencedColumnName="id", nullable=true)
+     * @Assert\NotNull(message="choissez la structure ")
+     */
+    private $structure; 
+    
+        /**
+     * @var string
+     *
+     * @ORM\Column(name="autrestructure", type="string", length=255,nullable=true)
+     */
+    private $autrestructure;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Cv_directiongle")
+     * @ORM\JoinColumn(name="cv_directiongle_id", referencedColumnName="id", nullable=true)
+     */
+    private $cvdirectiongle ;
+    
+     /**
+     * @ORM\ManyToOne(targetEntity="Cv_direction")
+     * @ORM\JoinColumn(name="cv_direction_id", referencedColumnName="id", nullable=true)
+     */
+    private $cvdirection ;
+   
+      /**
+     * @ORM\ManyToOne(targetEntity="Secteur")
+     * @ORM\JoinColumn(name="secteur_id", referencedColumnName="id", nullable=true)
+     */
+    private $secteur; 
+    
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="mission", type="text", length=10000,nullable=true)
+     
+     */
+    private $mission;
+
+
+
+}

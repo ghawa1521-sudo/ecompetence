@@ -1,0 +1,84 @@
+{% extends app.request.attributes.get('_route')=='affecter_print' 
+? '::gabarit_print.html.twig' 
+: '::gabarit_preview.html.twig' %}
+{% block bootstrap %}
+    {% if app.request.attributes.get('_route')=='affecter_print'%}
+    <link href="{{app.request.getSchemeAndHttpHost() ~ asset('design/css/bootstrap.min.css') }}" rel="stylesheet"/>
+    
+{% endif %}
+{% endblock %}
+{% block service %}
+<span class="gras">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Le Directeur Général</span>
+{% endblock %}
+
+{% block ref %}N°:..................MEF/DGE/SRHMG{% endblock %}
+{% block titre %}
+    <div align="center" style="font-size:30px; font-family:CenturyFontBold !important; border: solid; border-radius: 15px; width: 80%; margin: auto;">
+        <span class="gras">CERTIFICAT DE PRISE DE SERVICE</span>
+
+    </div>
+    <p></p>
+{% endblock %}
+
+    {% block contenuPdf -%}
+
+        <div style="background-color: white; color:black; line-height: 2em;">
+            <p>
+        Je soussigné {{dgName}}, Directeur Général de l'Economie, certifie que
+                {{entity[0]['regularisation'].agent.getCivilite.libsitf}} {{entity[0]['regularisation'].agent.concatNom}}
+
+
+            N° candidature {{entity[0]['regularisation'].justificaton}}, {{entity[0]['newEmploi']}}, a effectivement pris service à la Direction Générale de l'Economie (DGE),
+
+         le {{entity[0]['regularisation'].dateNew|localizeddate('none', 'none', app.request.locale, "Europe/Paris", "cccc dd MMMM Y") }}.
+            </p><p>
+            
+        </p>
+    </div>
+    <br>
+   <p>
+        En foi de quoi, je délivre le présent certificat pour servir et valoir ce que de droit.
+    </p>
+    
+  
+    
+          <br><br>  
+   <div style="font-size: 16pt;">
+    <div class="col-md-6">
+        <table cellsapcing="5">
+            <tr><td>
+            <span class="gras">AMPLIATIONS&nbsp;:</span>
+                </td>
+                <td></td>
+            </tr>
+                        <tr>
+            <td>MEF/DRH</td><td>1</td>
+            </tr>
+            <!--
+            <tr>
+            <td>MEF/DGE</td><td>1</td>
+            </tr>
+       <tr>
+            <td>SRHMG</td><td>1</td>
+            </tr> --> 
+            <tr>
+            <td>{{entity[0]['regularisation'].agent.direction.sigle}}</td><td>1</td>
+            </tr>
+            
+
+            <tr>
+            <td>INTERESSE(E)</td><td>1</td>
+            </tr>
+
+            <tr>
+            <td>DOSSIER</td><td>1</td>
+            </tr>
+             
+        </table>
+    </div>
+</div>
+      <script src="{{ asset('design/js/style.js') }}"></script>
+   {% endblock %}
+{% block ampliationPdf %}
+    
+        {% endblock %}

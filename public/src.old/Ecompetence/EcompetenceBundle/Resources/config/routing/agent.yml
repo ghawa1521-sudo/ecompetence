@@ -1,0 +1,22 @@
+agent_index:
+    path:     /
+    defaults: { _controller: "EcompetenceBundle:Agent:index" }
+
+agent_cv:
+    path:     /{id}/cv
+    defaults: { _controller: "EcompetenceBundle:Agent:cv" }
+
+agent_cv1:
+    path:     /{id}/cv1
+    defaults: { _controller: "EcompetenceBundle:Agent:cv1" }
+
+agent_cv_api:
+    path:     /{id}/cvapi
+    defaults: { _controller: "EcompetenceBundle:Agent:cvapi" }
+    methods:  GET
+    options:
+      expose: true
+
+agent_find_profile:
+    path:     /profile
+    defaults: { _controller: "EcompetenceBundle:Profile:profile" }

@@ -1,0 +1,70 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div align="center">
+        <a class="btn btn-primary" href="#" onclick="printElem('toprint');">
+            <span class="fa fa-print">Imprimer</span>
+            <a class="btn btn-warning" href="{{app.request.headers.get('referer')}}">
+                <span class="fa fa-arrow-circle-o-left"></span>
+                RETOUR
+            </a>
+        </a>
+        {% if is_granted('ROLE_RESPO_SRHMG') %}{% endif %}
+
+
+    </a>
+    {% if entity.typeConges and entity.typeConges.id== 1 %}
+
+
+        {% if entity.exercice and entity.exercice.annee >= 'now'|date('Y') %}
+
+            <center>
+                <a class="btn btn-success" href="{{ path('conges_regul', { 'id': entity.id }) }}">Corriger l'année</a>
+            </center>
+        {% endif %}
+    {% endif %}
+
+</div>
+<div id="toprint" style="width:210mm !important; height:297mm !important; color:black !important;">
+
+    <div class="col-md-push-2 col-md-10" style="width:210mm !important; height:297mm !important; color:black !important; margin:auto; overflow:hidden;">
+
+        {% if is_granted('ROLE_RESPO_SRHMG') %}{% endif %}
+        {% if entity.niveau ==0 and entity.etat == 1 %}
+            {% include 'AgentBundle::Conges/cessation_pdf.html.twig'%}
+        {% endif %}
+        {% if entity.niveau ==0 and entity.etat == 3 %}
+            {% include 'AgentBundle::Conges/reprise_pdf.html.twig'%}
+        {% endif %}
+
+    </div>
+</div>{% endblock %}{% block javascript %}
+<script>
+    {% if is_granted('ROLE_RESPO_SRHMG') %}{% endif %}{% if entity.niveau ==0 and entity.etat == 1 %}
+        $url = Routing.generate("conge_print_status", {
+            id: {{ entity.id }},
+            status: 2
+        });{% endif %}
+    {% if entity.niveau ==0 and entity.etat == 3 %}
+        $url = Routing.generate("conge_print_status", {
+            id: {{ entity.id }},
+            status: 4
+        });{% endif %}
+
+
+    function printElem(divId) {
+        var nomPdf = 'ok';
+        var content = document.getElementById(divId).innerHTML;
+        var mywindow = window.open();
+
+        mywindow.document.write(content);
+
+
+        mywindow.document.close();
+        mywindow.focus()
+        mywindow.print();
+        mywindow.close();
+        $.get($url, function (data, status) {});
+        return true;
+    }
+</script>{% endblock %}

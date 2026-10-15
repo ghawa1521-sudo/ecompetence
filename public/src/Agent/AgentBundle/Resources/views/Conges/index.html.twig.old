@@ -1,0 +1,225 @@
+{% extends '::base.html.twig' %}
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+    <style>
+        .dataTables_filter{
+            width: auto !important;
+        }
+        .records_list{
+            width:100% !important;
+        }
+    </style>
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+{% block body -%}
+
+    {#
+    <div class="row">
+        {% for flashMessage in app.session.flashbag.get('success') %}
+            <div class="alert alert-danger"> {{flashMessage}} </div>
+        {% endfor %}
+    </div>
+    #}
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs bar_tabs" role="tablist">
+        <li role="presentation"  class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Congés en attente de validation</a></li>
+        <li role="presentation"  ><a href="#valide" aria-controls="valide" role="tab" data-toggle="tab">Congés Validés</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane  active" id="home">
+            <div class="x_title">
+                <h2>Liste des demandes de congés en attente<small> </small></h2>
+                <div class="clearfix"></div>
+            </div>
+
+            <table class="records_list table table-striped responsive-utilities jambo_table bulk_action">
+                <thead>
+                    <tr>
+                        <th>Date soumission</th>
+                        <th>Type de Congés</th>
+                        <th>Nom & prénoms</th>
+                        <th>Date de départ</th>
+                        <th>Date de fin</th>
+                        <th>Nombre de jours</th>
+
+                        <th>Date de reprise</th>
+                        <th>Etat</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entity in entities %}
+                        <tr>
+
+                            <td>{% if entity.datecreation %}{{ entity.datecreation|date('H:i:s d-m-Y') }}{% endif %}</td>
+                            <td>{{entity.typeConges.libelle}}</td>
+                            <td>{% if entity.agent %}{{entity.agent.nom}} {{entity.agent.prenoms}}{% endif %}</td>
+                            <td>{% if entity.datedebut %}{{ entity.datedebut|date('d-m-Y') }}{% endif %}</td>
+                            <td>{% if entity.datefin %}{{ entity.datefin|date('d-m-Y') }}{% endif %}</td>
+                            <td>{{entity.nbrejours}}</td>
+
+                            <td>
+
+
+                                {% if (entity.numReprise is defined) and (entity.numReprise is not null) %}
+
+                                    {{ entity.numReprise.date|date('d-m-Y') }}
+                                {% endif %}
+
+
+
+
+
+
+
+                            </td>
+                            <td>
+                                {#
+                                {{macro.EtatConge(entity.etat,entity.niveau,entity.agent.retour_service.tab_lib[entity.niveau])}}
+                                #}
+                                {#
+                                {% if (entity.agent.Fonction.id in [5,7]) %}
+                                    {{macro.EtatCongeResponsable(entity.etat,entity.niveau,entity.agent.retour_service.tab_lib[entity.niveau])}}
+                                {% elseif entity.niveau == 0 %}
+                                   {{macro.EtatConge(entity.etat,entity.niveau,entity.agent.retour_service.tab_lib[entity.niveau])}}
+                               {% endif %}
+                               #}
+                                {{entity.getValidateur(0)}}
+                            </td>
+                            <td>
+
+                                <a href="{{ path('conges_show', { 'id': entity.id }) }}">Consulter</a> &nbsp;
+                                {#{% if is_granted('ROLE_RESPO') %}
+                                    {% if entity.etat == 0 %}
+                                        <a href="{{ path('conges_approuv', { 'id': entity.id,'choice': 1 }) }}">
+                                            Confirmer la Demande
+                                        </a>
+                                    {% endif %}
+                                    {% if entity.etat == 4 %}
+                                        <a href="{{ path('conges_print', { 'id': 2,'conge': entity.id }) }}" >
+                                            Imprimer reprise
+                                        </a>
+                                    {% endif %}
+
+                                {% endif %}
+                                {% if is_granted('ROLE_RESPO_SRHMG') %}
+                                    {% if entity.etat == 3 %}
+                                        <a href="{{ path('conges_print', { 'id': 1,'conge': entity.id }) }}" >
+                                            Imprimer cessation
+                                        </a>
+                                    {% endif %}
+                                    {% if entity.etat == 3 %}
+                                        <a href="{{ path('conges_print', { 'id': 2,'conge': entity.id }) }}" >
+                                            Imprimer Reprise
+                                        </a>
+                                    {% endif %}
+                                {% endif %}#}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+        <div role="tabpanel" class="tab-pane" id="valide">
+            <div class="x_title">
+                <h2>Liste des demandes de congés validés<small> </small></h2>
+                <div class="clearfix"></div>
+            </div>
+
+            <table class="records_list table table-striped responsive-utilities jambo_table bulk_action">
+                <thead>
+                    <tr>
+                        <th>Date soumission</th>
+                        <th>Type de Congés</th>
+                        <th>Nom & prénoms</th>
+                        <th>Date de départ</th>
+                        <th>Date de fin</th>
+                        <th>Nombre de jours</th>
+
+                        <th>Date de reprise</th>
+                        <th>Etat</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entity in valides %}
+                        <tr>
+
+                            <td>{% if entity.datecreation %}{{ entity.datecreation|date('H:i:s d-m-Y') }}{% endif %}</td>
+                            <td>{{entity.typeConges.libelle}}</td>
+                            <td>{% if entity.agent %}{{entity.agent.nom}} {{entity.agent.prenoms}}{% endif %}</td>
+                            <td>{% if entity.datedebut %}{{ entity.datedebut|date('d-m-Y') }}{% endif %}</td>
+                            <td>{% if entity.datefin %}{{ entity.datefin|date('d-m-Y') }}{% endif %}</td>
+                            <td>{{entity.nbrejours}}</td>
+
+                            <td>
+
+
+                                {% if (entity.numReprise is defined) and (entity.numReprise is not null) %}
+
+                                    {{ entity.numReprise.date|date('d-m-Y') }}
+                                {% endif %}
+
+
+
+
+
+
+
+                            </td>
+                            <td>
+                                {#
+                                {{macro.EtatConge(entity.etat,entity.niveau,entity.agent.retour_service.tab_lib[entity.niveau])}}
+                                #}
+                                {#
+                                {% if (entity.agent.Fonction.id in [5,7]) %}
+                                    {{macro.EtatCongeResponsable(entity.etat,entity.niveau,entity.agent.retour_service.tab_lib[entity.niveau])}}
+                                {% elseif entity.niveau == 0 %}
+                                   {{macro.EtatConge(entity.etat,entity.niveau,entity.agent.retour_service.tab_lib[entity.niveau])}}
+                               {% endif %}
+                               #}
+                                {{entity.getValidateur(0)}}
+                            </td>
+                            <td>
+
+                                <a href="{{ path('conges_show', { 'id': entity.id }) }}">Consulter</a> &nbsp;
+                                {#{% if is_granted('ROLE_RESPO') %}
+                                    {% if entity.etat == 0 %}
+                                        <a href="{{ path('conges_approuv', { 'id': entity.id,'choice': 1 }) }}">
+                                            Confirmer la Demande
+                                        </a>
+                                    {% endif %}
+                                    {% if entity.etat == 4 %}
+                                        <a href="{{ path('conges_print', { 'id': 2,'conge': entity.id }) }}" >
+                                            Imprimer reprise
+                                        </a>
+                                    {% endif %}
+
+                                {% endif %}
+                                {% if is_granted('ROLE_RESPO_SRHMG') %}
+                                    {% if entity.etat == 3 %}
+                                        <a href="{{ path('conges_print', { 'id': 1,'conge': entity.id }) }}" >
+                                            Imprimer cessation
+                                        </a>
+                                    {% endif %}
+                                    {% if entity.etat == 3 %}
+                                        <a href="{{ path('conges_print', { 'id': 2,'conge': entity.id }) }}" >
+                                            Imprimer Reprise
+                                        </a>
+                                    {% endif %}
+                                {% endif %}#}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+{% endblock %}

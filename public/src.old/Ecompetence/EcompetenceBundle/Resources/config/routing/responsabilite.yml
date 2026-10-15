@@ -1,0 +1,3 @@
+responsabilite_new:
+    path:     /{id}/new
+    defaults: { _controller: "EcompetenceBundle:Responsabilite:new" }

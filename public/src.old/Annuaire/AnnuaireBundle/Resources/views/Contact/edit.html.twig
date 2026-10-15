@@ -1,0 +1,36 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Mise à jour des contacts de l'agent <font color="red">{{entity.nom}} {{entity.prenoms}}</font></h1>
+ <div style="float:center";>
+     <table class="records_list table table-striped responsive-utilities jambo_table bulk_action">
+        <tbody border="10" cellspacing="20" >
+            <tr>
+                <th>Matricule</th>
+                <td>{{ entity.matricule }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ entity.nom }}</td>
+            </tr>
+            <tr>
+                <th>Pr&eacute;noms</th>
+                <td>{{ entity.prenoms }}</td>
+                </ul>
+            </tr>
+        </tbody>  
+</table>
+
+
+    {{ form(edit_form) }}
+
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('contact') }}">
+            Retour à la liste
+        </a>
+    </li>
+</ul>
+</div>
+{% endblock %}

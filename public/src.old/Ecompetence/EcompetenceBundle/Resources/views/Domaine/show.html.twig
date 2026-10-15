@@ -1,0 +1,64 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Liste des Domaines de Compétence</h1>
+
+    <table class="record_properties">
+        <tbody>
+            {#{{ form(edit_form) }}
+             <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Libdomaine</th>
+                <td>{{ entity.libDomaine }}</td>
+            </tr>
+            <tr>
+                <th>Level</th>
+                <td>{{ entity.level }}</td>
+            </tr> #}
+            <h3>Nom du domaine : {{ entity.libDomaine }}</h3>
+<p><strong>Niveau :</strong> {{ entity.level }}</p>
+
+<hr>
+
+<h3>Sous-domaines</h3>
+<ul>
+    {% for child in children %}
+       <li style="margin-bottom: 8px;">
+            <span style="margin-right: 15px;">
+                {{ child.libDomaine }}
+            </span>
+            <a href="{{ path('domaine_edit', { 'id': child.id }) }}"
+               class="btn btn-primary btn-sm">
+                Modifier
+            </a>
+        </li>
+    {% else %}
+        <li>Aucun sous-domaine</li>
+    {% endfor %}
+</ul>
+
+<hr>
+
+<a href="{{ path('domaine') }}">Retour à la liste</a>
+
+
+        </tbody>
+    </table>
+
+       {# <ul class="record_actions">
+    <li>
+        <a href="{{ path('domaine') }}">
+            Retour à la liste
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('domaine_edit', { 'id': entity.id }) }}">
+            Modifier
+        </a>
+    </li>
+     <li>{{ form(delete_form) }}</li> 
+</ul>#}
+{% endblock %}

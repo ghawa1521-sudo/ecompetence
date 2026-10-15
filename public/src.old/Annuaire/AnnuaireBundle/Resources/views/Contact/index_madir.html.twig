@@ -1,0 +1,44 @@
+{% extends '::base.html.twig' %}
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %} 
+{% endblock %}
+{% block title %}Liste des Contacts {% endblock %}
+{% block body -%}
+    <div class="span12">
+        
+                        
+    <h1>Liste des conctats</h1>
+
+    <table class="records_list table table-striped jambo_table bulk_action">
+        <thead>
+            <tr>
+                <th>Matricule</th>
+                <th>Nom et Pr&eacute;noms</th>
+                <th> Bureau</th>
+                <th> Portable</th>
+                <th> Domicile</th>
+                <th> Poste </th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for entity in entities %}
+                <tr>
+                    <td>{{ entity.matricule }}</td>
+                    <td>{{ entity.nom }} {{ entity.prenoms }}</td>
+                    
+                    
+                    <td>{{ entity.telBur }}</td>
+                    <td>{{ entity.telport }}</td>
+                    <td>{{ entity.telDom }}</td>
+                    <td>{{ entity.numPoste }}</td>
+                    
+                
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

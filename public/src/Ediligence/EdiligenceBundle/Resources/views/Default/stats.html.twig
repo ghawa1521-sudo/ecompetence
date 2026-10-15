@@ -1,0 +1,255 @@
+{% extends '::ediligence/base.html.twig' %}
+
+{% block javascripts %}
+
+
+
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .plop { 
+            animation: Plop 1s infinite;
+            color: red; 
+            font-weight: bold;
+
+        }@keyframes Plop{
+            0%{opacity:1;}
+            50% {opacity:0;}
+            100%{opacity:1;}
+        }
+    </style>
+{% endblock %}
+
+{% block body %} 
+    {#
+    {{dump(fonctionbase.Notif())}}
+    #}
+    {% if app.user.agent.retour_service.lib == 'DGE'%} 
+        {% set services='Direction Générale'%} 
+    {% else%} 
+        {% set services='Service ' ~ app.user.agent.retour_service.lib %}
+    {%endif%}
+    Bienvenue {{app.user.agent.getCivilite.codesitf}} 
+    <strong>{{app.user.agent.nom}}
+        {{app.user.agent.prenoms}} 
+        {{app.user.agent.nomJeuneFille}}
+        {{app.user.agent.matricule}}
+        ({{services}})</strong>
+    <br>
+    <h3><b><font color="#406F09"><span class="glyphicon glyphicon-briefcase"></span> E-DILIGENCE</font></b></h3>
+    <br />
+    <div>APPLICATION SPECIALISEE DANS LE TRAITEMENT DES DILIGENCES</div>
+    <br />
+    <div id="wrapper">
+        <div id="page-wrapper">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa">ZONE RECHERCHE</i>
+                        </div>
+                        <div class="panel-body">
+                            {{ form_start(form) }}
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-sm-1">
+
+                                    </div>
+                                    <div class="col-sm-3">
+                                        {{ form_row(form.motcles1) }}
+                                    </div>
+                                    <div class="col-sm-1">
+                                        Dans
+                                    </div>
+                                    <div class="col-sm-3">
+                                        {{ form_row(form.objet1) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-sm-1">
+                                        {{ form_row(form.conn1) }}
+                                    </div>
+                                    <div class="col-sm-3">
+                                        {{ form_row(form.motcles2) }}
+                                    </div>
+                                    <div class="col-sm-1">
+                                        Dans
+                                    </div>
+                                    <div class="col-sm-3">
+                                        {{ form_row(form.objet2) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-sm-1">
+                                        {{ form_row(form.conn2) }}
+                                    </div>
+                                    <div class="col-sm-3">
+                                        {{ form_row(form.motcles3) }}
+                                    </div>
+                                    <div class="col-sm-1">
+                                        Dans
+                                    </div>
+                                    <div class="col-sm-3">
+                                        {{ form_row(form.objet3) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-sm-1">
+                                        Période de
+                                    </div>
+                                    <div class="col-sm-3">
+                                        {{ form_row(form.datedebut) }}
+                                    </div>
+                                    <div class="col-sm-1">
+                                        à
+                                    </div>
+                                    <div class="col-sm-3">
+                                        {{ form_row(form.datefin) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group">
+
+                                    <div class="col-sm-8">
+                                        {{ form_row(form.services) }}
+                                    </div>
+                                </div>
+                            </div> 
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-sm-4">
+
+                                    </div>
+                                    <div class="col-sm-4">
+                                        {{ form_row(form.submit) }}
+                                    </div>
+                                </div>
+                            </div> 
+
+                            {{ form_end(form, {'render_rest': false}) }}
+                        </div>
+                    </div>  
+                </div>
+
+            </div>   
+            {#
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <i class="fa">ZONE RESULTAT RECHERCHE</i>
+                                    </div>
+                                    <div class="panel-body">
+            
+            
+            
+                                    </div>
+                                </div>  
+                            </div>
+            
+                        </div> 
+                                    #}
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa">ZONE GRAPHIQUE</i>
+                        </div>
+                        <div class="panel-body">
+
+                            <div class="col-sm-6">
+                                <!-- Mini Bar Charts Block -->
+                                <div class="">
+
+                                    <!-- Mini Bar Charts Content -->
+                                    <div class="row text-center">
+
+                                        <div class="col-sm-6">
+                                            <span id="mini-chart-bar1">{{query_role}}</span>
+                                            <h4 class="text-center">Courrier Archivé</h4>
+                                        </div>
+
+                                    </div>
+                                    <!-- END Mini Bar Charts Content -->
+                                </div>
+                                <!-- END Mini Bar Charts Block -->
+                            </div>
+
+                        </div>
+                    </div>  
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa">ZONE STATISTIQUES</i>
+                        </div>
+                        <div class="panel-body">
+                            <div class="list-group">
+                                <div class="table-responsive">
+                                    <table class="table table-borderless">
+                                        <tr>
+                                            <th></th>
+                                            <th>Lun</th>
+                                            <th>Mar</th>
+                                            <th>Mer</th>
+                                            <th>Jeu</th>
+                                            <th>Ven</th>
+                                            <th></th>
+                                        </tr>
+                                        <tr class="table-success">
+                                            <th>Courriers</th>
+                                            <td><span class="pull-right text-muted small"><em>0</em></span></td>
+                                            <td><span class="pull-right text-muted small"><em>0</em></span></td>
+                                            <td><span class="pull-right text-muted small"><em>0</em></span></td>
+                                            <td><span class="pull-right text-muted small"><em>0</em></span></td>
+                                            <td><span class="pull-right text-muted small"><em>0</em></span></td>
+                                            <td><span class="pull-right text-muted small"><em>0</em></span></td>
+                                        </tr>
+                                        <tr class="table-primary">
+                                            <th>Diligences Imputées</th>
+                                            <td><span class="pull-right text-muted small"><em>0</em></span></td>
+                                            <td><span class="pull-right text-muted small"><em>0</em></span></td>
+                                            <td><span class="pull-right text-muted small"><em>0</em></span></td>
+                                            <td><span class="pull-right text-muted small"><em>0</em></span></td>
+                                            <td><span class="pull-right text-muted small"><em>0</em></span></td>
+                                            <td><span class="pull-right text-muted small"><em>0</em></span></td>
+                                        </tr>
+                                        <tr class="table-warning">
+                                            <th>Diligences traitées</th>
+                                            <td><span class="pull-right text-muted small"><em>0</em></span></td>
+                                            <td><span class="pull-right text-muted small"><em>0</em></span></td>
+                                            <td><span class="pull-right text-muted small"><em>0</em></span></td>
+                                            <td><span class="pull-right text-muted small"><em>0</em></span></td>
+                                            <td><span class="pull-right text-muted small"><em>0</em></span></td>
+                                            <td><span class="pull-right text-muted small"><em>0</em></span></td>
+                                        </tr>
+                                    </table>
+                                </div> 
+                                {# {% for key, line in board %}
+                                     <a href="" target="_blank" class="list-group-item">
+                                         <i class="fa fa-twitter fa-fw"></i>{{key}}
+                                         <span class="pull-right text-muted small"><em>{{line}}</em></span>   
+                                     </a>
+                                 {% endfor %}#}
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+
+            </div> 
+        </div>  
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,54 @@
+{% block footer %}
+<style>
+.fix1 {
+    position: fixed !important;
+    right: 0 !important;
+    z-index: 2147483640 !important;
+    transition: all .5s ease !important;
+    width: 65px !important;
+    height: 109px !important;
+    background: inherit !important;
+    text-decoration: none !important;
+}
+
+.fix2 {
+    margin: 0 !important;
+    border: 0 none !important;
+    width: 65px !important;
+    height: 109px !important;
+    display: block !important;
+}
+</style>
+ <footer class="main-footer">
+        <div >
+            <p class="pull-right">
+			
+                <div class="pull-right hidden-xs">
+                  <b>Version</b> 0.1.0
+                </div>
+                <strong>
+                    Copyright &copy; {{ 'now'|date('Y') }}
+                    <a href="#">Direction Générale de l'Economie / Service Informatique et Maintenance</a>.
+                </strong>. |
+                <span class="lead">
+                    <i class="fa fa-paw"></i>
+                    Tous droits réservés.
+                </span>
+				
+            </p>
+
+			
+        </div>
+		
+        <div class="clearfix"></div>
+		<div>
+		<div  class="fix1 fix2"  title="Click to Verify - This site chose GeoTrust SSL for secure e-commerce and confidential communications.">
+
+<script type="text/javascript" src="https://seal.geotrust.com/getgeotrustsslseal?host_name=e-agent.dge.ci&amp;size=M&amp;lang=en"></script><br />
+<a href="http://www.geotrust.com/ssl/" target="_blank"  style="color:#000000; text-decoration:none; font:bold 7px verdana,sans-serif; letter-spacing:.5px; text-align:center;"></a>
+
+</div><div style="width:500px;">&nbsp;</div>
+</div>
+</footer>
+
+  {% endblock footer %}

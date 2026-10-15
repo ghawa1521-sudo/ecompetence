@@ -1,0 +1,30 @@
+typedemande:
+    path:     /
+    defaults: { _controller: "DemandesBundle:TypeDemande:index" }
+
+typedemande_show:
+    path:     /{id}/show
+    defaults: { _controller: "DemandesBundle:TypeDemande:show" }
+
+typedemande_new:
+    path:     /new
+    defaults: { _controller: "DemandesBundle:TypeDemande:new" }
+
+typedemande_create:
+    path:     /create
+    defaults: { _controller: "DemandesBundle:TypeDemande:create" }
+    methods:  POST
+
+typedemande_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "DemandesBundle:TypeDemande:edit" }
+
+typedemande_update:
+    path:     /{id}/update
+    defaults: { _controller: "DemandesBundle:TypeDemande:update" }
+    methods:  [POST, PUT]
+
+typedemande_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "DemandesBundle:TypeDemande:delete" }
+    methods:  [POST, DELETE]

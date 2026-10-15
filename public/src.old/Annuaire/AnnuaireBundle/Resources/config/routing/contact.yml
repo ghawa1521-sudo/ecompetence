@@ -1,0 +1,38 @@
+contact:
+    path:     /
+    defaults: { _controller: "AnnuaireBundle:Contact:index" }
+
+contact_in:
+    path:     /madir
+    defaults: { _controller: "AnnuaireBundle:Contact:madir" }
+
+contact_Results:
+    path:     /
+    defaults: { _controller: "AnnuaireBundle:Contact:indexResults" }
+
+contact_show:
+    path:     /{id}/show
+    defaults: { _controller: "AnnuaireBundle:Contact:show" }
+
+contact_new:
+    path:     /new
+    defaults: { _controller: "AnnuaireBundle:Contact:new" }
+
+contact_create:
+    path:     /create
+    defaults: { _controller: "AnnuaireBundle:Contact:create" }
+    methods:  POST
+
+contact_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AnnuaireBundle:Contact:edit" }
+
+contact_update:
+    path:     /{id}/update
+    defaults: { _controller: "AnnuaireBundle:Contact:update" }
+    methods:  [POST, PUT]
+
+contact_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AnnuaireBundle:Contact:delete" }
+    methods:  [POST, DELETE]

@@ -1,0 +1,52 @@
+
+coordinateur_delimpute:
+    path:     /{id}/delimpute
+    defaults: { _controller: "EdiligenceBundle:Coordinateur:delimpute" }
+
+coordinateur_csrecu:
+    path:     /csrecu
+    defaults: { _controller: "EdiligenceBundle:Coordinateur:csrecu" }
+    
+coordinateur_trtret:
+    path:     /trtret
+    defaults: { _controller: "EdiligenceBundle:Coordinateur:trtret" }
+    methods:  [POST, GET]
+    
+coordinateur_ret:
+    path:     /{id}/ret
+    defaults: { _controller: "EdiligenceBundle:Coordinateur:ret" }
+    methods:  [POST, GET]
+    
+coordinateur_transmis:
+    path:     /transmis
+    defaults: { _controller: "EdiligenceBundle:Coordinateur:transmis" }
+    methods:  [POST, GET]
+    
+coordinateur_archive:
+    path:     /archive
+    defaults: { _controller: "EdiligenceBundle:Coordinateur:archive" }
+    methods:  [POST, GET]
+    
+coordinateur_trait:
+    path:     /trait
+    defaults: { _controller: "EdiligenceBundle:Coordinateur:trait" }
+    methods:  [POST, GET]
+    
+coordinateur_trt:
+    path:     /trt
+    defaults: { _controller: "EdiligenceBundle:Coordinateur:trt" }
+    methods:  [POST, GET]
+    
+coordinateur_compile:
+    path:     /{id}/compile
+    defaults: { _controller: "EdiligenceBundle:Coordinateur:compile" }
+    methods:  [POST, GET]
+    
+coordinateur_index:
+    path:     /
+    defaults: { _controller: "EdiligenceBundle:Coordinateur:index" }
+
+coordinateur_forum:
+    path:     /{id}/forum
+    defaults: { _controller: "EdiligenceBundle:Coordinateur:forum" }
+    methods:  [POST, GET]

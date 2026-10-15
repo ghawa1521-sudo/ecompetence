@@ -1,0 +1,57 @@
+<?php
+
+namespace Ecompetence\EcompetenceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Domaine
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Ecompetence\EcompetenceBundle\Entity\DomaineRepository")
+ */
+class Domaine
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="LibDomaine", type="string", length=50)
+     */
+    private $libDomaine;
+    
+      /**
+     * @var string
+     *
+     * @ORM\Column(name="Level", type="integer",nullable=true)
+     */
+    private $level;
+  
+    /**
+     * @ORM\OneToMany(targetEntity="Domaine", mappedBy="parent")
+     */
+    private $children;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Domaine", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id",nullable=true)
+     */
+    private $parent;
+
+    public function __construct() {
+        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    
+
+   
+
+}

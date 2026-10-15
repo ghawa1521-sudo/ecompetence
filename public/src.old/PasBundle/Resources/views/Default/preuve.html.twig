@@ -1,0 +1,136 @@
+{% extends '::ediligence/base.html.twig' %}
+{% block stylesheets %}
+    <style>
+        .vertical-text {
+            transform: rotate(-90deg);
+
+
+        }
+    </style>
+
+{% endblock %}
+{% block body %}
+
+</script>
+
+<div class="content-header">
+    <div class="header-section">
+        <h1><i class="gi gi-envelope"></i> Dossier<br><small>P.A.S</small></h1>
+    </div>
+</div>
+<ul class="breadcrumb breadcrumb-top">
+    <li>Actions</li>
+    <li><a href="">Evaluation du P.A.S</a></li>
+</ul>
+<div class="block full">
+    <div class="block-title">
+        <h2><strong>EVALUER</strong> P.A.S</h2>
+    </div>
+    {% set countperiode = pas.naturepas.getMonths()|length %} 
+    {% set colspan = countperiode + 8 %}
+    <div class="table-responsive">
+        <form method="post" action="{{path('pas_noter',{id:pas.id})}}" enctype="multipart/form-data" >
+            <table class="table table-vcenter table-condensed table-bordered table-responsive">
+                <thead style="background-color: #DFF2FF; color: black; ">
+                    <tr style="font-size: 1.0em; font-weight: bold; text-align: center; border-color: black;">
+                        <td rowspan="2">Résultat</td>
+                        <td rowspan="2">Actions</td>
+                        <td rowspan="2">Indicateurs</td>
+                        <td rowspan="2">Sources de vérification</td>
+                        <td rowspan="2">Budget Estimatif</td>
+                        <td colspan="{{countperiode}}" width="20">Calendrier</td>
+                        <td rowspan="2">Responsable</td>
+                        <td rowspan="2" width="10%">Partenaires d'exécution</td>
+                        <td rowspan="2" width="10%">Note</td>
+                    </tr>
+                    <tr>  {% for repartition in pas.naturepas.getMonths()%}
+                        <td class="vertical-text"  style="font-size: 6pt; margin: 0px; font-weight: bold; font-style: italic;">{{repartition}}</td>
+                        {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key, axe in pas.axes %}
+                            <tr style="background-color: #EDEDED; color: black;" border='1'>
+                                <td colspan="{{colspan}}" align="center"><strong>Axe strategique {{(key + 1)}}: {{axe.libelle}}</strong></td>
+                            </tr>
+                            {% for key1, obj in axe.objectifs  %}
+                                <tr height='30'>
+                                    <td colspan="{{colspan}}" align="left"><strong><u>OBJECTIF STRATEGIQUE {{(key1 + 1)}}</u>: {{obj.libelleobj}}</strong></td>
+                                </tr>
+
+                                {% for key2, act in obj.actions  %}
+                                    <tr height='30'>
+                                        <td></td>
+                                        <td align="left">Action {{(key2 + 1)}}: {{act.libelleaction}}</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        {% for w in 1..countperiode  %}
+                                            <td  {% if w in act.calendar%} class="bg-info" {% endif %}>
+                                                
+                                                {#
+                                                    <span class="label label-success form-control">&nbsp;</span>
+                                                    #}
+                                                
+                                                {#
+                                                <input type="checkbox" name="calendar[{{axe.id}}][{{obj.id}}][{{act.id}}][]" value="{{w}}" class="form-control">
+                                                #}
+                                              
+                                            </td>
+                                        {% endfor %}    
+
+                                        <td align="center">{% if pas.direction.sigle is defined and pas.direction.sigle!=null%}
+                                            {{pas.direction.sigle}}
+
+                                        {% else %}
+
+
+                                            {% endif %}
+                                            </td>
+                                            <td></td>
+                                            <td style="font-size: 1.1em; color:red; font-weight: bolder">
+                                                {% if (act.piecejointe is defined) and (act.piecejointe != null) %}
+                                                {{ macro.apercu(act.piecejointe) }}
+                                                {% else %}
+                                                  <input type="file" name="pj[{{axe.id}}][{{obj.id}}][{{act.id}}]"/>
+                                                {% endif %}
+
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+
+                                            {% endfor %}
+
+                                                {% endfor %}
+
+                                                </tbody>
+                                                <tr>
+                                                    <td colspan="{{colspan}}">
+                                                        <input type="hidden" name="preuve" value="ok">
+                                                        <button type="submit" class="btn btn-success  form-control ">Evaluer</button>
+
+                                                    </td>
+                                                </tr>
+                                            </table>
+
+                                        </form>
+                                    </div>
+                                    <ul>
+                                    </ul>
+                                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+ {{macro.div_apercu() }}
+
+                                {% endblock %}

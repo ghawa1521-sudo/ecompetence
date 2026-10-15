@@ -1,0 +1,151 @@
+<?php
+
+namespace PasBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Naturepas
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="PasBundle\Repository\NaturepasRepository")
+ */
+class Naturepas {
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="libelle", type="string", length=255)
+     */
+    private $libelle;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="periode", type="integer")
+     */
+    private $periode;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="repartition", type="string", length=255)
+     */
+    private $repartition;
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId() {
+        return $this->id;
+    }
+    
+    public function __toString() {
+        return $this->getLibelle();
+    }
+    /**
+     * Set libelle
+     *
+     * @param string $libelle
+     *
+     * @return Naturepas
+     */
+    public function setLibelle($libelle) {
+        $this->libelle = $libelle;
+
+        return $this;
+    }
+
+    /**
+     * Get libelle
+     *
+     * @return string
+     */
+    public function getLibelle() {
+        return $this->libelle;
+    }
+
+    /**
+     * Set periode
+     *
+     * @param integer $periode
+     *
+     * @return Naturepas
+     */
+    public function setPeriode($periode) {
+        $this->periode = $periode;
+
+        return $this;
+    }
+
+    /**
+     * Get periode
+     *
+     * @return integer
+     */
+    public function getPeriode() {
+        return $this->periode;
+    }
+
+    /**
+     * Set repartition
+     *
+     * @param string $repartition
+     *
+     * @return Naturepas
+     */
+    public function setRepartition($repartition) {
+        $this->repartition = $repartition;
+
+        return $this;
+    }
+
+    /**
+     * Get repartition
+     *
+     * @return string
+     */
+    public function getRepartition() {
+        return $this->repartition;
+    }
+
+    /**
+     * Get repartition
+     *
+     * @return string
+     */
+    public function getRepartitions() {
+        return explode(',', $this->repartition);
+    }
+
+    public function getMonths() {
+        $x = explode(',', $this->getRepartition());
+        $count = count($x);
+
+        if ($this->getPeriode() == 0) {
+            for ($i = 0; $i < $count; $i++) {
+                //$tab[$i]=date('M',mktime(0,0,0,$i+1,10));   
+                setlocale(LC_TIME, "fr_FR.utf8", 'fra');
+                $tab[$i] = strtoupper(strftime("%b", mktime(0, 0, 0, $i + 1, 10)));
+            }
+            //return [$x[0]=>'JAN', $x[1]=>'FEV',$x[2]=>'MAR',$x[3]=>'AVR',$x[4]=>'MAI',$x[5]=>'JUIN',$x[6]=>'JUIL',$x[7]=>'AOUT',$x[8]=>'SEPT',$x[9]=>'OCT',$x[10]=>'NOV',$x[11]=>'DEC'];
+        } else {
+            $y = date('Y');
+            for ($i = 0; $i < $count; $i++) {
+                $tab[$i] = $y + $i;
+            }
+        } return $tab;
+    }
+
+}

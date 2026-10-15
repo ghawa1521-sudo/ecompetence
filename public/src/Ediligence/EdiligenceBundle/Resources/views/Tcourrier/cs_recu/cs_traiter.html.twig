@@ -1,0 +1,68 @@
+{% extends '::ediligence/base.html.twig' %}
+
+{% block body %}
+<div class="content-header">
+    <div class="header-section">
+        <h1>
+            <i class="gi gi-notes_2"></i>Diligences reçues<br><small>&nbsp;</small>
+        </h1>
+    </div>
+</div>
+<ul class="breadcrumb breadcrumb-top">
+    <li>Traitement d'une diligence</li>
+    <!--<li><a href="">Nouveau</a></li>-->
+</ul>
+<div class="row">
+ {{ form_start(form) }}
+    <div class="col-md-offset-2 col-md-8">
+        <div class="block"> 
+            <!-- Basic Form Elements Title -->
+            <div class="block-title">
+
+                <h2><strong>Traitement N° {{traitement}}</strong></h2>
+            </div>
+
+            <div style="float:right;" class="bien2">
+                <b>COURRIER: N° &nbsp; {{entities[0].courrier.id}}</b>
+            </div>
+            <div class="bien">
+                <b>DESTINATAIRE: <font color="#000000">&nbsp;{% if entities[0].nbrePers == 1 and coord == 1 %}{{entities[0].matriculeImput.nom}}&nbsp;{{entities[0].matriculeImput.prenoms}}{% else %} {{name_coord[0].matriculeimpute.nom}}&nbsp;{{name_coord[0].matriculeimpute.prenoms}} {% endif %}</font></b><br>
+                <b>OBJET:<font color="#000000">&nbsp;{{entities[0].courrier.objet|raw|striptags|slice(0, 150) }}</font></b>
+            </div>
+            <div class="form-group bien">
+                 {{ form_row(form.libtraitement, {'label':'OBSERVATIONS'}) }}
+            </div>
+          <label>
+              {{form_widget(form.pjtraitement.imageFile,{'attr':{'required':true}})}}
+            <i style="margin-bottom: 5px;">Format du Fichier (jpg, png, pdf, doc ou docx | max. 50 Mo)</i>
+          </label>
+       {%if(is_granted('ROLE_CHARGE_ETUDES')==false)%}     
+            
+       {% if coord==1 and entities[0].nbrePers == 1 %}
+         {% if entities[0].etatImput >=1 %} 
+             <button id="btnp" type="submit" value="traiter" class="btn btn-primary pull-right form-control" name="traiter"><span class="glyphicon glyphicon-ok-sign"> Soumettre le traitement au Supérieur</span></button>
+         {% else %}
+             <button id="btnp" type="submit" value="traiter" class="btn btn-primary pull-right form-control" name="traiter"><span class="glyphicon glyphicon-ok-sign"> Soumettre le traitement au DG </span></button> 
+         {% endif %}
+       {% else %}
+          <button id="btnp" type="submit" value="traiter" class="btn btn-primary pull-right form-control" name="traiter"><span class="glyphicon glyphicon-ok-sign"> Soumettre le traitement au Coordinateur</span></button>
+       {% endif %}
+      {% else %}
+          <button id="btnp" type="submit" value="traiter" class="btn btn-primary pull-right form-control" name="traiter"><span class="glyphicon glyphicon-ok-sign"> Soumettre le traitement au Supérieur</span></button>
+      {% endif %}
+          <a class="btn btn-primary pull-right form-control" href="{{ path('courrier_cstraiter', { 'id': id }) }}">Retour</a>  
+          <input type="hidden" name="id_imput" value="{{id}}">
+          <input type="hidden" name="id_courrier" value="{{entities[0].courrier.id}}">
+          <input type="hidden" name="imputdir" value="{{imputdir[0].id}}">
+          <input type="hidden" name="coord" value="{{coord}}">
+          <input type="hidden" name="nbrePers" value="{{entities[0].nbrePers}}">
+        </div>
+{{ form_end(form) }}
+    </div>
+</div>
+<ul>
+    <li>
+        <a href="{{ path('reception') }}">&nbsp;</a>
+    </li>
+</ul>
+{% endblock %}

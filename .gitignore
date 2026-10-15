@@ -1,0 +1,29 @@
+# Dépendances
+/public/vendor/
+/public/web/objetConge/
+/public_new/vendor/
+
+# Cache et journaux Symfony
+/public/var/cache/
+/public/var/logs/
+/public/app/cache/
+/public/app/logs/
+/public/app/cache/dev/sessions/
+/public/app/cache/prod/sessions/
+
+# Fichiers de configuration sensibles
+/public/.env
+/public/.env.local
+
+# Dossier public_new
+/public_new/
+
+# IDE
+.idea/
+.vscode/
+
+# Journaux
+*.log
+
+# Sauvegardes de base de données
+/db//public/app/logs/dev.log

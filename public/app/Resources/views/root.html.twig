@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="{{ asset('images/logoDGE.png') }}" type="image/png">
+        <link rel="icon" href="{{ asset('images/logoDGE.png') }}" type="image/png">
+        <title>e-RH {% block title %}{% endblock %}</title>
+
+
+        {% block datatableCss %}
+
+        {% endblock %}
+        {% block css %}
+
+        {% endblock %}
+
+        <!-- Bootstrap core CSS -->
+
+        <link href="{{ asset('design/css/bootstrap.min.css') }}" rel="stylesheet"/>
+        <link href="{{ asset('design/css/daterangepicker.css') }}" rel="stylesheet"/>
+        <link href="{{ asset('design/css/jquery.datetimepicker.css') }}" rel="stylesheet"/>
+        <link href="{{ asset('design/css/jquery-ui.css') }}" rel="stylesheet"/>
+        <link href="{{ asset('design/fonts/css/font-awesome.min.css') }}" rel="stylesheet"/>
+        <link href="{{ asset('design/vendor/iCheck/skins/flat/orange.css') }}" rel="stylesheet"/>
+        <link href="{{ asset('design/css/animate.min.css') }}" rel="stylesheet"/>
+        <link href="{{ asset('design/toastr/toastr.min.css') }}" rel="stylesheet"/>
+        <link href="{{ asset('ediligence/assets/css/bootstrap-select.min.css') }}" rel="stylesheet"/>
+        <link href="{{ asset('design/css/bootstrap-treeview.min.css') }}" rel="stylesheet"/>
+        <link href="{{ asset('design/css/flex-tree.min.css') }}" rel="stylesheet"/>
+        <link href="{{ asset('design/css/custom.css') }}" rel="stylesheet"/>
+        <link href="{{ asset('design/css/popup.css') }}" rel="stylesheet"/>
+        <link href="{{ asset('design/vendor/jquery-datatables-checkboxes/css/dataTables.checkboxes.css') }}" rel="stylesheet"/>
+        <script src="{{ asset('design/js/jquery.min.js') }}"></script>
+
+        <!--[if lt IE 9]>
+        <script src="{{ asset('design/../assets/js/ie8-responsive-file-warning.js') }}"></script>
+        <![endif]-->
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+
+    </head>
+
+
+    <body class="nav-md">
+        <!--
+
+        -->
+        <div class="container body">
+
+            {% block interim %}
+
+            {% endblock %}
+
+            <div class="main_container">
+
+                <div class="col-md-3 left_col">
+                    <div class="left_col scroll-view">
+
+                    {% block root %}{% endblock %}
+
+                    <!-- sidebar menu -->
+
+                    <!-- /sidebar menu -->
+
+                    <!-- /menu footer buttons -->
+
+                    <!-- /menu footer buttons -->
+                </div>
+            </div>
+
+            <!-- top navigation -->
+        {% block header %}{% endblock %}
+
+        <!-- /top navigation -->
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+
+            <div class="">
+                <div class="page-title">
+
+
+                    <div class="title_left">
+                        <h3>{% block titre_page %} {% endblock %}</h3>
+                    </div>
+
+                    <div class="title_right">
+                        <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+
+                <div class="row">
+
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        {% if app.request.attributes.get('_route')=='agent_cv1' or app.request.attributes.get('_route')=='affecter_view' or app.request.attributes.get('_route')=='demande_view' or app.request.attributes.get('_route')=='mutation_view' or app.request.attributes.get('_route')=='conges_view' or app.request.attributes.get('_route')=='mutation_interim_view' or app.request.attributes.get('_route')=='regularisation_print'%}
+                            <div class="x_panel" style="height:100%; background-color: #ededed;">
+                            {% else %}
+                                <div class="x_panel" style="height:100%; background-color: #fff;">
+                                {% endif %}
+                                {% block body %} {% endblock %}
+                                <div id="dialog" style="display: none">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- footer content -->
+                {% block footer %} {% endblock %}
+                <!-- /footer content -->
+
+
+            </div>
+            <!-- /page content -->
+        </div>
+
+    </div>
+
+    <div id="custom_notifications" class="custom-notifications dsp_none">
+        <ul class="list-unstyled notifications clearfix" data-tabbed_notifications="notif-group">
+        </ul>
+        <div class="clearfix"></div>
+        <div id="notif-group" class="tabbed_notifications"></div>
+    </div>
+    {{ render(controller('AgentBundle:News:news')) }}
+
+</body>
+
+<script src="{{ asset('design/js/jquery-2.1.4.min.js') }}"></script>
+<script src="{{ asset('design/js/jquery-ui.min.js') }}"></script>
+<script src="{{ asset('design/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('design/js/fieldsets/jquery.multifield.min.js') }}"></script>
+<script src="{{ asset('design/js/moment-with-locales.min.js') }}"></script>
+<script src="{{ asset('design/js/daterangepicker.js') }}"></script>
+<script src="{{ asset('design/toastr/toastr.min.js') }}"></script>
+
+<!-- moris js -->
+<script src="{{ asset('design/js/jquery.datetimepicker.full.min.js') }}"></script>
+<script src="{{ asset('design/js/style.js') }}"></script>
+<script src="{{ asset('design/vendor/iCheck/icheck.min.js') }}"></script>
+<script src="{{ asset('design/js/custom.js') }}"></script>
+
+<!-- debut ecompetence -->
+<script src="{{ asset('design/js/ckeditor/ckeditor.js') }}"></script>
+<!--fin ecompetence -->
+<script src="{{ asset('ediligence/assets/js/bootstrap-select.min.js') }}"></script>
+<script src="{{ asset('design/js/bootstrap-notify.js') }}"></script>
+<script src="{{ asset('design/js/bootstrap-notify.min.js') }}"></script>
+<script src="{{ asset('design/js/jquery.popup.min.js') }}"></script>
+<script src="{{ asset('design/js/raphael/raphael.min.js') }}"></script>
+<script src="{{ asset('design/js/morris.js/morris.min.js') }}"></script>
+<script src="{{ asset('design/js/jquery.chained.js') }}"></script>
+<script src="{{ asset('design/js/jquery.chained.min.js') }}"></script>
+
+<!-- debut ecompetence -->
+<script src="{{ asset('design/js/bootstrap-treeview.min.js') }}"></script>
+<script src="{{ asset('design/js/treeview/logger.js') }}"></script>
+<script src="{{ asset('design/js/treeview/treeview.js') }}"></script>
+<script src="{{ asset('design/js/flex-tree.min.js') }}"></script>
+<!--fin ecompetence -->
+{#<script src="{{ asset('design/js/custom/custom.min.js') }}"></script>
+
+<script src="{{ asset('design/js/add.js') }}"></script>#}
+
+<!-- DataTable -->
+
+
+{% block datatableJs %}
+    <!-- For Datatable -->
+
+{% endblock %}
+
+<script src="{{ asset('design/vendor/jquery-datatables-checkboxes/js/dataTables.checkboxes.js') }}"></script>
+<!-- Routing!-->
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+
+ <script>
+            $('#treeview-checkbox-demo').treeview({
+                debug : true,
+                data :['links', 'Informatique']
+            });
+            $('#show-values').on('click', function(){ 
+                $('#values').text(
+                    $('#treeview-checkbox-demo').treeview('selectedValues')
+                );
+            });
+ </script>
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+    (function () {
+        var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = 'https://embed.tawk.to/5c385751361b3372892f96e4/default';
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin', '*');
+        s0.parentNode.insertBefore(s1, s0);
+        Tawk_API.visitor = {
+            name: '{{app.user.agent.matricule}}-{{app.user.agent.concatnom}}',
+            email: '{{app.user.email}}'
+        };
+
+    })();
+</script>
+
+<!--
+<script>
+                        $.notify({
+                        title: '<strong>Heads up!</strong>',
+                        message: 'You can use any of bootstraps other alert styles as well by default.'
+                        },{
+                        type: 'success'
+                        });
+</script> -->
+{% for flash_message in app.session.flashBag.get('notice') %}
+    <script>
+
+    $.notify({
+        title: '',
+        message: '<strong>{{ flash_message }}</strong>'
+
+    },
+            {
+                type: 'success',
+                offset:
+                        {
+                            x: 20,
+                            y: 80
+                        }
+            }
+
+    );
+    </script>
+
+{% endfor %}
+{% for flash_message in app.session.flashBag.get('error') %}
+    <script>
+
+        $.notify({
+            title: '',
+            message: '<strong>{{ flash_message }}</strong>'
+
+        },
+                {
+                    type: 'error',
+                    offset:
+                            {
+                                x: 20,
+                                y: 80
+                            }
+                }
+
+        );
+    </script>
+
+{% endfor %}
+
+{% block javascript %} {% endblock %}}
+
+
+</html>

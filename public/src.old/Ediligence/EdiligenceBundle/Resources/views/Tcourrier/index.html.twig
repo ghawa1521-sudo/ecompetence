@@ -1,0 +1,76 @@
+{% extends '::ediligence/base.html.twig' %}
+
+{% block body %}
+    <script type="text/javascript">
+        function pop_apercu(txt){
+            var chkbox=document.getElementById("lg1234");
+            var chks="<iframe style='height: 100% !important; width: 100% !important' class='iframepop' src='"+txt+"'></iframe>";
+            chkbox.innerHTML=chks;
+            $("a#alg123").fancybox({"hideOnContentClick":false}).trigger("click");
+        }
+    </script>
+    
+     <div class="content-header">
+        <div class="header-section">
+            <h1><i class="gi gi-envelope"></i> Dossier<br><small>Mes diligences</small></h1>
+        </div>
+    </div>
+    <ul class="breadcrumb breadcrumb-top">
+        <li>Actions</li>
+        <li><a href="">Mes Dossiers</a></li>
+    </ul>
+    <div class="block full">
+        <div class="block-title">
+            <h2><strong>Liste</strong> dossiers</h2>
+        </div>{#
+        <p><a href="https://dge.ci" target="_blank">DataTables</a> is a plug-in for the Jquery Javascript library. It is a highly flexible tool, based upon the foundations of progressive enhancement, which will add advanced interaction controls to any HTML table. It is integrated with template's design and it offers many features such as on-the-fly filtering and variable length pagination.</p>
+#}
+
+        <div class="table-responsive">
+            <table id="example-datatable" class="table table-vcenter table-condensed table-bordered">
+                <thead>
+                    <tr>
+                        <th>Num</th>
+                        <th>Ref</th>
+                        <th>Date</th>
+                        <th>Exp</th>
+                        <th>Provenance</th>
+                        <th>Objet</th>
+                        <th>Observation</th>
+                        <th>Télécharger</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entity in entities %}
+                        <tr>
+                            <td><a href="{{ path('courrier_show', { 'id': entity.id }) }}">{{ entity.numenregistrement }}</a></td>
+                            <td>{{ entity.reforigine }}</td>
+                            <td>{% if entity.dateorigine %}{{ entity.dateorigine|date('d-m-Y') }}{% endif %}</td>
+                            <td>{{ entity.adresseenreg }}</td>
+                            <td>{{ entity.sourceCour }}</td>
+                            <td>{{ entity.objet|raw|striptags|slice(0, 150) }}</td>
+                            <td>{{ entity.observationscecour|raw|striptags|slice(0, 50) }}</td>
+                            <td>{{ macro.apercu(entity.piecejointe) }}
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group btn-group-xs">
+                                   {% if(entity.etatcourrier == 0)%}
+                                    <a href="{{ path('courrier_edit', { 'id': entity.id }) }}" data-toggle="tooltip" title="Modifier" class="btn btn-success"><i class="fa fa-edit" style="font-size:16px;color:red"></i></a>
+                                   {% endif%}
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <ul>
+            <li>
+                <a href="{{ path('courrier_new') }}">Transmettre diligence</a>
+            </li>
+        </ul>
+    </div>
+   {{macro.div_apercu() }}
+            
+    {% endblock %}

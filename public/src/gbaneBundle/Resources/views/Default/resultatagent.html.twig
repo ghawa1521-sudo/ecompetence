@@ -1,0 +1,276 @@
+{% extends "::base.html.twig" %}
+
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+    <style>
+        td {
+            vertical-align: middle !important;
+        }
+
+        /* Style pour l'entête du modal d'alerte */
+        #alertModal .modal-header {
+            background-color: orange;
+        }
+    </style>
+{% endblock %}
+
+{% block datatableJs %}
+  <script>
+    $("#example").margetable({
+        type: 2,
+        colindex: [0,1,2,3,4,5,6]
+    });
+
+    function selectOnlyOneCheckbox(element, modalName) {
+        var checkboxes = document.querySelectorAll('input[name="' + modalName + 'Function"]');
+        checkboxes.forEach(function (checkbox) {
+            checkbox.checked = false;
+        });
+        element.checked = true;
+
+        // Vérifier si une seule case à cocher est sélectionnée
+        if (modalName === 'potential') {
+            var selectedPotentialFunction = document.querySelector('input[name="potentialFunction"]:checked');
+            if (selectedPotentialFunction) {
+                $('#promotionModal').modal('show');
+            }
+        }
+    }
+
+    function showModal() {
+        var selected = document.querySelector('input[name="potentialFunction"]:checked');
+        if (selected) {
+            $('#promotionModal').modal('show');
+        } else {
+            $('#alertModal').modal('show');
+        }
+    }
+
+    function validateModalSelection() {
+        var selectedPotentialFunction = document.querySelector('input[name="potentialFunction"]:checked');
+        var selectedModalFunction = document.querySelector('#promotionModal input[name="modalFunction"]:checked');
+        
+        if (!selectedPotentialFunction) {
+            $('#alertModal').modal('show');
+            return;
+        }
+
+        if (!selectedModalFunction) {
+            $('#alertModal').modal('show');
+            return;
+        }
+
+        // Collect agent information
+        var matricule = "{{ agent.matricule }}";
+        var nom = "{{ agent.concatNom }}";
+        var fonctionPotentielle = selectedPotentialFunction.closest('tr').querySelector('td:nth-child(2)').textContent;
+        var fonctionAssimilee = selectedPotentialFunction.closest('tr').querySelector('td:nth-child(3)').textContent;
+        var directionService = selectedModalFunction.nextElementSibling.textContent;
+
+        // Set data in the recap modal
+        document.getElementById('recapMatricule').textContent = matricule;
+        document.getElementById('recapNom').textContent = nom;
+        document.getElementById('recapFonctionPotentielle').textContent = fonctionPotentielle;
+        document.getElementById('recapFonctionAssimilee').textContent = fonctionAssimilee;
+        document.getElementById('recapDirectionService').textContent = directionService;
+
+        // Show recap modal
+        $('#recapModal').modal('show');
+    }
+  </script>
+  {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+
+{% block body %}
+
+<div>
+    <form method="post" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+        <button type="submit" class="btn btn-primary">Rechercher</button>
+    </form>
+
+    {% if agent %}
+        <h3 style="text-align: center;">INFORMATIONS ACTUELLES DE L'AGENT</h3><br>
+        <table border="1" style="text-align: center;" class="records_list table table-striped table-bordered">
+            <tr>
+                <th>Matricule</th>
+                <th>Nom et prénoms</th>
+                <th>Fonction réelle</th>
+                <th>Fonction assimilée actuelle</th>
+                <th>Grade</th>
+                <th>Anciennete grade</th>
+                <th>Anciennete dge</th>
+                <th>Anciennete agent</th>
+            </tr>
+            <tr>
+                <td>{{ agent.matricule }}</td>
+                <td>{{ agent.concatNom }}</td>
+                <td>{{ agent.Fonction.libFonc }}</td>
+                <td>{{ agent.FonctionAssimilees.libFonctAss }}</td>
+                <td>{{ agent.Emploi.Grade.libGrade }}</td>
+                <td>{{ agent.anciennete.anciennetegrade.years|number_format }} an(s)</td>
+                <td>{% if agent.anciennete.anciennetedge.years is defined %}{{ agent.anciennete.anciennetedge.years|number_format }}{% endif %} an(s)</td>
+                <td>{{ agent.anciennete.ancienneteagent.years|number_format }} an(s)</td>
+            </tr>
+        </table>
+    {% endif %}
+      
+    <br>
+    <h3 style="text-align: center;">FONCTIONS POTENTIELLES</h3><br>
+    <form id="promotionForm" method="post" action="{{ path('gbane_promo', {'agt': agent.id, 'id': 'selectedFunctionId'}) }}">
+        <input type="hidden" name="agentId" value="{{ agent.id }}">
+        <input type="hidden" name="selectedFunctionId" id="selectedFunctionId">
+        <table id="example" style="text-align: left;" class="records_list table table-striped table-bordered">
+            {% if agent %}
+                <thead>
+                    <tr>
+                        <th>Choix</th>
+                        <th>Fonction</th>
+                        <th>Fonction Assimilée</th>
+                        <th>Grade</th>
+                        <th>Anciennete grade</th>
+                        <th>Anciennete dge</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for regle in regles %}
+                        {% if agent.FonctionAssimilees.libFonctAss != regle.FonctionAssimilees.libFonctAss %}
+                            <tr>
+                                <td><input type="checkbox" name="potentialFunction" value="{{ regle.FonctionAssimilees.id }}" onclick="selectOnlyOneCheckbox(this, 'potential')"></td>
+                                <td>{{ regle.FonctionAssimilees.idFonction.libFonc }}</td>
+                                <td>{{ regle.FonctionAssimilees.libFonctAss }}</td>
+                                <td>{{ regle.Grade.libGrade }}</td>
+                                <td>{{ regle.ancienneteGrade }} an(s)</td>
+                                <td>{{ regle.ancienneteDge }} an(s)</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            {% endif %}
+        </table>
+        <br>
+        <a href="{{ path('gbane_agent') }}"><button type="button" class="btn btn-secondary">Retour au formulaire</button></a> 
+       
+    </form>
+
+    <!-- Modal directionService -->
+    <div id="promotionModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="promotionModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="promotionModalLabel">Sélectionner une direction ou un service rattaché</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div>
+                            <input type="checkbox" name="modalFunction" value="1" onclick="selectOnlyOneCheckbox(this, 'modal')">
+                            <label for="modalFunction1">Direction des Prévisions des Politiques et des Statistiques Economiques</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" name="modalFunction" value="2" onclick="selectOnlyOneCheckbox(this, 'modal')">
+                            <label for="modalFunction2">Direction des Affaires Economiques Régionales</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" name="modalFunction" value="3" onclick="selectOnlyOneCheckbox(this, 'modal')">
+                            <label for="modalFunction3">Direction de la Promotion et de la Coopération Economique Internationale</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" name="modalFunction" value="4" onclick="selectOnlyOneCheckbox(this, 'modal')">
+                            <label for="modalFunction4">Service de Suivi du Développement du Secteur Public et Parapublic</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" name="modalFunction" value="5" onclick="selectOnlyOneCheckbox(this, 'modal')">
+                            <label for="modalFunction5">Service des Ressources Humaines et des Moyens Généraux</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" name="modalFunction" value="6" onclick="selectOnlyOneCheckbox(this, 'modal')">
+                            <label for="modalFunction6">Service Informatique et Maintenance</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" name="modalFunction" value="7" onclick="selectOnlyOneCheckbox(this, 'modal')">
+                            <label for="modalFunction7">Service de la Communication et de la Documentation</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" name="modalFunction" value="8" onclick="selectOnlyOneCheckbox(this, 'modal')">
+                            <label for="modalFunction8">Service de la Qualité et de la Normalisation</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" name="modalFunction" value="9" onclick="selectOnlyOneCheckbox(this, 'modal')">
+                            <label for="modalFunction9">Service des Affaires Juridiques et de Réglementation Economique</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-success" onclick="validateModalSelection()">Valider</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal récapitulatif -->
+    <div id="recapModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="recapModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title font-weight-bold" id="recapModalLabel">Récapitulatif</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Matricule</th>
+                            <td id="recapMatricule"></td>
+                        </tr>
+                        <tr>
+                            <th>Nom</th>
+                            <td id="recapNom"></td>
+                        </tr>
+                        <tr>
+                            <th>Fonction</th>
+                            <td id="recapFonctionPotentielle"></td>
+                        </tr>
+                        <tr>
+                            <th>Fonction Assimilée</th>
+                            <td id="recapFonctionAssimilee"></td>
+                        </tr>
+                        <tr>
+                            <th>Direction/Service</th>
+                            <td id="recapDirectionService"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <a href="{{ path('gbane_decision',{'id':agent.id}) }}"><button type="button" class="btn btn-success">Promouvoir</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal d'alerte -->
+    <div id="alertModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="alertModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title font-weight-bold" id="alertModalLabel">Alerte</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <strong><p>Veuillez faire un choix avant de continuer.</p></strong>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+<div style="padding-left:4px;padding-right:4px;">
+    <div class="x_panel" style="background-color:white;border-radius: 4px;">
+        <div class="x_content">
+
+            {# ----------------- PANEL CONNAISSANCES ----------------- #}
+            {% if formConnaissance %}
+            <div class="x_panel">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h2 style="color:orangered;">
+                            {% if modif %}
+                                Modifier une connaissance informatique
+                            {% else %}
+                                Ajouter une connaissance informatique
+                            {% endif %}
+                        </h2>
+                    </div>
+                    <div class="panel-body">
+                        {{ form_start(formConnaissance) }}
+                        {{ form_errors(formConnaissance) }}
+                        
+                        <div class="form-group">
+                            {{ form_label(formConnaissance.libelle) }}
+                            {{ form_widget(formConnaissance.libelle, {'attr': {'class':'form-control'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(formConnaissance.niveau) }}
+                            {{ form_widget(formConnaissance.niveau, {'attr': {'class':'form-control'}}) }}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            {% if modif %}
+                                Modifier connaissance
+                            {% else %}
+                                + Enrégistrer connaissance
+                            {% endif %}
+                        </button>
+                        {{ form_end(formConnaissance) }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {# ----------------- PANEL DECORATIONS ----------------- #}
+            {% if formDecoration %}
+            <div class="x_panel">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h2 style="color:orangered;">
+                            {% if modif %}
+                                Modifier une décoration
+                            {% else %}
+                                Ajouter une décoration
+                            {% endif %}
+                        </h2>
+                    </div>
+                    <div class="panel-body">
+                        {{ form_start(formDecoration) }}
+                        {{ form_errors(formDecoration) }}
+                        
+                        <div class="form-group">
+                            {{ form_label(formDecoration.libelle) }}
+                            {{ form_widget(formDecoration.libelle, {'attr': {'class':'form-control'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(formDecoration.annee) }}
+                            {{ form_widget(formDecoration.annee, {'attr': {'class':'form-control', 'placeholder':'Ex: 2020'}}) }}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            {% if modif %}
+                                Modifier décoration
+                            {% else %}
+                                + Enrégistrer décoration
+                            {% endif %}
+                        </button>
+                        {{ form_end(formDecoration) }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

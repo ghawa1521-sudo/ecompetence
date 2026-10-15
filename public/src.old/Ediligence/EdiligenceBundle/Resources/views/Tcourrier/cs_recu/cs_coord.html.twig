@@ -1,0 +1,78 @@
+{% extends '::ediligence/base.html.twig' %}
+
+{% block body %}
+ {#% for entitys in entities %}
+ {{dump(entitys.id)}}
+ {% set services = '' %}
+    {% for entit_ds in entity1 %} 
+      {%if entitys.id == entit_ds[0].imputation.id %}
+        {{dump('ici'~entit_ds[0].imputation.id)}}
+        {% set services = services ~ entit_ds['service'] ~ ' - ' %}
+      {% endif %}
+    {% endfor %}
+    {{dump(services)}}
+ {% endfor %#}
+
+    <div class="content-header">
+        <div class="header-section">
+            <h1><i class="gi gi-envelope"></i> Dossier<br><small>Mes diligences</small></h1>
+        </div>
+    </div>
+    <ul class="breadcrumb breadcrumb-top">
+        <li>Actions</li>
+        <li><a href="">Mes Dossiers</a></li>
+    </ul>
+    <div class="block full">
+        <div class="block-title">
+            <h2><strong>Liste</strong> des dossiers à coordonner</h2>
+        </div>
+
+        <div class="table-responsive">
+            <table id="example-datatable" class="table table-vcenter table-condensed table-bordered">
+                <thead>
+                    <tr>
+                        <th>Num</th>
+                        <th>Dossier</th>
+                        <th>Direction Concernées</th>
+                        <th>Date Imputation</th>
+                        <th>Délai Diligence</th>
+                        <th>Télécharger</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set i = 0 %}
+                    {% for entity in entities %}
+                        {% set i = i + 1 %}{% set service = '' %}
+                        {% for entit_d in entity1 %} 
+
+                            {%if entity.id == entit_d[0].imputation.id %}
+                                {% set service = service ~ entit_d['service'] ~ ' - ' %}
+                            {% endif%}
+
+                        {% endfor %}
+                        <tr>
+                            <td><a href="{{ path('courrier_show', { 'id': entity.id }) }}">{{ i }}</a></td>
+                            <td>{{entity.courrier.objet|raw|striptags|slice(0, 150)}}</td>
+                            <td>{{ service|trim(' - ', 'right') }}</td>
+                            <td>{{entity.dateImput|date('d-m-Y')}}</td>
+                            <td>{{entity.delaiImput|date('d-m-Y')}}<font color="red">&nbsp;&nbsp;&nbsp;{{(date(entity.delaiImput).diff(date(entity.dateImput))).days}}&nbsp;jour(s)</font></td>
+                            <td><a class="red" href="{{vich_uploader_asset(entity.courrier.piecejointe, 'imageFile')}}" title="Télécharger"  class="tooltip-info" data-rel="tooltip" data-original-title="Télécharger"><i class="ace-icon fa fa-download bigger-130"></i></a></td>
+                            <td class="text-center">
+                                <div class="btn-group btn-group-xs">
+                                   {# <a href="{{ path('courrier_show', { 'id': entity.id }) }}" data-toggle="tooltip" title="Consulter" class="btn btn-default"><i class="fa fa-envelope"></i></a>#}
+                                    <a href="{{ path('coordinateur_compile', { 'id': entity.id }) }}" data-toggle="tooltip" title="Coordonner" class="btn btn-danger"><i class="fa fa-pencil"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <ul>
+            <li>
+                <a href="{{ path('courrier_new') }}">Coordorner diligence</a>
+            </li>
+        </ul>
+    </div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends '::gabarit_print.html.twig' %}
+{% block titre %}
+    <div align="center" style="font-size:30px; text-decoration: underline;">
+        <h3><b>CERTIFICAT PRISE DE SERVICE</b></h3>
+    </div>
+{% endblock %}
+    {% block datePdf %}{% if entity.datecreation %}{{ entity.datecreation|date('d-m-Y H:i:s') }}{% endif %}{% endblock %}
+    {% block contenuPdf -%}
+
+        <div style="background-color: white; color:black;">
+            Je soussigné SAIN OGUIE, Directeur Général de l'Economie (DGE), 
+            
+                certifie
+            
+            
+            que 
+
+            {% if entity.sexe.id == 1 %}
+               
+                Monsieur
+                {% elseif entity.sexe.id == 2 %}
+                        {% if  entity.situationMatri.id == 1  %}Mademoiselle {% endif %}
+                        {% if  entity.situationMatri.id == 2  %}Madame {% endif %}
+                
+            {% endif %}
+            {{entity.nom}} {{entity.prenoms}}, matricule {{entity.matricule}}, {{entity.emploi.libEmpl}}, est effectivement en service à la Direction Générale de l'Economie (DGE), depuis le {{entity.datePriseServiceDge|date('d-m-Y',"Europe/Paris") }}
+            .
+            <br/><br/><br/>
+            En foi de quoi, le présent certificat lui est délivré pour servir et valoir ce que de droit.
+        </div>
+        </div>
+        
+
+
+<!--{% if is_granted('ROLE_RESPO') %}
+        <div class="row" id="verif">
+            <br/><br/>
+            <div align="center">
+                <label>Veuillez entrer votre mot de passe afin d\'éffectuer la validation de la demande</label><br/>
+                <div class="col-md-offset-4 col-sm-3 col-xs-3 col-lg-3 col-md-3">
+                    <form action="{{ path('demande_valid', { 'id': entity.id }) }}" method ="POST">
+                        <input id="mdp" name="mdp" type="password" class="form-control" placeholder="Votre Mot de Passe" />
+                        <input type="submit" class="btn btn-success btn-sm col-md-offset-5 col-md-2" value="valider">
+                    </form>
+                </div>
+            </div>
+        </form>
+        
+        </div>
+        <div id="boutton">
+        <button id="btn-js" class="btn btn-success btn-sm col-md-offset-5 col-md-2" onclick="VerifPassword() ;"> Valider</button>
+        </div>
+        <br/>
+        <div>
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('demande_receive') }}">
+            Retour Demandes Reçues
+        </a>
+    </li>       
+    
+</ul>
+</div>
+{% endif %}
+
+-->
+<script src="{{ asset('design/js/style.js') }}"></script>
+
+    {% endblock %}
+    

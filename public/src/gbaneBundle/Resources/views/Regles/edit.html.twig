@@ -1,0 +1,16 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Modifier une règle</h1>
+
+    {{ form(edit_form) }}
+
+
+    
+  <a href="{{ path('regles') }}">
+    <button type="button" class="btn btn-primary">Retour à la liste</button>
+  </a>
+    
+ {#{{ form(delete_form) }}#}
+
+{% endblock %}

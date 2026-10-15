@@ -1,0 +1,103 @@
+<?php
+
+namespace Ecompetence\EcompetenceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
+/**
+ * Langue
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Ecompetence\EcompetenceBundle\Repository\LangueRepository")
+ * @UniqueEntity(
+ *     fields={"liblangue"},
+ *     message="Cette langue existe déjà."
+ * )
+ */
+class Langue
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="liblangue", type="string", length=20)
+     */
+    private $liblangue;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Ecompetence\EcompetenceBundle\Entity\TypeLangue")
+     * @ORM\JoinColumn(name="TypeLangue_id", referencedColumnName="id", nullable=true)
+     */
+    private $TypeLangue;
+
+     public function __toString() {
+        return $this->getLiblangue();
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set liblangue
+     *
+     * @param string $liblangue
+     *
+     * @return Langue
+     */
+    public function setLiblangue($liblangue)
+    {
+        $this->liblangue = $liblangue;
+
+        return $this;
+    }
+
+    /**
+     * Get liblangue
+     *
+     * @return string
+     */
+    public function getLiblangue()
+    {
+        return $this->liblangue;
+    }
+
+     /**
+     * Set TypeLangue
+     *
+     * param Entity\TypeLangue $TypeLangue
+     *
+     * return TypeLangue
+     */
+    public function setTypeLangue( $TypeLangue = null)
+    {
+        $this->TypeLangue = $TypeLangue;
+
+        return $this;
+    }
+
+    /**
+     * Get TypeLangue
+     *
+     * return Entity\TypeLangue
+     */
+    public function getTypeLangue()
+    {
+        return $this->TypeLangue;
+    }
+}

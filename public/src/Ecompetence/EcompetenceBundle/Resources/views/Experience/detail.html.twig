@@ -1,0 +1,197 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    
+    
+ 
+
+
+
+
+
+
+
+            <!-- page content -->
+                          <div style="padding-left:85px;padding-right:85px;">
+                            <div class="x_panel" style="background-color:white;border-radius: 4px;">
+                             
+                                <div class="x_content">
+
+                                    <div class="col-md-7 col-sm-3 col-xs-12 profile_left">
+
+                     
+                          <table>                 
+                         
+                          <tr>  
+                         
+                                    <td style="font-weight: bold;font-size:20px;"> <b>
+                                        {% if (entity.nom) %}
+                                        {{ entity.nom }}
+                                        {% endif %}
+                                        {% if (entity.prenoms) %}
+                                        {{ entity.prenoms }}
+                                        {% endif %}</b>
+                                        {% if (entity.matricule) %}
+                                            <b  style="color: red;" >{{ ' ('~entity.matricule~')' }} </b>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>                                      
+                                      <td style="font-size:16px;">{% if (entity.emploi) %}
+                                        {{ entity.emploi.libEmpl }}
+                                        {% endif %}
+                                    </td>
+                            
+                                 <tr>
+                                   <td style="font-size:16px;">
+                                        {% if (entity.dateNaiss) %}
+                                        Né le {{ entity.dateNaiss|date('d-m-Y') }} 
+                                        {% endif %}
+                                        {% if (entity.LieuNaissance) %}
+                                         à {{entity.LieuNaissance.lieuNaiss}} 
+                                        {% endif %}</td>
+                                </tr>
+                                 <tr>
+                                   
+                                    <td style="font-size:16px;">
+                                        {% if (entity.telPort) %}
+                                        Tèl:{{entity.telPort}}</td>
+                                        {% endif %}
+                                </tr>
+
+                                <tr>
+                                    
+                                    <td style="font-size:16px;">Email :
+                                        {% if (entity.email) %}{{entity.email}}{% endif %}</td>
+                                </tr>
+                                <tr>
+                                  
+                                    <td style="font-size:16px;">{% if (entity.emailPerso) %}{{entity.emailPerso}}{% endif %}
+                                    {%for adr in entity.adresse%}
+                                        {{adr.email}} / 
+                                    {% endfor %}
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                  
+                                    <td style="font-size:16px;">{% if (entity.situationMatri) %}{{ entity.situationMatri }}{% endif %} 
+                                        {% if (entity.nbEnf) %}/ {{ entity.nbEnf }} enfant(s){% endif %} </td>
+                                </tr>
+                          </table>  
+          {#     {% if (entity.imageName) %}
+             <img src="{{ vich_uploader_asset(entity, 'imageFile') }}" alt="{{ entity.imageName }} Avatar">
+             
+          {% elseif (entity.sexe.id == 1 ) %}
+                <img src="{{ asset('images/img_test_agent.png')}}" Avatar>
+            {% elseif (entity.sexe.id == 2 ) %}
+                <img src="{{ asset('images/woman.png')}}" Avatar>
+            {% endif %}
+             #}                                     
+                                                    
+       
+                                           <!-- end of image cropping -->
+       </div>  
+            
+             <div class="col-lg-offset-1 col-md-3  profile_left">
+
+                                        <div class="profile_img">
+
+                                            
+           <div id="cropE-avatar">
+                                            
+          <div class="avatar-view" title="Change the avatar">                                      
+           {% if (entity.imageName) %}
+             <img src="{{ vich_uploader_asset(entity, 'imageFile') }}" alt="{{ entity.imageName }} Avatar">
+             
+          {% elseif (entity.sexe.id == 1 ) %}
+                <img src="{{ asset('images/img_test_agent.png')}}" Avatar>
+            {% elseif (entity.sexe.id == 2 ) %}
+                <img src="{{ asset('images/woman.png')}}" Avatar>
+            {% endif %}
+                                                
+                                                    
+             </div>                                          
+      </div>
+          </div>
+        </div>
+       </div>
+      </div>
+ </div>
+    
+    
+    
+    
+    
+    <style type="text/css">
+        td{
+            color:black;
+        }
+        th{
+            text-align: left;
+        }
+        p{color:black;}
+    </style>
+    
+ <div class="col-lg-1"> 
+ </div>    
+ <div class="col-lg-10">    
+  <div class="row">
+           <div class="panel panel-success">
+            <div class="panel-heading"><h2 style="color:orangered;">Détail sur l'expérience</h2></div>
+            <div class="panel-body">
+      
+ <table style='width:100%;margin-left:2px;'>
+        <tbody>
+          {%if(exprs)%} 
+           {% for expr in exprs%}
+            <tr role='row'>
+                <th width="15%">Date de debut: </th>
+                <td style="color:black";width="35%">{{ expr.dateDebExp|date('d-m-Y') }}</td>
+                <th width="15%">Date de fin    :</th>
+                <td width="35%">{{ expr.dateFinExp|date('d-m-Y') }}</td>
+            </tr>
+            
+            <tr>
+                <th width="15%">Employeur: </th>
+                <td width="35%">{%if(expr.structure)%}{{expr.structure.libStructure}} {%endif%}</td>
+                <th width="15%">Poste occupé :</th>
+                <td width="35%">{%if(expr.fonction)%}{{expr.fonction.libFonc}}{%elseif(expr.libExp) %}{{expr.libExp}} {%endif%}</td>  
+            </tr>
+            <tr>
+                <th width="15%">Direction générale: </th>
+                <td width="35%">{%if(expr.cvdirectiongle)%}{{expr.cvdirectiongle.libdirectiongle}}{%else%} Inconnu {%endif%}</td>
+                <th width="15%">Direction :</th>
+                <td width="35%">{%if(expr.cvdirection)%}{{expr.cvdirection.libdirection}}{%else%} Inconnu {%endif%}</td> 
+            </tr>
+             <tr> 
+               <td colspan="4" > 
+                 <br>
+                {%if(expr.mission)%}
+                  <i> <u> Missions </u></i><br>
+                  <p> 
+                    {{expr.mission|raw}}   
+                   {%endif%}
+                  </p>
+               </td>
+             
+            </tr>
+            <tr> 
+               <td colspan="4" >   <hr style="border:0.5px solid orange"> </td>
+             
+            </tr>
+           {% endfor%}
+           {% endif%} 
+         </tbody>
+       
+</table>
+              <br>
+ <a class="btn btn-primary btn-block col-lg-4" href="{{ path('experience_liste', { 'id':id }) }}">Précédent</a> 
+ <a class="btn btn-success btn-block col-lg-4" href="{{  path('agent_cv', { 'id':id }) }}">Aller à la page CV </a>     
+</div>
+<div class="col-lg-1"> 
+</div>        
+</div>
+</div>
+
+  {% endblock %}

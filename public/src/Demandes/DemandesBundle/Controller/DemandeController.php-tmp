@@ -1,0 +1,937 @@
+<?php
+
+namespace Demandes\DemandesBundle\Controller;
+
+use Demandes\DemandesBundle\Entity\Demande;
+use Demandes\DemandesBundle\Form\DemandeOkType;
+use Demandes\DemandesBundle\Form\DemandeType;
+
+use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+
+/**
+ * Demande controller.
+ *
+ */
+
+class DemandeController extends Controller {
+
+	/**
+	 * Lists all Demande entities.
+	 *
+	 */
+	public function indexAction() {
+		$em = $this->getDoctrine()->getManager();
+
+		$entities = $em->getRepository('DemandesBundle:Demande')->findAll();
+
+		return $this->render('DemandesBundle:Demande:index.html.twig', array(
+				'entities' => $entities,
+			));
+	}
+
+	public function listPrintAction() {
+		$em = $this->getDoctrine()->getManager();
+
+		$absence     = $em->getRepository('DemandesBundle:Demande')->listPrint(1);
+		$attestation = $em->getRepository('DemandesBundle:Demande')->listPrint(3);
+		$certificat  = $em->getRepository('DemandesBundle:Demande')->listPrint(4);
+
+		return $this->render('DemandesBundle:Demande:demande_list_print.html.twig', array(
+				'absence'     => $absence,
+				'attestation' => $attestation,
+				'certificat'  => $certificat,
+			));
+	}
+
+	public function printAction($id) {
+
+		$em = $this->getDoctrine()->getManager();
+
+		$entity = $em->getRepository('DemandesBundle:Demande')->find($id);
+
+		if (!$entity) {
+			throw $this->createNotFoundException('Cette demande n\'existe pas');
+		}
+
+		$typedemande = $entity->getTypeDemande();
+		switch ($typedemande->getId()) {
+			case 1:
+				# code...
+				$action = 'DemandesBundle:Demande:demande_absence_pdf.html.twig';
+				break;
+
+			default:
+				# code...
+				$action = 'DemandesBundle:Demande:demande_autres_pdf.html.twig';
+				break;
+		}
+
+		///////////////////Génération PDF/////////////////////////
+		//////////////////////////////////////////////////////////
+
+		$agent    = $entity->getEmmeteur()->getNom();
+		$filename = $agent."_".$typedemande.".pdf";
+		$snappy   = $this->get('knp_snappy.pdf');
+		$footer   = $this->renderview('DemandesBundle:Demande:footer_pdf.html.twig');
+		$html     = $this->renderview($action, array('entity' => $entity));
+
+		$snappy->setOption('margin-top', 10);
+		$snappy->setOption('margin-bottom', 10);
+
+		$snappy->setOption('footer-center', utf8_decode('Página [page] de [topage] - Impresso em '));
+
+		$snappy->setOption('footer-html', $footer);
+
+		$options = [
+			'orientation' => 'portrait',
+			'encoding'    => 'UTF-8',
+
+			'footer-html' => $footer,
+		];
+
+		return new PdfResponse(
+			$snappy->getOutputFromHtml($html, $options),
+			$filename
+		);
+
+		/*
+		return new PdfResponse(
+		$this->get('knp_snappy.pdf')->getOutputFromHtml($html),
+		'zzzz.pdf'
+		);*/
+		/*
+		 */
+
+		/////////////////////////////
+	}
+
+	/**
+	 * Lists all Demande by Agent
+	 *
+	 */
+	public function sendAction() {
+		$em = $this->getDoctrine()->getManager();
+
+		$agent = $this->getUser()->getAgent()->getMatricule();
+		//  $entities = $em->getRepository('DemandesBundle:Demande')->findBy(['typeDemande'=>1],array('datecreation' => 'desc'),array('emmeteur'=>$agent));
+		//;
+		$entities = $em->getRepository('DemandesBundle:Demande')->demandeSendAutorisation($agent);
+		$entiti   = $em->getRepository('DemandesBundle:Demande')->demandeSendOther($agent);
+		return $this->render('DemandesBundle:Demande:index.html.twig', array(
+				'entities' => $entities,
+				'entiti'   => $entiti,
+			));
+	}
+
+	/**
+	 * Lists all Demande receive
+	 *
+	 */
+	public function receiveAction() {
+		$em = $this->getDoctrine()->getManager();
+
+		$Direction = $this->getUser()->getAgent()->getDirection();
+		$user      = $this->getUser();
+		if ($this->getUser()->hasRole("ROLE_RESPO")) {
+			$entities = $em->getRepository('DemandesBundle:Demande')->findDemandeReceive($user);
+			$entitie  = $em->getRepository('DemandesBundle:Demande')->findDemandeReceiveSRHMG();
+			$entiti   = $em->getRepository('DemandesBundle:Demande')->findDemandeReceiveSRHMG2();
+
+		}
+
+		//dump($entitie);
+		dump($entities);
+		return $this->render('DemandesBundle:Demande:receive.html.twig', array(
+				'entities' => $entities,
+				'entitie'  => $entitie,
+				'entiti'   => $entiti,
+			));
+	}
+
+	public function rejectAction(Request $request, $id) {
+		$em     = $this->getDoctrine()->getManager();
+		$entity = $em->getRepository('DemandesBundle:Demande')->find($id);
+
+		$direction = $this->getUser()->getAgent()->getDirection();
+
+		$superieur = $em->getRepository('AgentBundle:Agent')->findSuperieurSD("ROLE_RESPO_SRHMG", $direction);
+
+		$form = $this->createRejectForm($entity, 99, $id);
+		$form->handleRequest($request);
+
+		if ($form->isValid()) {
+			//Refus Authorisation d'absence
+			if ($entity->getTypeDemande()->getId() == 1) {
+				//Niveau 3
+				if ($entity->getEtatRepSupDir2() == 1) {
+					// echo "3";
+					die;
+					if ($entity->getGrh() == $this->getUser()->getAgent()) {
+						$entity->setEtatRepGrh(2);
+						$entity->setDateRepGrh(new \DateTime());
+						$entity->setEtatNotification(0);
+						$entity->setEtatEmmission(2);
+						$entity->setEtatEncours(1);
+						$em->persist($entity);
+						$em->flush();
+						$notif = $this->addFlash(
+							'error',
+							'La Demande a été rejetée avec succès'
+						);
+					} else {
+						$notif = $this->addFlash(
+							'error',
+							'Vous n\'êtes pas Autorisé à Refuser cette Demande');
+					}
+					# code...
+				}
+				//Niveau 2
+				 elseif ($entity->getEtatRepSupDir() == 1) {
+
+					if ($entity->getSupDir2() == $this->getUser()->getAgent()) {
+
+						$entity->setEtatRepSupDir2(2);
+						$entity->setEtatEmmission(2);
+						$entity->setEtatNotification(0);
+						$entity->setDateRepSupDir2(new \DateTime());
+						$entity->setEtatEncours(1);
+						$em->persist($entity);
+						$em->flush();
+						$notif = $this->addFlash(
+							'error',
+							'La Demande a été rejetée avec succès'
+						);
+					} else {
+						echo "21";
+						die;
+						$notif = $this->addFlash(
+							'error',
+							'Vous n\'êtes pas Autorisé à Refuser cette Demande');
+					}
+
+				}
+				//Refus Supérieur 1
+				 elseif ($entity->getEtatRepSupDir() == 0) {
+					//echo "1";
+					die;
+					if ($entity->getSupDir() == $this->getUser()->getAgent()) {
+						$entity->setEtatRepSupDir(2);
+						$entity->setEtatEmmission(2);
+						$entity->setEtatNotification(0);
+						$entity->setDateRepSupDir(new \DateTime());
+						$entity->setEtatEncours(1);
+						$em->persist($entity);
+						$em->flush();
+						$notif = $this->addFlash(
+							'error',
+							'La Demande a été rejetée avec succès'
+						);
+					} else {
+						$notif = $this->addFlash(
+							'error',
+							'Vous n\'êtes pas Autorisé à Refuser cette Demande');
+					}
+
+				}
+
+				//Refus Supérieur 3
+
+			}
+			/*
+			else {
+			$entity->setEtatRepSupDir(2);
+			//  $entity->setEtatEmmission(1);
+			$entity->setEtatNotification(0);
+			$entity->setDateRepSupDir(new \DateTime());
+
+			$em->persist($entity);
+			$em->flush();
+			# code...
+			}*/
+
+			return $this->redirect($this->generateUrl('demande_receive'));
+		}
+		return $this->render('DemandesBundle:Demande:demande_reject.html.twig',
+			array(
+				'entity' => $entity,
+				'form'   => $form->createView(),
+			));
+	}
+
+	public function validAction($id) {
+
+		$em     = $this->getDoctrine()->getManager();
+		$entity = $em->getRepository('DemandesBundle:Demande')->find($id);
+
+		$direction = $this->getUser()->getAgent()->getDirection();
+
+		$superieur = $em->getRepository('AgentBundle:Agent')->findSuperieurSD("ROLE_RESPO_SRHMG", $direction);
+
+		//Validation Authorisation d'absence
+		if ($entity->getTypeDemande()->getId() == 1) {
+
+			//Si 3ème niveau de Validation
+			if ($entity->getEtatRepSupDir2() == 1) {
+				if ($entity->getGrh() == $this->getUser()->getAgent()) {
+					// die;
+					# code...
+					$entity->setEtatRepGrh(1);
+					$entity->setdateRepGrh(new \DateTime());
+					$entity->setEtatEmmission(2);
+					$entity->setEtatNotification(0);
+					$entity->setEtatEncours(1);
+					$notif = $this->addFlash(
+						'notice',
+						'La Validation de la Demande a été éffectuée avec Succès');
+				} else {
+					$notif = $this->addFlash(
+						'error',
+						'Vous n\'êtes pas Autorisé à Valider cette Demande'
+					);
+				}
+			}
+			//Si 2ème niveau de Validation
+			 elseif ($entity->getEtatRepSupDir() == 1) {
+				if ($entity->getSupDir2() == $this->getUser()->getAgent()) {
+					//die;
+					# code...
+					$entity->setEtatRepSupDir2(1);
+					$entity->setEtatEmmission(1);
+					$entity->setEtatNotification(0);
+					$entity->setDateRepSupDir2(new \DateTime());
+					$entity->setEtatRepGrh(0);
+					$entity->setdateRepGrh(null);
+					// $entity->setEtatEncours(1);
+					$notif = $this->addFlash(
+						'notice',
+						'La Validation de la Demande a été éffectuée avec Succès');
+				} else {
+					$notif = $this->addFlash(
+						'error',
+						'Vous n\'êtes pas Autorisé à Valider cette Demande'
+					);
+				}
+			}
+			//Si 1er niveau de Validation
+			if ($entity->getEtatRepSupDir() == 0) {
+				if (($entity->getSupDir() == $this->getUser()->getAgent()) and ($entity->getSupDir() == $entity->getSupDir2())) {
+					//var_dump("1er Niveau 1");
+					die;
+					$entity->setEtatRepSupDir(1);
+					$entity->setEtatRepSupDir2(1);
+					$entity->setEtatEmmission(1);
+					$entity->setEtatNotification(0);
+					$entity->setDateRepSupDir(new \DateTime());
+					$entity->setDateRepSupDir2(new \DateTime());
+					$entity->setEtatRepGrh(0);
+					$entity->setdateRepGrh(null);
+					$notif = $this->addFlash(
+						'notice',
+						'La Validation de la Demande a été éffectuée avec Succès');
+				} elseif ($entity->getSupDir() == $this->getUser()->getAgent()) {
+					//var_dump("1er Niveau 2");
+					die;
+					$entity->setEtatRepSupDir(1);
+					$entity->setEtatEmmission(1);
+					$entity->setEtatNotification(0);
+					$entity->setDateRepSupDir(new \DateTime());
+					$entity->setEtatRepGrh(0);
+					$entity->setdateRepGrh(null);
+					$notif = $this->addFlash(
+						'notice',
+						'La Validation de la Demande a été éffectuée avec Succès');
+				} elseif ($entity->getSupDir2() == $this->getUser()->getAgent()) {
+					$entity->setEtatRepSupDir(1);
+					$entity->setEtatRepSupDir2(1);
+					$entity->setEtatEmmission(1);
+					$entity->setEtatNotification(0);
+					$entity->setDateRepSupDir(new \DateTime());
+					$entity->setDateRepSupDir2(new \DateTime());
+					$entity->setEtatRepGrh(0);
+					$entity->setdateRepGrh(null);
+					$entity->setSupDir($this->getUser()->getAgent());
+				} else {
+					$notif = $this->addFlash(
+						'error',
+						'Vous n\'êtes pas Autorisé à Valider cette Demande'
+					);
+				}
+
+			}
+
+			$em->persist($entity);
+			$em->flush();
+		}
+		//Validation Autres Type de Demande
+		 else {
+			# code...
+			$entity->setEtatRepGrh(1);
+			$entity->setEtatEmmission(1);
+			$entity->setEtatNotification(0);
+			$entity->setDateRepGrh(new \DateTime());
+			$entity->setEtatEncours(1);
+			$em->persist($entity);
+			$em->flush();
+			$notif = $this->addFlash(
+				'notice',
+				'La Validation de la Demande a été éffectuée avec Succès');
+		}
+
+		$notif;
+		return $this->redirect($this->generateUrl('demande_receive'));
+
+	}
+
+	/**
+	 * Creates a new Demande entity.
+	 *
+	 */
+	public function retour_superieur() {
+		$em          = $this->getDoctrine()->getManager();
+		$direction   = $this->getUser()->getAgent()->getDirection();
+		$tab_service = $this->getUser()->getAgent()->retour_service()['tab_imput'];
+		//var_dump($direction);
+		// die;
+		$superieur1 = "";
+		$superieur2 = "";
+		$superieur3 = $em->getRepository('AgentBundle:Agent')->findOneBy(['Fonction' => 5, 'Direction' => 3]);
+		/////////////Envoi de Demande Pour Un Service Rattaché //////////
+		if ($direction->getEtatDirection() == 0) {
+			//Responsable Ressources Humaines
+			if (($this->getUser()->hasRole('ROLE_RESPO_SRHMG')) and ($this->getUser()->getAgent()->getFonction()->getId() == 5)) {
+				//Sup 1 & 2 DG
+				$superieur1 = $em->getRepository('AgentBundle:Agent')->findOneBy(['Fonction' => 10]);
+				$superieur2 = $superieur1;
+			}
+			//Chef de Service Rattaché
+			 elseif (($this->getUser()->hasRole('ROLE_RESPO')) and ($this->getUser()->getAgent()->getFonction()->getId() == 5)) {
+				$superieur1 = $em->getRepository('AgentBundle:Agent')->findOneBy(['Fonction' => 10]);
+				$superieur2 = $superieur1;
+			}
+			//Chef de Section
+			 elseif (($this->getUser()->hasRole('ROLE_RESPO')) and ($this->getUser()->getAgent()->getFonction()->getId() == 3)) {
+				$superieur1 = $em->getRepository('AgentBundle:Agent')
+				                 ->findOneBy(
+					['Fonction'  => 5,
+						'Direction' => $this->getUser()->getAgent()->getDirection()->getId()
+					]);
+				$superieur2 = $superieur1;
+
+			}
+			//Agent
+			 else {
+
+				//Agent Dans une Section
+				if (stristr($tab_service, 'SD') == TRUE) {
+					$superieur1 = $em->getRepository('AgentBundle:Agent')
+					                 ->findOneBy(
+						['Fonction' => 3,
+							'code_sd'  => $this->getUser()->getAgent()->getCodeSd()
+						]);
+					$superieur2 = $em->getRepository('AgentBundle:Agent')
+					                 ->findOneBy(
+						['Fonction'  => 5,
+							'Direction' => $this->getUser()->getAgent()->getDirection()->getId()
+						]);
+				}
+				//AGent Rattaché au Chef de Service
+				 elseif (stristr($tab_service, 'SD') == FALSE) {
+					$superieur1 = $em->getRepository('AgentBundle:Agent')
+					                 ->findOneBy(
+						['Fonction'  => 5,
+							'Direction' => $this->getUser()->getAgent()->getDirection()->getId()
+						]);
+					$superieur2 = $superieur1;
+				}
+
+			}}
+		/////////////Fin Envoi de Demande Pour Un Service Rattaché //////////
+		/////////////Envoi de Demande Pour Une Direction //////////
+		 elseif ($direction->getEtatDirection() == 1) {
+			//Directeur
+
+			if (($this->getUser()->hasRole('ROLE_RESPO')) and ($this->getUser()->getAgent()->getFonction()->getId() == 7)) {
+				$superieur1 = $em->getRepository('AgentBundle:Agent')->findOneBy(['Fonction' => 10]);
+				$superieur2 = $superieur1;
+			}
+			//Sous-Directeur
+			 elseif (($this->getUser()->hasRole('ROLE_RESPO')) and ($this->getUser()->getAgent()->getFonction()->getId() == 6)) {
+				$superieur1 = $em->getRepository('AgentBundle:Agent')
+				                 ->findOneBy(
+					['Fonction'  => 7,
+						'Direction' => $this->getUser()->getAgent()->getDirection()->getId()
+					]);
+				$superieur2 = $superieur1;
+			}
+			//Chef de Service
+			 elseif (($this->getUser()->hasRole('ROLE_RESPO')) and ($this->getUser()->getAgent()->getFonction()->getId() == 4)) {
+				$superieur1 = $em->getRepository('AgentBundle:Agent')
+				                 ->findOneBy(
+					['Fonction' => 6,
+						'code_sd'  => $this->getUser()->getAgent()->getCodeSd()
+					]);
+				$superieur2 = $em->getRepository('AgentBundle:Agent')
+				                 ->findOneBy(
+					['Fonction'  => 7,
+						'Direction' => $this->getUser()->getAgent()->getDirection()->getId()
+					]);
+			}
+			//Agent
+			 else {
+
+				//Agent dans un Service
+				if (stristr($tab_service, 'SD') == TRUE and stristr($tab_service, 'SC') == TRUE) {
+					$superieur1 = $em->getRepository('AgentBundle:Agent')
+					                 ->findOneBy(
+						['Fonction' => 4,
+							'code_sc'  => $this->getUser()->getAgent()->getCodeSc()
+						]);
+					$superieur2 = $em->getRepository('AgentBundle:Agent')
+					                 ->findOneBy(
+						['Fonction' => 6,
+							'code_sd'  => $this->getUser()->getAgent()->getCodeSd()
+						]);
+				}
+				//Agent Rattaché à une sous Direction et n'appartenant pas à un Service
+				//Secrétaire Sous Directeur, Chargé d'Etudes, etc.
+				 elseif (stristr($tab_service, 'SD') == TRUE and stristr($tab_service, 'SC') == FALSE) {
+
+					$superieur1 = $em->getRepository('AgentBundle:Agent')
+					                 ->findOneBy(
+						['Fonction' => 6,
+							'code_sd'  => $this->getUser()->getAgent()->getCodeSd()
+						]);
+					$superieur2 = $superieur1;
+				}
+				//Agent Rattaché au Directeur: CT, Secretaire......
+				 elseif (stristr($tab_service, 'SD') == FALSE and stristr($tab_service, 'SC') == FALSE) {
+
+					$superieur1 = $em->getRepository('AgentBundle:Agent')
+					                 ->findOneBy(
+						['Fonction'  => 7,
+							'Direction' => $this->getUser()->getAgent()->getDirection()->getId()
+						]);
+					$superieur2 = $superieur1;
+				}
+			}
+		}
+		return array(
+			'sup1' => $superieur1,
+			'sup2' => $superieur2,
+			'sup3' => $superieur3);;
+	}
+	public function createAction(Request $request) {
+		$em = $this->getDoctrine()->getManager();
+
+		//$prive=$em->getRepository('DemandesBundle:TypeDemande')->findTypeDemandePrive($matricule);
+		$entity    = new Demande();
+		$matricule = $this->getUser()->getAgent()->getMatricule();///Recevra l'action à effectuer en focntion du type choisi
+
+		$form = $this->createDoForm($entity, $matricule);
+		$form->handleRequest($request);
+		//
+		if ($form->isValid()) {
+
+			$ok    = new \DateTime();
+			$today = new \DateTime($ok->format('Y-m-d'));
+			//dump($today);
+			//$type=$entity->getTypeDemande()->getId();
+			$type = $form->getData()->getTypeDemande()->getId();
+
+			if ($type == 1) {
+				$datedebut = $form->getData()->getDateDeb();
+				$datefin   = $form->getData()->getDateFin();
+				$interval  = $datedebut->diff($datefin)->format('%R%a');
+
+				$interval2 = $today->diff($datedebut)->format('%R%a');
+				$delai     = $em->getRepository('DemandesBundle:Quota')->findOneBy(['typeDemande' => $type])->getNbreJoursAvant();
+
+			} else {
+				$interval  = null;
+				$interval2 = null;
+				$delai     = null;
+			}
+
+			//dump($interval);
+
+			//die;
+			if ($interval < 0) {
+				$this->addFlash(
+					'error',
+					'Vous ne Pouvez pas choisir de date de Fin antérieur à la date de Début'
+				);
+				return $this->render('DemandesBundle:Demande:new.html.twig', array(
+						'entity' => $entity,
+						'form'   => $form->createView(),
+					));
+
+			} elseif ($interval2 < 0) {
+				$this->addFlash(
+					'error',
+					'Vous ne Pouvez pas choisir de date Antérieur à la Date du Jour'
+				);
+				return $this->render('DemandesBundle:Demande:new.html.twig', array(
+						'entity' => $entity,
+						'form'   => $form->createView(),
+					));
+			} elseif ($interval2 < $delai) {
+				$this->addFlash(
+					'error',
+					'Vous Devez faire votre Demande '.$delai.' Jour avant votre Départ'
+				);
+				return $this->render('DemandesBundle:Demande:new.html.twig', array(
+						'entity' => $entity,
+						'form'   => $form->createView(),
+					));
+			} elseif ($interval > 2) {
+				$this->addFlash(
+					'error',
+					'Vous ne Pouvez pas Demandé plus de 3 jours d\'absence'
+				);
+				return $this->render('DemandesBundle:Demande:new.html.twig', array(
+						'entity' => $entity,
+						'form'   => $form->createView()));
+			} else {
+				$em = $this->getDoctrine()->getManager();
+
+				$entity->setEmmeteur($this->getUser()->getAgent());
+				$entity->setEtatEmmission(0);//Etat de base de l'émission
+				$entity->setEtatNotification(0);
+				//Retrouver le Supérieur de l'agent en fonction du rôle et de la direction de l'agent
+				//En fonction de sa demande
+				$superieur = $this->retour_superieur();
+				/////////////Envoi de Demande Pour Une Direction //////////
+				// dump($this->retour_superieur());
+				die;
+
+				switch ($type) {
+						//Autorisation d'absence
+					case 1:
+						$entity->setSupDir($superieur['sup1']);
+						$entity->setEtatRepSupDir(0);
+
+						$entity->setSupDir2($superieur['sup2']);
+						$entity->setEtatRepSupDir2(0);
+
+						$entity->setGrh($superieur['sup3']);
+						$entity->setEtatRepGrh(0);
+						break;
+
+					case 2:
+
+						$entity->setGrh($superieur['sup3']);
+						$entity->setEtatRepGrh(0);
+						break;
+
+					case 3:
+
+						$entity->setGrh($superieur['sup3']);
+						$entity->setEtatRepGrh(0);
+						break;
+
+					default:
+						$entity->setGrh($superieur['sup3']);
+						$entity->setEtatRepGrh(0);
+						break;
+
+				}
+
+				//$superieur=$em->getRepository('AgentBundle:Agent')->find('989609M');
+				if (!$superieur) {
+					throw $this->createNotFoundException(':-( Aucun Supérieur trouvé pour ce Agent');
+				}
+
+				$em->persist($entity);
+				$em->flush();
+				$this->addFlash(
+					'notice',
+					'Demande enregistrée avec Succès'
+				);
+				return $this->redirect($this->generateUrl('demande_send'));
+			}
+			// dump($interval2);
+			//die;
+			//var_dump($entity->getTypeDemande()->getId());
+			die;
+
+		}
+
+		return $this->render('DemandesBundle:Demande:new.html.twig', array(
+				'entity' => $entity,
+				'form'   => $form->createView(),
+			));
+	}
+
+	//Gérer l'affichage du formulaire de choix du type de Demande
+	public function doCreateAction(Request $request) {
+
+		$entity = new Demande();
+		$em     = $this->getDoctrine()->getManager();
+		$form   = $this->createCreateForm($entity, 0);
+		$form->handleRequest($request);
+
+		if ($form->isValid()) {
+			$todo = $entity->getTypeDemande()->getId();
+			$form = $this->createCreateForm($entity, $todo);
+			$form->handleRequest($request);
+			return $this->render('DemandesBundle:Demande:new.html.twig', array(
+					'entity' => $entity,
+					'form'   => $form->createView(),
+				));
+			exit;
+		}
+	}
+
+	/**
+	 * Creates a form to create a Demande entity.
+	 *
+	 * @param Demande $entity The entity
+	 *
+	 * @return \Symfony\Component\Form\Form The form
+	 */
+	private function createCreateForm(Demande $entity, $todo) {
+		$securityContext = $this->container->get('security.context');
+		$form            = $this->createForm(new DemandeType($securityContext, $todo), $entity, array(
+				'action' => $this->generateUrl('demande_create', array('todo' => $todo)),
+				'method' => 'POST',
+			));
+
+		$form->add('submit', 'submit', array('label' => 'Valider la Demande', 'attr' => array('class' => 'btn-success')));
+
+		return $form;
+	}
+
+	private function createDoForm(Demande $entity, $matricule) {
+		//  $securityContext = $this->container->get('security.context');
+		$form = $this->createForm(new DemandeOkType($matricule), $entity, array(
+				'action' => $this->generateUrl('demande_create'),
+				'method' => 'POST',
+			));
+
+		$form->add('submit', 'submit', array('label' => 'Enregistrer la Demande', 'attr' => array('class' => 'btn-success col-md-push-4 col-md-4 col-lg-4 col-sm-4')));
+
+		return $form;
+	}
+
+	private function createRejectForm(Demande $entity, $todo, $id) {
+		$securityContext = $this->container->get('security.context');
+		$form            = $this->createForm(new DemandeType($securityContext, $todo), $entity, array(
+				'action' => $this->generateUrl('demande_reject', array('id' => $id)),
+				'method' => 'POST',
+			));
+
+		$form->add('submit', 'submit', array('label' => 'REJETER LA DEMANDE', 'attr' => array('class' => 'btn-danger col-md-5 col-lg-5 col-sm-5', 'data-confirm' => 'Etes-vous <strong>certain</strong> de vouloir rejeter cette demande ?')))
+		->add('button', 'reset', array('label'       => 'ANNULER', 'attr'       => array('class'       => 'btn-warning col-md-5 col-lg-5 col-sm-5', 'onClick'       => '/')))
+		;
+
+		return $form;
+	}
+	/**
+	 * Displays a form to create a new Demande entity.
+	 *
+	 */
+	public function newAction() {
+
+		$entity = new Demande();
+		$form   = $this->createCreateForm($entity);
+
+		return $this->render('DemandesBundle:Demande:new.html.twig', array(
+				'entity' => $entity,
+				'form'   => $form->createView(),
+			));
+	}
+
+	public function doAction() {
+		//$em = $this->getDoctrine()->getManager();
+		//$matricule=$this->getUser()->getAgent()->getMatricule();
+		//$prive=$em->getRepository('DemandesBundle:TypeDemande')->findTypeDemandePrive($matricule);
+		//var_dump($prive->getQuery()->getResult());
+		//Etat 1 ppour identifier une Demande d'autorisation
+		// var_dump($this->getUser()->getRoles());
+		//var_dump(explode(",", $this->getUser()->getAgent()->retour_service()['tab_imput']));
+
+		$entity    = new Demande();
+		$matricule = $this->getUser()->getAgent()->getMatricule();
+		$form      = $this->createDoForm($entity, $matricule);
+
+		//$em = $this->getDoctrine()->getManager();
+		//$exclus=$em->getRepository('DemandesBundle:TypeDemande')->findTypeDemandePrive($matricule);
+		//var_dump($exclus->getQuery()->getResult());
+		//die;
+		return $this->render('DemandesBundle:Demande:new.html.twig', array(
+				'entity' => $entity,
+				'form'   => $form->createView(),
+			));
+	}
+
+	public function doRejectAction($id) {
+		$em     = $this->getDoctrine()->getManager();
+		$entity = $em->getRepository('DemandesBundle:Demande')->find($id);
+		$form   = $this->createRejectForm($entity, 99, $id);
+		return $this->render('DemandesBundle:Demande:demande_reject.html.twig', array(
+				'entity' => $entity,
+				'form'   => $form->createView(),
+			));
+	}
+
+	/**
+	 * Finds and displays a Demande entity.
+	 *
+	 */
+	public function showAction($id) {
+		$em = $this->getDoctrine()->getManager();
+
+		$entity = $em->getRepository('DemandesBundle:Demande')->find($id);
+
+		if (!$entity) {
+			throw $this->createNotFoundException('Cette demande n\'existe pas');
+		}
+		if ($this->getUser()->getAgent()->getMatricule() == $entity->getEmmeteur()->getMatricule()) {
+			$em = $this->getDoctrine()->getManager();
+			$entity->setEtatNotification(1);
+			$em->persist($entity);
+			$em->flush();
+			// die;
+		}
+		$typedemande = $entity->getTypeDemande();
+		switch ($typedemande->getId()) {
+			case 1:
+				# code...
+				$action = 'DemandesBundle:Demande:show_absence.html.twig';
+				break;
+
+			default:
+				# code...
+				$action = 'DemandesBundle:Demande:show.html.twig';
+				break;
+		}
+
+		$deleteForm = $this->createDeleteForm($id);
+
+		return $this->render($action, array(
+				'entity'      => $entity,
+				'delete_form' => $deleteForm->createView(),
+			));
+	}
+
+	/**
+	 * Displays a form to edit an existing Demande entity.
+	 *
+	 */
+	public function editAction($id) {
+		$em = $this->getDoctrine()->getManager();
+
+		$entity = $em->getRepository('DemandesBundle:Demande')->find($id);
+
+		if (!$entity) {
+			throw $this->createNotFoundException('Unable to find Demande entity.');
+		}
+		$matricule = $this->getUser()->getAgent()->getMatricule();
+
+		$editForm   = $this->createEditForm($entity, $matricule);
+		$deleteForm = $this->createDeleteForm($id);
+
+		return $this->render('DemandesBundle:Demande:edit.html.twig', array(
+				'entity'      => $entity,
+				'edit_form'   => $editForm->createView(),
+				'delete_form' => $deleteForm->createView(),
+			));
+	}
+
+	/**
+	 * Creates a form to edit a Demande entity.
+	 *
+	 * @param Demande $entity The entity
+	 *
+	 * @return \Symfony\Component\Form\Form The form
+	 */
+	private function createEditForm(Demande $entity, $matricule) {
+		//$todo=$entity->getTypeDemande()->getId();
+		// $securityContext = $this->container->get('security.context');
+		$form = $this->createForm(new DemandeOkType($matricule), $entity, array(
+				'action' => $this->generateUrl('demande_update', array('id' => $entity->getId())),
+				'method' => 'PUT',
+			));
+
+		$form->add('submit', 'submit', array('label' => 'Update'));
+
+		return $form;
+	}
+	/**
+	 * Edits an existing Demande entity.
+	 *
+	 */
+	public function updateAction(Request $request, $id) {
+		$em = $this->getDoctrine()->getManager();
+
+		$entity = $em->getRepository('DemandesBundle:Demande')->find($id);
+
+		if (!$entity) {
+			throw $this->createNotFoundException('Unable to find Demande entity.');
+		}
+
+		$deleteForm = $this->createDeleteForm($id);
+		$editForm   = $this->createEditForm($entity);
+		$editForm->handleRequest($request);
+
+		if ($editForm->isValid()) {
+			$em->flush();
+
+			return $this->redirect($this->generateUrl('demande_edit', array('id' => $id)));
+		}
+
+		return $this->render('DemandesBundle:Demande:edit.html.twig', array(
+				'entity'      => $entity,
+				'edit_form'   => $editForm->createView(),
+				'delete_form' => $deleteForm->createView(),
+			));
+	}
+	/**
+	 * Deletes a Demande entity.
+	 *
+	 */
+	public function deleteAction(Request $request, $id) {
+		$form = $this->createDeleteForm($id);
+		$form->handleRequest($request);
+
+		if ($form->isValid()) {
+			$em     = $this->getDoctrine()->getManager();
+			$entity = $em->getRepository('DemandesBundle:Demande')->find($id);
+
+			if (!$entity) {
+				throw $this->createNotFoundException('Unable to find Demande entity.');
+			}
+
+			$em->remove($entity);
+			$em->flush();
+		}
+
+		return $this->redirect($this->generateUrl('demande'));
+	}
+
+	/**
+	 * Creates a form to delete a Demande entity by id.
+	 *
+	 * @param mixed $id The entity id
+	 *
+	 * @return \Symfony\Component\Form\Form The form
+	 */
+	private function createDeleteForm($id) {
+		return $this->createFormBuilder()
+		            ->setAction($this->generateUrl('demande_delete', array('id' => $id)))
+		->setMethod('DELETE')
+		->add('submit', 'submit', array('label' => 'Delete'))
+		->getForm()
+		;
+	}
+
+	public function testAction() {
+		$this->addFlash(
+			'notice',
+			'Test'
+		);
+		return $this->redirect($this->generateUrl('demande'));
+	}
+}

@@ -1,0 +1,52 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Treception</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Datereception</th>
+                <td>{{ entity.datereception|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Etatreception</th>
+                <td>{{ entity.etatreception }}</td>
+            </tr>
+            <tr>
+                <th>Matriculereception</th>
+                <td>{{ entity.matriculereception }}</td>
+            </tr>
+            <tr>
+                <th>Codecourrier</th>
+                <td>{{ entity.codecourrier }}</td>
+            </tr>
+            <tr>
+                <th>Idimput</th>
+                <td>{{ entity.idImput }}</td>
+            </tr>
+            <tr>
+                <th>Chrono</th>
+                <td>{{ entity.chrono }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('reception') }}">
+            Retour
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('reception_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

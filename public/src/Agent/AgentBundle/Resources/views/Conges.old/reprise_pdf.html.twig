@@ -1,0 +1,73 @@
+{% extends app.request.attributes.get('_route')=='conges_print' 
+? '::gabarit_print.html.twig' 
+: '::gabarit_preview.html.twig' %}
+{% block service %}
+<span class="gras">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Le Directeur Général</span>
+
+
+{% endblock %}
+
+{% block ref %} <br> <br>N°:................../DGE/SRHMG{% endblock %}
+{% block titre %}
+    <div align="center" style="font-size:25px; font-family:CenturyFontBold !important; border: solid; border-radius: 5px; width: 60%; margin: auto;">
+        CERTIFICAT DE REPRISE DE SERVICE
+    </div>
+{% endblock %}
+{% block datePdf %}{% endblock %}
+{% block contenuPdf -%}
+
+    <div style="background-color: white; color:black; line-height:35px;">
+        Je soussigné SAIN OGUIE, Directeur Général de l'Economie,
+        certifie
+       
+        que
+        {{entity.agent.getCivilite.libsitf}}
+        
+        {{entity.agent.concatNom}}, matricule {{entity.agent.matricule}}, {{entity.agent.emploi.libEmpl}},  en service {% if entity.agent.direction.etatDirection==0 %}au {% else  %} à la{% endif %} {{entity.agent.direction}} de la Direction Générale de l'Economie (DGE), a effectivement repris le service le {% if entity.datereprise %}{{ entity.datereprise|localizeddate('none', 'none', app.request.locale, "Europe/Paris", "cccc d MMMM Y")  }}{% endif %}
+    .
+    <br/><br/><br/>
+    <div class="gras" align="center" style="font-size:15px; text-decoration: underline;">
+        <h3><b style="font-family: 'CenturyFont';">MOTIF DE LA REPRISE</b></h3>
+    </div>
+    Retour de ({{ entity.nbrejours }}) jours de congé {{ entity.typeConges.libelle }} au titre de l'année {{ entity.exercice}}.
+</div>
+</div>
+<br/><br/>
+
+</div>
+<div style="font-size:1em">
+<div class="col-md-6">
+<table cellsapcing="5">
+    <tr><td class="gras">
+            AMPLIATIONS :
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>MEF/DRH</td><td>1</td>
+    </tr>
+    <tr>
+        <td>MEF/DGE</td><td>1</td>
+    </tr>
+    <tr>
+        <td>SRHMG</td><td>1</td>
+    </tr>
+    {% if entity.agent.direction.sigle != 'SRHMG'%}
+    <tr>
+        <td>{{entity.agent.direction.sigle}}</td><td>1</td>
+    </tr>
+{% endif %}
+    <tr>
+        <td>INTERESSE(E)</td><td>1</td>
+    </tr>
+     <tr>
+        <td>DOSSIER</td><td>1</td>
+    </tr>
+
+</table>
+
+</div>
+</div>
+<script src="{{ asset('design/js/style.js') }}"></script>
+
+{% endblock %}

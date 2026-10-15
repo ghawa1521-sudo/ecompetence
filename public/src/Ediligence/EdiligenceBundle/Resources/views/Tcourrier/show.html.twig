@@ -1,0 +1,112 @@
+{% extends '::ediligence/base.html.twig' %}
+
+{% block body -%}
+    <h1>Tcourrier</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Reforigine</th>
+                <td>{{ entity.reforigine }}</td>
+            </tr>
+            <tr>
+                <th>Dateorigine</th>
+                <td>{{ entity.dateorigine|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Numenregistrement</th>
+                <td>{{ entity.numenregistrement }}</td>
+            </tr>
+            <tr>
+                <th>Objet</th>
+                <td>{{ entity.objet }}</td>
+            </tr>
+            <tr>
+                <th>Observationscecour</th>
+                <td>{{ entity.observationscecour }}</td>
+            </tr>
+            <tr>
+                <th>Adresseenreg</th>
+                <td>{{ entity.adresseenreg }}</td>
+            </tr>
+            <tr>
+                <th>Codetypecour</th>
+                <td>{{ entity.codetypecour }}</td>
+            </tr>
+            <tr>
+                <th>Etatcourrier</th>
+                <td>{{ entity.etatcourrier }}</td>
+            </tr>
+            <tr>
+                <th>Codnatcour</th>
+                <td>{{ entity.codnatcour }}</td>
+            </tr>
+            <tr>
+                <th>Exercice</th>
+                <td>{{ entity.exercice }}</td>
+            </tr>
+            <tr>
+                <th>Etataff</th>
+                <td>{{ entity.etataff }}</td>
+            </tr>
+            <tr>
+                <th>Idcord</th>
+                <td>{{ entity.idCord }}</td>
+            </tr>
+            <tr>
+                <th>Idinvits</th>
+                <td>{{ entity.idInvits }}</td>
+            </tr>
+            <tr>
+                <th>Ididentifiant</th>
+                <td>{{ entity.idIdentifiant }}</td>
+            </tr>
+            <tr>
+                <th>Numenregistrements</th>
+                <td>{{ entity.numenregistrements }}</td>
+            </tr>
+            <tr>
+                <th>Sourcecour</th>
+                <td>{{ entity.sourceCour }}</td>
+            </tr>
+            <tr>
+                <th>Destcour</th>
+                <td>{{ entity.destCour }}</td>
+            </tr>
+            <tr>
+                <th>Datecreat</th>
+                <td>{{ entity.dateCreat|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Datemodif</th>
+                <td>{{ entity.dateModif|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Etatreception</th>
+                <td>{{ entity.etatReception }}</td>
+            </tr>
+            <tr>
+                <th>Etatalert</th>
+                <td>{{ entity.etatAlert }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('courrier') }}">
+            Retour
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('courrier_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

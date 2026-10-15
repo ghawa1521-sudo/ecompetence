@@ -1,0 +1,96 @@
+<?php
+
+namespace PasBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Exercice
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="PasBundle\Entity\ExerciceRepository")
+ */
+class Exercice
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="annee", type="integer")
+     */
+    private $annee;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="actif", type="integer")
+     */
+    private $actif;
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set annee
+     *
+     * @param integer $annee
+     *
+     * @return Exercice
+     */
+    public function setAnnee($annee)
+    {
+        $this->annee = $annee;
+
+        return $this;
+    }
+
+    /**
+     * Get annee
+     *
+     * @return integer
+     */
+    public function getAnnee()
+    {
+        return $this->annee;
+    }
+
+    /**
+     * Set actif
+     *
+     * @param integer $actif
+     *
+     * @return Exercice
+     */
+    public function setActif($actif)
+    {
+        $this->actif = $actif;
+
+        return $this;
+    }
+
+    /**
+     * Get actif
+     *
+     * @return integer
+     */
+    public function getActif()
+    {
+        return $this->actif;
+    }
+}

@@ -1,0 +1,49 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Direction</h1>
+
+    <table class="record_properties">
+        <tbody align="left">
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Libellé </th>
+                <td>{{ entity.libDirect }}</td>
+            </tr>
+            <tr>
+                <th>Sigle</th>
+                <td>{{ entity.sigle }}</td>
+            </tr>
+            
+            <tr>
+                <th>Siege</th>
+                <td>{{ entity.siegeDirect }}</td>
+            </tr>
+            <tr>
+                <th>Immeuble</th>
+                <td>{{ entity.immeuble }}</td>
+            </tr>
+            <tr>
+                <th>Etage</th>
+                <td>{{ entity.etage }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('direction') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('direction_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

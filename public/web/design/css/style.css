@@ -1,0 +1,81 @@
+.label-white.label-warning {
+    color: #d9993e;
+    border-color: #e4ae62;
+    background-color: #fef6eb;
+}
+.label.label-white {
+    color: #879da9;
+    border: 1px solid #abbac3;
+    background-color: #f2f5f6;
+    border-right-width: 1px;
+    border-left-width: 2px;
+}
+.label-warning, .label.label-warning, .badge.badge-warning, .badge-warning {
+    background-color: #f89406;
+}
+.label {
+    font-size: 12px;
+    line-height: 1.15;
+    height: 20px;
+}
+.label {
+    border-radius: 0;
+    text-shadow: none;
+    font-weight: 400;
+    color: #fff;
+    display: inline-block;
+    background-color: #abbac3;
+}
+.middle {
+    vertical-align: middle;
+}
+.label-warning {
+    background-color: #f0ad4e;
+}
+.label {
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+}
+.pointer-css-invisible{
+  pointer-events: none;
+}
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+Inherited from body.no-skin
+body {
+    background-color: #e4e6e9;
+    min-height: 100%;
+    padding-bottom: 0;
+    font-family: 'Open Sans';
+    font-size: 13px;
+    color: #393939;
+    line-height: 1.5;
+}
+body {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #333;
+    background-color: #fff;
+}
+Inherited from html
+html {
+    font-size: 10px;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+html {
+    font-family: sans-serif;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+}

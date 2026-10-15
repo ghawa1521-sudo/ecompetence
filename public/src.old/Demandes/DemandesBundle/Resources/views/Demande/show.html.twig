@@ -1,0 +1,105 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <div align="center">
+      <h3>DEMANDE {{entity.typedemande}}</h3>
+    </div>
+    <br>
+<div class="col-md-push-2 col-md-8">
+
+    <table class="record_properties table table-striped" align="left">
+        <tbody>
+            <!--
+            <tr>
+                <td>Id</td>
+                <td>{{ entity.id }}</td>
+            </tr>
+            -->
+            <tr>
+                <td><b>MATRICULE</b></td>
+                <td left="left">{{ entity.emmeteur.matricule }}</td>
+            </tr>
+            <tr>
+                <td><b>NOM et PRENOMS</b></td>
+                <td left="left">{{ entity.emmeteur.nom }} {{ entity.emmeteur.prenoms }}</td>
+            </tr>
+            <tr>
+                <td><b>OBJET</b></td>
+                <td left="left">{{ entity.objet }}</td>
+            </tr>
+            <tr> <td> <br/></td> <td></td></tr>
+            <tr>
+                <td><b>REPONSE Service des Ressources Humaines</b></td>
+                <td >{% if (entity.EtatrepGrh == 0) %}{# Etat 0  En attente#}
+                            <span class="label label-warning" heigtd="100%">En Attente de Validation</span>
+                     {% elseif (entity.EtatrepGrh == 1) %}
+                            <span class="label label-success" heigtd="100%">Demande Validée</span>
+                        {% elseif (entity.EtatrepGrh == 2) %}
+                            <span class="label label-danger"> Demande Refusée</span><br>
+                            MOTIF: {{entity.motifRejet}}
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td><b>DATE Service des Ressources Humaines</b></td>
+                <td left="left">{% if (entity.dateRepGrh) %} {{ entity.dateRepGrh|date('d-m-Y H:i:s') }} {% endif %} </td>
+            </tr>
+
+        </tbody>
+    </table>
+{#
+    {% if is_granted('ROLE_RESPO_SRHMG') and (entity.Etatrepsupdir == 1) %}
+        <a class="btn btn-info col-md-offset-5" href="{{ path('demande_print', { 'id': entity.id }) }}">
+            <i class="fa fa-download"></i>
+            Imprimer l'acte
+        </a>
+    {% endif %}#}
+
+
+    {% if (is_granted('ROLE_RESPO_SRHMG') and (entity.EtatrepGrh == 0) and (entity.Grh == app.user.agent))%}
+        <div class="row">
+            <div class="col-md-push-3 col-md-6">
+                <a href="{{ path('demande_valid', { 'id': entity.id }) }}" class="btn btn-large btn-primary col-md-push-1 col-md-8" data-confirm="Etes-vous <strong>certain</strong> de vouloir Valider cette demande ?">Valider</a>
+            </div>
+
+        </div>
+        <!--
+        <div id="boutton">
+        <button id="btn-js" class="btn btn-success col-md-offset-5" onclick="VerifPassword() ;"> Traiter la Demande</button>
+        </div>
+        <div class="row" id="verif" style="visibility:hidden">
+            <br/><br/>
+            <div align="center">
+                <label> <font color="red"><i>Veuillez entrer votre mot de passe afin d'éffectuer la validation de la demande </i></font></label><br/>
+                <div class="col-md-offset-4 col-sm-3 col-xs-3 col-lg-3 col-md-3">
+                    <form action="{{ path('demande_valid', { 'id': entity.id }) }}" metdod ="POST">
+                        <input id="mdp" name="mdp" type="password" class="form-control" placeholder="Votre Mot de Passe" required="required" />
+
+                        <input type="submit" class="btn btn-success col-sm-12 form-control" value="valider">
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        -->
+        <br/>
+        <div>
+            <ul class="record_actions">
+                <li>
+                    <a href="{{ path  ('demande_receive') }}">
+                        Retour Demandes Reçues
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+
+{%endif%}
+  </div>
+{% endblock %}
+{% block javascript %}
+<script src="{{ asset('design/js/style.js') }}"></script>
+
+
+</script>
+{% endblock %}

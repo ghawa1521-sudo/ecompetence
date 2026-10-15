@@ -1,0 +1,43 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Numeriser note de mutation</h1>
+
+        <div class="col-md-push-2 col-md-8">
+            <table class="table table-bordered col-md-12">
+                <tr>
+                    <td width="35%">matricule</td>
+                    <td>{{entity.emmeteur.matricule}}</td>
+                </tr>
+                <tr>
+                    <td>Nom</td>
+                    <td>{{entity.emmeteur.nom}}{{entity.emmeteur.prenoms}}</td>
+                    
+                </tr>
+                <tr>
+                    <td>Origine</td>
+                    <td>{{entity.origine}}</td>  
+                </tr>
+                <tr>
+                    <td>Destination</td>
+                    <td>{{entity.destination}}</td>  
+                </tr>
+                <tr>
+                    <td>Ressources Humaines</td>
+                    <td>validé le  {% if entity.dateRepGrh %}{{entity.dateRepGrh|date('d-m-y')}} à  {{entity.dateRepGrh|date('h:m:s')}}{% endif %}</td>  
+                </tr>
+                
+            </table>
+               
+                    {{ form_start(form) }}
+                    {{ form_errors(form) }}
+                    {{ form_row(form.dateNoteMutation, {'label_attr': {'class': ''}}) }}
+                    {{ form_row(form.numNote, {'label_attr': {'class': ''}}) }}
+                    {{ form_row(form.mutationNote.docFile, {'label_attr': {'class': ''}}) }}
+                    {{ form_row(form._token) }}
+                    
+                    <input type='submit' value='NUMERISER LA NOTE DE MUTATION' class='col-md-6 btn btn-success'/>
+        </div>
+
+    
+{% endblock %}

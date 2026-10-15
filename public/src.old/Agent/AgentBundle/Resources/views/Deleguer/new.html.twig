@@ -1,0 +1,181 @@
+{% extends '::base.html.twig' %}
+{% block css %}
+    <link href="{{ asset('design/css/style.css') }}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{{asset('ediligence/assets/css/bootstrap-select.min.css')}}">
+{% endblock %}
+
+
+
+{% block titre_page %}
+
+{% endblock %}
+
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+    <style>
+        th{
+            text-align: left !important;
+        }
+        .dataTables_filter{
+            width: auto !important;
+        }
+        td,th {
+            vertical-align : middle !important;
+            text-align: center !important;
+        }
+    </style>
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+    <script src="{{ asset('design/js/jquery.collection.js') }}"></script>
+{% endblock %}
+
+{% block body -%}
+    <h1>Définir les imputations de {{fonctionalites[0]|lower}}</h1>
+
+    {{ form_start(form) }}
+
+    <table border="1" width="50%" class="deleguJs table table-striped records_list responsive-utilities jambo_table table-responsive">
+        <tr>
+            <th colspan="5">
+                {% for item in fonctionalites %}
+                    {{item.libelle}}
+                {% endfor %}
+            </th>
+        </tr>
+        <tr>{#
+            <td style="width: 20%;">Fonctionalit&eacute; &
+                Rubrique</td>#}
+            <th style="width: 25%;">Rubriques</th>
+            <th style="width: 25%;">Responsable</th>
+            <th style="width: 50%;" colspan="2">Chargés d'Etudes affilié à Direction/Service</th>
+            <th>Action</th>
+        </tr>
+        {#
+        {% for deleguation in form.children %}
+
+            {% for  delegu in deleguation %}
+                <tr>
+                    <td><div style="display: none;">
+                            {{form_widget(delegu.fonctionalite)}}</div>
+
+                        {{form_widget(delegu.rubriques)}}</td>
+                    <td>{{form_widget(delegu.responsable)}}</td>
+                    <td>{{form_widget(delegu.agent)}}</td>
+                    <td>{{form_widget(delegu.services)}}</td>
+                </tr>
+            {% endfor %}
+
+        {% endfor %}#}
+
+
+
+        <tbody class="deleguJs" data-prototype="
+               {# {{'<td>'|e}}{{ form_widget(form.deleguation.vars.prototype.children.fonctionalite)|e('html_attr') }}{{'</td>'|e}}#}
+               {{'<td>'|e}}{{ form_widget(form.deleguation.vars.prototype.children.rubriques)|e('html_attr') }}{{'</td>'|e}}
+               {{'<td>'|e}}{{ form_widget(form.deleguation.vars.prototype.children.responsable)|e('html_attr') }}{{'</td>'|e}}
+               {{'<td>'|e}}{{ form_widget(form.deleguation.vars.prototype.children.agent)|e('html_attr') }}{{'</td>'|e}}
+               {{'<td>'|e}}{{ form_widget(form.deleguation.vars.prototype.children.services)|e('html_attr') }}{{'</td>'|e}}">
+            {% for deleguation in form.children %}
+                {% for  delegu in deleguation %}
+                    <tr>
+                        <td><div style="display: none;">
+                                {{form_widget(delegu.fonctionalite)}}</div>
+
+                            {{form_widget(delegu.rubriques)}}</td>
+                        <td>{{form_widget(delegu.responsable)}}</td>
+                        <td width="22%">{{form_widget(delegu.agent)}}</td>
+                        <td>{{form_widget(delegu.services)}}</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+
+
+    </table>
+    {{form_end(form)}}
+
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('deleguer') }}">
+                Retour à la liste
+            </a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block javascript %}
+
+    <script src="{{ asset('design/js/style.js') }}"></script>
+    <script src="{{ asset('ediligence/assets/js/bootstrap-select.min.js') }}"></script>
+    <script>
+
+        var $collectionHolder;
+
+// setup an "add a tag" link
+        var $addDeleguButton = $('<button class="btn btn-info add_tag_link" type="button"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <small><em>Ajouter une Déléguation</small></em></button></div>');
+        var $newLinkLi = $('<div></div>').append($addDeleguButton);
+
+        jQuery(document).ready(function () {
+            // Get the ul that holds the collection of deleguJs
+            $collectionHolder = $('tbody.deleguJs');
+            $collectionHolder.css("list-style-type", "none");
+            // add the "add a tag" anchor and li to the deleguJs ul
+            $collectionHolder.append($newLinkLi);
+
+            // add a delete link to all of the existing tag form li elements
+            $collectionHolder.find('tr').each(function () {
+                addDeleguFormDeleteLink($(this));
+            });
+
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+            $addDeleguButton.on('click', function (e) {
+                // add a new tag form (see next code block)
+                addDeleguForm($collectionHolder, $newLinkLi);
+            });
+        });
+
+/////////////////////
+        function addDeleguForm($collectionHolder, $newLinkLi) {
+            // Get the data-prototype explained earlier
+            var prototype = $collectionHolder.data('prototype');
+
+            // get the new index
+            var index = $collectionHolder.data('index');
+
+            var newForm = prototype;
+            // You need this only if you didn't set 'label' => false in your deleguJs field in TaskType
+            // Replace '__name__label__' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            // newForm = newForm.replace(/__name__label__/g, index);
+
+            // Replace '__name__' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            newForm = newForm.replace(/__name__/g, index);
+
+            // increase the index with one for the next item
+            $collectionHolder.data('index', index + 1);
+
+            // Display the form in the page in an li, before the "Add a tag" link li
+            var $newFormLi = $('<tr></tr>').append(newForm);
+            $newLinkLi.before($newFormLi);
+
+            addDeleguFormDeleteLink($newFormLi);
+        }
+
+        function addDeleguFormDeleteLink($tagFormLi) {
+            var $removeFormButton = $("<td style='text-align: center;margin-left: auto;margin-right: auto;'><button class='btn btn-danger' type='button'> <span class='glyphicon glyphicon-trash' aria-hidden='true'></span> <small><em></small></em></button></div></td>");
+            $tagFormLi.append($removeFormButton);
+
+            $removeFormButton.on('click', function (e) {
+                // remove the li for the tag form
+                $tagFormLi.remove();
+            });
+        }
+
+
+    </script>
+{% endblock %}

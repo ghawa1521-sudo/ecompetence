@@ -1,0 +1,30 @@
+syndicat:
+    path:     /
+    defaults: { _controller: "AgentBundle:Syndicat:index" }
+
+syndicat_show:
+    path:     /{id}/show
+    defaults: { _controller: "AgentBundle:Syndicat:show" }
+
+syndicat_new:
+    path:     /new
+    defaults: { _controller: "AgentBundle:Syndicat:new" }
+
+syndicat_create:
+    path:     /create
+    defaults: { _controller: "AgentBundle:Syndicat:create" }
+    methods:  POST
+
+syndicat_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AgentBundle:Syndicat:edit" }
+
+syndicat_update:
+    path:     /{id}/update
+    defaults: { _controller: "AgentBundle:Syndicat:update" }
+    methods:  [POST, PUT]
+
+syndicat_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AgentBundle:Syndicat:delete" }
+    methods:  [POST, DELETE]

@@ -1,0 +1,62 @@
+formation_index:
+    path:     /
+    defaults: { _controller: "EcompetenceBundle:Formation:new" }
+    
+formation_new:
+    path:     /{id}/new
+    defaults: { _controller: "EcompetenceBundle:Formation:new" }
+
+formation_valider:
+    path:     /{id}/valider
+    defaults: { _controller: "EcompetenceBundle:Formation:valider" }
+
+formation_refuser:
+    path:     /{id}/refuser
+    defaults: { _controller: "EcompetenceBundle:Formation:refuser" }
+
+formation_show:
+    path:     /{id}/show
+    defaults: { _controller: "EcompetenceBundle:Formation:show" }
+
+formation_edit:
+    path:     /{id}/{ag}/edit
+    defaults: { _controller: "EcompetenceBundle:Formation:edit" }
+    
+formation_detail:
+    path:     /{id}/detail
+    defaults: { _controller: "EcompetenceBundle:Formation:detail" }
+
+listediplome:
+    path:     /{id}/listedipl
+    defaults: { _controller: "EcompetenceBundle:Formation:listediplome" }
+    methods:  GET
+    options:
+      expose: true
+
+listespecialite:
+    path:     /{id}/listespecialite
+    defaults: { _controller: "EcompetenceBundle:Formation:listespecialite" }
+    methods:  GET
+    options:
+      expose: true
+
+listeoption:
+    path:     /{id}/listeoption
+    defaults: { _controller: "EcompetenceBundle:Formation:listeoption" }
+    methods:  GET
+    options:
+      expose: true
+      
+formation_liste:
+    path:      /{id}/liste
+    defaults: { _controller: "EcompetenceBundle:Formation:liste" }
+
+ajout_diplome:
+    path:     /ajoutdiplome
+    defaults: { _controller: "EcompetenceBundle:Formation:ajoutdiplome" }
+    methods:  POST
+
+ajout_etablissement:
+    path:     /ajoutetablissement
+    defaults: { _controller: "EcompetenceBundle:Formation:ajoutetablissement" }
+    methods:  POST

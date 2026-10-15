@@ -1,0 +1,110 @@
+<?php
+
+namespace Agent\AgentBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * Deleguer
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Agent\AgentBundle\Repository\DeleguerRepository")
+ */
+class Deleguer {
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date", type="datetime")
+     */
+    private $date;
+
+    /**
+     * @var Deleguation|null
+     *
+     * @ORM\OneToMany(targetEntity="Deleguation", mappedBy="deleguer",cascade={"persist","remove"})
+     * @ORM\JoinColumn( nullable=true)
+     */
+    private $deleguation;
+
+    /**
+     * Constructor
+     */
+    public function __construct() {
+        $this->deleguation = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->date = new \DateTime();
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     *
+     * @return Deleguation
+     */
+    public function setDate($date) {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime
+     */
+    public function getDate() {
+        return $this->date;
+    }
+
+    /**
+     * Add deleguation
+     *
+     * @param \Agent\AgentBundle\Entity\Deleguation $deleguation
+     *
+     * @return Deleguer
+     */
+    public function addDeleguation(\Agent\AgentBundle\Entity\Deleguation $deleguation) {
+        $this->deleguation[] = $deleguation;
+
+        return $this;
+    }
+
+    /**
+     * Remove deleguation
+     *
+     * @param \Agent\AgentBundle\Entity\Deleguation $deleguation
+     */
+    public function removeDeleguation(\Agent\AgentBundle\Entity\Deleguation $deleguation) {
+        $this->deleguation->removeElement($deleguation);
+    }
+
+    /**
+     * Get deleguation
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDeleguation() {
+        return $this->deleguation;
+    }
+
+}

@@ -1,0 +1,279 @@
+{% extends '::base.html.twig' %}
+{%from "EcompetenceBundle:macro:macro.html.twig" import recursiveDomaine,recursiveDomaineAff,recursiveDomaineselect%}
+
+{# {% set val=""%}#}
+{% block body %}
+
+<style>
+        .info{
+              color:black;
+        }
+        .ok th{
+        color:white;
+        border:1px solid white;
+        font-weight:bold;
+        }
+        .ok td{
+         text-align:left; 
+         color:black;
+         font-weight:bold; 
+         border:1px solid lightgray
+        }
+        .ok thead{border:1px solid white;background-color: #008080;
+        }
+       
+         </style>
+
+                         <div style="padding-left:4px;padding-right:4px;">
+                            <div class="x_panel" style="background-color:white;border-radius: 4px;">
+                             
+                                <div class="x_content">
+
+                                    <div class="col-md-7 col-sm-3 col-xs-12 profile_left">
+
+                     
+                          <table class='info'  border=0>                 
+                         
+                          <tr>  
+                         
+                                    <td style="font-weight: bold;font-size:20px;"> <b>
+                                        {% if (entit.nom) %}
+                                        {{ entit.nom }}
+                                        {% endif %}
+                                        {% if (entit.prenoms) %}
+                                        {{ entit.prenoms }}
+                                        {% endif %}</b>
+                                        {% if (entit.matricule) %}
+                                            <b  style="color: red;" >{{ ' ('~entit.matricule~')' }} </b>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>                                      
+                                      <td style="font-size:16px;">{% if (entit.emploi) %}
+                                        {{ entit.emploi.libEmpl }}
+                                        {% endif %}
+                                    </td>
+                            
+                                 <tr>
+                                   <td style="font-size:16px;">
+                                        {% if (entit.dateNaiss) %}
+                                        Né le {{ entit.dateNaiss|date('d-m-Y') }} 
+                                        {% endif %}
+                                        {% if (entit.LieuNaissance) %}
+                                         à {{entit.LieuNaissance.lieuNaiss}} 
+                                        {% endif %}</td>
+                                </tr>
+                                 <tr>
+                                   
+                                    <td style="font-size:16px;">
+                                        {% if (entit.telPort) %}
+                                        Tèl:{{entit.telPort}}</td>
+                                        {% endif %}
+                                </tr>
+
+                                <tr>
+                                    
+                                    <td style="font-size:16px;">Email :
+                                        {% if (entit.email) %}{{entit.email}}{% endif %}</td>
+                                </tr>
+                                <tr>
+                                  
+                                    <td style="font-size:16px;">{% if (entit.emailPerso) %}{{entit.emailPerso}}{% endif %}
+                                    {%for adr in entit.adresse%}
+                                        {{adr.email}} / 
+                                    {% endfor %}
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                  
+                                    <td style="font-size:16px;">{% if (entit.situationMatri) %}{{ entit.situationMatri }}{% endif %} 
+                                        {% if (entit.nbEnf) %}/ {{ entit.nbEnf }} enfant(s){% endif %} </td>
+                                </tr>
+                          </table>  
+        
+       </div>  
+            
+             <div class="col-lg-offset-2 col-md-3  profile_left">
+
+                                        <div class="profile_img">
+
+                                            
+           <div id="cropE-avatar">
+                                            
+          <div class="avatar-view" title="Change the avatar">                                      
+           {% if (entit.imageName) %}
+             <img src="{{ vich_uploader_asset(entit, 'imageFile') }}" alt="{{ entit.imageName }} Avatar">
+             
+          {% elseif (entit.sexe.id == 1 ) %}
+                <img src="{{ asset('images/img_test_agent.png')}}" Avatar>
+            {% elseif (entit.sexe.id == 2 ) %}
+                <img src="{{ asset('images/woman.png')}}" Avatar>
+            {% endif %}
+                                                
+                                                    
+             </div>                                          
+      </div>
+          </div>
+        </div>
+       </div>
+      </div>
+ </div>
+
+    <div class="x_panel">
+        <br>
+                  
+        <div class="row"> 
+            
+            <div class="col-md-12"> 
+                <div class="panel panel-success" >
+                    <div class="panel-heading" style="color:orangered"> <h2>Sélectionner les domaines de compétences</h2>
+                   {#<form action="{{ path('competence_ajoutCompetence') }}" method="post">    <button>Creer une compétence</button></form>#}
+                    </div>
+                    <div class="panel-body"style="height:400px;overflow-y:scroll;overflow-x:scroll;">
+
+                        <form method='post' name='cp' >
+                             <div class="container">
+            
+                             <div id="flex-tree-check"></div>
+
+                             </div
+                            <input type="hidden" value="4" id="UD1Wbw13BW5aOwVo" name="bouton">       
+
+
+                            </div>
+                            </div>
+                            </div>
+                            </div>
+            </div>
+                            
+
+                            </div>
+                            {#<div class="row"> 
+                                <div class="col-md-1"> </div>
+                                <div class="col-md-10"> 
+                                    <a class="btn btn-danger col-lg-12" href="{{ path('competence_ajoutCompetence', { 'id':id }) }}">Créer un nouveau domaine de competence</a>
+                                    <input type="hidden" value="4" id="UD1Wbw13BW5aOwVo" name="bouton">  
+                                </div>
+
+                            </div>#}
+                            <div class="row"> 
+                                <div class="col-md-1"> </div>
+                                <div class="col-md-4" style="margin-right:10px;"> 
+                                    <button type='submit' class="btn btn-primary btn-large btn-block">Enregistrer</button>
+                                    <input type="hidden" value="4" id="UD1Wbw13BW5aOwVo" name="bouton">  
+                                </div>
+                                <div class="col-md-4" style="margin-right:10px;">
+                                 <a class="btn btn-primary btn-block col-lg-12" href="{{ path('agent_cv1', { 'id': entit.id }) }}">Visualiser le CV</a>
+                                </div>
+                            </div>
+                             <div class="row"> 
+                                <div class="col-md-1"> </div>
+                                <div class="col-md-4" style="margin-right:10px;"> 
+                                    <a class="btn btn-success col-lg-12" href="{{ path('competence_recap', { 'id':id }) }}">Affichage du détail des compétences de l'agent</a>
+                                    <input type="hidden" value="4" id="UD1Wbw13BW5aOwVo" name="bouton">  
+                                </div>
+                                
+                                <div class="col-md-4"> 
+                                    <a class="btn btn-warning col-lg-12" href="{{ path('agent_cv', { 'id':id }) }}">Aller à la page Cv</a>
+                                    <input type="hidden" value="4" id="UD1Wbw13BW5aOwVo" name="bouton">  
+                                </div>
+                            </div>
+
+                         {# <div class="row">
+                          <div class="col-md-1"> </div>
+                          
+                          <div class="col-md-5">
+                          <a class="btn btn-info btn-block col-lg-4" style="background-color:#20B2AA; color:white;font-weight:bold; font-size:16px;" href="{{ path('langue_new', { 'id':id}) }}"> ➕ Ajouter le niveau de langue </a>
+                          </div> 
+                          <div class="col-md-1"> </div>
+                          </div>
+
+                            <div class="row"> 
+                                <div class="col-md-1"> </div>
+                                
+
+                            </div>#}
+
+                        </form>
+                      
+                        
+                    </div>
+                        
+                  </div>     
+                </div>
+
+                <style>
+                    .help-block{
+                        color:red;
+                        font-weight:bold;
+                    }
+                </style>
+
+            {% endblock %}
+             {% block treeview %} [{{val}}0]{% endblock %}
+            {% block javascript %}
+                {#<script>
+                       {% set val="" %}
+                     {% if competences %}
+                                             
+                                                       {% for pere in  peres %}
+                                                          {{recursiveDomaineAff(pere.competence,cp)}}
+                                                          {% set val=val~recursiveDomaineselect(pere.competence,cp)%}
+                                                       {% endfor %}
+                         
+                                {% endif %}
+                           $('#treeview-checkbox-demo').treeview({
+                               debug : true,
+                               data : [{{val}}|t,'0']            });  
+                 </script>#}
+                <script type="text/javascript" src="{{ asset('design/js/wizard/jquery.smartWizard.js') }}"></script>
+                <script src="{{ asset('design/js/nicescroll/jquery.nicescroll.min.js') }}"></script>
+
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        // Smart Wizard
+                        $('#wizard').smartWizard();
+
+                        function onFinishCallback() {
+                            $('#wizard').smartWizard('showMessage', 'Finish Clicked');
+                           // alert('Finish Clicked');
+                        }
+                    });
+
+                    $(document).ready(function () {
+                         Smart Wizard
+                        $('#wizard_verticle').smartWizard({
+                            transitionEffect: 'slide'
+                        });
+
+                    });
+
+
+
+                </script>
+
+                <script type="text/javascript">
+                    var donnee;
+                    $(document).ready(function () {
+
+                        $.ajax({
+                            type: "GET",
+                            url: Routing.generate('agent_cv_api',{id:{{id}}}),
+                            dataType: "json",
+                            success: function (data) {
+                                $('#flex-tree-check').flexTree({
+                                    //console.log(donnee);
+                                    type: 'checkbox',
+                                    name: 'competences[]',
+                                    collapsed: false,
+                                    items: jQuery.parseJSON(data)});
+                            }
+                        });
+
+
+
+                    });
+                </script>
+
+            {% endblock %}

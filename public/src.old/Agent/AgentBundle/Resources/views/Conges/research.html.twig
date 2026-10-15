@@ -1,0 +1,201 @@
+{% extends '::base.html.twig' %}
+
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+{% block css %}
+    <link href="{{ asset('design/css/style.css') }}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{{asset('ediligence/assets/css/bootstrap-select.min.css')}}">
+{% endblock %}
+{% block titre_page %}
+    <div>Administration
+    </div>
+{% endblock %}
+{% block body -%}
+    <div>
+
+        <h4>Etat  des congés de  l'agent:
+        </h4>
+        <div class="row" style="congeskground-color: #f7f7f7;">
+            <form method="post" {{ form_enctype(form) }}>
+                <div class="col-md-4">
+
+                    {{ form_row(form.agent) }}
+
+
+                    {{ form_row(form._token) }}
+                    <input class="btn btn-success col-md-8" type="submit" value="RECHERCHER"/>
+                </div>
+            </form>
+        </div>
+        <div class="tab-content" style="overflow: scroll;">
+
+
+            <div class="tab-pane active">
+                <div class="x_title">
+                    <h2>conges à impression<small></small>
+                    </h2>
+                    <div class="clearfix"></div>
+                </div>
+
+                <table class="records_list table table-striped responsive-utilities jambo_table bulk_action" style="width: 100% !important;">
+                    <thead>
+                        <tr>
+                            <th>Date de création</th>
+                            <th>Service / Direction</th>
+                            <th>Type de Congés</th>
+                            <th>Nom & Prénoms</th>
+                            <th>Date de départ</th>
+                            <th>Date de fin</th>
+                            <td>Nombre jours</td>
+                            <th>Date reprise</th>
+                            <th>Etat</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for conge in conges %}
+                            <tr>
+                                <td>
+                                    {% if conge.datecreation %}
+                                        {{ conge.datecreation|date('H:i:s d-m-Y') }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if conge.agent.Direction %}
+                                        {{conge.agent.Direction.sigle}}
+                                    {% endif %}
+                                </td>
+                                <td>{{conge.typeConges.libelle}}</td>
+                                <td>
+                                    {% if conge.agent %}
+                                        {{conge.agent.matricule}}|{{conge.agent.nom}}
+                                        {{conge.agent.prenoms}}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if conge.datedebut %}
+                                        {{ conge.datedebut|date('d-m-Y') }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if conge.datefin %}
+                                        {{ conge.datefin|date('d-m-Y') }}
+                                    {% endif %}
+                                </td>
+                                <td>{{conge.nbrejours}}</td>
+
+                                <td>
+
+                                    {% if (conge.numReprise is defined) and (conge.numReprise is not null) %}
+
+                                        {{ conge.numReprise.date|date('d-m-Y') }}
+                                    {% endif %}
+
+                                </td>
+                                <td>
+
+                                    {#
+                                                                                                                                                                                                                                                                                                                                                                                                                                                {% if (conge.agent.Fonction.id in [5,7]) %}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    {{macro.EtatCongeResponsable(conge.etat,conge.niveau,conge.agent.retour_service.tab_lib[conge.niveau])}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                {% elseif conge.niveau == 0 %}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    {{macro.EtatConge(conge.etat,conge.niveau,conge.agent.retour_service.tab_lib[conge.niveau])}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                {% elseif( conge.niveau > 0) %}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    {{macro.EtatConge(conge.etat,conge.niveau,conge.agent.retour_service.tab_lib[conge.niveau-1])}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                {% endif %}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                #}
+
+                                    <label class="label label-success">
+                                        {{conge.getValidateur(0)|replace({"DIRECTION": 'au DIRECTEUR',"DIRECTION GENERALE DE L'ECONOMIE": 'au DGE','Direction': 'Directeur', 'Service': 'Chef du Service'})}}
+
+                                    </label>
+                                    <br>
+                                    {% if (conge.numCessation is defined) and (conge.numCessation is not null)%}
+                                        <br>
+                                        <label class="label label-warning">Cessation Signé & en ligne</label>
+
+                                        <i>depuis le
+                                            {{conge.numCessation.date|date('d-m-Y')}}</i>
+                                        <button value="{{ vich_uploader_asset(conge.numCessation.pj, 'imageFile')}}" class="btn btn-success btnShow">
+                                            Visualiser</button>
+
+
+                                    {% endif  %}
+                                    {% if (conge.numReprise is defined) and (conge.numReprise is not null) %}
+                                        <br>
+                                        <label class="label label-warning">Reprise Signé & en ligne</label>
+
+                                        <i>depuis le
+                                            {{conge.numReprise.date|date('d-m-Y')}}</i>
+                                        <button value="{{ vich_uploader_asset(conge.numReprise.pj, 'imageFile')}}" class="btn btn-success btnShow">
+                                            Visualiser</button>
+
+                                    {% endif  %}
+
+
+                                </td>
+
+                                <td>
+
+
+                                    {% if ((app.user.agent.fonction.id==10) or (is_granted('ROLE_RESPO_SRHMG')) or (delegu !=-1 and delegu == 0)) and (conge.niveau ==0 and conge.etat==0 )%}
+
+                                        {#
+                                                                                                                                                                                                        <a href="{{ path('conges_generate', { 'id': conge.id,'choice': 0 }) }}" class="btn  btn-primary col-md-12" data-confirm="Etes-vous <strong>certain</strong> de vouloir Valider cette demande ?">
+                                                                                                                                                                                                            Approuver
+                                                                                                                                                                                                        </a>
+                                                                                                                                                                                                        #}
+                                    {% endif %}
+                                    {# delegu !=-1 and delegu == 0  and  #}
+                                    {% if date() >=  conge.datefin and conge.etat==1  %}
+                                        <a href="{{ path('conges_edit', { 'id': conge.id,'todo': 2 }) }}" class="btn btn-warning">
+                                            Produire reprise
+                                        </a>
+                                    {% endif %}
+
+
+                                    {% if conge.etat == 1 and conge.etatImpression<=2 and conge.numCessation is null %}
+
+
+                                        <a href="{{ path('conges_view', { 'id': conge.id }) }}" class="btn  btn-primary col-md-12">
+                                            Réimprimer cessation
+                                        </a>
+                                    {% elseif conge.etat ==1 and conge.numCessation is null %}
+
+                                        <a href="{{ path('conges_view', { 'id': conge.id }) }}" class="btn  btn-primary col-md-12">
+                                            Imprimer cessation
+                                        </a>
+
+                                    {% endif %}
+                                    {% if conge.etat == 3 and conge.etatImpression <=  4 and conge.numReprise is null %}
+                                        <a href="{{ path('conges_view', { 'id': conge.id }) }}" class="btn  btn-primary col-md-12">
+                                            Réimprimer reprise
+                                        </a>
+
+                                    {% elseif conge.etat == 3 and  conge.numReprise is null %}
+
+                                        Imprimer  reprise
+
+                                    {% endif %}
+
+
+                                    <a href="{{ path('conges_show', { 'id': conge.id }) }}" class="btn  btn-info col-md-12">Consulter</a>
+
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+
+        </ul>
+    {% endblock %}
+    {% block javascript %}
+        <script src="{{ asset('ediligence/assets/js/bootstrap-select.min.js') }}"></script>
+
+    {% endblock %}

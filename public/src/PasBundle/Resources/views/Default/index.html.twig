@@ -1,0 +1,81 @@
+{% extends '::ediligence/base.html.twig' %}
+
+{% block stylesheets %}
+
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+{% endblock%}
+
+{% block body %}
+
+</script>
+
+<div class="content-header">
+    <div class="header-section">
+        <h1><i class="gi gi-envelope"></i> Plan d'Actions Stratégiques<br><small>Liste</small></h1>
+    </div>
+</div>
+<ul class="breadcrumb breadcrumb-top">
+    <li>Actions</li>
+    <li><a href="">Liste des P.A.S</a></li>
+</ul>
+<div class="block full">
+    <div class="block-title">
+        <h2><strong>Liste</strong> PAS</h2>
+    </div>{#
+    <p><a href="https://dge.ci" target="_blank">DataTables</a> is a plug-in for the Jquery Javascript library. It is a highly flexible tool, based upon the foundations of progressive enhancement, which will add advanced interaction controls to any HTML table. It is integrated with template's design and it offers many features such as on-the-fly filtering and variable length pagination.</p>
+#}
+
+    <div class="table-responsive">
+        <table id="dtable" class="table table-vcenter table-condensed table-bordered">
+            <thead>
+                <tr>
+                    <th>Num</th>
+                    <th>libellé</th>
+                    <th>Année</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entity in entities %}
+                    <tr>
+                        <td><a href="#">{{ entity.id }}</a></td>
+                        <td>PAS {{ entity.direction.sigle }}</td>
+                        <td>{{entity.exercice.annee}}{#{% if entity.dateorigine %}{{ entity.dateorigine|date('d-m-Y') }}{% endif %}#}</td>
+
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group btn-group-xs">
+                                <a href="{{ path('courrier_edit', { 'id': entity.id }) }}" data-toggle="tooltip" title="Ajouter" class="btn btn-success"><i class="fa fa-edit" style="font-size:16px;color:red"></i>Modifier</a>  &nbsp; &nbsp;
+                                <a href="{{ path('pas_evaluer', { 'id': entity.id }) }}" data-toggle="tooltip" title="Planifier" class="btn btn-success"><i class="fa fa-edit" style="font-size:16px;color:red"></i>Planifier</a>  &nbsp; &nbsp;
+                                <a href="{{ path('pas_bareme', { 'id': entity.id }) }}" data-toggle="tooltip" title="Barème" class="btn btn-success"><i class="fa fa-edit" style="font-size:16px;color:red"></i>Barème</a>  &nbsp; &nbsp;
+                                <a href="{{ path('pas_preuve', { 'id': entity.id }) }}" data-toggle="tooltip" title="Preuve source" class="btn btn-success"><i class="fa fa-edit" style="font-size:16px;color:red"></i>Preuve</a>  &nbsp; &nbsp;
+                                <a href="{{ path('pas_fiche', { 'id': entity.id }) }}" data-toggle="tooltip" title="Evaluer" class="btn btn-success"><i class="fa fa-edit" style="font-size:16px;color:red"></i>Evaluer</a>  &nbsp; &nbsp;
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <ul>
+    </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

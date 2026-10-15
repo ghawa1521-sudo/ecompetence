@@ -1,0 +1,74 @@
+{% extends '::base.html.twig' %}
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+    <style>
+        .dataTables_filter{
+            width: auto !important;
+        }
+        .records_list{
+            width:100% !important;
+        }
+    </style>
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+{% block title %}
+    Suivi des congés & Statistiques
+{% endblock %}
+{% block body -%}
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs bar_tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Details mois de {{date('2018-' ~ action ~ '-01')|localizeddate('none', 'none', app.request.locale, "Africa/Abidjan", "MMMM")}}</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="home">
+
+            <div class="x_title">
+                <h2>Details mois de {{date('2018-' ~ action ~ '-01')|localizeddate('none', 'none', app.request.locale, "Africa/Abidjan", "MMMM")}}<small> </small></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="table-responsive">
+                <table class="records_list table table-striped responsive-utilities jambo_table bulk_action" id="datatable">
+                    <thead>
+                        <tr>
+                            <th>Nom & Prénoms</th>
+                            <th>Serv. / Dir.</th>
+                            <th>Type de Congés</th>
+                            <th>Date de départ</th>
+                            <th>Date de fin</th>
+                            <th>Nombre de jours</th>
+                            <th>Temps Restant</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entity in entities %}
+                            <tr>
+                                <td>{{ entity.agent.nom}} {{ entity.agent.prenoms}}</td>
+                                <td>{{entity.agent.Direction.sigle}}</td>
+                                <td>{{entity.typeConges.libelle}}</td>
+                                <td>{% if entity.datedebut %}{{ entity.datedebut|date('d-m-Y') }}{% endif %}</td>
+                                <td>{% if entity.datefin %}{{ entity.datefin|date('d-m-Y') }}{% endif %}</td>
+                                <td>{{entity.nbrejours}}</td>
+                                <td>{{macro.remaining_time(entity.datefin,'now')}} </td>
+                                <td>
+                                    <a href="{{ path('conges_show', { 'id': entity.id }) }}">Consulter</a>&nbsp;|&nbsp;
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+        <br><br>
+
+        <a class="btn btn-success" href="{{ path('conges_suivi', { 'action': 'default' }) }}">Retourner au suivi</a>
+        <br><br>
+    </div>
+
+{% endblock %}
+

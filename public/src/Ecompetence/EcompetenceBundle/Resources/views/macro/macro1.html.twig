@@ -1,0 +1,19 @@
+{% macro recursiveDomaineAff(domaine,cp) %}
+   
+     {% if domaine.id in cp %}
+    <li data-value="{{domaine.id}}">
+        <b>{{domaine}}</b>
+
+        {% if domaine.children|length %}
+            <ul>
+                {% for child in domaine.children %} 
+                    {{ _self.recursiveDomaine(child,cp) }}
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+    </li>{% endif %}
+{% endmacro %}
+
+
+

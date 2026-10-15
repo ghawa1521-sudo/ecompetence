@@ -1,0 +1,67 @@
+{% extends '::base.html.twig' %}
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+    <style>
+        td{
+            vertical-align: middle !important;
+        }
+    </style> 
+{% endblock %}
+{% block datatableJs %}
+  <script>
+   $("#example").margetable({
+            type: 2,
+            colindex: [1,2,3,4]
+});
+
+</script>
+    {% include "::sections_app/datatableJs.html.twig" %}
+   
+{% endblock %}
+{% block body -%}
+<div>
+    <h1 style="text-align: center;">Liste des règles</h1>
+
+     <table id="example" class="records_list table table-striped table-bordered " >
+        <thead>
+            <tr>
+                <th>N°</th>
+                <th>Fonction </th>
+                <th>Fonction Assimilee</th>
+                <th>Grade</th>
+                <th>Anciennete Grade</th>
+                <th>Anciennete Dge</th>
+                <th>Pieces</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                {% dump(entity.FonctionAssimilees) %}
+                <td><a href="{{ path('regles_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{% if(entity.FonctionAssimilees.idFonction.libFonc)%}{{ entity.FonctionAssimilees.idFonction.libFonc}}{% endif %}</td>
+                <td>{{ entity.FonctionAssimilees }}</td>
+                <td>{{ entity.grade}}</td>
+                <td>{{ entity.ancienneteGrade }}</td>
+                <td>{{ entity.ancienneteDge }}</td>
+                <td>{{ entity.pieces }}</td>
+                <td>
+                <ul>
+                 
+                    <li>
+                        <a href="{{ path('regles_edit', { 'id': entity.id }) }}"><button type="button" class="btn btn-primary">Modifier</button></a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        
+            <a href="{{ path('regles_new') }}">
+                <button type="button" class="btn btn-primary">Créer une nouvelle règle</button>
+            </a>
+</div> 
+    {% endblock %}

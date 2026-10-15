@@ -1,0 +1,62 @@
+<?php
+
+namespace Application\Migrations;
+
+use Doctrine\DBAL\Migrations\AbstractMigration;
+use Doctrine\DBAL\Schema\Schema;
+
+/**
+ * Auto-generated Migration: Please modify to your needs!
+ */
+class Version20241007101650 extends AbstractMigration
+{
+    /**
+     * @param Schema $schema
+     */
+    public function up(Schema $schema)
+    {
+        // this up() migration is auto-generated, please modify it to your needs
+        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+
+        $this->addSql('DROP TABLE copy_agent');
+        $this->addSql('DROP TABLE diplomes');
+        $this->addSql('DROP TABLE fichierdgeoriginal');
+        $this->addSql('DROP TABLE fileattachment');
+        $this->addSql('DROP TABLE newagent');
+        $this->addSql('ALTER TABLE affecter CHANGE dateMiseService dateMiseService DATETIME DEFAULT NULL');
+        $this->addSql('ALTER TABLE decision CHANGE date date DATETIME NOT NULL');
+        $this->addSql('ALTER TABLE deleguation CHANGE datecreation datecreation timestamp default current_timestamp');
+        $this->addSql('ALTER TABLE detachement CHANGE datecreation datecreation timestamp default current_timestamp on update current_timestamp');
+        $this->addSql('ALTER TABLE interimaire CHANGE datesys datesys timestamp default current_timestamp on update current_timestamp');
+        $this->addSql('ALTER TABLE news CHANGE datecreation datecreation DATETIME NOT NULL, CHANGE debut debut DATETIME NOT NULL, CHANGE fin fin DATETIME DEFAULT NULL');
+        $this->addSql('ALTER TABLE numerisation CHANGE date date DATETIME NOT NULL');
+        $this->addSql('ALTER TABLE validation CHANGE date date DATETIME NOT NULL');
+        $this->addSql('ALTER TABLE experience ADD intitule VARCHAR(255) NOT NULL, ADD date_debut DATE NOT NULL, ADD date_fin DATE DEFAULT NULL');
+        $this->addSql('ALTER TABLE formation ADD intitule VARCHAR(255) NOT NULL, ADD date_debut DATE NOT NULL, ADD date_fin DATE DEFAULT NULL');
+    }
+
+    /**
+     * @param Schema $schema
+     */
+    public function down(Schema $schema)
+    {
+        // this down() migration is auto-generated, please modify it to your needs
+        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+
+        $this->addSql('CREATE TABLE copy_agent (id INT NOT NULL, id_provenance INT DEFAULT NULL, id_type INT DEFAULT NULL, id_fonction INT DEFAULT NULL, id_emploi INT DEFAULT NULL, id_titre INT DEFAULT NULL, id_classe INT DEFAULT NULL, id_promotion INT DEFAULT NULL, id_syndicat INT DEFAULT NULL, id_sexe INT DEFAULT NULL, id_direction INT DEFAULT NULL, id_echelon INT DEFAULT NULL, id_affecter INT DEFAULT NULL, matricule VARCHAR(255) NOT NULL COLLATE utf8_unicode_ci, nom VARCHAR(50) DEFAULT NULL COLLATE utf8_unicode_ci, prenoms VARCHAR(255) DEFAULT NULL COLLATE utf8_unicode_ci, nomJeuneFille VARCHAR(255) DEFAULT NULL COLLATE utf8_unicode_ci, dateNaiss DATE DEFAULT NULL, nomPere VARCHAR(255) DEFAULT NULL COLLATE utf8_unicode_ci, nomMere VARCHAR(255) DEFAULT NULL COLLATE utf8_unicode_ci, nbEnf INT DEFAULT NULL, indice INT DEFAULT NULL, datePremierService DATE DEFAULT NULL, datePriseServiceDge DATE DEFAULT NULL, agent_image VARCHAR(255) DEFAULT NULL COLLATE utf8_unicode_ci, image_name VARCHAR(255) DEFAULT NULL COLLATE utf8_unicode_ci, updated_at DATETIME DEFAULT NULL, agent_cv VARCHAR(255) DEFAULT NULL COLLATE utf8_unicode_ci, cv_name VARCHAR(255) DEFAULT NULL COLLATE utf8_unicode_ci, updated_cv_at DATETIME DEFAULT NULL, telBur VARCHAR(20) DEFAULT NULL COLLATE utf8_unicode_ci, telPort VARCHAR(50) DEFAULT NULL COLLATE utf8_unicode_ci, telDom VARCHAR(20) DEFAULT NULL COLLATE utf8_unicode_ci, quartier VARCHAR(255) DEFAULT NULL COLLATE utf8_unicode_ci, nomConjoint VARCHAR(255) DEFAULT NULL COLLATE utf8_unicode_ci, telConjoint VARCHAR(20) DEFAULT NULL COLLATE utf8_unicode_ci, descriComp LONGTEXT DEFAULT NULL COLLATE utf8_unicode_ci, persUrgent1 VARCHAR(255) DEFAULT NULL COLLATE utf8_unicode_ci, persUrgent2 VARCHAR(255) DEFAULT NULL COLLATE utf8_unicode_ci, telUrgent1 VARCHAR(20) DEFAULT NULL COLLATE utf8_unicode_ci, telUrgent2 VARCHAR(20) DEFAULT NULL COLLATE utf8_unicode_ci, email VARCHAR(255) DEFAULT NULL COLLATE utf8_unicode_ci, numPoste VARCHAR(20) DEFAULT NULL COLLATE utf8_unicode_ci, CODE_DC VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, emailPerso VARCHAR(255) DEFAULT NULL COLLATE utf8_unicode_ci, dateAutoModifEnreg DATETIME DEFAULT NULL, id_lieuNaiss INT DEFAULT NULL, id_situationMatrimoniale INT DEFAULT NULL, id_situationMili INT DEFAULT NULL, CODE_DG VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, CODE_SD VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, CODE_SC VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, matModifEnreg INT DEFAULT NULL, UNIQUE INDEX UNIQ_268B9C9D12B2DC9C (matricule), UNIQUE INDEX UNIQ_268B9C9D924BE9EF (id_affecter), INDEX IDX_268B9C9D248F5D56 (id_provenance), INDEX IDX_268B9C9D7FE4B2B (id_type), INDEX IDX_268B9C9D59DB3928 (id_fonction), INDEX IDX_268B9C9D52970517 (id_emploi), INDEX IDX_268B9C9D11F20684 (id_titre), INDEX IDX_268B9C9DA9B00A7B (id_classe), INDEX IDX_268B9C9D7FEF12CB (id_lieuNaiss), INDEX IDX_268B9C9D4128C1F6 (id_promotion), INDEX IDX_268B9C9D17ABADE3 (id_syndicat), INDEX IDX_268B9C9D47CCA38E (id_sexe), INDEX IDX_268B9C9DBE7F6D94 (id_direction), INDEX IDX_268B9C9DB8075A76 (id_echelon), INDEX IDX_268B9C9D524749F2 (id_situationMatrimoniale), INDEX IDX_268B9C9D2CD04499 (id_situationMili), INDEX IDX_268B9C9DC75691A (CODE_DG), INDEX IDX_268B9C9D90FFBC36 (CODE_SD), INDEX IDX_268B9C9DE9B2995 (CODE_SC), INDEX IDX_268B9C9D10D8F4CF (matModifEnreg), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE diplomes (id INT NOT NULL, niveau_id INT DEFAULT NULL, LibDiplome VARCHAR(255) NOT NULL COLLATE utf8_unicode_ci, INDEX IDX_8A81EFD1B3E9C81 (niveau_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE fichierdgeoriginal (ordre INT DEFAULT NULL, Nom_prenoms VARCHAR(520) DEFAULT NULL COLLATE utf8_general_ci, Matricule VARCHAR(13) DEFAULT NULL COLLATE utf8_general_ci, Date_naissance VARCHAR(48) DEFAULT NULL COLLATE utf8_general_ci, Emploi VARCHAR(56) DEFAULT NULL COLLATE utf8_general_ci, codeemploi VARCHAR(3) DEFAULT NULL COLLATE utf8_general_ci, Grade VARCHAR(13) DEFAULT NULL COLLATE utf8_general_ci, CodeGrade VARCHAR(13) DEFAULT NULL COLLATE utf8_general_ci, Statut VARCHAR(13) DEFAULT NULL COLLATE utf8_general_ci, codestatut VARCHAR(21) DEFAULT NULL COLLATE utf8_general_ci, Direction VARCHAR(68) DEFAULT NULL COLLATE utf8_general_ci, Sous_direction VARCHAR(109) DEFAULT NULL COLLATE utf8_general_ci, Service VARCHAR(85) DEFAULT NULL COLLATE utf8_general_ci, Fonction VARCHAR(50) DEFAULT NULL COLLATE utf8_general_ci, codefonction VARCHAR(10) DEFAULT NULL COLLATE utf8_general_ci, DatepremierpriseserviceFP VARCHAR(10) DEFAULT NULL COLLATE utf8_general_ci, DateMEF VARCHAR(11) DEFAULT NULL COLLATE utf8_general_ci, Date premierepriseserviceDGE VARCHAR(10) DEFAULT NULL COLLATE utf8_general_ci, Date de prise de service Emploi Actuel VARCHAR(10) DEFAULT NULL COLLATE utf8_general_ci, Genre VARCHAR(10) DEFAULT NULL COLLATE utf8_general_ci, codegenre VARCHAR(10) DEFAULT NULL COLLATE utf8_general_ci, Position VARCHAR(12) DEFAULT NULL COLLATE utf8_general_ci, Etatmat VARCHAR(26) DEFAULT NULL COLLATE utf8_general_ci, codesit VARCHAR(38) DEFAULT NULL COLLATE utf8_general_ci, Contact VARCHAR(49) DEFAULT NULL COLLATE utf8_general_ci, Email VARCHAR(34) DEFAULT NULL COLLATE utf8_general_ci) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE fileattachment (id INT NOT NULL, filename VARCHAR(255) NOT NULL COLLATE latin1_swedish_ci, filepath VARCHAR(255) NOT NULL COLLATE latin1_swedish_ci, createdAt DATE NOT NULL) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE newagent (Matricule VARCHAR(13) DEFAULT NULL COLLATE utf8_unicode_ci, id_provenance VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, id_type VARCHAR(1) DEFAULT NULL COLLATE utf8_unicode_ci, id_fonction VARCHAR(1) DEFAULT NULL COLLATE utf8_unicode_ci, id_emploi VARCHAR(2) DEFAULT NULL COLLATE utf8_unicode_ci, id_titre VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, id_classe VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, id_promotion VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, id_syndicat VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, id_sexe INT DEFAULT NULL, id_direction VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, id_echelon VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, nom VARCHAR(12) DEFAULT NULL COLLATE utf8_unicode_ci, prenoms VARCHAR(25) DEFAULT NULL COLLATE utf8_unicode_ci, nomjeunefille VARCHAR(19) DEFAULT NULL COLLATE utf8_unicode_ci, datenaiss VARCHAR(11) DEFAULT NULL COLLATE utf8_unicode_ci, nomPere VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, nomMere VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, nbEnf VARCHAR(9) DEFAULT NULL COLLATE utf8_unicode_ci, indice VARCHAR(12) DEFAULT NULL COLLATE utf8_unicode_ci, Datepremierservice VARCHAR(13) DEFAULT NULL COLLATE utf8_unicode_ci, datePriseServiceDge VARCHAR(16) DEFAULT NULL COLLATE utf8_unicode_ci, agent_image VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, image_name VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, updated_at VARCHAR(25) DEFAULT NULL COLLATE utf8_unicode_ci, telBur VARCHAR(11) DEFAULT NULL COLLATE utf8_unicode_ci, telPort VARCHAR(38) DEFAULT NULL COLLATE utf8_unicode_ci, telDom VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, quartier VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, nomConjoint VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, telConjoint VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, descriComp VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, agent_cv VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, telUrgent1 VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, telUrgent2 VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, id_lieuNaiss VARCHAR(1) DEFAULT NULL COLLATE utf8_unicode_ci, email VARCHAR(1) DEFAULT NULL COLLATE utf8_unicode_ci, id_situationMatrimoniale VARCHAR(1) DEFAULT NULL COLLATE utf8_unicode_ci, id_situationMili VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, cv_name VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, updated_cv_at VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, numPoste VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, id_affecter VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, CODE_DG VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, CODE_DC VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, CODE_SD VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, CODE_SC VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, persUrgent1 VARCHAR(24) DEFAULT NULL COLLATE utf8_unicode_ci, persUrgent2 VARCHAR(24) DEFAULT NULL COLLATE utf8_unicode_ci, Emailperso VARCHAR(49) DEFAULT NULL COLLATE utf8_unicode_ci, dateAutoModifEnreg VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci, matModifEnreg VARCHAR(10) DEFAULT NULL COLLATE utf8_unicode_ci) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('ALTER TABLE affecter CHANGE dateMiseService dateMiseService DATETIME DEFAULT NULL');
+        $this->addSql('ALTER TABLE decision CHANGE date date DATETIME NOT NULL');
+        $this->addSql('ALTER TABLE deleguation CHANGE datecreation datecreation DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL');
+        $this->addSql('ALTER TABLE detachement CHANGE datecreation datecreation DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL');
+        $this->addSql('ALTER TABLE experience DROP intitule, DROP date_debut, DROP date_fin');
+        $this->addSql('ALTER TABLE formation DROP intitule, DROP date_debut, DROP date_fin');
+        $this->addSql('ALTER TABLE interimaire CHANGE datesys datesys DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL');
+        $this->addSql('ALTER TABLE news CHANGE datecreation datecreation DATETIME NOT NULL, CHANGE debut debut DATETIME NOT NULL, CHANGE fin fin DATETIME DEFAULT NULL');
+        $this->addSql('ALTER TABLE numerisation CHANGE date date DATETIME NOT NULL');
+        $this->addSql('ALTER TABLE validation CHANGE date date DATETIME NOT NULL');
+    }
+}

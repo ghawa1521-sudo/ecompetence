@@ -1,0 +1,48 @@
+{% extends '::ediligence/root.html.twig' %}
+{% import "::ediligence/macro/macro.html.twig" as macro %}
+{% block root %}
+
+
+    <div id="page-container" class="sidebar-partial sidebar-visible-lg sidebar-no-animations">
+        {% include "::ediligence/sections_app/sidebar.html.twig" %} 
+        {###Sidebar###}
+
+        <div id="main-container">
+
+            {% include "::ediligence/sections_app/header.html.twig" %}
+
+            <div id="page-content">
+                {#{% include "::sections_app/content.html.twig" %}#}
+                {% block body %}  {% endblock %}
+
+            </div>
+            {% include "::ediligence/sections_app/footer.html.twig" %}
+            <a href="#" id="to-top"><i class="fa fa-angle-double-up"></i></a>
+
+
+        </div>
+
+
+    </div>
+    {% include "::ediligence/sections_app/modal.html.twig" %}
+
+{% endblock %}
+{# le header  #}
+{#{% if is_granted('ROLE_GPP')%}
+    {% include "::sections_app/header.html.twig" %}
+{% elseif is_granted('ROLE_DISTRI')%}
+    {% include "::sections_app/headerDist.html.twig" %}
+{% endif %}#}{#}
+{% include "::ediligence/sections_app/header.html.twig" %}
+<div class="page animsition">
+    <div class="page-content container-fluid">
+        {# les messages flashs #}
+        {#{% include "::sections_app/flashMessages.html.twig" %} 
+
+        {# le contenu  #}
+        {#{% block body %}  {% endblock %}
+
+    </div>
+</div>
+{# le footer #}
+        {#{% include "::sections_app/footer.html.twig" %}#}

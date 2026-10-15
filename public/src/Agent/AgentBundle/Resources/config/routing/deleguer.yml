@@ -1,0 +1,30 @@
+deleguer:
+    path:     /
+    defaults: { _controller: "AgentBundle:Deleguer:index" }
+
+deleguer_show:
+    path:     /{id}/show
+    defaults: { _controller: "AgentBundle:Deleguer:show" }
+
+deleguer_new:
+    path:     /new/{fid}
+    defaults: { _controller: "AgentBundle:Deleguer:new",fid:all }
+
+deleguer_create:
+    path:     /create
+    defaults: { _controller: "AgentBundle:Deleguer:create" }
+    methods:  POST
+
+deleguer_edit:
+    path:     /{id}/edit/{fid}
+    defaults: { _controller: "AgentBundle:Deleguer:edit",fid:'' }
+
+deleguer_update:
+    path:     /{id}/update
+    defaults: { _controller: "AgentBundle:Deleguer:update" }
+    methods:  [POST, PUT]
+
+deleguer_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AgentBundle:Deleguer:delete" }
+    methods:  [POST, DELETE]

@@ -1,0 +1,77 @@
+{% extends '::base.html.twig' %}
+    {%from "EcompetenceBundle:macro:macro.html.twig" import recursiveDomaineIndex, recursiveDomaine,recursiveDomaineAff,recursiveDomaineselect, recursiveDomaineTableIndent %}
+
+{% block body -%}
+    <div class="panel panel-success" >
+        <div class="panel-heading" ><h1>Liste des domaines de compétences</h1></div>
+    </div>
+    
+    <div class="modal-header  panel-primary">
+
+        <a class=" btn btn-success" style='width:205px;' href="{{ path('domaine_new')}}">Ajouter un nouveau domaine</a>
+        
+    </div>  
+    {# <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Libdomaine</th>
+                <th>Level</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('domaine_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.libDomaine }}</td>
+                <td>{{ entity.level }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('domaine_show', { 'id': entity.id }) }}">Afficher</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('domaine_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                    <li>
+                        
+                        <a href="{{ path('domaine_fils', { 'id': entity.id }) }}">Créer un sous-domaine</a>
+                    
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table> #}
+     
+ <table class="table table-bordered">
+    <thead>
+        <tr>
+            
+            <th><h3 style="text-align:center; font-weight: bold;">Domaine</h3></th>
+            
+            <th><h3 style="text-align:center; font-weight: bold;">Actions</h3></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for domaine in entities %}
+            {{ recursiveDomaineTableIndent(domaine, 0) }}
+        {% endfor %}
+    </tbody>
+ </table>
+
+    
+    
+    </div>
+        {#<ul>
+
+
+         <li>
+            <a href="{{ path('domaine_new') }}">
+                Créer un nouveau domaine de compétence
+            </a>
+        </li> 
+    </ul>#}
+    {% endblock %}

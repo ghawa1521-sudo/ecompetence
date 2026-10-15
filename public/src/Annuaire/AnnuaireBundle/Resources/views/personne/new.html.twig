@@ -1,0 +1,41 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>personne creation</h1>
+
+    {{ form(form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('personne') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}
+{% block javascript %}
+    <script>
+        var $ville=$('.ville');
+    function ajaxRechercheVille() {
+        {#Pour Ajax#}
+                var idville = $ville.val(); // on récupère la valeur de id du responsable
+                var villeAjaxUrl = Routing.generate('recherche_ville_ajax', {'id': idville});
+                // on vide la liste des D
+
+                if (idville != null) {
+                    $.ajax({
+                        type: 'GET',
+                        url: villeAjaxUrl,
+                        dataType: 'json',
+                        success: function (data) {
+                            $villeLi.empty();
+                            $villeLi.append('<option > Choisir une Ville </option>');
+                            $.each(data, function (index, value) {
+                                $villeLi.append('<option value="' + index + '">' + value + '</option>');
+                            });
+                        }
+                    });
+                }
+            }
+    </</script>
+            {% endblock %}

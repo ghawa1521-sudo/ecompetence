@@ -1,0 +1,60 @@
+gbane_regles:
+    resource: "@gbaneBundle/Resources/config/routing/regles.yml"
+    prefix:   /regles
+
+
+gbane_homepage:
+    path: /
+    defaults: { _controller: gbaneBundle:Default:index }
+
+gbane_profil:
+    path: /profil
+    defaults: { _controller: gbaneBundle:Default:profil }
+    methods: GET
+
+gbane_promo:
+    path: /promotion/{agt}/{id}
+    defaults: { _controller: gbaneBundle:Default:promotion }
+
+gbane_agent:
+    path: /rechercheagent
+    defaults: { _controller: gbaneBundle:Default:rechercheagent }
+
+agent_list:
+    path: /agents
+    defaults: { _controller: 'Agent\AgentBundle\Controller\AgentController::listAgents' }
+
+agent_promote:
+    path: /agents/promote
+    defaults: { _controller: 'Agent\AgentBundle\Controller\AgentController::promoteAgents' }
+
+process_selected_agents:
+    path: /promote_agent
+    defaults: { _controller: 'gbaneBundle:Agent:processSelectedAgents' }
+    methods: POST
+
+promote_agent:
+    path: /promote_agent
+    defaults: { _controller: 'gbaneBundle:Agent:promote_agent' }
+    methods: POST
+
+gbane_decision:
+    path: /decision/{id}
+    defaults: { _controller: gbaneBundle:Default:decision }
+    methods: GET
+
+file_list:
+    path: /files
+    defaults: { _controller: gbaneBundle:FileAttachment:list }
+    methods: [GET]
+
+file_upload:
+    path: /file/upload
+    defaults: { _controller: gbaneBundle:FileAttachment:upload }
+    methods: [POST]
+
+file_delete:
+    path: /files/delete/{id}
+    defaults: { _controller: gbaneBundle:FileAttachment:delete }
+    methods: [DELETE]
+    

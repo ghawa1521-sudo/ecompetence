@@ -1,0 +1,19 @@
+
+{% macro active_link(value) %}
+    {% if app.request.attributes.get('_route') ==  value %}
+        active
+    {% endif %}
+{% endmacro %}
+
+{% macro vueTitle(value,text) %}
+    {% if app.request.attributes.get('_route') ==  value %}
+        {{text}}
+    {% endif %}
+{% endmacro %}
+
+{% macro title_fil(value)%}
+    {% block title %}value{% endblock %}
+    {% block fil %} value {% endblock %}
+{% endmacro %}
+
+

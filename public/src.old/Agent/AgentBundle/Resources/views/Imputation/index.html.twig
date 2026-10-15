@@ -1,0 +1,142 @@
+{% extends '::base.html.twig' %}
+{% block css %}
+   <link href="{{ asset('design/css/style.css') }}" rel="stylesheet"/>
+       <link rel="stylesheet" href="{{asset('ediligence/assets/css/bootstrap-select.min.css')}}">
+{% endblock %}
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+    <style>
+        th{
+            text-align: left !important;
+        }
+        .dataTables_filter{
+            width: auto !important;
+        }
+    </style>
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+{% block title %}
+Effectuer des imputations
+{% endblock %}
+{% block titre_page %}
+    Effectuer des imputations
+    {% endblock %}
+{% block body -%}
+   
+     <ul class="nav nav-tabs bar_tabs" role="tablist">
+
+      <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Affectation</a></li>
+      <li role="presentation"><a href="#serv1" aria-controls="message" role="tab" data-toggle="tab">Congé</a></li>
+      <li role="presentation"><a href="#serv2" aria-controls="message" role="tab" data-toggle="tab">Demande d'actes</a></li>
+      <li role="presentation"><a href="#serv3" aria-controls="message" role="tab" data-toggle="tab">Mutation</a></li>
+    </ul>
+    <div class="tab-content">
+         <div role="tabpanel" class="tab-pane active" id="home">
+    <form method="post" name="affecter_index" class="form_valider" action="{{ path('imputation') }}">
+        <table class="records_chk table table-striped responsive-utilities jambo_table">
+            <thead>
+
+                <tr  class="headings" align="center">
+                    <th></th>
+                   <th><b>Matricule</b></th>
+                    <th><b>Nom & Prénom(s)</b></th>
+                    <th><b>Etat affectation</b></th>
+                    
+                    {#<th><b>Actions</b></th>#}
+                </tr>
+            </thead>
+            <tbody> 
+                {% for affectation in affecter %}
+                <tr>
+                    <td>  {{affectation.id}}  </td>
+                    <td>   {{affectation.matAffecter}} </td>
+                    <td>   {{affectation.nomAffecter}} {{affectation.prenomsAffecter}}</td>
+                    <td>  En attente d'affectation  </td>
+                   {# <td>    </td>#}
+                </tr>
+            {% endfor %}
+            </tbody>
+    </table>
+    <div class="col-md-push-4 col-md-4">
+    <select class="form-control selectpicker" name="nom" data-live-search='true' title="Choisir le collaborateur">
+        {% for agt in agent %}
+            <option value="{{agt.matricule}}">{{agt.nom}} {{agt.prenoms}}</option>    
+        {% endfor %}
+        
+    </select>
+    <br>
+    <input type="hidden" name="hidden_value" value="1" />
+    
+    <input type="submit" name="btn_valider" class="btn btn-success col-md-12" value="Imputer" />
+</div>
+</form>
+</div>
+<div role="tabpanel" class="tab-pane" id="serv1">
+    <form method="post" name="conge_index">
+<table class="records_chk table table-striped responsive-utilities jambo_table">
+        <thead>
+
+            <tr  class="headings" align="center">
+                
+               <th><b>Matricule</b></th>
+                <th><b>Nom & Prénom(s)</b></th>
+                <th><b>Date Imputation</b></th>
+                <th><b>Etat Traitement</b></th>
+                <th><b>Date Traitement</b></th>
+                <th><b>Coolaborateur en charge du dossier</b></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</form>
+</div>
+<div role="tabpanel" class="tab-pane" id="serv2">
+<table class="records_chk table table-striped responsive-utilities jambo_table">
+        <thead>
+
+            <tr  class="headings" align="center">
+                
+               <th><b>Matricule</b></th>
+                <th><b>Nom & Prénom(s)</b></th>
+                <th><b>Date Imputation</b></th>
+                <th><b>Etat Traitement</b></th>
+                <th><b>Date Traitement</b></th>
+                <th><b>Coolaborateur en charge du dossier</b></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<div role="tabpanel" class="tab-pane" id="serv3">
+<table class="records_chk table table-striped responsive-utilities jambo_table">
+        <thead>
+            <tr  class="headings" align="center">
+                
+               <th><b>Matricule</b></th>
+                <th><b>Nom & Prénom(s)</b></th>
+                <th><b>Date Imputation</b></th>
+                <th><b>Etat Traitement</b></th>
+                <th><b>Date Traitement</b></th>
+                <th><b>Coolaborateur en charge du dossier</b></th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+</div>
+
+ <div role="tabpanel" class="tab-pane active" id="home">
+
+ </div>
+        </div>
+
+    {% endblock %}
+    {% block javascript %}
+    <script src="{{ asset('ediligence/assets/js/bootstrap-select.min.js') }}"></script>
+
+{% endblock %}

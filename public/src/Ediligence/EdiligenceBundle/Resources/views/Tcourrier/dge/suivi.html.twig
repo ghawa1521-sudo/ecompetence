@@ -1,0 +1,115 @@
+{% extends '::ediligence/base.html.twig' %}
+
+{% block body %}
+
+    <div class="content-header">
+        <div class="header-section">
+            <h1><i class="gi gi-envelope"></i> Dossier<br><small>Suivie des diligences</small></h1>
+        </div>
+    </div>
+    <ul class="breadcrumb breadcrumb-top">
+        <li>Actions</li>
+        <li><a href="">Mes Dossiers</a></li>
+    </ul>
+    <div class="block full">
+        <div class="block-title">
+            <h2><strong>Liste</strong> dossiers</h2>
+        </div>{#
+            <p><a href="https://dge.ci" target="_blank">DataTables</a> is a plug-in for the Jquery Javascript library. It is a highly flexible tool, based upon the foundations of progressive enhancement, which will add advanced interaction controls to any HTML table. It is integrated with template's design and it offers many features such as on-the-fly filtering and variable length pagination.</p>
+    #}
+
+        <div class="table-responsive">
+            <table id="example-datatable" class="table table-vcenter table-condensed table-bordered">
+                <thead>
+                    <tr>
+                        <th>Num</th>
+                        <th>Destinataire</th>
+                        <th>Nature courrier</th>
+                        <th>Objet courrier</th>
+                        <th>Date imputation</th>
+                        <th>Etat</th>
+                        <th>Delai</th>
+                        <th>Jauge</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% set i = 0 %}
+                    {% for entit_i in entity %}
+                        {% set i = i + 1 %}{% set service = '' %}
+                        {% for entit_d in entity1 %}
+                            {%if entit_i['id'] == entit_d[0].imputation.courrier.id %}
+                                {% set service = service ~ entit_d['service'] ~ ' - ' %}
+                            {% endif%}
+
+                        {% endfor %}
+
+
+                        <tr>
+                            <td>{{ i }}</td>
+                            <td>{{ service|trim(' - ', 'right') }}</td>
+                            <td>{{ entit_i['libcourrier'] }}</td>
+                            <td>{{ entit_i['objet']|raw|striptags|slice(0, 150) }}</td>
+
+                            <td> {% if entit_i[0] is defined and entit_i[0] !=null  %}
+                                   {{ entit_i[0].dateImput|date('d-m-Y H:i:s') }}
+                                 {% endif %}
+                            </td>
+
+                            <td><b>{#{% if entit_i.etat == 0 %}En cours{% else %}Transmis {% endif %} #} En cours</b></td>
+
+                            <td>{% if entit_i[0] is defined  and entit_i[0] !=null %}
+                                {{ entit_i[0].delaiImput|date('d-m-Y H:i:s') }}
+                                {#<br><font color="red">
+                                {{(date(entit_i[0].delaiImput).diff(date(entit_i[0].dateImput))).days}}
+                                jour(s)</font>#}
+								<br>{{macro.remaining_time(entit_i[0].delaiImput, ("now"))}}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if entit_i[0] is defined  and entit_i[0] !=null %}
+                                    {{jauge[entit_i['id']]|raw}}
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-xs">
+                                {% if entit_i.etat == 0 %}
+                                    {% if entit_i['idtypecourrier'] ==2 %}
+
+                                         {% if (entit_i['etatcourrier']==1) %}
+                                             <a href="{{ path('courrier_dgedel', { 'id': entit_i[0].id }) }}" class="btn btn-danger"><span class="glyphicon glyphicon-inbox"></span> Supprimer</a>
+                                         {% else %}
+                                             <a href="{{ path('courrier_interne_imput', { 'id': entit_i['id'] }) }}" class="btn btn-success"><span class="glyphicon glyphicon-inbox"></span> Imputer</a>
+                                             <a href="{{ path('courrier_dgedel1', { 'id': entit_i['id'] }) }}" class="btn btn-danger"><span class="glyphicon glyphicon-inbox"></span> Supprimer</a>
+                                         {% endif %}
+
+                                    {% else %}
+                                        {% if(entit_i['etatcourrier']==1) %}
+                                           {% if(entit_i['etat_trait'] == 0) %}
+                                            <a href="{{ path('courrier_dgedel', { 'id': entit_i[0].id }) }}" class="btn btn-danger"><span class="glyphicon glyphicon-inbox"></span> Supprimer</a>
+                                           {% else %}
+                                              <a href="{{ path('courrier_recap_trait', { 'id': entit_i[0].id }) }}" class="btn btn-success"><span class="glyphicon glyphicon-inbox"></span> Consulter</a>
+                                           {% endif %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% else %}
+                                   <a href="{{ path('courrier_recap_trait', { 'id': entit_i[0].id }) }}" class="btn btn-success"><span class="glyphicon glyphicon-inbox"></span> Consulter</a>
+                                {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+        <ul>
+            <li>
+                <a href="{{ path('courrier_new') }}">Transmettre diligence</a>
+            </li>
+        </ul>
+    </div>
+
+{% endblock %}

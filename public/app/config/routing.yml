@@ -1,0 +1,60 @@
+agent_identification:
+    resource: "@AgentIdentificationBundle/Resources/config/routing.yml"
+    prefix:   /identification
+    methods:  [POST,GET]
+
+pas:
+    resource: "@PasBundle/Resources/config/routing.yml"
+    prefix:   /pas
+
+agent_homepage:
+    path:     /
+    defaults: { _controller: AgentBundle:Default:index }
+
+ediligence:
+    resource: "@EdiligenceBundle/Resources/config/routing.yml"
+    prefix:   /ediligences
+
+biblio:
+    resource: "@BiblioBundle/Resources/config/routing.yml"
+    prefix:   /biblio
+demandes:
+    resource: "@DemandesBundle/Resources/config/routing.yml"
+    prefix:   /e-rh
+
+users:
+    resource: "@UsersBundle/Controller/"
+    type:     annotation
+    prefix:   /e-rh
+
+agent:
+    resource: "@AgentBundle/Resources/config/routing.yml"
+    prefix:   /e-rh
+
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+
+annuaire:
+    resource: "@AnnuaireBundle/Resources/config/routing.yml"
+    prefix:   /e-rh
+
+competence:
+    resource: "@EcompetenceBundle/Resources/config/routing.yml"
+    prefix:   /e-competence
+
+gbane:
+    resource: "@gbaneBundle/Resources/config/routing.yml"
+    prefix:   /e-carriere
+
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+
+default_notififajax:
+    path:     /notififajax
+    defaults: { _controller: "AgentBundle:Default:notififAjax"}
+    methods:  [GET, POST]
+    options:
+        expose: true
+        # config/routes.yaml
+
+

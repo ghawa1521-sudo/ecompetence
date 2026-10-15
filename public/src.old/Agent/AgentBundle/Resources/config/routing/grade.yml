@@ -1,0 +1,30 @@
+grade:
+    path:     /
+    defaults: { _controller: "AgentBundle:Grade:index" }
+
+grade_show:
+    path:     /{id}/show
+    defaults: { _controller: "AgentBundle:Grade:show" }
+
+grade_new:
+    path:     /new
+    defaults: { _controller: "AgentBundle:Grade:new" }
+
+grade_create:
+    path:     /create
+    defaults: { _controller: "AgentBundle:Grade:create" }
+    methods:  POST
+
+grade_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AgentBundle:Grade:edit" }
+
+grade_update:
+    path:     /{id}/update
+    defaults: { _controller: "AgentBundle:Grade:update" }
+    methods:  [POST, PUT]
+
+grade_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AgentBundle:Grade:delete" }
+    methods:  [POST, DELETE]

@@ -1,0 +1,613 @@
+{% extends '::base.html.twig' %}
+
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+{% endblock %}
+
+{% block titre_page %}
+    <div><h1>Demandes Reçues</h1></div>
+{% endblock %}
+{% block body %}
+
+
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs bar_tabs" role="tablist">
+
+        {% if is_granted('ROLE_RESPO_SRHMG') or deleguation == 0 %}
+            <li role="presentation" class="active"><a href="#serv1" aria-controls="profile" role="tab" data-toggle="tab">Autorisation d'absences <label class="label label-danger">{% if (absence|length > 0) %}{{absence|length}}{% endif %}</label></a></li>
+            <li role="presentation"><a href="#serv2" aria-controls="messages" role="tab" data-toggle="tab">Attestation de présence <label class="label label-danger">{% if (attestation|length > 0) %}{{attestation|length}}{% endif %}</label></a></li>
+            <li role="presentation"><a href="#serv3" aria-controls="message" role="tab" data-toggle="tab">Attestation de travail <label class="label label-danger">{% if (certificat|length > 0) %}{{certificat|length}}{% endif %}</label></a></li>
+            <li role="presentation"><a href="#serv5" aria-controls="message" role="tab" data-toggle="tab">Cabinet et Responsable<label class="label label-danger">{% if (cabinet|length > 0) %}{{cabinet|length}}{% endif %}</label></a></li>
+            <li role="presentation"><a href="#hors" aria-controls="message" role="tab" data-toggle="tab">Hors Côte d'Ivoire<label class="label label-danger">{% if (hors|length > 0) %}{{cabinet|length}}{% endif %}</label></a></li>
+            <li role="presentation"><a href="#serv4" aria-controls="message" role="tab" data-toggle="tab">Archives <label class="label label-success">{% if (archive|length > 0) %}{{archive|length}}{% endif %}</label></a></li>
+
+        {% endif %}
+
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+
+
+        {% if is_granted('ROLE_RESPO_SRHMG') or deleguation == 0 %}
+            <div role="tabpanel" class="tab-pane active" id="serv1">
+
+                <table class="records_list table table-striped responsive-utilities jambo_table bulk_action">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">Date Demande</th>
+                            <th rowspan="2">Matricule</th>
+                            <th rowspan="2">Nom et Prénoms</th>
+                            <th rowspan="2">Direction</th>
+                            <th rowspan="2">Objet</th>
+                            <th rowspan="2">Période d'absence</th>
+                            <th rowspan="2">Destination</th>
+
+                            <th colspan="3">ETAT VALIDATION</th>
+                            <th rowspan="2">Actions</th>
+                        </tr>
+                        <tr>
+                            <th>
+                                {% if app.user.agent.direction.etatDirection == 0 %}
+                                    Chef de Section
+                                {% elseif app.user.agent.direction.etatDirection == 1 %}
+
+                                    Chef de Service
+                                {% endif %}
+                            </th>
+                            <th>Directeur / Chef de Service Rattaché</th>
+                            <th>Service Ressources Humaines</th>
+                        </tr>
+                    </thead>
+                    {% for entity in absence %}
+                        <tr>
+                            <td>{% if entity.datecreation %}{{ entity.datecreation|date('d-m-Y H:i:s') }}{% endif %}</td>
+                            <td>{{ entity.emmeteur.matricule }}</td>
+                            <td>{{ entity.emmeteur.nom }} {{ entity.emmeteur.prenoms }}</td>
+                            <td>{% if entity.emmeteur.Direction %} {{ entity.emmeteur.Direction.Sigle }} {% endif %}</td>
+                            <td>{{ entity.objet }}</td>
+                            <td align="center">{{ entity.dateDeb|date('d-m-Y') }} <br>au<br>{{ entity.DateFin|date('d-m-Y') }}</td>
+                            <td>{{ entity.Destination }}</td>
+
+
+                            <td align="center">{% if (entity.Etatrepsupdir == 0) %}En Attente{# Etat 0  En attente#}
+                                <span class="label label-warning"></span>
+                                {% elseif (entity.Etatrepsupdir == 1) %}Validé
+                                    <span class="label label-success"></span>
+                                    {% elseif (entity.Etatrepsupdir == 2) %}Refusé
+                                        <span class="label label-danger"></span>
+                                        <br>
+                                        {{entity.motifRejet}}
+                                        {% endif %}
+                                            {% if entity.dateRepSupDir %}<br>{{ entity.dateRepSupDir|date('d-m-Y H:i:s') }}{% endif %}
+                                        </td>
+
+                                        <td align="center">
+                                            {% if (entity.Etatrepsupdir2 == 0) and (entity.Etatrepsupdir == 1) %}En attente{# Etat 0  En attente#}
+                                                <span class="label label-warning"></span>
+                                            {% elseif (entity.Etatrepsupdir2 == 1) %}Validé
+                                                <span class="label label-success"></span>
+                                            {% elseif (entity.Etatrepsupdir2 == 2) %}Refusé
+                                                <span class="label label-danger"></span>
+                                                <br>
+                                                {{entity.motifRejet}}
+                                            {% endif %}
+                                            {% if entity.dateRepSupDir2 %}<br>{{ entity.dateRepSupDir2|date('d-m-Y H:i:s') }}{% endif %}
+
+                                        </td>
+                                        <td align="center">{% if(entity.Etatrepgrh == 0 and entity.etatRepSupDir2 == 1 ) %}En attente{# Etat 0  En attente#}
+                                            <span class="label label-warning"></span>
+                                            {% elseif (entity.Etatrepgrh == 1) %}Validé
+                                                <span class="label label-success"></span>
+                                                {% elseif (entity.Etatrepgrh == 2) %}Refusé
+                                                    <span class="label label-danger"></span>
+                                                    <br>
+                                                    {{entity.motifRejet}}
+                                                    {% endif %}
+                                                        {% if entity.dateRepGrh %}<br>{{ entity.dateRepGrh|date('d-m-Y H:i:s') }}{% endif %}
+
+                                                    </td>
+                                                    <td>
+                                                        {% if
+    (((entity.Etatrepsupdir == 0) and (entity.SupDir == app.user.agent)) or
+    ((entity.Etatrepsupdir2 == 0) and (entity.SupDir2 == app.user.agent)) or
+    ((entity.Etatrepgrh == 0) and (entity.Grh == app.user.agent)) or deleguation == 0 )
+                                                        %}
+
+                                                        <div class="row">
+                                                            <a href="{{ path('demande_valid', { 'id': entity.id }) }}" class="btn btn-success col-md-12" data-confirm="Etes-vous <strong>certain</strong> de vouloir Valider cette demande ?">Valider la Demande</a>
+
+
+                                                            {#<a href="{{ path('demande_do_reject', { 'id': entity.id }) }}" class="btn btn-danger col-md-12">Rejeter la Demande</a>#}
+                                                        </div>
+                                                        {% endif %}
+
+                                                            <!--
+                                                            <li>
+                                                                <a href="{{ path('demande_valid', { 'id': entity.id }) }}">Valider</a>
+                                                            </li>
+                                                            -->
+
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                    </table>
+
+                                                </div>
+
+
+                                                <div role="tabpanel" class="tab-pane" id="serv5">
+
+                                                    <table class="records_list table table-responsive table-striped responsive-utilities jambo_table bulk_action" width="100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th rowspan="2">Date Demande</th>
+                                                                <th rowspan="2">Matricule</th>
+                                                                <th rowspan="2">Nom et Prénoms</th>
+                                                                <th rowspan="2">Direction</th>
+                                                                <th rowspan="2">Objet</th>
+                                                                <th rowspan="2">Période d'absence</th>
+                                                                <th rowspan="2">Destination</th>
+
+                                                                <th colspan="3">ETAT VALIDATION</th>
+                                                                <th rowspan="2">Actions</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>
+                                                                    {% if app.user.agent.direction.etatDirection == 0 %}
+                                                                        Chef de Section
+                                                                    {% elseif app.user.agent.direction.etatDirection == 1 %}
+
+                                                                        Chef de Service
+                                                                    {% endif %}
+                                                                </th>
+                                                                <th>Directeur / Chef de Service Rattaché</th>
+                                                                <th>Service Ressources Humaines</th>
+                                                            </tr>
+                                                        </thead>
+                                                        {% for entity in cabinet %}
+                                                            <tr>
+                                                                <td>{% if entity.datecreation %}{{ entity.datecreation|date('d-m-Y H:i:s') }}{% endif %}</td>
+                                                                <td>{{ entity.emmeteur.matricule }}</td>
+                                                                <td>{{ entity.emmeteur.nom }} {{ entity.emmeteur.prenoms }}</td>
+                                                                <td>{% if entity.emmeteur.Direction %} {{ entity.emmeteur.Direction.Sigle }} {% endif %}</td>
+                                                                <td>{{ entity.objet }}</td>
+                                                                <td align="center">{{ entity.dateDeb|date('d-m-Y') }} <br>au<br>{{ entity.DateFin|date('d-m-Y') }}</td>
+                                                                <td>{{ entity.Destination }}</td>
+
+
+                                                                <td align="center">{% if (entity.Etatrepsupdir == 0) %}En Attente{# Etat 0  En attente#}
+                                                                    <span class="label label-warning"></span>
+                                                                    {% elseif (entity.Etatrepsupdir == 1) %}Validé
+                                                                        <span class="label label-success"></span>
+                                                                        {% elseif (entity.Etatrepsupdir == 2) %}Refusé
+                                                                            <span class="label label-danger"></span>
+                                                                            <br>
+                                                                            {{entity.motifRejet}}
+                                                                            {% endif %}
+                                                                                {% if entity.dateRepSupDir %}<br>{{ entity.dateRepSupDir|date('d-m-Y H:i:s') }}{% endif %}
+                                                                            </td>
+
+                                                                            <td align="center">
+                                                                                {% if (entity.Etatrepsupdir2 == 0) and (entity.Etatrepsupdir == 1) %}En attente{# Etat 0  En attente#}
+                                                                                    <span class="label label-warning"></span>
+                                                                                {% elseif (entity.Etatrepsupdir2 == 1) %}Validé
+                                                                                    <span class="label label-success"></span>
+                                                                                {% elseif (entity.Etatrepsupdir2 == 2) %}Refusé
+                                                                                    <span class="label label-danger"></span>
+                                                                                    <br>
+                                                                                    {{entity.motifRejet}}
+                                                                                {% endif %}
+                                                                                {% if entity.dateRepSupDir2 %}<br>{{ entity.dateRepSupDir2|date('d-m-Y H:i:s') }}{% endif %}
+
+                                                                            </td>
+                                                                            <td align="center">{% if(entity.Etatrepgrh == 0 and entity.etatRepSupDir2 == 1 ) %}En attente{# Etat 0  En attente#}
+                                                                                <span class="label label-warning"></span>
+                                                                                {% elseif (entity.Etatrepgrh == 1) %}Validé
+                                                                                    <span class="label label-success"></span>
+                                                                                    {% elseif (entity.Etatrepgrh == 2) %}Refusé
+                                                                                        <span class="label label-danger"></span>
+                                                                                        <br>
+                                                                                        {{entity.motifRejet}}
+                                                                                        {% endif %}
+                                                                                            {% if entity.dateRepGrh %}<br>{{ entity.dateRepGrh|date('d-m-Y H:i:s') }}{% endif %}
+
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            {% if
+    (((entity.Etatrepsupdir == 0) and (entity.SupDir == app.user.agent)) or
+    ((entity.Etatrepsupdir2 == 0) and (entity.SupDir2 == app.user.agent)) or
+    ((entity.Etatrepgrh == 0) and (entity.Grh == app.user.agent)) or deleguation == 0 )
+                                                                                            %}
+
+                                                                                            <div class="row">
+                                                                                                <a href="{{ path('demande_valid', { 'id': entity.id }) }}" class="btn btn-success col-md-12" data-confirm="Etes-vous <strong>certain</strong> de vouloir Valider cette demande ?">Valider la Demande</a>
+
+
+                                                                                                {#<a href="{{ path('demande_do_reject', { 'id': entity.id }) }}" class="btn btn-danger col-md-12">Rejeter la Demande</a>#}
+                                                                                            </div>
+                                                                                            {% endif %}
+
+                                                                                                <!--
+                                                                                                <li>
+                                                                                                    <a href="{{ path('demande_valid', { 'id': entity.id }) }}">Valider</a>
+                                                                                                </li>
+                                                                                                -->
+
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        {% endfor %}
+                                                                                        </table>
+
+                                                                                    </div>
+                                                                                    <div role="tabpanel" class="tab-pane" id="hors">
+
+                                                                                        <table class="records_list table table-responsive table-striped responsive-utilities jambo_table bulk_action" width="100%">
+                                                                                            <thead>
+                                                                                                <tr>
+                                                                                                    <th rowspan="2">Date Demande</th>
+                                                                                                    <th rowspan="2">Matricule</th>
+                                                                                                    <th rowspan="2">Nom et Prénoms</th>
+                                                                                                    <th rowspan="2">Direction</th>
+                                                                                                    <th rowspan="2">Objet</th>
+                                                                                                    <th rowspan="2">Période d'absence</th>
+                                                                                                    <th rowspan="2">Destination</th>
+
+                                                                                                    <th colspan="3">ETAT VALIDATION</th>
+                                                                                                    <th rowspan="2">Actions</th>
+                                                                                                </tr>
+                                                                                                <tr>
+                                                                                                    <th>
+                                                                                                        {% if app.user.agent.direction.etatDirection == 0 %}
+                                                                                                            Chef de Section
+                                                                                                        {% elseif app.user.agent.direction.etatDirection == 1 %}
+
+                                                                                                            Chef de Service
+                                                                                                        {% endif %}
+                                                                                                    </th>
+                                                                                                    <th>Directeur / Chef de Service Rattaché</th>
+                                                                                                    <th>Service Ressources Humaines</th>
+                                                                                                </tr>
+                                                                                            </thead>
+                                                                                            {% for entity in hors %}
+                                                                                                <tr>
+                                                                                                    <td>{% if entity.datecreation %}{{ entity.datecreation|date('d-m-Y H:i:s') }}{% endif %}</td>
+                                                                                                    <td>{{ entity.emmeteur.matricule }}</td>
+                                                                                                    <td>{{ entity.emmeteur.nom }} {{ entity.emmeteur.prenoms }}</td>
+                                                                                                    <td>{% if entity.emmeteur.Direction %} {{ entity.emmeteur.Direction.Sigle }} {% endif %}</td>
+                                                                                                    <td>{{ entity.objet }}</td>
+                                                                                                    <td align="center">{{ entity.dateDeb|date('d-m-Y') }} <br>au<br>{{ entity.DateFin|date('d-m-Y') }}</td>
+                                                                                                    <td>{{ entity.Destination }}</td>
+
+
+                                                                                                    <td align="center">{% if (entity.Etatrepsupdir == 0) %}En Attente{# Etat 0  En attente#}
+                                                                                                        <span class="label label-warning"></span>
+                                                                                                        {% elseif (entity.Etatrepsupdir == 1) %}Validé
+                                                                                                            <span class="label label-success"></span>
+                                                                                                            {% elseif (entity.Etatrepsupdir == 2) %}Refusé
+                                                                                                                <span class="label label-danger"></span>
+                                                                                                                <br>
+                                                                                                                {{entity.motifRejet}}
+                                                                                                                {% endif %}
+                                                                                                                    {% if entity.dateRepSupDir %}<br>{{ entity.dateRepSupDir|date('d-m-Y H:i:s') }}{% endif %}
+                                                                                                                </td>
+
+                                                                                                                <td align="center">
+                                                                                                                    {% if (entity.Etatrepsupdir2 == 0) and (entity.Etatrepsupdir == 1) %}En attente{# Etat 0  En attente#}
+                                                                                                                        <span class="label label-warning"></span>
+                                                                                                                    {% elseif (entity.Etatrepsupdir2 == 1) %}Validé
+                                                                                                                        <span class="label label-success"></span>
+                                                                                                                    {% elseif (entity.Etatrepsupdir2 == 2) %}Refusé
+                                                                                                                        <span class="label label-danger"></span>
+                                                                                                                        <br>
+                                                                                                                        {{entity.motifRejet}}
+                                                                                                                    {% endif %}
+                                                                                                                    {% if entity.dateRepSupDir2 %}<br>{{ entity.dateRepSupDir2|date('d-m-Y H:i:s') }}{% endif %}
+
+                                                                                                                </td>
+                                                                                                                <td align="center">{% if(entity.Etatrepgrh == 0 and entity.etatRepSupDir2 == 1 ) %}En attente{# Etat 0  En attente#}
+                                                                                                                    <span class="label label-warning"></span>
+                                                                                                                    {% elseif (entity.Etatrepgrh == 1) %}Validé
+                                                                                                                        <span class="label label-success"></span>
+                                                                                                                        {% elseif (entity.Etatrepgrh == 2) %}Refusé
+                                                                                                                            <span class="label label-danger"></span>
+                                                                                                                            <br>
+                                                                                                                            {{entity.motifRejet}}
+                                                                                                                            {% endif %}
+                                                                                                                                {% if entity.dateRepGrh %}<br>{{ entity.dateRepGrh|date('d-m-Y H:i:s') }}{% endif %}
+
+                                                                                                                            </td>
+                                                                                                                            <td>
+                                                                                                                                {% if
+    (((entity.Etatrepsupdir == 0) and (entity.SupDir == app.user.agent)) or
+    ((entity.Etatrepsupdir2 == 0) and (entity.SupDir2 == app.user.agent)) or
+    ((entity.Etatrepgrh == 0) and (entity.Grh == app.user.agent)) or deleguation == 0 )
+                                                                                                                                %}
+
+                                                                                                                                <div class="row">
+                                                                                                                                    <a href="{{ path('demande_valid', { 'id': entity.id }) }}" class="btn btn-success col-md-12" data-confirm="Etes-vous <strong>certain</strong> de vouloir Valider cette demande ?">Valider la Demande</a>
+
+
+                                                                                                                                    {#<a href="{{ path('demande_do_reject', { 'id': entity.id }) }}" class="btn btn-danger col-md-12">Rejeter la Demande</a>#}
+                                                                                                                                </div>
+                                                                                                                                {% endif %}
+
+                                                                                                                                    <!--
+                                                                                                                                    <li>
+                                                                                                                                        <a href="{{ path('demande_valid', { 'id': entity.id }) }}">Valider</a>
+                                                                                                                                    </li>
+                                                                                                                                    -->
+
+                                                                                                                                </td>
+                                                                                                                            </tr>
+                                                                                                                            {% endfor %}
+                                                                                                                            </table>
+
+                                                                                                                        </div>
+                                                                                                                        <div role="tabpanel" class="tab-pane" id="serv2">
+
+
+                                                                                                                            <table class="records_list table table-striped responsive-utilities jambo_table bulk_action" width="100%">
+                                                                                                                                <thead>
+                                                                                                                                    <tr>
+                                                                                                                                        <th rowspan="2">Date Demande</th>
+                                                                                                                                        <th rowspan="2">Matricule</th>
+                                                                                                                                        <th rowspan="2">Nom et Prénoms</th>
+                                                                                                                                        <th rowspan="2">Direction</th>
+                                                                                                                                        <th rowspan="2">Nombre copie</th>
+                                                                                                                                        <th rowspan="2">Objet</th>
+                                                                                                                                        <th rowspan="2">Date Réponse</th>
+                                                                                                                                        <th colspan="1">ETAT VALIDATION</th>
+                                                                                                                                        <th rowspan="2">Actions</th>
+                                                                                                                                    </tr>
+                                                                                                                                    <tr>
+                                                                                                                                        <th>Service des Ressources Humaines</th>
+
+                                                                                                                                    </tr>
+                                                                                                                                </thead>
+                                                                                                                                {% for entity in attestation %}
+                                                                                                                                    <tr>
+                                                                                                                                        <td>{% if entity.datecreation %}{{ entity.datecreation|date('d-m-Y H:i:s') }}{% endif %}</td>
+                                                                                                                                        <td>{{ entity.emmeteur.matricule }}</td>
+                                                                                                                                        <td>{{ entity.emmeteur.nom }} {{ entity.emmeteur.prenoms }}</td>
+                                                                                                                                        <td>{% if entity.emmeteur.Direction %} {{ entity.emmeteur.Direction.Sigle }} {% endif %}</td>
+                                                                                                                                        <td>{% if entity.nbrecopie > 0  %} {{ entity.nbrecopie }} {% else %} 1 copie {% endif %}</td>
+                                                                                                                                        <td>{{ entity.objet }}</td>
+
+                                                                                                                                        <td>{% if entity.dateRepGrh %}{{ entity.dateRepGrh|date('d-m-Y H:i:s') }}{% endif %}</td>
+                                                                                                                                        <td align="center">{% if (entity.EtatrepGrh == 0) %}En Attente{# Etat 0  En attente#}
+                                                                                                                                            <span class="label label-warning"></span>
+                                                                                                                                            {% elseif (entity.EtatrepGrh == 1) %}Validé
+                                                                                                                                                <span class="label label-success"></span>
+                                                                                                                                                {% elseif (entity.EtatrepGrh == 2) %}Refusé
+                                                                                                                                                    <span class="label label-danger"></span>
+                                                                                                                                                    <br>
+                                                                                                                                                    {{entity.motifRejet}}
+                                                                                                                                                    {% endif %}
+
+                                                                                                                                                    </td>
+                                                                                                                                                    {#
+                                                                                                                                                    <td align="center">{% if(entity.Etatrepgrh == 0) %}
+                                                                                                                                                        <span class="label label-warning">En attente</span>
+                                                                                                                                                        {% elseif (entity.Etatrepgrh == 1) %}
+                                                                                                                                                        <span class="label label-success">Validé</span>
+                                                                                                                                                        {% elseif (entity.Etatrepgrh == 2) %}
+                                                                                                                                                        <span class="label label-danger">Refusé</span>
+                                                                                                                                                    {% endif %}
+
+                                                                                                                                                </td>#}
+                                                                                                                                                    <td>
+                                                                                                                                                        {% if
+    (((entity.Etatrepsupdir == 0) and (entity.SupDir == app.user.agent)) or
+    ((entity.Etatrepsupdir2 == 0) and (entity.SupDir2 == app.user.agent)) or
+    ((entity.Etatrepgrh == 0) and (entity.Grh == app.user.agent)) or deleguation == 0 )
+                                                                                                                                                        %}
+
+                                                                                                                                                        <div class="row">
+                                                                                                                                                            <a href="{{ path('demande_valid', { 'id': entity.id }) }}" class="btn btn-success col-md-12" data-confirm="Etes-vous <strong>certain</strong> de vouloir Valider cette demande ?">Valider la Demande</a>
+
+
+                                                                                                                                                            <a href="{{ path('demande_do_reject', { 'id': entity.id }) }}" class="btn btn-danger col-md-12">Rejeter la Demande</a>
+                                                                                                                                                        </div>
+
+                                                                                                                                                        <!--
+                                                                                                                                                        <li>
+                                                                                                                                                            <a href="{{ path('demande_valid', { 'id': entity.id }) }}">Valider</a>
+                                                                                                                                                        </li>
+                                                                                                                                                        -->
+                                                                                                                                                        {% endif %}
+                                                                                                                                                        </td>
+                                                                                                                                                    </tr>
+                                                                                                                                                    {% endfor %}
+                                                                                                                                                    </table>
+                                                                                                                                                </div>
+                                                                                                                                                <div role="tabpanel" class="tab-pane" id="serv3">
+                                                                                                                                                    <table class="records_list table table-striped responsive-utilities jambo_table bulk_action" width="100%">
+                                                                                                                                                        <thead>
+                                                                                                                                                            <tr>
+                                                                                                                                                                <th rowspan="2">Date Demande</th>
+                                                                                                                                                                <th rowspan="2">Matricule</th>
+                                                                                                                                                                <th rowspan="2">Nom et Prénoms</th>
+                                                                                                                                                                <th rowspan="2">Direction</th>
+                                                                                                                                                                <th rowspan="2">Nombre copie</th>
+                                                                                                                                                                <th rowspan="2">Objet</th>
+                                                                                                                                                                <th rowspan="2">Date Réponse</th>
+                                                                                                                                                                <th colspan="1">ETAT VALIDATION</th>
+                                                                                                                                                                <th rowspan="2">Actions</th>
+                                                                                                                                                            </tr>
+                                                                                                                                                            <tr>
+                                                                                                                                                                <th>Service des Ressources Humaines</th>
+
+                                                                                                                                                            </tr>
+                                                                                                                                                        </thead>
+                                                                                                                                                        {% for entity in certificat %}
+                                                                                                                                                            <tr>
+                                                                                                                                                                <td>{% if entity.datecreation %}{{ entity.datecreation|date('d-m-Y H:i:s') }}{% endif %}</td>
+                                                                                                                                                                <td>{{ entity.emmeteur.matricule }}</td>
+                                                                                                                                                                <td>{{ entity.emmeteur.nom }} {{ entity.emmeteur.prenoms }}</td>
+                                                                                                                                                                <td>{% if entity.emmeteur.Direction %} {{ entity.emmeteur.Direction.Sigle }} {% endif %}</td>
+                                                                                                                                                                <td>{% if entity.nbrecopie > 0  %} {{ entity.nbrecopie }} copies {% else %} 1 copie {% endif %}</td>
+                                                                                                                                                                <td>{{ entity.objet }}</td>
+
+                                                                                                                                                                <td>{% if entity.dateRepGrh %}{{ entity.dateRepGrh|date('d-m-Y H:i:s') }}{% endif %}</td>
+                                                                                                                                                                <td align="center">{% if (entity.EtatrepGrh == 0) %}En Attente{# Etat 0  En attente#}
+                                                                                                                                                                    <span class="label label-warning"></span>
+                                                                                                                                                                    {% elseif (entity.EtatrepGrh == 1) %}Validé
+                                                                                                                                                                        <span class="label label-success"></span>
+                                                                                                                                                                        {% elseif (entity.EtatrepGrh == 2) %}Refusé
+                                                                                                                                                                            <span class="label label-danger"></span>
+                                                                                                                                                                            <br>
+                                                                                                                                                                            {{entity.motifRejet}}
+                                                                                                                                                                            {% endif %}
+
+                                                                                                                                                                            </td>
+                                                                                                                                                                            {#
+                                                                                                                                                                            <td align="center">{% if(entity.Etatrepgrh == 0) %}
+                                                                                                                                                                                <span class="label label-warning">En attente</span>
+                                                                                                                                                                                {% elseif (entity.Etatrepgrh == 1) %}
+                                                                                                                                                                                <span class="label label-success">Validé</span>
+                                                                                                                                                                                {% elseif (entity.Etatrepgrh == 2) %}
+                                                                                                                                                                                <span class="label label-danger">Refusé</span>
+                                                                                                                                                                            {% endif %}
+
+                                                                                                                                                                        </td>#}
+                                                                                                                                                                            <td>
+                                                                                                                                                                                {% if
+    (((entity.Etatrepsupdir == 0) and (entity.SupDir == app.user.agent)) or
+    ((entity.Etatrepsupdir2 == 0) and (entity.SupDir2 == app.user.agent)) or
+    ((entity.Etatrepgrh == 0) and (entity.Grh == app.user.agent)) or deleguation == 0 )
+                                                                                                                                                                                %}
+
+                                                                                                                                                                                <div class="row">
+                                                                                                                                                                                    <a href="{{ path('demande_valid', { 'id': entity.id }) }}" class="btn btn-success col-md-12" data-confirm="Etes-vous <strong>certain</strong> de vouloir Valider cette demande ?">Valider la Demande</a>
+
+
+                                                                                                                                                                                    <a href="{{ path('demande_do_reject', { 'id': entity.id }) }}" class="btn btn-danger col-md-12">Rejeter la Demande</a>
+                                                                                                                                                                                </div>
+
+                                                                                                                                                                                <!--
+                                                                                                                                                                                <li>
+                                                                                                                                                                                    <a href="{{ path('demande_valid', { 'id': entity.id }) }}">Valider</a>
+                                                                                                                                                                                </li>
+                                                                                                                                                                                -->
+                                                                                                                                                                                {% endif %}
+                                                                                                                                                                                </td>
+                                                                                                                                                                            </tr>
+                                                                                                                                                                            {% endfor %}
+                                                                                                                                                                            </table>
+
+                                                                                                                                                                        </div>
+                                                                                                                                                                        <div role="tabpanel" class="tab-pane" id="serv4">
+
+                                                                                                                                                                            <table class="records_list table table-striped responsive-utilities jambo_table" width="100%">
+                                                                                                                                                                                <thead>
+                                                                                                                                                                                    <tr>
+                                                                                                                                                                                        <th rowspan="2">Date Demande</th>
+                                                                                                                                                                                        <th rowspan="2">Matricule</th>
+                                                                                                                                                                                        <th rowspan="2">Nom et Prénoms</th>
+                                                                                                                                                                                        <th rowspan="2">Direction</th>
+                                                                                                                                                                                        <th rowspan="2">Objet</th>
+
+                                                                                                                                                                                        <th colspan="3">ETAT VALIDATION</th>
+                                                                                                                                                                                        <th rowspan="2">Actions</th>
+                                                                                                                                                                                    </tr>
+                                                                                                                                                                                    <tr>
+                                                                                                                                                                                        <th>Chef de Section / Chef de Service</th>
+                                                                                                                                                                                        <th>Directeur / Chef de Service Rattaché</th>
+                                                                                                                                                                                        <th>Service Ressources Humaines</th>
+                                                                                                                                                                                    </tr>
+                                                                                                                                                                                </thead>
+                                                                                                                                                                                {% for entity in archive %}
+                                                                                                                                                                                    <tr>
+                                                                                                                                                                                        <td>{% if entity.datecreation %}{{ entity.datecreation|date('d-m-Y H:i:s') }}{% endif %}</td>
+                                                                                                                                                                                        <td>{{ entity.emmeteur.matricule }}</td>
+                                                                                                                                                                                        <td>{{ entity.emmeteur.nom }} {{ entity.emmeteur.prenoms }}</td>
+                                                                                                                                                                                        <td>{% if entity.emmeteur.Direction %} {{ entity.emmeteur.Direction.Sigle }} {% endif %}</td>
+                                                                                                                                                                                        <td>{{ entity.objet }}</td>
+
+                                                                                                                                                                                        <td align="center">{% if (entity.Etatrepsupdir == 0) %}En Attente{# Etat 0  En attente#}
+                                                                                                                                                                                            <span class="label label-warning"></span>
+                                                                                                                                                                                            {% elseif (entity.Etatrepsupdir == 1) %}Validé
+                                                                                                                                                                                                <span class="label label-success"></span>
+                                                                                                                                                                                                {% elseif (entity.Etatrepsupdir == 2) %}Refusé
+                                                                                                                                                                                                    <span class="label label-danger"></span>
+                                                                                                                                                                                                    <br>
+                                                                                                                                                                                                    {{entity.motifRejet}}
+                                                                                                                                                                                                    {% endif %}
+                                                                                                                                                                                                        {% if entity.dateRepSupDir %}<br>{{ entity.dateRepSupDir|date('d-m-Y H:i:s') }}{% endif %}
+                                                                                                                                                                                                    </td>
+
+                                                                                                                                                                                                    <td align="center">
+                                                                                                                                                                                                        {% if (entity.Etatrepsupdir2 == 0) and (entity.Etatrepsupdir == 1) %}En attente{# Etat 0  En attente#}
+                                                                                                                                                                                                        <span class="label label-warning"></span>
+                                                                                                                                                                                                        {% elseif (entity.Etatrepsupdir2 == 1) %}Validé
+                                                                                                                                                                                                        <span class="label label-success"></span>
+                                                                                                                                                                                                        {% elseif (entity.Etatrepsupdir2 == 2) %}Refusé
+                                                                                                                                                                                                        <span class="label label-danger"></span>
+                                                                                                                                                                                                        <br>
+                                                                                                                                                                                                        {{entity.motifRejet}}
+                                                                                                                                                                                                        {% endif %}
+                                                                                                                                                                                                        {% if entity.dateRepSupDir2 %}<br>{{ entity.dateRepSupDir2|date('d-m-Y H:i:s') }}{% endif %}
+
+                                                                                                                                                                                                    </td>
+                                                                                                                                                                                                    <td align="center">{% if(entity.Etatrepgrh == 0 and entity.etatRepSupDir2 == 1 ) %}En attente{# Etat 0  En attente#}
+                                                                                                                                                                                                        <span class="label label-warning"></span>
+                                                                                                                                                                                                        {% elseif (entity.Etatrepgrh == 1) %}Validé
+                                                                                                                                                                                                        <span class="label label-success"></span>
+                                                                                                                                                                                                        {% elseif (entity.Etatrepgrh == 2) %}Refusé
+                                                                                                                                                                                                        <span class="label label-danger"></span>
+                                                                                                                                                                                                        <br>
+                                                                                                                                                                                                        {{entity.motifRejet}}
+                                                                                                                                                                                                        {% endif %}
+                                                                                                                                                                                                        {% if entity.dateRepGrh %}<br>{{ entity.dateRepGrh|date('d-m-Y H:i:s') }}{% endif %}
+
+                                                                                                                                                                                                        </td>
+                                                                                                                                                                                                        <td>
+
+                                                                                                                                                                                                        {% if
+        (((entity.Etatrepsupdir == 0) and (entity.SupDir == app.user.agent)) or
+        ((entity.Etatrepsupdir2 == 0) and (entity.SupDir2 == app.user.agent)) or
+        ((entity.Etatrepgrh == 0) and (entity.Grh == app.user.agent)))
+                                                                                                                                                                                                        %}
+
+                                                                                                                                                                                                        <div class="row">
+                                                                                                                                                                                                        <a href="{{ path('demande_valid', { 'id': entity.id }) }}" class="btn btn-success col-md-12" data-confirm="Etes-vous <strong>certain</strong> de vouloir Valider cette demande ?">Valider la Demande</a>
+
+
+                                                                                                                                                                                                        <a href="{{ path('demande_do_reject', { 'id': entity.id }) }}" class="btn btn-danger col-md-12">Rejeter la Demande</a>
+                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                        {% endif %}
+
+                                                                                                                                                                                                        <!--
+                                                                                                                                                                                                        <li>
+                                                                                                                                                                                                        <a href="{{ path('demande_valid', { 'id': entity.id }) }}">Valider</a>
+                                                                                                                                                                                                        </li>
+                                                                                                                                                                                                        -->
+
+                                                                                                                                                                                                        </td>
+                                                                                                                                                                                                        </tr>
+                                                                                                                                                                                                        {% endfor %}
+                                                                                                                                                                                                        </table>
+                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                        {# fin RH #}
+
+                                                                                                                                                                                                        </table>
+
+                                                                                                                                                                                                    </div>
+
+
+
+                                                                                                                                                                                                    {% endif %}
+
+
+
+
+                                                                                                                                                                                                        {#dump(entities)#}
+
+
+                                                                                                                                                                                                        {% endblock %}
+
+                                                                                                                                                                                                        {% block datatableJs %}
+                                                                                                                                                                                                        {% include "::sections_app/datatableJs.html.twig" %}
+                                                                                                                                                                                                        {% endblock %}

@@ -1,0 +1,180 @@
+{% extends '::base.html.twig' %}
+{% block css %}
+   <link href="{{ asset('design/css/style.css') }}" rel="stylesheet"/>
+       <link rel="stylesheet" href="{{asset('ediligence/assets/css/bootstrap-select.min.css')}}">
+{% endblock %}
+
+
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+    <style>
+        th{
+            text-align: left !important;
+        }
+        .dataTables_filter{
+            width: auto !important;
+        }
+    </style>
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+{% block body -%}
+    <h1>Regularisation {% if id == 1 %}
+    emploi
+	{% elseif id == 2 %}
+		fonction
+    {% elseif id == 3 %}
+        contractuel
+	{% endif %}</h1>
+    <div class="row">
+        <div class="col-md-4 col-xs-4">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {% if id == 1 or id == 2 %}
+                 
+                {{ form_row(form.agent) }}
+                {{ form_row(form.new) }}
+                {{ form_row(form.dateNew) }}
+                {{ form_label(form.pjJustificatif.docFile, 'Certificat de prise de service DGE antérieur') }}
+                {{ form_widget(form.pjJustificatif.docFile) }}
+                {{ form_row(form.numNote) }}
+                {{ form_row(form.dateNumNote) }}
+            {% if id == 2 %}
+               
+               
+                {{ form_row(form.code_dg) }}
+                {{ form_row(form.code_dc) }}
+                {{ form_row(form.code_sd) }}
+                {{ form_row(form.code_sc) }} {% endif %}
+                {% if id == 1 %}
+                {{ form_label(form.pj.docFile, 'Note de service DRH SIGFAE') }}
+            	{% elseif id == 2 %}
+            		{{ form_label(form.pj.docFile, 'Décision dans la fonction') }}
+            	{% endif %}
+                {{ form_widget(form.pj.docFile) }}
+                
+                  {{ form_row(form._token) }}
+                  {% if id == 1 %}
+                <input type="submit" value="REGULARISER EMPLOI" class="btn btn-success">
+            	{% elseif id == 2 %}
+            		<input type="submit" value="REGULARISER FONCTION" class="btn btn-success">
+            	{% endif %}
+{#Début Contractuel->fonctionnaire#}
+            {% elseif id == 3 %}
+                 {{ form_row(form.agent) }}
+                 {{ form_row(form.new) }}
+                {{ form_row(form.dateNew) }}
+                {{ form_row(form.justificaton) }}
+                {{ form_label(form.pj.docFile, 'Note de service DRH SIGFAE') }}
+                {{ form_widget(form.pj.docFile) }}
+                {{ form_row(form.numNote) }}
+                {{ form_row(form.dateNumNote) }}
+                 <input type="submit" value="REGULARISER CONTRACTUEL" class="btn btn-success">
+            {% endif %}
+            {{ form_row(form._token) }}
+      </div>
+     <div class="col-md-8 table-responsive">
+                <table class="records_chk table table-striped responsive-utilities jambo_table table-responsive">
+               <thead>
+            <tr>
+              
+                <th>Nature</th> 
+                <th>Matricule</th>
+                <th>Nom et prénoms</th>
+                <th>Ancienne valeur </th>
+                <th>Nouvelle valeur</th>      
+                <th>Date d'effet</th>
+                <th>Statut</th>
+                
+                
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+           
+        {% for entity in listeimprimer %}
+          
+            <tr>
+                
+                <td>{% if entity['regularisation'] %}{{ entity['regularisation'].retourNature }}{% endif %}</td>
+           
+                <td>{% if entity['regularisation'] %}{{ entity['regularisation'].agent.matricule }}{% endif %}</td>
+                <td>{% if entity['regularisation'] %}{{ entity['regularisation'].agent.concatNom }}{% endif %}</td>
+                <td>{% if entity['regularisation'].nature == 3 %}Contractuel{% elseif entity.oldEmploi is defined and entity.oldEmploi != null %}{{ entity.oldEmploi }} {% elseif  entity.oldFonction is defined and entity.oldFonction != null %} {{entity.oldFonction}} {% endif %}
+                </td>
+                 <td>{% if entity['regularisation'].nature == 3 %}Fonctionnaire{% elseif entity.newEmploi is defined and entity.newEmploi != null %}{{ entity.newEmploi }} {% elseif  entity.newFonction is defined and entity.newFonction != null %} {{entity.newFonction}} {% endif %}</td>
+
+                <td>{% if entity['regularisation'] %}{{ entity['regularisation'].dateNew|date('d-m-Y')}}{% endif %}</td>
+                <td>
+    {% if entity['regularisation'].pjNumerise is not null %}
+        <span class="label label-success">NOTE SIGNÉE JOINTE</span>
+    {% else %}
+        <span class="label label-warning">EN COURS</span>
+    {% endif %}
+</td>
+<td>
+
+    {% if entity['regularisation'].pjNumerise is not null %}
+
+        <a class="btn btn-info"
+           target="_blank"
+           href="{{ asset('images/document/' ~ entity['regularisation'].pjNumerise.docName) }}">
+            Visualiser
+        </a>
+
+    {% else %}
+
+        <a class="btn btn-success"
+           href="{{ path('regularisation_print', {
+                'id': entity['regularisation'].id,
+                'nature': entity['regularisation'].nature
+           }) }}">
+            Imprimer
+        </a>
+
+        <a class="btn btn-success"
+           href="{{ path('regularisation_joindre', {
+                'id': entity['regularisation'].id
+           }) }}">
+            Joindre note signée
+        </a>
+
+    {% endif %}
+
+</td>
+               <!-- <td>
+            
+                        <a class="btn btn-success " href="{{ path('regularisation_print', { 'id': entity['regularisation'].id ,'nature':entity['regularisation'].nature}) }}">imprimer</a>
+                        {% if entity['regularisation'].nature != 3 %}{#<a href="{{path('regularisation_edit',{'id':entity['regularisation'].nature,'modif':entity['regularisation'].id })}}" class="btn btn-danger">Modifier</a>#}{% endif %}
+                        {% if entity['regularisation'].pjNumerise is null %}
+    <a class="btn btn-success"
+       href="{{ path('regularisation_joindre', { 'id': entity['regularisation'].id }) }}">
+        Joindre note signée
+    </a>
+{% endif %}
+                </td> -->
+            </tr>
+        {% endfor %}
+        </tbody>
+            </table>
+        </div>
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('regularisation') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+</div>
+{% endblock %}
+{% block javascript %}
+    <script src="{{ asset('ediligence/assets/js/bootstrap-select.min.js') }}"></script>
+
+<script type="text/javascript">
+$(".code_dc").chained(".code_dg");
+$(".code_sd").chained(".code_dc");
+$(".code_sc").chained(".code_sd");
+</script>
+
+{% endblock %}

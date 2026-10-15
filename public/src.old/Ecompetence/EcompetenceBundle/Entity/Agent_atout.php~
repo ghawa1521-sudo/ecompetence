@@ -1,0 +1,48 @@
+<?php
+
+namespace Ecompetence\EcompetenceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Agent_atout
+ *
+ * @ORM\Table()
+ * @ORM\Entity
+ */
+class Agent_atout
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Agent\AgentBundle\Entity\Agent")
+     * @ORM\JoinColumn(name="agent_id", referencedColumnName="id", nullable=true)
+     */
+    private $agent; 
+   
+     /**
+     * @ORM\ManyToOne(targetEntity="Atout")
+     * @ORM\JoinColumn(name="atout_id", referencedColumnName="id", nullable=true)
+    
+     */
+    private $langue; 
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+}
+

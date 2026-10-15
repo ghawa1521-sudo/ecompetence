@@ -1,0 +1,42 @@
+{% extends 'root.html.twig' %}
+{% import "macro/macro.html.twig" as macro %}
+{% block root %}
+
+    {# le header  #}
+    {#{{ dump(app.user.roles)}}
+   {{ dump(is_granted('ROLE_ADMIN'))}}#}
+    {#
+    {% if is_granted('ROLE_RESPO_SRHMG') %}
+    {% include "::sections_app/sidebar.html.twig" %}
+    {% elseif is_granted('ROLE_RESPO') %}
+        {% include "::sections_app/sidebar_respo.html.twig" %}
+    {% elseif is_granted('ROLE_AGENT')%}
+        {% include "::sections_app/sidebar_user.html.twig" %}
+    {% endif %}
+    #}
+    {{render(controller('AgentBundle:Default:notifAndMenu'))}}
+    
+
+    {# {% include "::sections_app/headerDist.html.twig" %}#}
+{#}    <div class="page animsition">
+        <div class="page-content container-fluid">
+            {# les messages flashs #}
+        {#    {% include "::sections_app/flashMessages.html.twig" %}
+            {# le contenu  #}
+
+
+        {#</div>
+    </div>
+    #
+    {# le footer #}
+
+{% endblock %}
+{% block header %}
+    {% include "::sections_app/header.html.twig" %}
+{% endblock %}
+{% block footer %}
+    {% include "::sections_app/footer.html.twig" %}
+{% endblock %}
+ {% block interim %}
+    {{ macro.bar_interim()}}
+{% endblock %}

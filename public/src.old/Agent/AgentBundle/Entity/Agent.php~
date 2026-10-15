@@ -1,0 +1,2418 @@
+<?php
+
+namespace Agent\AgentBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Agent\AgentBundle\Entity\Affecter;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
+/**
+ * Agent
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Agent\AgentBundle\Repository\AgentRepository")
+ * @Vich\Uploadable
+ * @UniqueEntity(fields={"email"})
+ * @UniqueEntity(fields={"matricule"})
+ */
+class Agent
+{
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="matricule", type="string", unique=true)
+     * @Assert\NotNull(message="renseignez le matricule")
+     */
+    private $matricule;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nom", type="string", length=50, nullable=true)
+     * @Assert\NotNull(message="renseignez le nom")
+     */
+    private $nom;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="prenoms", type="string", length=255, nullable=true)
+     */
+    private $prenoms;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nomJeuneFille", type="string", length=255, nullable=true)
+     */
+    private $nomJeuneFille;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateNaiss", type="date", nullable=true)
+     * @Assert\NotNull(message="renseignez la date de naissance ")
+     */
+    private $dateNaiss;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nomPere", type="string", length=255, nullable=true)
+     */
+    private $nomPere;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nomMere", type="string", length=255, nullable=true)
+     */
+    private $nomMere;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="nbEnf", type="integer", nullable=true)
+     */
+    private $nbEnf;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="indice", type="integer", nullable=true)
+     */
+    private $indice;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datePremierService", type="date", nullable=true)
+     */
+    private $datePremierService;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datePriseServiceDge", type="date", nullable=true)
+     */
+    private $datePriseServiceDge;
+    
+     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datePriseServicePromotion", type="date", nullable=true)
+     */
+    private $datePriseServicePromotion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="gradePromotion", type="string", length=4)
+     */
+    private $gradePromotion;
+
+    /**
+     * @Vich\UploadableField(mapping="agent_image", fileNameProperty="imageName")
+     *
+     * @var File
+     */
+    private $imageFile;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="agent_image", type="string", length=255, nullable=true)
+     */
+    private $agent_image;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @var string
+     */
+    private $imageName;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     *
+     * @var \DateTime
+     */
+    private $updatedAt;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="agent_cv", type="string", length=255, nullable=true)
+     */
+    private $agent_cv;
+
+    /**
+     * @Vich\UploadableField(mapping="agent_cv", fileNameProperty="cvName")
+     *
+     * @var file $cvFile
+     */
+    private $cvFile;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @var string
+     */
+    private $cvName;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     *
+     * @var \DateTime
+     */
+    private $updatedCvAt;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="telBur", type="string", length=20, nullable=true)
+     */
+    private $telBur;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="telPort", type="string", length=50, nullable=true)
+     */
+    private $telPort;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="telDom", type="string", length=20, nullable=true)
+     */
+    private $telDom;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="quartier", type="string", length=255, nullable=true)
+     */
+    private $quartier;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nomConjoint", type="string", length=255, nullable=true)
+     */
+    private $nomConjoint;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="telConjoint", type="string", length=20, nullable=true)
+     */
+    private $telConjoint;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="descriComp", type="text", nullable=true)
+     */
+    private $descriComp;
+
+    /**
+     * @var string
+     * @Assert\NotNull(message="renseignez la personne à contacter en cas d'urgence")
+     * @ORM\Column(name="persUrgent1", type="string", length=255, nullable=true)
+     */
+    private $persUrgent1;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="persUrgent2", type="string", length=255, nullable=true)
+     */
+    private $persUrgent2;
+
+    /**
+     * @var string
+     * @Assert\NotNull(message="renseignez le téléphone de la personne à contacter en cas d'urgence")
+     * @ORM\Column(name="telUrgent1", type="string", length=20, nullable=true)
+     */
+    private $telUrgent1;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="telUrgent2", type="string", length=20, nullable=true)
+     */
+    private $telUrgent2;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     * @Assert\Email(
+     *     message = "Ce mail  '{{ value }}' est invalide",
+     *     checkMX = false
+     * )
+     *
+     */
+    private $email;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numPoste", type="string", length=20, nullable=true)
+     */
+    private $numPoste;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Provenance")
+     * @ORM\JoinColumn(name="id_provenance", referencedColumnName="id", nullable=true)
+     */
+    protected $Provenance;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Type")
+     * @ORM\JoinColumn(name="id_type", referencedColumnName="id")
+     * @Assert\NotNull(message="renseignez le type d'agent")
+     */
+    protected $Type;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Fonction")
+     * @ORM\JoinColumn(name="id_fonction", referencedColumnName="id")
+     * @Assert\NotNull(message="renseignez la fonction")
+     */
+    protected $Fonction;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Emploi")
+     * @ORM\JoinColumn(name="id_emploi", referencedColumnName="id")
+     * @Assert\NotNull(message="renseignez l'emploi")
+     */
+    protected $Emploi;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Titre")
+     * @ORM\JoinColumn(name="id_titre", referencedColumnName="id")
+     */
+    protected $Titre;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Classe")
+     * @ORM\JoinColumn(name="id_classe", referencedColumnName="id")
+     */
+    protected $Classe;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Lieu_Naissance")
+     * @ORM\JoinColumn(name="id_lieuNaiss", referencedColumnName="id")
+     * @Assert\NotNull(message="renseignez le de lieu de naissance")
+     */
+    protected $Lieu_Naissance;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Promotion")
+     * @ORM\JoinColumn(name="id_promotion", referencedColumnName="id")
+     */
+    protected $Promotion;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Syndicat")
+     * @ORM\JoinColumn(name="id_syndicat", referencedColumnName="id")
+     */
+    protected $Syndicat;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Sexe")
+     * @ORM\JoinColumn(name="id_sexe", referencedColumnName="id")
+     * @Assert\NotNull(message="renseignez le genre")
+     */
+    protected $Sexe;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Direction")
+     * @ORM\JoinColumn(name="id_direction", referencedColumnName="id")
+     */
+    protected $Direction;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Echelon")
+     * @ORM\JoinColumn(name="id_echelon", referencedColumnName="id")
+     */
+    protected $Echelon;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Users\UsersBundle\Entity\Users", mappedBy="agent",cascade={"persist"})
+     */
+    private $users;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SituationMatrimoniale")
+     * @ORM\JoinColumn(name="id_situationMatrimoniale", referencedColumnName="id")
+     */
+    protected $situationMatri;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="PositionMilitaire")
+     * @ORM\JoinColumn(name="id_situationMili", referencedColumnName="id")
+     */
+    protected $situationMili;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Affecter", inversedBy="agent")
+     * @ORM\JoinColumn(name="id_affecter", referencedColumnName="id")
+     */
+    protected $affecter;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="DirectionGenerale")
+     * @ORM\JoinColumn(name="CODE_DG", referencedColumnName="CODE_DG", nullable=true)
+     */
+    protected $code_dg;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SousDirection")
+     * @ORM\JoinColumn(name="CODE_SD", referencedColumnName="CODE_SD", nullable=true)
+     */
+    protected $code_sd;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="ServiceDirection")
+     * @ORM\JoinColumn(name="CODE_SC", referencedColumnName="CODE_SC", nullable=true)
+     */
+    protected $code_sc;
+
+    /**
+     * @var string
+     * @ORM\Column(name="CODE_DC", type="string", length=10, nullable=true)
+     */
+    private $code_dc;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="emailPerso", type="string", length=255, nullable=true)
+     * @Assert\Email(
+     *     message = "The email '{{ value }}' is not a valid email.",
+     *     checkMX = false
+     * )
+     */
+    private $emailPerso;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateAutoModifEnreg", type="datetime", nullable=true)
+     *
+     *
+     */
+    private $dateAutoModifEnreg;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Agent")
+     * @ORM\JoinColumn(name="matModifEnreg", referencedColumnName="id", nullable=true)
+     */
+    private $matModifEnreg;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateAutoAjoutEnreg", type="datetime", nullable=true)
+     *
+     *
+     */
+    private $dateAutoAjoutEnreg;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Agent")
+     * @ORM\JoinColumn(name="matAjoutEnreg", referencedColumnName="id", nullable=true)
+     */
+    private $matAjoutEnreg;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Adresse", mappedBy="agent",cascade={"persist"})
+     */
+    protected $adresse;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Ecompetence\EcompetenceBundle\Entity\Responsabilite_extra", mappedBy="agent",cascade={"persist"})
+     */
+    protected $responsabilite;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="confirms", type="integer", nullable=true)
+     */
+    public $confirms = 0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="position", type="integer", nullable=true)
+     */
+    public $position = 0;
+
+    /**
+     * One Agent has One Detachement.
+     * @ORM\OneToOne(targetEntity="Detachement", mappedBy="agent")
+     */
+    private $detachement;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nomSignature", type="string", length=255, nullable=true)
+     *
+     */
+    private $nomSignature;
+    
+    /**
+    * @ORM\OneToMany(targetEntity="Ecompetence\EcompetenceBundle\Entity\Experience", cascade={"persist", "remove"}, mappedBy="agent")
+    * @ORM\JoinColumn(name="experience_id", referencedColumnName="id", nullable=true)
+    */
+    public $experience;
+
+    /**
+    * @ORM\OneToMany(targetEntity="Ecompetence\EcompetenceBundle\Entity\Formation", cascade={"persist", "remove"}, mappedBy="agent")
+    * @ORM\JoinColumn(name="formation_id", referencedColumnName="id", nullable=true)
+    */
+    
+   Public $formation;
+ 
+    /**
+     * @var gbaneBundle\Entity\FonctionAssimilees
+     *
+     * @ORM\ManyToOne(targetEntity="gbaneBundle\Entity\FonctionAssimilees")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="FonctionAssimilees", referencedColumnName="id", nullable=true)
+     * })
+     */
+    
+    private $FonctionAssimilees;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="anciennete_agent", type="integer", nullable=false)
+     */
+    private $ancienneteAgent = '0';
+
+
+    public function __toString()
+    {
+        return $this->getMatricule();
+    }
+
+    public function getDroitMutationInterne()
+    {
+        if ($this->getUsers()->hasRole('ROLE_RESPO') and in_array($this->getFonction()->getId(), array(5, 6, 7, 9, 10))) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Get prenoms
+     *
+     * @return string
+     */
+    public function getPrenoms()
+    {
+        //dump($this->getSexe()->getId());die;
+        if ($this->getSexe() and $this->getSexe()->getId() == 2) {
+            if ($this->getSituationMatri() and $this->getSituationMatri()->getId() == 2 or (empty($this->prenoms) or $this->prenoms == null)) {
+
+                $x = explode(" ", $this->nomJeuneFille);
+                $x1 = $x[0];
+                $x2 = strlen($x1);
+                $x3 = substr($this->nomJeuneFille, $x2);
+                if (!empty($x3)) {
+                    $x4 = trim(strtoupper($x1) . ' ' . trim(ucwords(mb_strtolower($x3))));
+                } else {
+                    $x4 = trim(strtoupper($x1));
+                }
+                //return ' née ' . trim(ucwords(mb_strtolower($this->nomJeuneFille)));
+                return ' née ' . $x4;
+            } else {
+                return trim(ucwords(mb_strtolower($this->prenoms)));
+            }
+        } elseif (!empty($this->prenoms)) {
+            return trim(ucwords(mb_strtolower($this->prenoms)));
+        } else {
+            return trim(ucwords(mb_strtolower($this->prenoms)));
+        }
+    }
+
+    public function concatNom()
+    {
+
+        $prenoms = null;
+        $tprenoms = explode(' ', $this->getPrenoms());
+
+        foreach ($tprenoms as $pren) {
+            $tprens = null;
+            $tprens = explode('-', $pren);
+            $prentiret = null;
+            if (count($tprens) > 1) {
+                foreach ($tprens as $p) {
+                    if ($prentiret != null) {
+                        $prentiret .= '-' . trim(ucwords(mb_strtolower($p)));
+                    } else {
+                        $prentiret = trim(ucwords(mb_strtolower($p)));
+                    }
+                }
+                $prenoms .= ' ' . $prentiret;
+            } else {
+                $prenoms .= ' ' . $pren;
+            }
+        }
+        return $this->nom . ' ' . $prenoms;
+    }
+
+    /*
+    public function concatNom() {
+
+        return $this->nom . ' ' . $this->getPrenoms();
+    }
+    */
+
+    public function concatNommatricule()
+    {
+
+        return $this->nom . ' ' . $this->getPrenoms() . ' | ' . $this->getMatricule();
+    }
+
+    public function getCivilite()
+    {
+        //die;
+        if ($this->getSexe()->getId() == 1) {
+            $tab_civilite = array('libsitf' => 'Monsieur ', 'codesitf' => 'M. ');
+        } elseif ($this->getSexe()->getId() == 2) {
+            $tab_civilite = array('libsitf' => 'Mademoiselle ', 'codesitf' => 'Mlle. ');
+            if ($this->getSituationMatri()) {
+                if (in_array($this->getSituationMatri()->getId(), array(2, 3, 4)) /* || $this->getFonction()->getId() > 2 */) {
+                    $tab_civilite = array('libsitf' => 'Madame ', 'codesitf' => 'Mme. ');
+                }
+            } else {
+                $tab_civilite = array('libsitf' => 'Madame ', 'codesitf' => 'Mme. ');
+            }
+        }
+        return $tab_civilite;
+    }
+
+    public function retour_service()
+    {
+        $tab_imput = '';
+        $lib = '';
+
+        if (!empty($this->getCodeSc())) {
+            // $service = (empty($this->getCodeSc())? null: $this->getCodeSc()->getCodeSc());
+            $service = $this->getCodeSc()->getCodeSc();
+            $tab_imput .= $service . ',';
+            $lib .= $this->getCodeSc()->getAbrv() . ',';
+            //$abrv='SC';
+        }
+        if (!empty($this->getCodeSd())) {
+            //$service = (empty($this->getCodeSd())? null: $this->getCodeSd()->getCodeSd());
+            $service = $this->getCodeSd()->getCodeSd();
+            $tab_imput .= $service . ',';
+            $lib .= $this->getCodeSd()->getAbrv() . ',';
+            //$abrv='SD';
+        }
+        if (!empty($this->getCodeDc())) {
+            //$service = (empty($this->getCodeDc())? null: $this->getCodeDc());
+            $service = $this->getCodeDc();
+            $tab_imput .= $service . ',';
+            //$abrv='DC';
+            $lib .= $this->getDirection()->getSigle() . ',';
+        }
+        if (!empty($this->getCodeDg())) {
+            //$service = (empty($this->getCodeDg())? null: $this->getCodeDg()->getCodeDg());
+            $service = $this->getCodeDg()->getCodeDg();
+            $tab_imput .= $service . ',';
+            $lib .= $this->getCodeDg()->getAbrv() . ',';
+            //$abrv='DG';
+        }
+        //  var_dump(array('abrv'=>$abrv, 'service'=>$service, 'tab_imput'=>$tab_imput));
+        // if(empty($abrv)){$abrv='';}
+        // if(empty($service)){$service='';}
+        if (empty($tab_imput)) {
+            $tab_imput = '';
+            $abrv = '';
+            $service = '';
+            $lib = '';
+        } else {
+            $tab_imput = substr($tab_imput, 0, strlen($tab_imput) - 1);
+            $service = explode(',', $tab_imput)[0];
+            $abrv = substr($service, 0, 2);
+            $lib = explode(',', $lib);
+        }
+
+        return array('abrv' => $abrv, 'service' => $service, 'tab_imput' => $tab_imput, 'lib' => $lib[0], 'tab_lib' => @array_reverse(array_filter($lib)));
+    }
+
+    public function getRoleEdiligence()
+    {
+        $tab1 = $this->getUsers()->getRoles();
+        $tab2 = array($this->getFonction()->getTypeCompte()->getRoleBase());
+        $tab = array_merge($tab1, $tab2);
+        //$tab=array('rolebase'=>$this->getUsers()->getRoles(), 'roleedilig'=>$this->getFonction()->getTypeCompte()->getRoleBase() );//roles attribues
+        return $tab;
+    }
+
+    public function getServiceActuel($param = null, $n = null)
+    {
+
+
+        $service = null;
+        $niveau = 0;
+        if ($this->getCodeSc()) {
+            $service = $this->getCodeSc();
+            $niveau = 0;
+        } elseif ($this->getCodeSd()) {
+            $service = $this->getCodeSd();
+            $niveau = 1;
+        } elseif ($this->getDirection()) {
+            $service = $this->getDirection();
+            $niveau = 2;
+        } elseif ($this->getCodeDg()) {
+            $service = $this->getCodeDg();
+            $niveau = 3;
+        }
+        //die;
+        if ($n) {
+            if ($n == 0) {
+                $service = $this->getCodeSc();
+            } elseif ($n == 1) {
+                $service = $this->getCodeSd();
+            } elseif ($n == 2) {
+                $service = $this->getDirection();
+            } elseif ($n == 3) {
+                $service = $this->getCodeDg();
+            }
+            $service = $service;
+        }
+        if ($param > 0 and !$n) {
+            $service = $niveau;
+        }
+        return $service;
+    }
+
+    public function getServiceActuelWhere($alias, $param)
+    {
+        $service = null;
+        if ($this->getCodeSc()) {
+            $req = $alias . ".code_sd = :" . $param;
+        } elseif ($this->getCodeSd()) {
+            $req = $alias . ".code_sd = :" . $param;
+        } elseif ($this->getDirection()) {
+            $req = $alias . ".Direction = :" . $param;
+            //} elseif ($this->getCodeDg()) {
+        } else {
+            $req = $alias . ".code_dg = :" . $param;
+        }
+        return $req;
+    }
+
+    public function getEtatPosition()
+    {
+        if ($this->getPosition() == 2) {
+            $retour = "Retraite";
+        } elseif ($this->getPosition() == 1) {
+            $retour = "Disponibilité";
+        } else {
+            $retour = "En activité";
+        }
+        return $retour;
+    }
+
+    /**
+     * Set matricule
+     *
+     * @param string $matricule
+     *
+     * @return Agent
+     */
+    public function setMatricule($matricule)
+    {
+        $this->matricule = $matricule;
+
+        return $this;
+    }
+
+    /**
+     * Get matricule
+     *
+     * @return string
+     */
+    public function getMatricule()
+    {
+        return $this->matricule;
+    }
+
+    /**
+     * Set nom
+     *
+     * @param string $nom
+     *
+     * @return Agent
+     */
+    public function setNom($nom)
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * Get nom
+     *
+     * @return string
+     */
+    public function getNom()
+    {
+        return $this->nom;
+    }
+
+    /**
+     * Set prenoms
+     *
+     * @param string $prenoms
+     *
+     * @return Agent
+     */
+    public function setPrenoms($prenoms)
+    {
+        $this->prenoms = $prenoms;
+
+        return $this;
+    }
+
+    /**
+     * Set nomJeuneFille
+     *
+     * @param string $nomJeuneFille
+     *
+     * @return Agent
+     */
+    public function setNomJeuneFille($nomJeuneFille)
+    {
+        $this->nomJeuneFille = $nomJeuneFille;
+
+        return $this;
+    }
+
+    /**
+     * Get nomJeuneFille
+     *
+     * @return string
+     */
+    public function getNomJeuneFille()
+    {
+        return $this->nomJeuneFille;
+    }
+
+    /**
+     * Set dateNaiss
+     *
+     * @param \DateTime $dateNaiss
+     *
+     * @return Agent
+     */
+    public function setDateNaiss($dateNaiss)
+    {
+        $this->dateNaiss = $dateNaiss;
+
+        return $this;
+    }
+
+    /**
+     * Get dateNaiss
+     *
+     * @return \DateTime
+     */
+    public function getDateNaiss()
+    {
+        return $this->dateNaiss;
+    }
+
+    /**
+     * Set nomPere
+     *
+     * @param string $nomPere
+     *
+     * @return Agent
+     */
+    public function setNomPere($nomPere)
+    {
+        $this->nomPere = $nomPere;
+
+        return $this;
+    }
+
+    /**
+     * Get nomPere
+     *
+     * @return string
+     */
+    public function getNomPere()
+    {
+        return $this->nomPere;
+    }
+
+    /**
+     * Set nomMere
+     *
+     * @param string $nomMere
+     *
+     * @return Agent
+     */
+    public function setNomMere($nomMere)
+    {
+        $this->nomMere = $nomMere;
+
+        return $this;
+    }
+
+    /**
+     * Get nomMere
+     *
+     * @return string
+     */
+    public function getNomMere()
+    {
+        return $this->nomMere;
+    }
+
+    /**
+     * Set nbEnf
+     *
+     * @param integer $nbEnf
+     *
+     * @return Agent
+     */
+    public function setNbEnf($nbEnf)
+    {
+        $this->nbEnf = $nbEnf;
+
+        return $this;
+    }
+
+    /**
+     * Get nbEnf
+     *
+     * @return integer
+     */
+    public function getNbEnf()
+    {
+        return $this->nbEnf;
+    }
+
+    /**
+     * Set indice
+     *
+     * @param integer $indice
+     *
+     * @return Agent
+     */
+    public function setIndice($indice)
+    {
+        $this->indice = $indice;
+
+        return $this;
+    }
+
+    /**
+     * Get indice
+     *
+     * @return integer
+     */
+    public function getIndice()
+    {
+        return $this->indice;
+    }
+
+    /**
+     * Set datePremierService
+     *
+     * @param \DateTime $datePremierService
+     *
+     * @return Agent
+     */
+    public function setDatePremierService($datePremierService)
+    {
+        $this->datePremierService = $datePremierService;
+
+        return $this;
+    }
+
+    /**
+     * Get datePremierService
+     *
+     * @return \DateTime
+     */
+    public function getDatePremierService()
+    {
+        return $this->datePremierService;
+    }
+
+    /**
+     * Set datePriseServiceDge
+     *
+     * @param \DateTime $datePriseServiceDge
+     *
+     * @return Agent
+     */
+    public function setDatePriseServiceDge($datePriseServiceDge)
+    {
+        $this->datePriseServiceDge = $datePriseServiceDge;
+
+        return $this;
+    }
+
+    /**
+     * Get datePriseServiceDge
+     *
+     * @return \DateTime
+     */
+    public function getDatePriseServiceDge()
+    {
+        return $this->datePriseServiceDge;
+    }
+
+    /**
+     * Set agentImage
+     *
+     * @param string $agentImage
+     *
+     * @return Agent
+     */
+    public function setAgentImage($agentImage)
+    {
+        $this->agent_image = $agentImage;
+
+        return $this;
+    }
+
+    /**
+     * Get agentImage
+     *
+     * @return string
+     */
+    public function getAgentImage()
+    {
+        return $this->agent_image;
+    }
+
+    /**
+     * Set imageName
+     *
+     * @param string $imageName
+     *
+     * @return Agent
+     */
+    public function setImageName($imageName)
+    {
+        $this->imageName = $imageName;
+
+        return $this;
+    }
+
+    /**
+     * Get imageName
+     *
+     * @return string
+     */
+    public function getImageName()
+    {
+        return $this->imageName;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return Agent
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Set agentCv
+     *
+     * @param string $agentCv
+     *
+     * @return Agent
+     */
+    public function setAgentCv($agentCv)
+    {
+        $this->agent_cv = $agentCv;
+
+        return $this;
+    }
+
+    /**
+     * Get agentCv
+     *
+     * @return string
+     */
+    public function getAgentCv()
+    {
+        return $this->agent_cv;
+    }
+
+    /**
+     * Set cvName
+     *
+     * @param string $cvName
+     *
+     * @return Agent
+     */
+    public function setCvName($cvName)
+    {
+        $this->cvName = $cvName;
+
+        return $this;
+    }
+
+    /**
+     * Get cvName
+     *
+     * @return string
+     */
+    public function getCvName()
+    {
+        return $this->cvName;
+    }
+
+    /**
+     * Set updatedCvAt
+     *
+     * @param \DateTime $updatedCvAt
+     *
+     * @return Agent
+     */
+    public function setUpdatedCvAt($updatedCvAt)
+    {
+        $this->updatedCvAt = $updatedCvAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedCvAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedCvAt()
+    {
+        return $this->updatedCvAt;
+    }
+
+    /**
+     * Set telBur
+     *
+     * @param string $telBur
+     *
+     * @return Agent
+     */
+    public function setTelBur($telBur)
+    {
+        $this->telBur = $telBur;
+
+        return $this;
+    }
+
+    /**
+     * Get telBur
+     *
+     * @return string
+     */
+    public function getTelBur()
+    {
+        return $this->telBur;
+    }
+
+    /**
+     * Set telPort
+     *
+     * @param string $telPort
+     *
+     * @return Agent
+     */
+    public function setTelPort($telPort)
+    {
+        $this->telPort = $telPort;
+
+        return $this;
+    }
+
+    /**
+     * Get telPort
+     *
+     * @return string
+     */
+    public function getTelPort()
+    {
+        return $this->telPort;
+    }
+
+    /**
+     * Set telDom
+     *
+     * @param string $telDom
+     *
+     * @return Agent
+     */
+    public function setTelDom($telDom)
+    {
+        $this->telDom = $telDom;
+
+        return $this;
+    }
+
+    /**
+     * Get telDom
+     *
+     * @return string
+     */
+    public function getTelDom()
+    {
+        return $this->telDom;
+    }
+
+    /**
+     * Set quartier
+     *
+     * @param string $quartier
+     *
+     * @return Agent
+     */
+    public function setQuartier($quartier)
+    {
+        $this->quartier = $quartier;
+
+        return $this;
+    }
+
+    /**
+     * Get quartier
+     *
+     * @return string
+     */
+    public function getQuartier()
+    {
+        return $this->quartier;
+    }
+
+    /**
+     * Set nomConjoint
+     *
+     * @param string $nomConjoint
+     *
+     * @return Agent
+     */
+    public function setNomConjoint($nomConjoint)
+    {
+        $this->nomConjoint = $nomConjoint;
+
+        return $this;
+    }
+
+    /**
+     * Get nomConjoint
+     *
+     * @return string
+     */
+    public function getNomConjoint()
+    {
+        return $this->nomConjoint;
+    }
+
+    /**
+     * Set telConjoint
+     *
+     * @param string $telConjoint
+     *
+     * @return Agent
+     */
+    public function setTelConjoint($telConjoint)
+    {
+        $this->telConjoint = $telConjoint;
+
+        return $this;
+    }
+
+    /**
+     * Get telConjoint
+     *
+     * @return string
+     */
+    public function getTelConjoint()
+    {
+        return $this->telConjoint;
+    }
+
+    /**
+     * Set descriComp
+     *
+     * @param string $descriComp
+     *
+     * @return Agent
+     */
+    public function setDescriComp($descriComp)
+    {
+        $this->descriComp = $descriComp;
+
+        return $this;
+    }
+
+    /**
+     * Get descriComp
+     *
+     * @return string
+     */
+    public function getDescriComp()
+    {
+        return $this->descriComp;
+    }
+
+    /**
+     * Set telUrgent1
+     *
+     * @param string $telUrgent1
+     *
+     * @return Agent
+     */
+    public function setTelUrgent1($telUrgent1)
+    {
+        $this->telUrgent1 = $telUrgent1;
+
+        return $this;
+    }
+
+    /**
+     * Get telUrgent1
+     *
+     * @return string
+     */
+    public function getTelUrgent1()
+    {
+        return $this->telUrgent1;
+    }
+
+    /**
+     * Set telUrgent2
+     *
+     * @param string $telUrgent2
+     *
+     * @return Agent
+     */
+    public function setTelUrgent2($telUrgent2)
+    {
+        $this->telUrgent2 = $telUrgent2;
+
+        return $this;
+    }
+
+    /**
+     * Get telUrgent2
+     *
+     * @return string
+     */
+    public function getTelUrgent2()
+    {
+        return $this->telUrgent2;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return Agent
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set numPoste
+     *
+     * @param string $numPoste
+     *
+     * @return Agent
+     */
+    public function setNumPoste($numPoste)
+    {
+        $this->numPoste = $numPoste;
+
+        return $this;
+    }
+
+    /**
+     * Get numPoste
+     *
+     * @return string
+     */
+    public function getNumPoste()
+    {
+        return $this->numPoste;
+    }
+
+    /**
+     * Set provenance
+     *
+     * @param \Agent\AgentBundle\Entity\Provenance $provenance
+     *
+     * @return Agent
+     */
+    public function setProvenance(\Agent\AgentBundle\Entity\Provenance $provenance = null)
+    {
+        $this->Provenance = $provenance;
+
+        return $this;
+    }
+
+    /**
+     * Get provenance
+     *
+     * @return \Agent\AgentBundle\Entity\Provenance
+     */
+    public function getProvenance()
+    {
+        return $this->Provenance;
+    }
+
+    /**
+     * Set type
+     *
+     * @param \Agent\AgentBundle\Entity\Type $type
+     *
+     * @return Agent
+     */
+    public function setType(\Agent\AgentBundle\Entity\Type $type = null)
+    {
+        $this->Type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return \Agent\AgentBundle\Entity\Type
+     */
+    public function getType()
+    {
+        return $this->Type;
+    }
+
+    /**
+     * Set fonction
+     *
+     * @param \Agent\AgentBundle\Entity\Fonction $fonction
+     *
+     * @return Agent
+     */
+    public function setFonction(\Agent\AgentBundle\Entity\Fonction $fonction = null)
+    {
+        $this->Fonction = $fonction;
+
+        return $this;
+    }
+
+    /**
+     * Get fonction
+     *
+     * @return \Agent\AgentBundle\Entity\Fonction
+     */
+    public function getFonction()
+    {
+        return $this->Fonction;
+    }
+
+    /**
+     * Set emploi
+     *
+     * @param \Agent\AgentBundle\Entity\Emploi $emploi
+     *
+     * @return Agent
+     */
+    public function setEmploi(\Agent\AgentBundle\Entity\Emploi $emploi = null)
+    {
+        $this->Emploi = $emploi;
+
+        return $this;
+    }
+
+    /**
+     * Get emploi
+     *
+     * @return \Agent\AgentBundle\Entity\Emploi
+     */
+    public function getEmploi()
+    {
+        return $this->Emploi;
+    }
+
+    /**
+     * Set titre
+     *
+     * @param \Agent\AgentBundle\Entity\Titre $titre
+     *
+     * @return Agent
+     */
+    public function setTitre(\Agent\AgentBundle\Entity\Titre $titre = null)
+    {
+        $this->Titre = $titre;
+
+        return $this;
+    }
+
+    /**
+     * Get titre
+     *
+     * @return \Agent\AgentBundle\Entity\Titre
+     */
+    public function getTitre()
+    {
+        return $this->Titre;
+    }
+
+    /**
+     * Set classe
+     *
+     * @param \Agent\AgentBundle\Entity\Classe $classe
+     *
+     * @return Agent
+     */
+    public function setClasse(\Agent\AgentBundle\Entity\Classe $classe = null)
+    {
+        $this->Classe = $classe;
+
+        return $this;
+    }
+
+    /**
+     * Get classe
+     *
+     * @return \Agent\AgentBundle\Entity\Classe
+     */
+    public function getClasse()
+    {
+        return $this->Classe;
+    }
+
+    /**
+     * Set lieuNaissance
+     *
+     * @param \Agent\AgentBundle\Entity\Lieu_Naissance $lieuNaissance
+     *
+     * @return Agent
+     */
+    public function setLieuNaissance(\Agent\AgentBundle\Entity\Lieu_Naissance $lieuNaissance = null)
+    {
+        $this->Lieu_Naissance = $lieuNaissance;
+
+        return $this;
+    }
+
+    /**
+     * Get lieuNaissance
+     *
+     * @return \Agent\AgentBundle\Entity\Lieu_Naissance
+     */
+    public function getLieuNaissance()
+    {
+        return $this->Lieu_Naissance;
+    }
+
+    /**
+     * Set promotion
+     *
+     * @param \Agent\AgentBundle\Entity\Promotion $promotion
+     *
+     * @return Agent
+     */
+    public function setPromotion(\Agent\AgentBundle\Entity\Promotion $promotion = null)
+    {
+        $this->Promotion = $promotion;
+
+        return $this;
+    }
+
+    /**
+     * Get promotion
+     *
+     * @return \Agent\AgentBundle\Entity\Promotion
+     */
+    public function getPromotion()
+    {
+        return $this->Promotion;
+    }
+
+    /**
+     * Set syndicat
+     *
+     * @param \Agent\AgentBundle\Entity\Syndicat $syndicat
+     *
+     * @return Agent
+     */
+    public function setSyndicat(\Agent\AgentBundle\Entity\Syndicat $syndicat = null)
+    {
+        $this->Syndicat = $syndicat;
+
+        return $this;
+    }
+
+    /**
+     * Get syndicat
+     *
+     * @return \Agent\AgentBundle\Entity\Syndicat
+     */
+    public function getSyndicat()
+    {
+        return $this->Syndicat;
+    }
+
+    /**
+     * Set sexe
+     *
+     * @param \Agent\AgentBundle\Entity\Sexe $sexe
+     *
+     * @return Agent
+     */
+    public function setSexe(\Agent\AgentBundle\Entity\Sexe $sexe = null)
+    {
+        $this->Sexe = $sexe;
+
+        return $this;
+    }
+
+    /**
+     * Get sexe
+     *
+     * @return \Agent\AgentBundle\Entity\Sexe
+     */
+    public function getSexe()
+    {
+        return $this->Sexe;
+    }
+
+    /**
+     * Set direction
+     *
+     * @param \Agent\AgentBundle\Entity\Direction $direction
+     *
+     * @return Agent
+     */
+    public function setDirection(\Agent\AgentBundle\Entity\Direction $direction = null)
+    {
+        $this->Direction = $direction;
+
+        return $this;
+    }
+
+    /**
+     * Get direction
+     *
+     * @return \Agent\AgentBundle\Entity\Direction
+     */
+    public function getDirection()
+    {
+        return $this->Direction;
+    }
+
+    /**
+     * Set echelon
+     *
+     * @param \Agent\AgentBundle\Entity\Echelon $echelon
+     *
+     * @return Agent
+     */
+    public function setEchelon(\Agent\AgentBundle\Entity\Echelon $echelon = null)
+    {
+        $this->Echelon = $echelon;
+
+        return $this;
+    }
+
+    /**
+     * Get echelon
+     *
+     * @return \Agent\AgentBundle\Entity\Echelon
+     */
+    public function getEchelon()
+    {
+        return $this->Echelon;
+    }
+
+    /**
+     * Set users
+     *
+     * @param \Users\UsersBundle\Entity\Users $users
+     *
+     * @return Agent
+     */
+    public function setUsers(\Users\UsersBundle\Entity\Users $users = null)
+    {
+        $this->users = $users;
+
+        return $this;
+    }
+
+    /**
+     * Get users
+     *
+     * @return \Users\UsersBundle\Entity\Users
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
+
+    /**
+     * Set situationMatri
+     *
+     * @param \Agent\AgentBundle\Entity\SituationMatrimoniale $situationMatri
+     *
+     * @return Agent
+     */
+    public function setSituationMatri(\Agent\AgentBundle\Entity\SituationMatrimoniale $situationMatri = null)
+    {
+        $this->situationMatri = $situationMatri;
+
+        return $this;
+    }
+
+    /**
+     * Get situationMatri
+     *
+     * @return \Agent\AgentBundle\Entity\SituationMatrimoniale
+     */
+    public function getSituationMatri()
+    {
+        return $this->situationMatri;
+    }
+
+    /**
+     * Set situationMili
+     *
+     * @param \Agent\AgentBundle\Entity\PositionMilitaire $situationMili
+     *
+     * @return Agent
+     */
+    public function setSituationMili(\Agent\AgentBundle\Entity\PositionMilitaire $situationMili = null)
+    {
+        $this->situationMili = $situationMili;
+
+        return $this;
+    }
+
+    /**
+     * Get situationMili
+     *
+     * @return \Agent\AgentBundle\Entity\PositionMilitaire
+     */
+    public function getSituationMili()
+    {
+        return $this->situationMili;
+    }
+
+    /**
+     *
+     * @return Agent
+     */
+    public function setImageFile(File $image = null)
+    {
+        $this->imageFile = $image;
+
+        if ($image) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTime('now');
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return File
+     */
+    public function getImageFile()
+    {
+        return $this->imageFile;
+    }
+
+    /**
+     *
+     * @return Agent
+     */
+    public function setCvFile(File $image = null)
+    {
+        $this->cvFile = $image;
+
+        if ($image) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedCvAt = new \DateTime('now');
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return File
+     */
+    public function getCvFile()
+    {
+        return $this->cvFile;
+    }
+
+    /**
+     * Set affecter
+     *
+     * @param \Agent\AgentBundle\Entity\Affecter $affecter
+     *
+     * @return Agent
+     */
+    public function setAffecter(\Agent\AgentBundle\Entity\Affecter $affecter = null)
+    {
+        $this->affecter = $affecter;
+
+        return $this;
+    }
+
+    /**
+     * Get affecter
+     *
+     * @return \Agent\AgentBundle\Entity\Affecter
+     */
+    public function getAffecter()
+    {
+        return $this->affecter;
+    }
+
+    /**
+     * Set codeDg
+     *
+     * @param \Agent\AgentBundle\Entity\DirectionGenerale $codeDg
+     *
+     * @return Agent
+     */
+    public function setCodeDg(\Agent\AgentBundle\Entity\DirectionGenerale $codeDg = null)
+    {
+        $this->code_dg = $codeDg;
+
+        return $this;
+    }
+
+    /**
+     * Get codeDg
+     *
+     * @return \Agent\AgentBundle\Entity\DirectionGenerale
+     */
+    public function getCodeDg()
+    {
+        return $this->code_dg;
+    }
+
+    /**
+     * Set codeSd
+     *
+     * @param \Agent\AgentBundle\Entity\SousDirection $codeSd
+     *
+     * @return Agent
+     */
+    public function setCodeSd(\Agent\AgentBundle\Entity\SousDirection $codeSd = null)
+    {
+        $this->code_sd = $codeSd;
+
+        return $this;
+    }
+
+    /**
+     * Get codeSd
+     *
+     * @return \Agent\AgentBundle\Entity\SousDirection
+     */
+    public function getCodeSd()
+    {
+        return $this->code_sd;
+    }
+
+    /**
+     * Set codeSc
+     *
+     * @param \Agent\AgentBundle\Entity\ServiceDirection $codeSc
+     *
+     * @return Agent
+     */
+    public function setCodeSc(\Agent\AgentBundle\Entity\ServiceDirection $codeSc = null)
+    {
+        $this->code_sc = $codeSc;
+
+        return $this;
+    }
+
+    /**
+     * Get codeSc
+     *
+     * @return \Agent\AgentBundle\Entity\ServiceDirection
+     */
+    public function getCodeSc()
+    {
+        return $this->code_sc;
+    }
+
+    /**
+     * Set codeDc
+     *
+     * @param string $codeDc
+     *
+     * @return Agent
+     */
+    public function setCodeDc($codeDc)
+    {
+        $this->code_dc = $codeDc;
+
+        return $this;
+    }
+
+    /**
+     * Get codeDc
+     *
+     * @return string
+     */
+    public function getCodeDc()
+    {
+        return $this->code_dc;
+    }
+
+    /**
+     * Set persUrgent1
+     *
+     * @param string $persUrgent1
+     *
+     * @return Agent
+     */
+    public function setPersUrgent1($persUrgent1)
+    {
+        $this->persUrgent1 = $persUrgent1;
+
+        return $this;
+    }
+
+    /**
+     * Get persUrgent1
+     *
+     * @return string
+     */
+    public function getPersUrgent1()
+    {
+        return $this->persUrgent1;
+    }
+
+    /**
+     * Set persUrgent2
+     *
+     * @param string $persUrgent2
+     *
+     * @return Agent
+     */
+    public function setPersUrgent2($persUrgent2)
+    {
+        $this->persUrgent2 = $persUrgent2;
+
+        return $this;
+    }
+
+    /**
+     * Get persUrgent2
+     *
+     * @return string
+     */
+    public function getPersUrgent2()
+    {
+        return $this->persUrgent2;
+    }
+
+    public function getCpAndNom()
+    {
+        if (!empty($this->code_dc)) {
+            $var = 'DGA' . ' ' . $this->nom . ' ' . $this->prenoms;
+        } else {
+            $var = 'DGE' . ' ' . $this->nom . ' ' . $this->prenoms;
+        }
+
+        return $var;
+    }
+
+    /**
+     * Set emailPerso
+     *
+     * @param string $emailPerso
+     *
+     * @return Agent
+     */
+    public function setEmailPerso($emailPerso)
+    {
+        $this->emailPerso = $emailPerso;
+
+        return $this;
+    }
+
+    /**
+     * Get emailPerso
+     *
+     * @return string
+     */
+    public function getEmailPerso()
+    {
+        return $this->emailPerso;
+    }
+
+    /**
+     * Set dateAutoModifEnreg
+     *
+     * @param \DateTime $dateAutoModifEnreg
+     *
+     * @return Agent
+     */
+    public function setDateAutoModifEnreg($dateAutoModifEnreg)
+    {
+        $this->dateAutoModifEnreg = $dateAutoModifEnreg;
+
+        return $this;
+    }
+
+    /**
+     * Get dateAutoModifEnreg
+     *
+     * @return \DateTime
+     */
+    public function getDateAutoModifEnreg()
+    {
+        return $this->dateAutoModifEnreg;
+    }
+
+    /**
+     * Set matModifEnreg
+     *
+     * @param \Agent\AgentBundle\Entity\Agent $matModifEnreg
+     *
+     * @return Agent
+     */
+    public function setMatModifEnreg(\Agent\AgentBundle\Entity\Agent $matModifEnreg = null)
+    {
+        $this->matModifEnreg = $matModifEnreg;
+
+        return $this;
+    }
+
+    /**
+     * Get matModifEnreg
+     *
+     * @return \Agent\AgentBundle\Entity\Agent
+     */
+    public function getMatModifEnreg()
+    {
+        return $this->matModifEnreg;
+    }
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->adresse = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->dateAutoAjoutEnreg = new \DateTime('now');
+        $this->datepositionagent = new \DateTime('now');
+    }
+
+    /**
+     * Add adresse
+     *
+     * @param \Agent\AgentBundle\Entity\Adresse $adresse
+     *
+     * @return Agent
+     */
+    public function addAdresse(\Agent\AgentBundle\Entity\Adresse $adresse)
+    {
+        $this->adresse[] = $adresse;
+        $adresse->setAgent($this);
+        return $this;
+    }
+
+    /**
+     * Remove adresse
+     *
+     * @param \Agent\AgentBundle\Entity\Adresse $adresse
+     */
+    public function removeAdresse(\Agent\AgentBundle\Entity\Adresse $adresse)
+    {
+        $this->adresse->removeElement($adresse);
+    }
+
+    /**
+     * Get adresse
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAdresse()
+    {
+        return $this->adresse;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set dateAutoAjoutEnreg
+     *
+     * @param \DateTime $dateAutoAjoutEnreg
+     *
+     * @return Agent
+     */
+    public function setDateAutoAjoutEnreg($dateAutoAjoutEnreg)
+    {
+        $this->dateAutoAjoutEnreg = $dateAutoAjoutEnreg;
+
+        return $this;
+    }
+
+    /**
+     * Get dateAutoAjoutEnreg
+     *
+     * @return \DateTime
+     */
+    public function getDateAutoAjoutEnreg()
+    {
+        return $this->dateAutoAjoutEnreg;
+    }
+
+    /**
+     * Set matAjoutEnreg
+     *
+     * @param \Agent\AgentBundle\Entity\Agent $matAjoutEnreg
+     *
+     * @return Agent
+     */
+    public function setMatAjoutEnreg(\Agent\AgentBundle\Entity\Agent $matAjoutEnreg = null)
+    {
+        $this->matAjoutEnreg = $matAjoutEnreg;
+
+        return $this;
+    }
+
+    /**
+     * Get matAjoutEnreg
+     *
+     * @return \Agent\AgentBundle\Entity\Agent
+     */
+    public function getMatAjoutEnreg()
+    {
+        return $this->matAjoutEnreg;
+    }
+
+    /**
+     * Set confirm
+     *
+     * @param integer $confirm
+     *
+     * @return Agent
+     */
+    public function setConfirms($confirms)
+    {
+        $this->confirms = $confirms;
+
+        return $this;
+    }
+
+    /**
+     * Get confirm
+     *
+     * @return integer
+     */
+    public function getConfirms()
+    {
+        return $this->confirms;
+    }
+
+    /**
+     * Set position
+     *
+     * @param integer $position
+     *
+     * @return Agent
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+
+        return $this;
+    }
+
+    /**
+     * Get position
+     *
+     * @return integer
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * Set detachement
+     *
+     * @param \Agent\AgentBundle\Entity\Detachement $detachement
+     *
+     * @return Agent
+     */
+    public function setDetachement(\Agent\AgentBundle\Entity\Detachement $detachement = null)
+    {
+        $this->detachement = $detachement;
+
+        return $this;
+    }
+
+    /**
+     * Get detachement
+     *
+     * @return \Agent\AgentBundle\Entity\Detachement
+     */
+    public function getDetachement()
+    {
+        return $this->detachement;
+    }
+
+    /**
+     * Set nomSignature
+     *
+     * @param string $nomSignature
+     *
+     * @return Agent
+     */
+    public function setNomSignature($nomSignature)
+    {
+        $this->nomSignature = $nomSignature;
+
+        return $this;
+    }
+
+    /**
+     * Get nomSignature
+     *
+     * @return string
+     */
+    public function getNomSignature()
+    {
+        return $this->nomSignature;
+    }
+
+    /**
+     * Add experience
+     *
+     * @param \Ecompetence\EcompetenceBundle\Entity\Experience $experience
+     *
+     * @return Agent
+     */
+    public function addExperience(\Ecompetence\EcompetenceBundle\Entity\Experience $experience)
+    {
+        $this->experience[] = $experience;
+
+        return $this;
+    }
+
+    /**
+     * Remove experience
+     *
+     * @param \Ecompetence\EcompetenceBundle\Entity\Experience $experience
+     */
+    public function removeExperience(\Ecompetence\EcompetenceBundle\Entity\Experience $experience)
+    {
+        $this->experience->removeElement($experience);
+    }
+
+    /**
+     * Get experience
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getExperience()
+    {
+        return $this->experience;
+    }
+
+    /**
+     * Add formation
+     *
+     * @param \Ecompetence\EcompetenceBundle\Entity\Formation $formation
+     *
+     * @return Agent
+     */
+    public function addFormation(\Ecompetence\EcompetenceBundle\Entity\Formation $formation)
+    {
+        $this->formation[] = $formation;
+
+        return $this;
+    }
+
+    /**
+     * Remove formation
+     *
+     * @param \Ecompetence\EcompetenceBundle\Entity\Formation $formation
+     */
+    public function removeFormation(\Ecompetence\EcompetenceBundle\Entity\Formation $formation)
+    {
+        $this->formation->removeElement($formation);
+    }
+
+    /**
+     * Get formation
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFormation()
+    {
+        return $this->formation;
+    }
+
+    /**
+     * Add responsabilite
+     *
+     * @param \Ecompetence\EcompetenceBundle\Entity\Responsabilite_extra $responsabilite
+     *
+     * @return Agent
+     */
+    public function addResponsabilite(\Ecompetence\EcompetenceBundle\Entity\Responsabilite_extra $responsabilite)
+    {
+        $this->responsabilite[] = $responsabilite;
+        $responsabilite->setAgent($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove responsabilite
+     *
+     * @param \Ecompetence\EcompetenceBundle\Entity\Responsabilite_extra $responsabilite
+     */
+    public function removeResponsabilite(\Ecompetence\EcompetenceBundle\Entity\Responsabilite_extra $responsabilite)
+    {
+        $this->responsabilite->removeElement($responsabilite);
+    }
+
+    /**
+     * Get responsabilite
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getResponsabilite()
+    {
+        return $this->responsabilite;
+    }
+
+   
+
+    
+
+    /**
+     * Set fonctionAssimilees
+     *
+     * @param \gbaneBundle\Entity\FonctionAssimilees $fonctionAssimilees
+     *
+     * @return Agent
+     */
+    public function setFonctionAssimilees(\gbaneBundle\Entity\FonctionAssimilees $fonctionAssimilees = null)
+    {
+        $this->FonctionAssimilees = $fonctionAssimilees;
+
+        return $this;
+    }
+
+    /**
+     * Get fonctionAssimilees
+     *
+     * @return \gbaneBundle\Entity\FonctionAssimilees
+     */
+    public function getFonctionAssimilees()
+    {
+        return $this->FonctionAssimilees;
+    }
+
+    /**
+     * Set ancienneteAgent
+     *
+     * @param integer $ancienneteAgent
+     *
+     * @return Agent
+     */
+    public function setAncienneteAgent($ancienneteAgent)
+    {
+        $this->ancienneteAgent = $ancienneteAgent;
+
+        return $this;
+    }
+
+    /**
+     * Get ancienneteAgent
+     *
+     * @return integer
+     */
+    public function getAncienneteAgent()
+    {
+        return $this->ancienneteAgent;
+    }
+}

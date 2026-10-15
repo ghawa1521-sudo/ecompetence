@@ -1,0 +1,70 @@
+{% extends app.request.attributes.get('_route') == 'demande_print' ? '::gabarit_print.html.twig' : '::gabarit_preview.html.twig' %}
+
+{% block bootstrap %}
+    {% if app.request.attributes.get('_route') == 'demande_print' %}
+        <link href="{{ app.request.getSchemeAndHttpHost() ~ asset('design/css/bootstrap.min.css') }}" rel="stylesheet"/>
+    {% endif %}
+{% endblock %}
+
+{% block service %}
+    {{ "MINISTERE DE L’ECONOMIE, DU PLAN ET DU DEVELOPPEMENT"|upper }} <br>
+    {{ "DIRECTION GENERALE DE L’ECONOMIE"|upper }}
+{% endblock %}
+
+{% block sousService %}{% endblock %}
+
+{% block ref %}
+    DECISION n°:................../MEPF/DGE/SRHMG du portant nomination de {{ agent.nom }} {{ agent.prenoms }} en qualité de {{ agent.fonctionAssimilees }}
+{% endblock %}
+
+{% block titre %}
+<div align="center" style="font-size:30px; font-family:CenturyFontBold !important; border: solid; border-radius: 15px; width: 60%; margin: auto;">
+    DECISION DE PROMOTION
+</div>
+{% endblock %}
+
+{% block datePdf %}{# Fait à Abidjan le {{ "now"|date('d-m-Y') }} #}{% endblock %}
+
+{% block contenuPdf %}
+<div class="row">
+    <table border="0" width="100%" style="line-height:1.8em; font-size: 12pt;">
+        <tbody>
+            <tr>
+                <td valign="top" width="20%" class="col-md-2">Je soussigné</td>
+                <td valign="top" class="col-md-10" width="80%">:
+                    LE DIRECTEUR GENERAL DE l’ECONOMIE
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    Vu la constitution ;<br>
+                    Vu le décret n°2016-600 du 03 août 2016 portant organisation du Ministère auprès du Premier Ministre chargé de l'Economie et des Finances tel que modifié par les décrets n°2018-478 du 16 mai 2018 et n°2020-52 du 15 janvier 2020 ;<br>
+                    Vu le décret n°2021-176 du 26 mars 2021 portant nomination du Premier Ministre Chef du Gouvernement ;<br>
+                    Vu le décret n°2021-181 du 06 avril 2021 portant nomination des Membres du Gouvernement ;<br>
+                    Vu le décret n°2021-190 du 28 avril 2021 portant attributions des Membres du Gouvernement ;<br>
+                    Vu l'arrêté n°409/MPMEF/DGE du 25 novembre 2016 portant organisation de la Direction Générale de l'Economie ;<br>
+                    Considérant les nécessités de service<br>
+                    DECIDE<br>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    Article 1 : {{ agent.nom }} {{ agent.prenoms }} matricule {{ agent.matricule }} est nommé(e) en qualité de .<br>
+                    Article 2 : La présente décision qui annule toute disposition antérieure contraire prend effet à compter de sa date de signature.
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block ampliationPdf %}
+    Amplification :
+    <ul>
+        <li>MEFCÆI 1</li>
+        <li>MEFOGE 1</li>
+        <li>MEF ORH 1</li>
+        <li>DGEGRHMO 1</li>
+        <li>Dossier 1</li>
+    </ul>
+{% endblock %}

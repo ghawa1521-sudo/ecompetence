@@ -1,0 +1,102 @@
+{% extends '::base.html.twig' %}
+{% block css %}
+    <link href="{{ asset('design/css/style.css') }}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{{asset('ediligence/assets/css/bootstrap-select.min.css')}}">
+{% endblock %}
+
+
+
+
+{% block body -%}
+    <div class="row" >
+
+        
+        <div class="col-md-push-3 col-md-6">
+            <div align="center">
+                <h3>Demande d'acte pour l'agent</h3>
+            </div>
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {#{{ form(form) }}#}
+            {{ form_row(form.emmeteur)}}
+            {{ form_label(form.typeDemande)}} <label style="color:red;"><bold>***</bold></label>
+                    {{ form_errors(form.typeDemande) }}
+                    {{ form_widget(form.typeDemande, {'attr' : {'onClick' : 'openBlock()'}}) }}
+            <div id="masquer" style="display:none;">
+
+
+                {{ form_label(form.dateDeb)}}
+                {{ form_errors(form.dateDeb) }}
+                {{ form_widget(form.dateDeb) }}
+
+                {{ form_label(form.dateFin)}}
+                {{ form_errors(form.dateFin) }}
+                {{ form_widget(form.dateFin) }}
+
+                {{ form_label(form.destination)}}
+                {{ form_errors(form.destination) }}
+                {{ form_widget(form.destination) }}
+
+            </div>
+            {{ form_label(form.objet)}}
+            {{ form_errors(form.objet) }}
+            {{ form_widget(form.objet) }}
+
+
+            {{ form_row(form.submit)}}
+            {{ form_row(form._token) }}
+        </div>
+        <div class="col-md-push-3 col-md-3" style="color:red; margin-top:50px; background-color:#ededed;text-align:justify;">
+            {#***<br> <b>Pour tous les types de demandes :</b> <br>
+            <ul>
+                <li>Vous ne pouvez pas faire de demandes lorsque vous avez déjà une demande en cours pour ce type;</li> <br>
+                <li>Vous ne pouvez pas faire de demandes lorsque votre quota est atteint.</li>
+            </ul>
+            <b>Pour les autorisations d'absences :</b> <br>
+            <ul>
+                <li>Faire sa demande au moins trois (03) jours avant son depart ;</li> <br>
+                <li style="text-align:justify;">La période d'absence ne peut excéder (03) jours consécutifs y compris les week-end et les jours fériés;</li> <br>
+
+            </ul>
+
+#}
+        </div>
+    </div>
+  <hr>
+ <div align="center">   <a class="btn btn-danger" href="{{ path('demande_initier_liste') }}">AFFICHER MES DEMANDES INITIEES</label></a> </div>
+    {#
+            <ul class="record_actions">
+        <li>
+            <a href="{{ path('demande') }}">
+                Back to the list
+            </a>
+        </li>
+    </ul>#}
+{% endblock %}
+{% block javascript %}
+    <script src="{{ asset('ediligence/assets/js/bootstrap-select.min.js') }}"></script>
+    <script type="text/javascript">
+        $(function () {
+            // On cache le div a afficher :
+            //  $("#masquer").hide();
+            openBlock();
+        });
+        function openBlock()
+        {
+            combo = document.getElementById('demandes_demandesbundle_demande_typeDemande');
+            //  alert(combo.value);
+            if (combo.value != "")
+            {
+                if (combo.value == 1)
+                {
+                    document.getElementById('masquer').style.display = 'block';
+                } else {
+                    document.getElementById('masquer').style.display = 'none';
+                }
+            } else {
+                document.getElementById('masquer').style.display = 'none';
+            }
+
+        }
+    </script>
+{% endblock %}

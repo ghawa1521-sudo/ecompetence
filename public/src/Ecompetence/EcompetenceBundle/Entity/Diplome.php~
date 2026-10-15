@@ -1,0 +1,40 @@
+<?php
+
+namespace Ecompetence\EcompetenceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Diplome
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Ecompetence\EcompetenceBundle\Entity\DiplomeRepository")
+ */
+class Diplome
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="LibDiplome", type="string", length=255)
+     */
+    private $libDiplome;
+    
+      /**
+     * @ORM\ManyToOne(targetEntity="Niveau")
+     * @ORM\JoinColumn(name="niveau_id", referencedColumnName="id", nullable=true)
+     */
+    private $niveau; 
+   
+
+    
+    
+}

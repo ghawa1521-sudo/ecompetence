@@ -1,0 +1,48 @@
+<?php
+
+namespace Ediligence\EdiligenceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Tspref
+ *
+ * @ORM\Table(name="tspref", uniqueConstraints={@ORM\UniqueConstraint(name="Code_spref", columns={"CODE_SPREF"})})
+ * @ORM\Entity
+ */
+class Tspref
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="ID", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="CODE_SPREF", type="string", length=20, nullable=false)
+     */
+    private $codeSpref;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="LIB_SPREF", type="string", length=200, nullable=false)
+     */
+    private $libSpref;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="ACTIF", type="integer", nullable=false)
+     */
+    private $actif = '0';
+
+    
+
+
+}

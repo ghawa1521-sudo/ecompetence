@@ -1,0 +1,30 @@
+direction:
+    path:     /
+    defaults: { _controller: "AgentBundle:Direction:index" }
+
+direction_show:
+    path:     /{id}/show
+    defaults: { _controller: "AgentBundle:Direction:show" }
+
+direction_new:
+    path:     /new
+    defaults: { _controller: "AgentBundle:Direction:new" }
+
+direction_create:
+    path:     /create
+    defaults: { _controller: "AgentBundle:Direction:create" }
+    methods:  POST
+
+direction_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AgentBundle:Direction:edit" }
+
+direction_update:
+    path:     /{id}/update
+    defaults: { _controller: "AgentBundle:Direction:update" }
+    methods:  [POST, PUT]
+
+direction_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AgentBundle:Direction:delete" }
+    methods:  [POST, DELETE]

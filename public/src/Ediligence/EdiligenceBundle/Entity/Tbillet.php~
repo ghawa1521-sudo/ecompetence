@@ -1,0 +1,64 @@
+<?php
+
+namespace Ediligence\EdiligenceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Tbillet
+ *
+ * @ORM\Table(name="tbillet")
+ * @ORM\Entity
+ */
+class Tbillet
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+    
+    
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="dateBillet", type="integer", nullable=false)
+     */
+    private $datebillet;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="txtBillet", type="text", length=65535, nullable=false)
+     */
+    private $txtbillet;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="matricule", type="integer", nullable=false)
+     */
+    private $matricule;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="pjBillet", type="integer", nullable=false)
+     */
+    private $pjbillet;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="CodeCourrier", type="integer", nullable=false)
+     */
+    private $codecourrier;
+
+    
+
+
+}

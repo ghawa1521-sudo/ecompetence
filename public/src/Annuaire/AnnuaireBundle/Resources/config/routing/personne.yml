@@ -1,0 +1,37 @@
+personne:
+    path:     /
+    defaults: { _controller: "AnnuaireBundle:personne:index" }
+
+personne_show:
+    path:     /{id}/show
+    defaults: { _controller: "AnnuaireBundle:personne:show" }
+
+personne_new:
+    path:     /new
+    defaults: { _controller: "AnnuaireBundle:personne:new" }
+
+personne_create:
+    path:     /create
+    defaults: { _controller: "AnnuaireBundle:personne:create" }
+    methods:  POST
+
+personne_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AnnuaireBundle:personne:edit" }
+
+personne_update:
+    path:     /{id}/update
+    defaults: { _controller: "AnnuaireBundle:personne:update" }
+    methods:  [POST, PUT]
+
+personne_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AnnuaireBundle:personne:delete" }
+    methods:  [POST, DELETE]
+
+recherche_ville_ajax:
+    path:     /{id}/villeajax
+    defaults: { _controller: "AnnuaireBundle:personne:villeajax" }
+    methods:  GET
+    options:
+        expose: true

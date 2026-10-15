@@ -1,0 +1,120 @@
+{% extends '::ediligence/base.html.twig' %}
+{% block stylesheets %}
+    <style>
+        .vertical-text {
+            transform: rotate(-90deg);
+            
+            
+        }
+        </style>
+
+    {% endblock %}
+    {% block body %}
+
+    </script>
+
+    <div class="content-header">
+    <div class="header-section">
+        <h1><i class="gi gi-envelope"></i> Dossier<br><small>Mes diligences</small></h1>
+    </div>
+</div>
+<ul class="breadcrumb breadcrumb-top">
+    <li>Actions</li>
+    <li><a href="">Evaluation du P.A.S</a></li>
+</ul>
+<div class="block full">
+    <div class="block-title">
+        <h2><strong>EVALUER</strong> P.A.S</h2>
+    </div>
+    {% set countperiode = pas.naturepas.getMonths()|length %} 
+    {% set colspan = countperiode + 7 %}
+    <div class="table-responsive">
+        <form method="post" action="{{path('pas_evaluer',{id:pas.id})}}">
+            <table class="table table-vcenter table-condensed table-bordered table-responsive">
+                <thead style="background-color: #DFF2FF; color: black; ">
+                    <tr style="font-size: 1.0em; font-weight: bold; text-align: center; border-color: black;">
+                        <td rowspan="2">Résultat</td>
+                        <td rowspan="2">Actions</td>
+                        <td rowspan="2">Indicateurs</td>
+                        <td rowspan="2">Sources de vérification</td>
+                        <td rowspan="2">Budget Estimatif</td>
+                        <td colspan="{{countperiode}}" width="20">Calendrier</td>
+                        <td rowspan="2">Responsable</td>
+                        <td rowspan="2" width="10%">Partenaires d'exécution</td>
+                    </tr>
+                    <tr>  {% for repartition in pas.naturepas.getMonths()%}
+                        <td class="vertical-text"  style="font-size: 6pt; margin: 0px; font-weight: bold; font-style: italic;">{{repartition}}</td>
+                        {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key, axe in pas.axes %}
+                            <tr style="background-color: #EDEDED; color: black;" border='1'>
+                                <td colspan="{{colspan}}" align="center"><strong>Axe strategique {{(key + 1)}}: {{axe.libelle}}</strong></td>
+                            </tr>
+                            {% for key1, obj in axe.objectifs  %}
+                                <tr height='30'>
+                                    <td colspan="{{colspan}}" align="left"><strong><u>OBJECTIF STRATEGIQUE {{(key1 + 1)}}</u>: {{obj.libelleobj}}</strong></td>
+                                </tr>
+
+                                {% for key2, act in obj.actions  %}
+                                    <tr height='30'>
+                                        <td><input type="text" class="form-control" name="resultat[{{axe.id}}][{{obj.id}}][{{act.id}}]" placeholder="RESULTATS"></td>
+                                        <td align="left">Action {{(key2 + 1)}}: {{act.libelleaction}}</td>
+                                        <td><input type="text" class="form-control" name="indicateur[{{axe.id}}][{{obj.id}}][{{act.id}}]" placeholder="INDICATEURS"></td>
+                                        <td><input type="text" class="form-control" name="source[{{axe.id}}][{{obj.id}}][{{act.id}}]" placeholder="SOURCES VERIFICATION"></td>
+                                        <td><input type="number" class="form-control" name="budget[{{axe.id}}][{{obj.id}}][{{act.id}}]" placeholder="BUDGET ESTIMATIF"></td>
+                                            {% for w in 1..countperiode  %}
+
+                                            <td><input type="checkbox" name="calendar[{{axe.id}}][{{obj.id}}][{{act.id}}][]" value="{{w}}" class="form-control"></td>
+                                                {#<td><input type="checkbox" name="calendar[{{axe.id}}][{{obj.id}}][{{act.id}}][]" value="2" class="form-control"></td>
+                                                <td><input type="checkbox" name="calendar[{{axe.id}}][{{obj.id}}][{{act.id}}][]" value="3" class="form-control"></td>#}
+                                            {% endfor %}    
+
+                                        <td align="center">{% if pas.direction.sigle is defined and pas.direction.sigle!=null%}
+                                            {{pas.direction.sigle}}
+
+                                        {% else %}
+                                            <input type="text" class="form-control" name="responsable[{{axe.id}}][{{obj.id}}][{{act.id}}]" placeholder="RESPONSABLES">
+
+                                            {% endif %}
+                                            </td>
+                                            <td><input type="text" class="form-control" name="partenaire[{{axe.id}}][{{obj.id}}][{{act.id}}]" placeholder="PARTENAIRES"></td>
+                                        </tr>
+                                        {% endfor %}
+
+                                            {% endfor %}
+
+                                                {% endfor %}
+
+                                                </tbody>
+                                                <tr>
+                                                    <td colspan="{{colspan}}">
+
+                                                        <button type="submit" class="btn btn-success  form-control ">Enregistrer</button>
+
+                                                    </td>
+                                                </tr>
+                                            </table>
+
+                                        </form>
+                                    </div>
+                                    <ul>
+                                    </ul>
+                                </div>
+
+                                {{dump(request)}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                {% endblock %}

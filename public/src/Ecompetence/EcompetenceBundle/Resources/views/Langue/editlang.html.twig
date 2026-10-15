@@ -1,0 +1,36 @@
+{# src/EcompetenceBundle/Resources/views/Langue/edit.html.twig #}
+
+
+
+{% extends '::base.html.twig' %}
+
+
+
+    {% block body %}
+
+        <h2>Modifier la langue</h2>
+
+    
+
+        {{ form_start(edit_form) }}
+
+            {{ form_widget(edit_form) }}
+
+            <input type="submit" value="Mettre à jour" style="background-color: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;" />
+             <button type="button" class="btn btn-warning" onclick="window.history.back();">
+                        <i class="fa fa-arrow-left"></i> Retour
+                        </button> 
+
+        {{ form_end(edit_form) }}
+
+        
+
+        <br>
+
+       
+
+      {#   <a href="{{ path('langue') }}" class="btn btn-default">Retour à la liste</a> #}
+
+    {% endblock %}
+
+    

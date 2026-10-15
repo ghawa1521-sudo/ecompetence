@@ -1,0 +1,199 @@
+{% import "::ediligence/macro/macro.html.twig" as macro %}
+<li class="dropdown">
+    <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
+        <span class="fa fa-bell-o" style="font-size:25px"></span>
+        <i class="fa fa-angle-down"></i>
+        <span class="label label-danger label-indicator animation-floating">{{notifications.compteur}}</span>
+    </a>
+    <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
+
+        <li class="dropdown-header text-center">Notifications</li>
+        <li>
+            {% for notif in notifications.cour_arr %}
+                <div class="alert alert-success alert-alt">
+                    <div>
+                        <small>Nouveau courrier</small>
+                        <br>
+                        {{ notif.objet|raw|striptags|slice(0, 150) }}
+                    </div>
+                    <a href="{{ path('courrier_imput', { 'id': notif.id }) }}" ><span class="glyphicon glyphicon-inbox"></span> Imputer</a>
+                    <br>
+                    <small>
+                        {% if notif.dateCreat %}{{ notif.dateCreat|ago}}{% endif %}
+                    </small>
+                </div>
+            {% endfor %}
+            {% for notif in notifications.diligrecu %}
+                <div class="alert alert-success alert-alt">
+                    <div>
+                        <small>Diligence reçue ({{macro.remaining_time(notif[0].delaiImput|date('d-m-Y'), 'now'|date('d-m-Y'))}} restant)
+                            <br>De {{ notif[0].matriculeImput.nom }} {{ notif[0].matriculeImput.prenoms }}
+                        </small>
+
+                        <br>
+                        {{ notif[0].courrier.objet|raw|striptags|slice(0, 150) }}
+                        <br>
+
+                    </div>
+
+                    {% if notif[0].nbrePers > 1 %}
+                        {% if notif[0].etatImput >=1 %} 
+                            {#<a href="{{ path('courrier_cstraiter', { 'id': notif[0].id }) }}" data-toggle="tooltip" title="Traiter" class="btn btn-danger"><i class="fa fa-pencil"></i></a> #} 
+                            <a href="{{ path('courrier_cstraiter', { 'id': notif[0].id }) }}" ><span class="glyphicon glyphicon-inbox"></span> Traiter</a>
+                        {% else %}
+                            {% if (notif.etatreception!=null or notif.etatreception==null) %} 
+                                {#<a href="{{ path('courrier_cstraiter', { 'id': notif[0].id }) }}" data-toggle="tooltip" title="Traiter" class="btn btn-danger"><i class="fa fa-pencil"></i></a>#}
+                                <a href="{{ path('courrier_cstraiter', { 'id': notif[0].id }) }}" ><span class="glyphicon glyphicon-inbox"></span> Traiter</a>
+                            {% else %} 
+                                {% if app.user.agent.fonction.id == 8 %}
+                                    {#<a href="{{ path('courrier_cstraiter', { 'id': notif[0].id }) }}" data-toggle="tooltip" title="Traiter" class="btn btn-danger"><i class="fa fa-pencil"></i></a> #} 
+                                    <a href="{{ path('courrier_cstraiter', { 'id': notif[0].id }) }}" ><span class="glyphicon glyphicon-inbox"></span> Traiter</a>
+                                {% endif%}
+                            {% endif%}  
+                        {% endif%} 
+
+                    {% else%} 
+                        {% if notif[0].etatImput >=1 %} 
+                            {# <a href="{{ path('courrier_cstraiter', { 'id': notif[0].id }) }}" data-toggle="tooltip" title="Traiter" class="btn btn-danger"><i class="fa fa-pencil"></i></a> #} 
+                            <a href="{{ path('courrier_cstraiter', { 'id': notif[0].id }) }}" ><span class="glyphicon glyphicon-inbox"></span> Traiter</a>
+                        {% else %}
+                            {% if (notif.etatreception!=null or notif.etatreception==null) %} 
+                                {#<a href="{{ path('courrier_cstraiter', { 'id': notif[0].id }) }}" data-toggle="tooltip" title="Traiter" class="btn btn-danger"><i class="fa fa-pencil"></i></a>#}
+                                <a href="{{ path('courrier_cstraiter', { 'id': notif[0].id }) }}" ><span class="glyphicon glyphicon-inbox"></span> Traiter</a>
+                            {% else %} 
+                                {% if app.user.agent.fonction.id == 8 %}
+                                    {#<a href="{{ path('courrier_cstraiter', { 'id': notif[0].id }) }}" data-toggle="tooltip" title="Traiter" class="btn btn-danger"><i class="fa fa-pencil"></i></a> #}
+                                    <a href="{{ path('courrier_cstraiter', { 'id': notif[0].id }) }}" ><span class="glyphicon glyphicon-inbox"></span> Traiter</a>
+                                {% endif%}
+                            {% endif%}  
+                        {% endif%} 
+
+                    {% endif%}  
+
+                    {% if notif.coord==1 and notif[0].nbrePers>1 %} 
+                        {#  <a href="{{ path('coordinateur_compile', { 'id': notif[0].id }) }}" data-toggle="tooltip" title="Coordonner" ><i class="fa fa-inbox"></i></a> #}
+                        <a href="{{ path('coordinateur_compile', { 'id': notif[0].id }) }}" class="btn btn-danger"><span class="glyphicon glyphicon-inbox"></span> Coordonner</a>  
+                    {% endif%}
+                    <br>
+                    <small>
+                        {% if notif[0].dateImput %}{{ notif[0].dateImput|ago}}{% endif %}
+                    </small>
+                </div>
+            {% endfor %}
+            {% for notif in notifications.diligtrt %}
+                <div class="alert alert-success alert-alt">
+                    <div>
+                        <small>Diligence Traitée ({{macro.remaining_time(notif.datetraitement|date('d-m-Y'), 'now'|date('d-m-Y'))}} restant)
+                            <br>De {{ notif.nom }}&nbsp;{{ notif.prenoms }}&nbsp;{{ notif.nomJeuneFille }}
+                        </small>
+
+                        <br>
+                        {{ notif.objet|raw|striptags|slice(0, 50) }} 
+                        <br>
+
+                    </div>
+                    {% if(is_granted('ROLE_CHARGE_ETUDES')==false)%}
+                        
+                        <a href="{{ path('etude_trt', { 'id': notif.id }) }}"><span class="glyphicon glyphicon-inbox"></span> Traiter</a>
+                    {% endif %}
+                    <br>
+                    <small>
+                        {% if notif.datetraitement %}{{ notif.datetraitement|ago}}{% endif %}
+                    </small>
+                </div>
+            {% endfor %}
+            {% for notif in notifications.suivre_dilig %}
+                {% if notif[0] is defined and notif[0]!=null %} 
+                    <div class="alert alert-success alert-alt">
+
+                        <div>
+                            <small>
+                                Suivre la diligence
+                            </small>
+                            <br>
+                            {{ notif['libcourrier'] }}
+                            <br>{{ notif['objet']|raw|striptags|slice(0, 150) }}
+                            <br>
+                            {% if notif.etat == 0 %}
+                                {% if notif['idtypecourrier'] ==2 %}  
+
+                                    {% if (notif['etatcourrier']==1) %}
+                                        <a href="{{ path('courrier_dgedel', { 'id': notif[0].id }) }}" ><span class="glyphicon glyphicon-inbox"></span> Supprimer</a>
+                                    {% else %}
+                                        <a href="{{ path('courrier_interne_imput', { 'id': notif['id'] }) }}" ><span class="glyphicon glyphicon-inbox"></span> Imputer</a> 
+                                        <a href="{{ path('courrier_dgedel1', { 'id': notif['id'] }) }}" ><span class="glyphicon glyphicon-inbox"></span> Supprimer</a>
+                                    {% endif %}
+
+                                {% else %}
+                                    {% if(notif['etatcourrier']==1) %}
+                                        {% if(notif['etat_trait'] == 0) %}  
+                                            <a href="{{ path('courrier_dgedel', { 'id': notif[0].id }) }}"><span class="glyphicon glyphicon-inbox"></span> Supprimer</a> 
+                                        {% else %}
+                                            <a href="{{ path('courrier_recap_trait', { 'id': notif[0].id }) }}"><span class="glyphicon glyphicon-inbox"></span> Consulter</a>  
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            {% else %}
+                                <a href="{{ path('courrier_recap_trait', { 'id': notif[0].id }) }}"><span class="glyphicon glyphicon-inbox"></span> Consulter</a> 
+                            {% endif %} 
+
+                        </div>
+                        <small>
+                            {{notif[0].dateImput|ago}}
+                        </small>
+
+                    </div>
+                    {#
+                     "id" => 2
+    "objet" => "TEST"
+    "idtypecourrier" => 1
+    "libcourrier" => "COURRIER ARRIVEE"
+    "etatcourrier" => 1
+                    
+                    #}
+
+                {% endif %}
+            {% endfor %}
+            {% for notif in notifications.dilig %}
+                <div class="alert alert-success alert-alt">
+                    <div>
+                        <small>Diligence reçue ({{macro.remaining_time(notif.delaiImput|date('d-m-Y'), 'now'|date('d-m-Y'))}} restant)</small>
+                        <br>
+                        {{ notif.courrier.objet|raw|striptags|slice(0, 150) }}
+                        <br>
+
+                    </div>
+                    <a href="{{ path('reception_new', { 'id': notif.id }) }}" ><span class="glyphicon glyphicon-inbox"></span> Réceptionner</a>
+                    <br>
+                    <small>
+                        {% if notif.dateImput %}{{ notif.dateImput|ago}}{% endif %}
+                    </small>
+                </div>
+            {% endfor %}
+
+        </li>
+
+    </ul>
+</li>
+
+{#
+            'cour_arr' => $cour_arr,
+                 'diligtrt' => $diligtrt,
+                 'dilig' => $dilig,
+                 'diligrecu' => $diligrecu,
+                 'suivre_dilig' => $suivre_dilig,
+                 'compteur'=>$contglobale);
+                 #}
+
+
+{#
+{% for notification in notifications %}
+    <a href="{{path(notification.notification.action,{'id':notification.notification.objetid})}}">
+        <div class="alert alert-success alert-alt">
+            <small>{{notification.notification.date|ago}}</small>
+            <br>
+            <i class="fa fa-thumbs-up fa-fw"></i> {{notification.notification.description|raw}}
+        </div>
+    </a>
+{% endfor %}
+#}

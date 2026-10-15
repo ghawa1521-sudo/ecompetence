@@ -1,0 +1,355 @@
+{% extends '::base.html.twig' %}
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+    <style>
+        .dataTables_filter{
+            width: auto !important;
+        }
+    </style>
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+
+{% block body -%}
+    {#
+       <div class="col-md-6 col-sm-6 col-xs-12">
+       <table class=" table table-striped responsive-utilities jambo_table bulk_action">
+           <thead>
+               <tr>
+                   <th>N°</th>
+                   <th>Type de Demande</th>
+                   <th>Nombre de demande effectuer</th>
+
+               </tr>
+           </thead>
+           <tbody>
+               {% set i = 1 %}
+           {% for entity in entities %}
+               <tr>
+                   <td>{{i}}</td>
+                   <td>{{entity.libelle}}</td>
+                   <td align="center" width="30%">{{entity.compt}}</td>
+               </tr>
+               {% set i = i + 1 %}
+           {% endfor %}
+       </tbody>
+   </table>
+   </div>
+   #}
+
+    <div class="col-xs-12">
+        <span style="float:right;"> <a class="btn btn-primary" href="{{path('agent_tableau', {'id':id} )}}"><b>Retour</b></a></span>
+        {#  <div class="col-xs-3">
+              <table class="table table-striped responsive-utilities jambo_table ">
+               <thead>
+                  <tr>
+                      <th >Grade</th>
+                      <th >Détail</th>
+                  </tr>
+              </thead>
+                  <tbody>
+                  {% for grade in stats.grade %}
+                  <tr>
+                      <th>{{grade.lib}}</th>
+                      <th>Total: {{grade.total}}<br>Homme: {{grade.m}}<br>Femme: {{grade.f}}</th>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+           </table>
+          </div>#}
+        {# <div align="right"><a class="btn btn-primary" href="#" target="blank" onClick="printElem('print3');">
+                 <span class="fa fa-print">Imprimer</span>
+             </a>
+         </div>#}
+        {% if id == 1 %}
+            <h3> STATISTIQUE PAR GRADE DES AGENTS</h3>
+            <table class="records_list table table-striped responsive-utilities jambo_table bulk_action">
+                <thead>
+                    <tr>
+                        <th>Grades</th>
+                            {% for grade in stats.grade %}
+                            <th>{{grade.lib}}</th>
+                            {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Homme<br>Femme<br>Total</td>
+                            {% for grade in stats.grade %}
+                            <td align="center"><a href="{{path('stat_details', {'id':id, 'names':'m', 'cat':grade.lib} )}}">{{grade.m}}</a><br><a href="{{path('stat_details', {'id':id, 'names':'f', 'cat':grade.lib} )}}">{{grade.f}}</a><br><a href="{{path('stat_details', {'id':id, 'names':'total', 'cat':grade.lib} )}}">{{grade.total}}</a><br></td>
+                            {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        {% endif %}
+        {% if id == 2 %}
+            <h3> STATISTIQUE PAR CATEGORIE DES AGENTS</h3>
+            <table class="records_list table table-striped responsive-utilities jambo_table bulk_action">
+                <thead>
+                <tr>
+                    <th>Catégorie</th>
+                        {% for categorie in stats.categorie %}
+                        <th>{{categorie.lib}}</th>
+                        {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Homme</td>
+                        {% for categorie in stats.categorie %}
+                        <td align="center"><a href="{{path('stat_details', {'id':id, 'names':'m', 'cat':categorie.lib} )}}">{{categorie.m}}</a></td>
+                        {% endfor %}
+                </tr>
+                <tr>
+                    <td>Femme</td>
+                        {% for categorie in stats.categorie %}
+                        <td align="center"><a href="{{path('stat_details', {'id':id, 'names':'f', 'cat':categorie.lib} )}}">{{categorie.f}}</a></td>
+                        {% endfor %}
+                </tr>
+               
+                <tr>
+                    <td>Total</td>
+                        {% for categorie in stats.categorie %}
+                        <td align="center"><a href="{{path('stat_details', {'id':id, 'names':'total', 'cat':categorie.lib} )}}">{{categorie.total}}</a></td>
+                        {% endfor %}
+                </tr>
+                </tbody>
+            </table>
+        {% endif %}
+        {% if id == 3 %}
+
+            <h3> EFFECTIF GLOBAL DES AGENTS ({{stats.effectif[0].total}})</h3>
+
+            <div id="print3">
+                <table class="records_list table table-striped responsive-utilities jambo_table bulk_action" >
+                    <thead>
+                        <tr>
+                            <th colspan="3">Effectif</th>
+                            <th colspan="3">Fonctionnaire</th>
+                            <th colspan="3">Contractuel</th>
+                        </tr>
+                        <tr>
+                            <th>Total</th>
+                            <th>Homme</th>
+                            <th>Femme</th>
+                            <th>Total</th>
+                            <th>Homme</th>
+                            <th>Femme</th>
+                            <th>Total</th>
+                            <th>Homme</th>
+                            <th>Femme</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        <tr>
+                            <td><a href="{{path('stat_details', {'id':id, 'names':'total'} )}}">{{stats.effectif[0].total}}</a></td>
+                            <td><a href="{{path('stat_details', {'id':id, 'names':'m'} )}}">{{stats.effectif[0].m}}</a></td>
+                            <td><a href="{{path('stat_details', {'id':id, 'names':'f'} )}}">{{stats.effectif[0].f}}</a></td>
+                            <td><a href="{{path('stat_details', {'id':id, 'names':'fonctionnairetotal'} )}}">{{stats.effectif[0].fonctionnairetotal}}</a></td>
+                            <td><a href="{{path('stat_details', {'id':id, 'names':'fonctionnairehomme'} )}}">{{stats.effectif[0].fonctionnairehomme}}</a></td>
+                            <td><a href="{{path('stat_details', {'id':id, 'names':'fonctionnairefemme'} )}}">{{stats.effectif[0].fonctionnairefemme}}</a></td>
+                            <td><a href="{{path('stat_details', {'id':id, 'names':'contractueltotal'} )}}">{{stats.effectif[0].contractueltotal}}</a></td>
+                            <td><a href="{{path('stat_details', {'id':id, 'names':'contractuelhomme'} )}}">{{stats.effectif[0].contractuelhomme}}</a></td>
+                            <td><a href="{{path('stat_details', {'id':id, 'names':'contractuelfemme'} )}}">{{stats.effectif[0].contractuelfemme}}</a></td>
+
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="color:red;">N.B: Pour voir le détail veuillez cliquez sur les effectifs</div>
+            </div>
+        {% endif %}
+
+        {% if id == 4 %}
+            <h3> STATISTIQUE PAR EMPLOI DES AGENTS</h3>
+            <div style="color:red;">N.B: Pour voir le détails veuillez cliquez sur les effectifs</div>
+            <table class="records_list table table-striped responsive-utilities jambo_table bulk_action">
+                <thead>
+                    <tr>
+                    <th>Emploi</th>
+                    <th>Total</th>
+                    <th>Homme</th>
+                    <th>Femme</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for emploi in stats.emploi %}
+                    <tr>
+                        <td align="left">{{emploi.lib}}</td>
+                        <td><a href="{{path('stat_details', {'id':id, 'names':'total', 'cat':emploi.id, 'lbl':'e'} )}}">{{emploi.total}}</a></td>
+                        <td><a href="{{path('stat_details', {'id':id, 'names':'m', 'cat':emploi.id, 'lbl':'e'} )}}">{{emploi.m}}</a></td>
+                        <td><a href="{{path('stat_details', {'id':id, 'names':'f', 'cat':emploi.id, 'lbl':'e'} )}}">{{emploi.f}}</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        {% if id == 5 %}
+            <h3> STATISTIQUE PAR DIRECTIONS DES AGENTS</h3>
+
+            <table class="records_list table table-striped responsive-utilities jambo_table bulk_action">
+                <thead>
+                <tr>
+                    <th>Direction</th>
+                    <th>Total</th>
+                    <th>Homme</th>
+                    <th>Femme</th>
+                    <th colspan="3">Fonctionnaire</th>
+                    <th colspan="3">Contractuel</th>
+                </tr>
+                <tr>
+                    <th colspan="4"></th>
+                    <th>Total</th>
+                    <th>Homme</th>
+                    <th>Femme</th>
+                    <th>Total</th>
+                    <th>Homme</th>
+                    <th>Femme</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for direction in stats.direction %}
+                    <tr>
+                        <td>{{direction.lib}}</td>
+                        <td><a href="{{path('stat_details', {'id':id, 'names':'total', 'cat':direction.id, 'lbl':'d'} )}}">{{direction.total}}</a></td>
+                        <td><a href="{{path('stat_details', {'id':id, 'names':'m', 'cat':direction.id, 'lbl':'d'} )}}">{{direction.m}}</a></td>
+                        <td><a href="{{path('stat_details', {'id':id, 'names':'f', 'cat':direction.id, 'lbl':'d'} )}}">{{direction.f}}</a></td>
+                        <td><a href="{{path('stat_details', {'id':id, 'names':'fonctionnairetotal', 'cat':direction.id, 'lbl':'d'} )}}">{{direction.fonctionnairetotal}}</a></td>
+                        <td><a href="{{path('stat_details', {'id':id, 'names':'fonctionnairehomme', 'cat':direction.id, 'lbl':'d'} )}}">{{direction.fonctionnairehomme}}</a></td>
+                        <td><a href="{{path('stat_details', {'id':id, 'names':'fonctionnairefemme', 'cat':direction.id, 'lbl':'d'} )}}">{{direction.fonctionnairefemme}}</a></td>
+                        <td><a href="{{path('stat_details', {'id':id, 'names':'contractueltotal', 'cat':direction.id, 'lbl':'d'} )}}">{{direction.contractueltotal}}</a></td>
+                        <td><a href="{{path('stat_details', {'id':id, 'names':'contractuelhomme', 'cat':direction.id, 'lbl':'d'} )}}">{{direction.contractuelhomme}}</a></td>
+                        <td><a href="{{path('stat_details', {'id':id, 'names':'fonctionnairefemme', 'cat':direction.id, 'lbl':'d'} )}}">{{direction.fonctionnairefemme}}</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div style="color:red;">N.B: Pour voir le détail veuillez cliquez sur les effectifs</div>
+        {% endif %}
+        {% if id == 7 %}
+            <h3> STATISTIQUE PAR SYNDICAT DES AGENTS</h3>
+
+            <table class=" table table-striped responsive-utilities jambo_table bulk_action">
+                <tr>
+                    <th>Syndicat</th>
+                        {% for syndicat in stats.syndicat %}
+                        <th>{{ syndicat.libSynd is defined and syndicat.libSynd is not empty ? syndicat.libSynd : 'AUTRE' }} </th>
+                        {% endfor %}
+                </tr>
+                <tr>
+                    <th>Homme</th>
+                        {% for syndicat in stats.syndicat %}
+                        <th><a href="{{path('stat_details', {'id':id, 'names':'m', 'cat':syndicat.libSynd} )}}">{{syndicat.m}}</a></th>
+                        {% endfor %}
+                </tr>
+                <tr>
+                    <th>Femme</th>
+                        {% for syndicat in stats.syndicat %}
+                        <th><a href="{{path('stat_details', {'id':id, 'names':'f', 'cat':syndicat.libSynd} )}}">{{syndicat.f}}</a></th>
+                        {% endfor %}
+                </tr>
+                <tr>
+                <tr>
+                    <th>Total</th>
+                        {% for syndicat in stats.syndicat %}
+                        <th><a href="{{path('stat_details', {'id':id, 'names':'total', 'cat':syndicat.libSynd} )}}">{{syndicat.total}}</a></th>
+                        {% endfor %}
+                </tr>
+                <tr>
+            </table>
+            <div style="color:red;">N.B: Pour voir le détail veuillez cliquez sur les effectifs</div>
+        {% endif %}
+
+         {% if id == 8 %}
+            <h3> STATISTIQUE PAR NATURE D'ACTES {% if (form.vars.value and form.vars.valid == true) %}du 
+            {{ form.vars.value.debut|date('d-m-Y') }} au {{ form.vars.value.fin|date('d-m-Y') }}
+             {% endif %}</h3>
+            
+                <div class="row">
+                    {{ form_start(form) }}
+                    
+                    
+                    <div class="col-md-4">{{form_widget(form.debut)}}</div>
+                    <div class="col-md-4">{{form_widget(form.fin)}}</div>
+                    <div class="col-md-4">{{ form_row(form._token) }}{{form_widget(form.rechercher)}}</div>
+                    <div class="col-md-8" style="color:red !important;">{{form_errors(form.debut)}}<br>{{form_errors(form.fin)}}{{form_errors(form)}}</div>
+                    
+                </div>
+                <br><br>
+                <table class="records_list table table-striped responsive-utilities jambo_table bulk_action">
+                    <thead>
+                        <tr>
+                           <th colspan="4">
+                           STATISTIQUE PAR NATURE D'ACTES {% if (form.vars.value and form.vars.valid == true) %}du 
+                            {{ form.vars.value.debut|date('d-m-Y') }} au {{ form.vars.value.fin|date('d-m-Y') }}
+                             {% endif %}
+                         </th>
+                        </tr>
+
+                   <tr>
+                            <th>&nbsp;</th>
+                            <th>NOMBRE</th>
+                            <th>TRAITE</th>
+                            <th>NON TRAITE</th>
+                       </tr>
+                   </thead>
+                   <tbody>
+                   {% for autoabscences in autoabscence %}
+
+                      <tr>
+                            <td>{{ autoabscences.libelle }}</td>
+                            <td>{{ autoabscences.nbre }}</td>
+                            <td>{{ autoabscences.TRAITE }}</td>
+                            <td>{{ autoabscences.NONTRAITE }}</td>
+                       </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+         {% endif %}
+        <br><br>
+    </div>
+
+    {% if names != null and lbl == null %}
+        <section id="MonCollapse">
+            <div class="" id="contenu">
+                {{ render(controller('AgentBundle:Default:listestats',{'id': id, 'names':names, 'cat':cat })) }}
+            </div>
+        </section>
+    {% endif %}
+
+
+{% endblock %}
+{% block javascript %}
+    <script>
+
+        {#
+
+        $("#graph_donut").length&&Morris.Donut({element:"graph_donut",
+            data:[
+                    {% for entity in entities %}
+                    {label:"{{entity.libelle|raw}}",value:{{entity.compt}}},
+                    {% endfor %}],
+            colors:["#26B99A","#34495E","#ACADAC"],
+            formatter:function(a){return a},
+            resize:!0})#}
+
+                function printElem(divId) {
+                    var nomPdf = 'ok';
+                    alert(document.getElementById(divId));
+                    var content = document.getElementById(divId).innerHTML;
+                    var mywindow = window.open();
+
+                    mywindow.document.write(content);
+
+
+                    mywindow.document.close();
+                    mywindow.focus()
+                    mywindow.print();
+                    mywindow.close();
+                    return true;
+                }
+
+
+    </script>
+{% endblock %}

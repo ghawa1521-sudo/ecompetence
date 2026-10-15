@@ -1,0 +1,197 @@
+{% extends '::base.html.twig' %}
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+    <style>
+        .dataTables_filter{
+            width: auto !important;
+        }
+        @media print {
+            /* Your styles here */
+            #printa { /* Or specify a table class */
+                height: 100% !important;
+                overflow: hidden;
+                page-break-after: always;
+
+            }
+            table{
+                height: 99%;
+                border: 3px !important;
+            }
+            footer{
+                color: white !important;
+            }
+            body{
+                -webkit-print-color-adjust:exact !important;
+                color-adjust:exact !important;
+                width:210mm !important;
+                height:300mm !important;
+                margin-top: 5px !important;
+                margin-bottom: 2px !important;
+
+
+                font-size: 16pt;
+            }
+
+            #footer {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                color: #ffffff !important;
+                text-decoration-color: white !important;
+                font-size: 12pt;
+            }
+            #footer-right {
+                position: fixed;
+                bottom: 0;
+                right: 0;
+            }
+        }
+
+    </style>
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+{% block title %}{{stats.listestats.libelle}}{% endblock %}
+{% block body -%}
+    {% if lbl == 'e' %}
+        {% if id == 4 %}
+            <h3> STATISTIQUE PAR EMPLOI DES AGENTS DE LA DGE</h3>
+            <table class="records_list table table-striped responsive-utilities jambo_table bulk_action ">
+                <thead>
+                    <tr>
+                        <th>Emploi</th>
+                        <th>Total</th>
+                        <th>Homme</th>
+                        <th>Femme</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for emploi in stats.emploi %}
+                    {% if emploi.id == cat %}
+                        <tr>
+                            <td align="left">{{emploi.lib}}</td>
+                            <td>{{emploi.total}}</td>
+                            <td>{{emploi.m}}</td>
+                            <td>{{emploi.f}}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        <br>
+        <div class="col-md-12 table-responsive">
+            <table class="records_list table table-striped responsive-utilities jambo_table table-responsive" id="datatable" >
+                <thead>
+                    <tr class="headings">
+                        <th colspan="6">
+                            {{stats.listestats.libelle}}
+                        </th>
+                    </tr>
+                    <tr class="headings">
+                        <th>Matricule</th>
+                        <th>Nom</th>
+                        <th>Prénoms</th>
+                        <th>Emploi</th>
+                        <th>Grade</th>
+                        <th>Service/Direction</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for Agent in stats.listestats.req %}
+                        <tr>
+
+                            <td>{{Agent.matricule}}</td>
+                            <td>{{Agent.nom}}</td>
+                            <td>{{Agent.prenoms}}</td>
+                            <td>{{Agent.Emploi.libEmpl}}</td>
+                            <td>{{Agent.Emploi.Grade.libGrade}}</td>
+                            <td>{{Agent.retour_service.tab_lib|join('/')}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% elseif lbl == 'd' %}
+        {% if id == 5 %}
+            <h3> STATISTIQUE PAR DIRECTIONS DES AGENTS DE LA DGE</h3>
+            <table class="records_list table table-striped responsive-utilities jambo_table ">
+                <thead>
+                <tr>
+                    <th>Direction</th>
+                    <th>Total</th>
+                    <th>Homme</th>
+                    <th>Femme</th>
+                    <th colspan="3">Fonctionnaire</th>
+                    <th colspan="3">Contractuel</th>
+                </tr>
+                <tr>
+                    <th colspan="4"></th>
+                    <th>Total</th>
+                    <th>Homme</th>
+                    <th>Femme</th>
+                    <th>Total</th>
+                    <th>Homme</th>
+                    <th>Femme</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for direction in stats.direction %}
+                    {% if direction.id == cat %}
+                        <tr>
+                            <th>{{direction.lib}}</th>
+                            <th>{{direction.total}}</th>
+                            <th>{{direction.m}}</th>
+                            <th>{{direction.f}}</th>
+                            <th>{{direction.fonctionnairetotal}}</th>
+                            <th>{{direction.fonctionnairehomme}}</th>
+                            <th>{{direction.fonctionnairefemme}}</th>
+                            <th>{{direction.contractueltotal}}</th>
+                            <th>{{direction.contractuelhomme}}</th>
+                            <th>{{direction.fonctionnairefemme}}</th>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+
+        {% endif %}
+        <br>
+        <div class="col-md-12 table-responsive">
+            <table class="records_chk table table-striped responsive-utilities jambo_table table-responsive" id="datatable" >
+                <thead>
+                    <tr class="headings">
+                        <th colspan="6">
+                            {{stats.listestats.libelle}}
+                        </th>
+                    </tr>
+                    <tr class="headings">
+                        <th>Matricule</th>
+                        <th>Nom</th>
+                        <th>Prénoms</th>
+                        <th>Emploi</th>
+                        <th>Grade</th>
+                        <th>Service/Direction</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for Agent in stats.listestats.req %}
+                        <tr>
+                            <td>{{Agent.matricule}}</td>
+                            <td>{{Agent.nom}}</td>
+                            <td>{{Agent.prenoms}}</td>
+                            <td>{{Agent.Emploi.libEmpl}}</td>
+                            <td>{{Agent.Emploi.Grade.libGrade}}</td>
+                            <td>{{Agent.retour_service.tab_lib|join('/')}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+{% endblock %}
+{% block javascript %}
+
+{% endblock %}

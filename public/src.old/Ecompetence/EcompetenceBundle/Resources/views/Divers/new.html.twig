@@ -1,0 +1,62 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+<div style="padding-left:4px;padding-right:4px;">
+    <div class="x_panel" style="background-color:white;border-radius: 4px;">
+        <div class="x_content">
+
+            <!-- Panel Connaissances Informatiques -->
+            <div class="x_panel">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h2 style="color:orangered;">Ajouter une connaissance informatique</h2>
+                    </div>
+                    <div class="panel-body">
+                        {{ form_start(formConnaissance) }}
+                        {{ form_errors(formConnaissance) }}
+                        
+                        <div class="form-group">
+                            {{ form_label(formConnaissance.libelle) }}
+                            {{ form_widget(formConnaissance.libelle, {'attr': {'class':'form-control'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(formConnaissance.niveau) }}
+                            {{ form_widget(formConnaissance.niveau, {'attr': {'class':'form-control'}}) }}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">+ Enrégistrer connaissance</button>
+                        {{ form_end(formConnaissance) }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel Décorations -->
+            <div class="x_panel">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h2 style="color:orangered;">Ajouter une décoration</h2>
+                    </div>
+                    <div class="panel-body">
+                        {{ form_start(formDecoration) }}
+                        {{ form_errors(formDecoration) }}
+                        
+                        <div class="form-group">
+                            {{ form_label(formDecoration.libelle) }}
+                            {{ form_widget(formDecoration.libelle, {'attr': {'class':'form-control'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(formDecoration.annee) }}
+                            {{ form_widget(formDecoration.annee, {'attr': {'class':'form-control', 'placeholder':'Ex: 2020'}}) }}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">+ Enrégistrer décoration</button>
+                        {{ form_end(formDecoration) }}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

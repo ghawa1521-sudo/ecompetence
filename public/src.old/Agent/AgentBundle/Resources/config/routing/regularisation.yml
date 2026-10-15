@@ -1,0 +1,51 @@
+regularisation:
+    path:     /
+    defaults: { _controller: "AgentBundle:Regularisation:index" }
+
+regularisation_show:
+    path:     /{id}/show
+    defaults: { _controller: "AgentBundle:Regularisation:show" }
+
+regularisation_new:
+    path:     /new/{id}
+    defaults: { _controller: "AgentBundle:Regularisation:new",id:1 }
+
+regularisation_create:
+    path:     /create
+    defaults: { _controller: "AgentBundle:Regularisation:create" }
+    methods:  POST
+
+regularisation_edit:
+    path:     /{id}/edit/{modif}
+    defaults: { _controller: "AgentBundle:Regularisation:new",id:1}
+
+regularisation_update:
+    path:     /{id}/update
+    defaults: { _controller: "AgentBundle:Regularisation:update" }
+    methods:  [POST, PUT]
+
+regularisation_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AgentBundle:Regularisation:delete" }
+    methods:  [POST, DELETE]
+
+regularisation_print:
+    path:     /{id}/print/{nature}
+    defaults: { _controller: "AgentBundle:Regularisation:print" }
+
+regularisation_position:
+    path:     /position/{id}/{modif}
+    defaults: { _controller: "AgentBundle:Regularisation:position", id:1, modif:0 }
+
+regularisation_positioncreate:
+    path:     /positioncreate
+    defaults: { _controller: "AgentBundle:Regularisation:positioncreate" }
+    methods:  POST
+
+regularisation_detachprint:
+    path:     /detachprint/{id}/{nature}
+    defaults: { _controller: "AgentBundle:Regularisation:detachprint" }
+
+regularisation_del:
+    path:     /del/{id}/{todo}/{res}
+    defaults: { _controller: "AgentBundle:Regularisation:delAgent", id:0, todo:0, res:0}

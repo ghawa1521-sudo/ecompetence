@@ -1,0 +1,24 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <div class="panel panel-success" >
+        <div class="panel-heading" ><h1>Créer nouveau TypeLangue </h1></div>
+    </div>
+    {{ form(form) }} 
+
+    
+    
+    <button type="button" class="btn btn-warning" onclick="window.history.back();">
+                        <i class="fa fa-arrow-left"></i> Retour
+                        </button> 
+     
+
+        <ul class="record_actions">
+                       
+    {# <li>
+        <a href="{{ path('typelangue') }}">
+            Retour à la liste
+        </a>
+    </li> #}
+</ul>
+{% endblock %}

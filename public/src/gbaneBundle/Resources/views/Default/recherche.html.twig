@@ -1,0 +1,60 @@
+{# empty Twig template #}
+{% extends '::base.html.twig' %}
+{% block css %}
+   <link href="{{ asset('design/css/style.css') }}" rel="stylesheet"/>
+       <link rel="stylesheet" href="{{asset('ediligence/assets/css/bootstrap-select.min.css')}}">
+{% endblock %}
+{% block body %}
+
+<div class="well research_form" style="width:50%; margin:auto;">
+
+<h3>Formulaire de recherche</h3><br>
+
+<form method="post" {{ form_enctype(form) }}>
+
+{{ form_widget(form) }}
+
+{# <input type="submit" class="btn btn-primary" /> #}
+<button type="submit" class="btn btn-primary">Rechercher</button>
+</form>
+</div>
+xc
+{% endblock %}
+{% block javascript %}
+         {#<script> 
+           function affiche(etat){
+               if (etat === 1){
+                   $('.champagent').attr('disabled','disabled');
+                   $('.champautres').attr('disabled','disabled');
+                   //$('.champautres').prop('disabled',true);
+                   alert($('.champagent').val());
+               }
+               else if (etat === 2){
+                   $('.champautres').prop('disabled',false);
+               }
+               else if (etat === 3){
+                   $('.champautres').prop('disabled',true);
+                   $('.champagent').prop('disabled',false);
+                   
+               }
+               else if (etat === 4){
+                  
+                   $('.champagent').prop('disabled',false);
+               }
+           }
+           function champ(elem){
+               
+               if ($(elem).hasClass('champagent') && $(elem).val() !== ""){
+                   affiche(1);}
+                else if($(elem).hasClass('champagent') && $(elem).val() === ""){
+                   affiche(2);
+               }else if($(elem).hasClass('champautres') && $(elem).val() !== ""){
+                   affiche(3);
+               }
+               else if($(elem).hasClass('champautres') && $(elem).val() === ""){}
+                    affiche(4);
+                }
+    </script>#}
+      <script src="{{ asset('ediligence/assets/js/bootstrap-select.min.js') }}"></script>
+         {% endblock %}
+        

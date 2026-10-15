@@ -1,0 +1,45 @@
+{% extends '::ediligence/base.html.twig' %}
+
+{% block body %}
+<div class="content-header">
+    <div class="header-section">
+        <h1>
+            <i class="gi gi-notes_2"></i>Diligences Traitées<br><small>&nbsp;</small>
+        </h1>
+    </div>
+</div>
+<ul class="breadcrumb breadcrumb-top">
+    <li>Archivage d'une diligence</li>
+    <!--<li><a href="">Nouveau</a></li>-->
+</ul>
+<div class="row">
+ {{ form_start(form) }}
+    <div class="col-md-offset-2 col-md-8">
+        <div class="block"> 
+            <!-- Basic Form Elements Title -->
+            <div class="block-title">
+
+                <h2><strong>Transmettre au: SERVICE COURRIER</strong></h2>
+            </div>
+
+            <div class="form-group bien">
+                 {{ form_row(form.obsrv, {'label':'OBSERVATIONS'}) }}
+            </div>
+          <label>
+              {{form_widget(form.nomFichier.imageFile,{'attr':{'required':true}})}}
+            <i style="margin-bottom: 5px;">Format du Fichier (jpg, png, pdf, doc ou docx | max. 50 Mo)</i>
+          </label>
+          <br><br>
+          <button id="btnp" type="submit" value="traiter" class="btn btn-primary pull-right form-control" name="traiter"><span class="gi gi-ok-sign"> Valider & Archiver </span></button>
+          <button id="btnp" type="submit" value="renvoyer" class="btn btn-primary pull-right form-control" name="traiter"><span class="gi gi-ok-sign"> Renvoyer au coordinateur </span></button>
+          <a class="btn btn-primary pull-right form-control" href="{{ path('courrier_diligtrt') }}">Retour</a> 
+        </div>
+{{ form_end(form) }}
+    </div>
+</div>
+<ul>
+    <li>
+        <a href="{{ path('reception') }}">&nbsp;</a>
+    </li>
+</ul>
+{% endblock %}

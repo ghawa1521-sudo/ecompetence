@@ -1,0 +1,103 @@
+<?php
+
+namespace PasBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Resultats
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="PasBundle\Repository\ResultatsRepository")
+ */
+class Resultats
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="libelleresult", type="string", length=500)
+     */
+    private $libelleresult;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datecreation", type="datetime")
+     */
+    private $datecreation;
+
+
+    
+     public function __construct()
+    {
+        $this->datecreation = new \DateTime();
+    }
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set libelleresult
+     *
+     * @param string $libelleresult
+     *
+     * @return Resultats
+     */
+    public function setLibelleresult($libelleresult)
+    {
+        $this->libelleresult = $libelleresult;
+
+        return $this;
+    }
+
+    /**
+     * Get libelleresult
+     *
+     * @return string
+     */
+    public function getLibelleresult()
+    {
+        return $this->libelleresult;
+    }
+
+    /**
+     * Set datecreation
+     *
+     * @param \DateTime $datecreation
+     *
+     * @return Resultats
+     */
+    public function setDatecreation($datecreation)
+    {
+        $this->datecreation = $datecreation;
+
+        return $this;
+    }
+
+    /**
+     * Get datecreation
+     *
+     * @return \DateTime
+     */
+    public function getDatecreation()
+    {
+        return $this->datecreation;
+    }
+}

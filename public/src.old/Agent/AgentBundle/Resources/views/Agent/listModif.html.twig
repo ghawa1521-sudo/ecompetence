@@ -1,0 +1,130 @@
+{% extends '::base.html.twig' %}
+
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+
+{% block titre_page %}
+    <div>Modifier les informations des agents</div>
+{% endblock %}
+{% block body -%}
+    <div align="center">
+            {#<a href="{{ path('agent_new') }}" class="btn btn-info">
+                Enregistrer un nouvel Agent
+            </a>#}
+    </div>
+    <ul class="nav nav-tabs bar_tabs" role="tablist">
+
+        <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">En activité</a></li>
+        <li role="presentation"><a href="#serv1" aria-controls="serv1" role="tab" data-toggle="tab">Autres positions</a></li>
+    </ul>
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="home">
+    <table class="records_list table table-striped responsive-utilities jambo_table bulk_action">
+        <thead>
+            <tr>
+                <th>Matricule</th>
+                <th>Nom et Prénoms</th>
+                
+                <th>Date de Naissance</th>
+
+                <th> Direction </th>
+                <th>Fonction</th>
+
+                <th>Emploi</th>
+                <th>Grade</th>
+                <th>Date prise Service DGE</th>
+                
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('agent_show', { 'id': entity.id }) }}">{{ entity.matricule }}</a></td>
+                <td> 
+                            {{ entity.concatNom }}
+                    
+                </td>
+               
+                <td>{% if entity.dateNaiss %}{{ entity.dateNaiss|date('d/m/Y') }}{% endif %}</td>
+                <td> {% if entity.direction %}{{ entity.direction.sigle }}{% endif %}</td>
+
+
+                <td>{% if entity.Fonction %}{{ entity.Fonction }}{% endif %}</td>
+
+                <td>{% if entity.Emploi %}{{ entity.Emploi }}{% endif %}</td>
+                <td>{% if entity.Emploi %}{{ entity.Emploi.Grade }}{% endif %}</td>
+                <td>{% if entity.datePriseServiceDge %}{{ entity.datePriseServiceDge|date('d-m-Y') }}{% endif %}</td>
+                
+                <td>
+
+
+
+                        <a class="btn btn-success" href="{{ path('agent_edit', { 'id': entity.id }) }}">Modifier</a>
+
+
+
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="serv1">
+    <table class="table table-striped responsive-utilities jambo_table bulk_action">
+        <thead>
+            <tr>
+                <th>Matricule</th>
+                <th>Nom et Prénoms</th>
+                
+                <th>Date de Naissance</th>
+
+                <th> Direction </th>
+                <th>Fonction</th>
+
+                <th>Emploi</th>
+                <th>Grade</th>
+                <th>Date prise Service DGE</th>
+                <th>Position</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in autres %}
+            <tr>
+                <td><a href="{{ path('agent_show', { 'id': entity.id }) }}">{{ entity.matricule }}</a></td>
+                <td> 
+                            {{ entity.concatNom }}
+                    
+                </td>
+               
+                <td>{% if entity.dateNaiss %}{{ entity.dateNaiss|date('d/m/Y') }}{% endif %}</td>
+                <td> {% if entity.direction %}{{ entity.direction.sigle }}{% endif %}</td>
+
+
+                <td>{% if entity.Fonction %}{{ entity.Fonction }}{% endif %}</td>
+
+                <td>{% if entity.Emploi %}{{ entity.Emploi }}{% endif %}</td>
+                <td>{% if entity.Emploi %}{{ entity.Emploi.Grade }}{% endif %}</td>
+                <td>{% if entity.datePriseServiceDge %}{{ entity.datePriseServiceDge|date('d-m-Y') }}{% endif %}</td>
+                <td>{% if entity.Position %}{{ entity.getEtatPosition }}{% endif %}</td>
+                <td>
+
+
+
+                        <a class="btn btn-success" href="{{ path('agent_edit', { 'id': entity.id }) }}">Modifier</a>
+
+
+
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+        </div>
+    </div>
+    {% endblock %}

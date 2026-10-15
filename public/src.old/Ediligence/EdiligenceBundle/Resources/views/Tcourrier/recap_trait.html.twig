@@ -1,0 +1,77 @@
+{% extends '::ediligence/base.html.twig' %}
+
+{% block body %}{% set cpt = 0 %}{% set dossier = 0 %}
+    <div class="content-header">
+        <div class="header-section">
+            <h1>
+                <i class="gi gi-notes_2"></i>Diligences Traitées Transmises<br><small>&nbsp;</small>
+            </h1>
+        </div>
+    </div>
+    <ul class="breadcrumb breadcrumb-top">
+        <li>diligence transmise</li>
+    </ul>
+    <div class="row">
+
+        <div class="col-md-offset-2 col-md-8">
+            <div class="block">
+                <!-- Basic Form Elements Title -->
+                <div class="block-title">
+
+                    <h2><strong>diligence traitée transmise</strong></h2>
+                </div>
+
+                <div class="bien">
+                    <b>COURRIER: N° &nbsp; {{entities['courrier'].courrier.id}}</b><br><br>
+                    <b>NATURE COURRIER:&nbsp; </b>{{entities['courrier'].courrier.typecourrier.libcourrier}}
+                </div>
+                <div class="bien">
+                    <b>OBJET COURRIER: &nbsp; </b>{{entities['courrier'].courrier.objet|raw}}
+                </div>
+                <div class="bien">
+                    <b>PIÈCE JOINTE D'ORIGINE: <font color="#000000">&nbsp;</font></b>
+                    <a class="red" href="{{vich_uploader_asset(entities['courrier'].courrier.piecejointe, 'imageFile')}}" title="Télécharger" class="tooltip-info" data-rel="tooltip" data-original-title="Télécharger"><i class="ace-icon fa fa-download bigger-130"></i></a>
+                </div>
+                <div class="bien">
+                    <table class="table table-vcenter table-condensed table-bordered">
+
+                        <tr style="font-weight: bold;">
+                            <td>Expéditeur</td>
+                            <td>Date traitement</td>
+                            <td>Observation</td>
+                            <td>Pièce jointe</td>
+                            <td>etat traitement</td>
+                        </tr>
+                        {% for tmp in entities['trait'] %}
+                            <tr>
+                                <td>{{tmp['nom']}} {{tmp['prenoms']}} {{tmp['nomJeuneFille']}}</td>
+                                <td>{{tmp[0].datetraitement|date('d-m-Y H:i:s')}}</td>
+                                <td>{{tmp[0].libtraitement|raw}}</td>
+                                <td>
+                                    <b>PIÈCE JOINTE TRANSMISE: <font color="#000000">&nbsp;</font></b>
+                                    <a class="red" href="{{vich_uploader_asset(tmp[0].pjtraitement, 'imageFile')}}" title="Télécharger" class="tooltip-info" data-rel="tooltip" data-original-title="Télécharger"><i class="ace-icon fa fa-download bigger-130"></i></a>
+                                </td>
+                                <td>{% if tmp[0].daterejet is defined and tmp[0].daterejet != null %}
+                                   rejeté le {{tmp[0].daterejet|date('d-m-Y H:i:s')}}
+                                   <br>pièce jointe: <a class="red" href="{{vich_uploader_asset(tmp[0].pjrejet, 'imageFile')}}" title="Télécharger" class="tooltip-info" data-rel="tooltip" data-original-title="Télécharger"><i class="ace-icon fa fa-download bigger-130"></i></a>
+                                   <br>motif: {{tmp[0].librejet|raw}}
+                                 {% else %}
+                                     valide
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+
+
+            </div>
+
+            <a class="btn btn-primary pull-right form-control" href="{{ path('courrier_suivi') }}">Retour</a>       
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

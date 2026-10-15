@@ -1,0 +1,21 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+
+<div class="col-md-push-3 col-md-6">
+<h1>Modifier le Quota</h1>
+<br>
+<h3> {{entity.typeDemande}}</h3>
+<br />
+    {{ form(edit_form) }}
+{#
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('quota') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>#}
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Effectuer les imputations</h1>
+    <br>
+    {% for fonctionalite in fonctionalites %}
+        <div class="col-md-6">
+            <a class=" col-md-12 btn btn-default" href="{{ path('deleguer_new', { 'fid': fonctionalite.id }) }}">{{fonctionalite}}</a>
+        </div>
+    {% endfor %}
+    <br><br>
+    {#
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entity in entities %}
+                <tr>
+                    <td><a href="{{ path('deleguer_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                    <td>
+                        <ul>
+                            <li>
+                                <a href="{{ path('deleguer_show', { 'id': entity.id }) }}">show</a>
+                            </li>
+                            <li>
+                                <a href="{{ path('deleguer_edit', { 'id': entity.id }) }}">edit</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+#}
+
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends '::base.html.twig' %}
+{% block css %}
+   <link href="{{ asset('design/css/style.css') }}" rel="stylesheet"/>
+       <link rel="stylesheet" href="{{asset('ediligence/assets/css/bootstrap-select.min.css')}}">
+{% endblock %}
+
+
+
+
+
+
+{% block titre_page %}  
+{% if app.user.agent.fonction is defined and app.user.agent.fonction != null %} 
+{% if app.user.agent.fonction.id == 10 %} 
+	Muter un agent
+{% else %}
+	Faire une Demande de Mutation
+{% endif %}
+{% endif %}
+{% endblock %}
+{% block body -%}
+
+    <div class="col-md-push-3 col-md-6">
+      <div >
+    
+
+    {{ form(form) }}
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+    <script src="{{ asset('ediligence/assets/js/bootstrap-select.min.js') }}"></script>
+
+{% endblock %}

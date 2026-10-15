@@ -1,0 +1,126 @@
+{% import "macro/macro.html.twig" as macro %}
+<!DOCTYPE html>
+<html lang="fr">
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="{{ asset('images/logoDGE.png') }}" type="image/png">
+        <link rel="icon" href="{{ asset('images/logoDGE.png') }}" type="image/png">
+        <title>E-Agent | Bienvenue </title>
+
+        <!-- Bootstrap core CSS -->
+
+        <link href="{{ asset('design/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('design/fonts/css/font-awesome.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('design/appli/styles.css') }}" rel="stylesheet">
+        <link href="{{ asset('design/appli/summernote.css') }}" rel="stylesheet">
+        <!-- Custom styling plus plugins -->
+
+
+        <script src="{{ asset('design/js/jquery.min.js') }}"></script>
+
+    </head>
+
+    <body>
+
+        <div class="">
+            {% if app.request.hasPreviousSession %}
+                {% for type, messages in app.session.flashbag.all() %}
+                    <div class="alert alert-{{ type }}">
+                        <ul>
+                            {% for message in messages %}
+                                <li>
+                                    {{ message }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        {{ macro.bar_interim()}}
+        <div class="row">
+            <div class="col-md-push-1 col-md-10" style="margin-bottom: 20px;">
+                <img src="{{ asset('images/baner_dge.png') }}" width="100%" alt="">
+            </div>
+
+            <div class="col-md-push-2 col-md-8">
+                <!-- SAMPLE BOX START  -->
+                <div class="row">
+                    {#
+                    {% if is_granted('ROLE_BIBLIO') %}
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <div class="style-box-one Style-one-clr-one">
+                            <a href="{{ path('bouquin_all') }}">
+                                <span class="glyphicon glyphicon-folder-open"></span>
+                                <h3 style="color: white;">BANQUE DE DONNEES</h3>
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                    #}
+                    {% if is_granted('ROLE_ERH') %}
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <a href="{{ path('agent_show',{id : app.user.agent.id, val:1}) }}" style="color:white; text-decoration: none;">
+                                <div class="style-box-one Style-one-clr-two">
+                                    <span class="glyphicon glyphicon-user"></span>
+                                    <h3 style="color: white;">e-RH</h3>
+                                </div>
+                            </a>
+                        </div>
+                    {% endif %}
+                    {% if is_granted('ROLE_EDILIGENCE') %}
+                        <div class="col-lg-6 col-md-6 col-sm-6"><a href="#" style="color:white; text-decoration: none;">
+                                <div class="style-box-one Style-one-clr-three">
+
+                                    <span class="glyphicon glyphicon-user"></span>
+                                    <h3 style="color: white;">E-DILIGENCE</h3>
+
+                                </div>                        </a>
+                        </div>
+                    {% endif %}
+                    {% if is_granted('ROLE_SITE') %}
+                        <div class="col-lg-6 col-md-6 col-sm-6"><a href="www.dge.ci/user/login" style="color:white; text-decoration: none;">
+                                <div class="style-box-one Style-one-clr-four">
+
+                                    <span class="glyphicon glyphicon-cog"></span>
+                                    <h3 style="color: white;">ADMINISTRER SITE</h3>
+
+                                </div>
+                            </a>
+                        </div>
+                    {% endif %}
+                    <div class="col-lg-6 col-md-6 col-sm-6"><a href="/" style="color:white; text-decoration: none;">
+                            <div class="style-box-one Style-one-clr-one">
+
+                                <span class="glyphicon glyphicon-home"></span>
+                                <h3 style="color: white;">ACCUEIL</h3>
+
+                            </div> </a>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6"> <a href="{{path('fos_user_security_logout')}}" style="color:white; text-decoration: none;">
+                            <div class="style-box-one Style-one-clr-two">
+
+                                <span class="glyphicon glyphicon-off"></span>
+                                <h3 style="color: white;">Se Déconnecter</h3>
+
+                            </div></a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div align="center">
+            <p>©2017 All Rights Reserved. <br> Direction Générale de l'Economie | Service Informatique et Maintenance. Privacy and Terms</p>
+        </div>
+    </div>
+</div>
+
+
+</body>
+
+</html>

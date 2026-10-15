@@ -1,0 +1,30 @@
+type:
+    path:     /
+    defaults: { _controller: "AgentBundle:Type:index" }
+
+type_show:
+    path:     /{id}/show
+    defaults: { _controller: "AgentBundle:Type:show" }
+
+type_new:
+    path:     /new
+    defaults: { _controller: "AgentBundle:Type:new" }
+
+type_create:
+    path:     /create
+    defaults: { _controller: "AgentBundle:Type:create" }
+    methods:  POST
+
+type_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AgentBundle:Type:edit" }
+
+type_update:
+    path:     /{id}/update
+    defaults: { _controller: "AgentBundle:Type:update" }
+    methods:  [POST, PUT]
+
+type_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AgentBundle:Type:delete" }
+    methods:  [POST, DELETE]

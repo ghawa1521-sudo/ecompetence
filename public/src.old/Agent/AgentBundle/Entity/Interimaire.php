@@ -1,0 +1,262 @@
+<?php
+
+namespace Agent\AgentBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+/**
+ * Interimaire
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Agent\AgentBundle\Repository\InterimaireRepository")
+ */
+class Interimaire
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Agent\AgentBundle\Entity\Agent",  cascade={"persist"})
+     * @ORM\JoinColumn(name="interimaire", referencedColumnName="id",nullable=false)
+     */
+    private $interimaire;
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Agent\AgentBundle\Entity\Agent",  cascade={"persist"})
+     * @ORM\JoinColumn(name="interime", referencedColumnName="id",nullable=false)
+     */
+    private $interime;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datesys", type="datetime", columnDefinition="timestamp default current_timestamp on update current_timestamp")
+     */
+    private $datesys;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datedebut", type="datetime")
+     * 
+     */
+    private $datedebut;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datefin", type="datetime")
+      * @Assert\Expression("this.getDatefin()>=this.getDatedebut()",message="La date de fin doit etre superieure a la date de debut")
+     */
+    private $datefin;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="etatcloture", type="integer")
+     */
+    private $etatcloture = 0;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Agent\AgentBundle\Entity\Agent",  cascade={"persist"})
+     * @ORM\JoinColumn(name="coordonnateur", referencedColumnName="id",nullable=true)
+     */
+    private $coordonnateur;
+   
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set datesys
+     *
+     * @param \DateTime $datesys
+     *
+     * @return Interimaire
+     */
+    public function setDatesys($datesys)
+    {
+        $this->datesys = $datesys;
+
+        return $this;
+    }
+
+    /**
+     * Get datesys
+     *
+     * @return \DateTime
+     */
+    public function getDatesys()
+    {
+        return $this->datesys;
+    }
+
+    /**
+     * Set datedebut
+     *
+     * @param \DateTime $datedebut
+     *
+     * @return Interimaire
+     */
+    public function setDatedebut($datedebut)
+    {
+        $this->datedebut = $datedebut;
+
+        return $this;
+    }
+
+    /**
+     * Get datedebut
+     *
+     * @return \DateTime
+     */
+    public function getDatedebut()
+    {
+        return $this->datedebut;
+    }
+
+    /**
+     * Set datefin
+     *
+     * @param \DateTime $datefin
+     *
+     * @return Interimaire
+     */
+    public function setDatefin($datefin)
+    {
+        $this->datefin = $datefin;
+
+        return $this;
+    }
+
+    /**
+     * Get datefin
+     *
+     * @return \DateTime
+     */
+    public function getDatefin()
+    {
+        return $this->datefin;
+    }
+
+    /**
+     * Set etatcloture
+     *
+     * @param integer $etatcloture
+     *
+     * @return Interimaire
+     */
+    public function setEtatcloture($etatcloture)
+    {
+        $this->etatcloture = $etatcloture;
+
+        return $this;
+    }
+
+    /**
+     * Get etatcloture
+     *
+     * @return integer
+     */
+    public function getEtatcloture()
+    {
+        return $this->etatcloture;
+    }
+
+    /**
+     * Set interimaire
+     *
+     * @param \Agent\AgentBundle\Entity\Agent $interimaire
+     *
+     * @return Interimaire
+     */
+    public function setInterimaire(\Agent\AgentBundle\Entity\Agent $interimaire)
+    {
+        $this->interimaire = $interimaire;
+
+        return $this;
+    }
+
+    /**
+     * Get interimaire
+     *
+     * @return \Agent\AgentBundle\Entity\Agent
+     */
+    public function getInterimaire()
+    {
+        return $this->interimaire;
+    }
+
+    /**
+     * Set interime
+     *
+     * @param \Agent\AgentBundle\Entity\Agent $interime
+     *
+     * @return Interimaire
+     */
+    public function setInterime(\Agent\AgentBundle\Entity\Agent $interime)
+    {
+        $this->interime = $interime;
+
+        return $this;
+    }
+
+    /**
+     * Get interime
+     *
+     * @return \Agent\AgentBundle\Entity\Agent
+     */
+    public function getInterime()
+    {
+        return $this->interime;
+    }
+    
+    public function getcontrol()
+    {
+       $now = new \DateTime();
+       $message='TERMINE';
+       if($now >= $this->getDatedebut() && $now<=$this->getDatefin()){
+           $message='EN COURS';
+       }elseif($now < $this->getDatedebut()){
+           $message='A VENIR';
+       }
+        return $message;
+    }
+
+    /**
+     * Set coordonnateur
+     *
+     * @param \Agent\AgentBundle\Entity\Agent $coordonnateur
+     *
+     * @return Interimaire
+     */
+    public function setCoordonnateur(\Agent\AgentBundle\Entity\Agent $coordonnateur)
+    {
+        $this->coordonnateur = $coordonnateur;
+
+        return $this;
+    }
+
+    /**
+     * Get coordonnateur
+     *
+     * @return \Agent\AgentBundle\Entity\Agent
+     */
+    public function getCoordonnateur()
+    {
+        return $this->coordonnateur;
+    }
+}

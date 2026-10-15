@@ -1,0 +1,84 @@
+<?php
+
+namespace Ediligence\EdiligenceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Treception
+ *
+ * @ORM\Table(name="treception")
+ * @ORM\Entity(repositoryClass="Ediligence\EdiligenceBundle\Repository\TreceptionRepository")
+ */
+class Treception {
+    
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="Id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+    
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="DateReception", type="datetime", nullable=false)
+     */
+    private $datereception;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="etatReception", type="integer", nullable=false)
+     */
+    private $etatreception = '0';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="matriculeReception", type="string", length=5, nullable=false)
+     */
+    private $matriculereception;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="Id_imput", type="integer", nullable=false)
+     */
+    private $idImput = '0';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="chrono", type="string", length=20, nullable=true)
+     */
+    private $chrono;
+
+    
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Tcourrier", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $courrier;
+
+    
+     /**
+     * @ORM\ManyToOne(targetEntity="Ttypecourrier", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $typecourrier;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="servicereception", type="string", length=255, nullable=true)
+     */
+    private $servicereception;
+    
+    
+}

@@ -1,0 +1,651 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+                                               
+
+       {# {{ form_start(form) }}
+        {{ form_errors(form) }}#}
+                           <div class= "modal fade" id= "exampleModal" tabindex= "-1" role= "dialog" aria-labelledby= "exampleModalLabel" aria-hidden= "true" >
+                            <div class= "modal-dialog" role= "document" > 
+                               
+                                <div class= "modal-content" >
+                                 {{ form_start(form1,{'id':'#form_body1'})}}
+                                  {{ form_errors(form1) }} 
+                                               
+                                    <div class= "modal-header panel-primary" > <h5 class= "modal-title" id= "exampleModalLabel" >Ajouter un nouveau diplôme</h5>
+                                        <button type= "button" class= "close" data-dismiss= "modal" aria-label= "Close" > 
+                                            <span aria-hidden= "true" > &times; </span>
+                                        </button> </div> 
+                                             <div class= "modal-body" >
+                                             
+                                                 <div class= "form-group row" >
+                                                    {{ form_label(form1.niveau, 'Niveau', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                                                    {{ form_errors(form1.niveau) }}
+                                                    {{ form_widget(form1.niveau, {'id':'niv','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                                                </div> 
+                                                <div class= "form-group row" > 
+                                                   {{ form_label(form1.libDiplome, 'Libellé du diplôme', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                                                    {{ form_errors(form1.libDiplome) }}
+                                                    {{ form_widget(form1.libDiplome, {'id':'dipl','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                                                </div>
+                                                <input type="hidden" name="bouton" value="1">
+                                             </div>
+                                    <div class= "modal-footer" > 
+                                        <button type= "button" class= "btn btn-secondary" data-dismiss= "modal" > Fermer 
+                                        </button> 
+                                   <input type= "submit" id="btn_valid1" class= "btn btn-primary" data-dismiss= "modal"  value="Enregistrer"/>
+                                        
+                                    </div> 
+                                    {{ form_row(form1._token) }}
+                                    {{ form_end(form1,{render_rest:false}) }}
+                                </div> 
+                                
+                            </div> 
+                        </div>
+
+                           <div class= "modal fade" id= "exampleModal1" tabindex= "-1" role= "dialog" aria-labelledby= "exampleModalLabel1" aria-hidden= "true" >
+                            <div class= "modal-dialog" role= "document" > 
+                                <div class= "modal-content" >
+                                {{ form_start(form2,{'id':'form_body_etab'})}}
+                                {{ form_errors(form2) }} 
+                                               
+                                    <div class= "modal-header panel-primary" > <h5 class= "modal-title" id= "exampleModalLabel1" >Ajouter un nouvel institut</h5>
+                                        <button type= "button" class= "close" data-dismiss= "modal" aria-label= "Close" > 
+                                            <span aria-hidden= "true" > &times; </span>
+                                        </button> </div> 
+                                             <div class= "modal-body" >
+                                             
+                                                <div class= "form-group row" > 
+                                                   {{ form_label(form2.nomEtablissement, 'Nom de l\'institut', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                                                    {{ form_errors(form2.nomEtablissement) }}
+                                                    {{ form_widget(form2.nomEtablissement, {'id':'etab_modal','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                                                </div> 
+                                                
+                                       <input type="hidden" name="bouton" value="2">
+                                        </div>
+                                    <div class= "modal-footer" > 
+                                        <button type= "button" class= "btn btn-secondary" data-dismiss= "modal" > Fermer 
+                                        </button> 
+                                        <input type= "submit" id="btn_valid2" class= "btn btn-primary" data-dismiss= "modal"  value="Enregistrer"/>
+                                        
+                                    </div> 
+                                    {{ form_row(form2._token) }}
+                                    {{ form_end(form2,{render_rest:false}) }}
+                                </div> 
+                            </div> 
+                        </div>
+       
+       
+        <div class="x_panel">
+       
+        <hr>
+          
+          <div class="row"> 
+          <div class="col-md-1"> </div>
+          <div class="col-md-10"> 
+          <div class="panel panel-success">
+          {%if(modif==false)%} 
+
+          <div class="panel-heading"> <h2> Nouvelle formation</h2></div>
+          {%else%}
+          <div class="panel-heading"> <h2> Modification d'une formation</h2></div>
+          {%endif%} 
+
+           {{ form_start(form) }}
+           {{ form_errors(form) }}
+          <div class="panel-body">
+         
+             
+    
+               
+                  <div class="col-md-2" >
+                  </div>
+                  <div class="col-md-8" >
+                    
+                       
+                    <div id="viewsopttyp"class="form-group row">
+                      {{ form_label(form.typeformation, 'Type de formation', {'label_attr': {'class': 'control-labelcol-md-4 col-sm-4 col-xs-12'}} ) }}
+                      {{ form_errors(form.typeformation) }}
+                      {{ form_widget(form.typeformation, {'id': 'typformat','attr':{'class': 'form-control col-md-7 col-xs-12'}}) }}
+                    </div>
+                   
+                    {# ⚠️ Champs masqués si formation qualifiante #}
+                    {% if not qualifiante %}
+
+                     <div  id="viewsoptniv" class="form-group row">
+                        {{ form_label(form.niveauFormation, 'Niveau d\'un diplôme', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.niveauFormation) }}
+                        {{ form_widget(form.niveauFormation, {'id': 'niveau','attr':{'class': 'form-control col-md-7 col-xs-12' }})}}
+                    </div>
+                     <div  id="viewoptdipl" class="form-group row">
+                       <div class="col-md-11">
+                        {{ form_label(form.diplome, 'Diplôme', {'label_attr': {'class': 'control-label col-md-4 col-sm-4 col-xs-12'}} ) }}
+                        {{ form_errors(form.diplome) }}
+                        {{ form_widget(form.diplome, {'id': 'diplome','attr':{'class': 'form-control col-md-7 col-xs-12'}}) }}
+                      </div>
+
+                     <div class="col-md-1"style="margin:0px 0px 0px 0px;">
+                        <div class="form-group row">
+                         <button id="plus" style="position:relative;top: 23px; left: 0px;" type= "button" class= "btn btn-primary glyphicon glyphicon-plus" data-toggle= "modal" data-target= "#exampleModal" data-whatever= "@mdo" ></button>
+                       
+                        </div>
+                    </div>
+
+                    </div>
+
+                       <div  id="viewoptspecialite" class="form-group row">
+                        {{ form_label(form.specialite, 'Spécialité', {'label_attr': {'class': 'control-label col-md-4 col-sm-4 col-xs-12'}} ) }}
+                        {{ form_widget(form.specialite, {'id': 'specialite','attr':{'class': 'form-control col-md-7 col-xs-12'}}) }}
+                      </div>
+  
+                        <div id="viewoption" class="form-group row">
+                         {{ form_label(form.option, 'Option du diplôme', {'label_attr': {'class': 'control-label col-md-4 col-sm-4 col-xs-12'}} ) }}
+                        {{ form_errors(form.option) }}
+                        {{ form_widget(form.option, {'id':'option','attr':{'class': 'form-control col-md-7 col-xs-12'}}) }}
+                      
+                       </div>
+                    {% endif %}   
+                   
+                       <div  id="viewdatob" class="form-group row">
+                        {{ form_label(form.dateObtentiondiplo, 'Date d\'obtention du diplôme', {'label_attr': {'class': 'control-label col-md-8 col-sm-8 col-xs-12'}} ) }}
+                        {{ form_errors(form.dateObtentiondiplo) }}
+                        {{ form_widget(form.dateObtentiondiplo) }}
+                       </div>
+
+                        <div id="viewdatedebut" class="form-group row">
+    {{ form_label(form.dateDebut, 'Date de début', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+    {{ form_errors(form.dateDebut) }}
+    {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control col-md-7 col-xs-12'}}) }}
+</div>
+
+<div id="viewdatefin" class="form-group row">
+    {{ form_label(form.dateFin, 'Date de fin', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+    {{ form_errors(form.dateFin) }}
+    {{ form_widget(form.dateFin, {'attr': {'class': 'form-control col-md-7 col-xs-12'}}) }}
+</div>
+                    <div id="viewoptetab" class="form-group row">
+                       <div class="col-md-11">
+                        {{ form_label(form.etablissement ,'Nom de l\'institut', {'label_attr': {'class': 'control-label col-md-6 col-sm-4 col-xs-12'}} ) }}
+                        {{ form_errors(form.etablissement)}}
+                        {{ form_widget(form.etablissement, {'id': 'etab','attr':{'class': 'col-md-7'}}) }}
+                      </div>
+                       <div class="col-md-1"style="margin:0px 0px 0px 0px;">
+                        <div class="form-group row">
+                         <button id="plus1" style="position:relative;top: 23px; left: 0px;" type= "button" class= "btn btn-primary glyphicon glyphicon-plus" data-toggle= "modal" data-target= "#exampleModal1" data-whatever= "@mdo" ></button>
+                      
+                        </div>
+                    </div>
+                    
+                    </div>
+
+                    {# <div id="viewtxtetab" class="form-group row">
+                        {{ form_label(form.autreetablissement , 'Nom institut',{'label_attr': {'class': 'control-label col-md-6 col-sm-4 col-xs-12'}} ) }}
+                        {{ form_errors(form.autreetablissement) }}
+                        {{ form_widget(form.autreetablissement, {'id': 'autreetab','attr':{'class': 'form-control col-md-7 col-xs-12'}}) }}
+                    </div> #}   
+                
+                    <div id="viewstxtform" class="form-group row" >                
+                        {{ form_label(form.libFormation, 'Intitulé du diplome', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.libFormation) }}
+                        {{ form_widget(form.libFormation, {'id': 'libelle','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                     </div>
+                     
+                     <div id="viewimg" class="form-group row">                
+                     {#{{ form_label(form.pj.imageFile, 'Fichier PDF', {'label_attr': {'class': 'control-label col-md-6 col-sm-4 col-xs-12'}} ) }}#}
+                      {{ form_errors(form.pjFile) }}
+                      {{ form_widget(form.pjFile, {'attr': {'accept': '.pdf'}}) }}
+                    </div>
+                    <br>
+                    <div id="viewstxtform" class="form-group row" >
+                    <input  type="hidden" id="modif" value="{{modif}}">    
+                    {{ form_widget(form.enregistrer, {'attr':{'class': 'btn btn-primary'}}) }}
+                        <input type="hidden" name="bouton" value="0">   
+                        <button type="button" class="btn btn-warning" onclick="window.history.back();">
+                        <i class="fa fa-arrow-left"></i> Retour
+                        </button> 
+                    </div> 
+                    
+                       
+                 </div>
+                 <div class="col-md-2">
+                 </div>
+                 
+                 </div>
+                   
+                     </div>
+                      {{ form_row(form._token) }}
+                      {{ form_end(form,{render_rest:false}) }}  
+                    <div class="col-md-1">
+
+                    </div>
+                   </div>
+                   </div>
+   
+                   
+<style>
+.help-block{
+color:red;
+font-weight:bold;
+}
+</style>
+{% endblock %}
+
+{% block javascript %}
+
+<script type="text/javascript" src="{{ asset('design/js/wizard/jquery.smartWizard.js') }}"></script>
+<script src="{{ asset('design/js/nicescroll/jquery.nicescroll.min.js') }}"></script>
+
+<script type="text/javascript">
+        $(document).ready(function () {
+        $('#viewtxtetab').hide();
+        $('#autreetab').attr({required:false});
+        $('#niveau').attr({required:true});
+        $('#etab').attr({required:true});
+        $('#libelle').attr({required:true});
+        $('#diplome').attr({required:true});
+        $('#specialite').attr({required:true});
+        // Assure-toi qu'elles sont obligatoires
+        $('#dateDebut').prop('required', true);
+        $('#dateFin').prop('required', true);
+       
+        var modif=$('#modif').val();
+        var type=$('#typformat').val();
+
+        if (modif==0) 
+        {      
+        $('#viewoptspecialite').show();
+        $('#viewoption').show();
+        $('#viewtxtetab').show(); 
+        $('#viewsoptniv').show();
+        $('#viewoptetab').show();
+        $('#viewtxtpodipl').show();
+        $('#viewoptdipl').show();
+        $('#plus').show();
+        $('#plus1').show(); 
+       // $('#diplome').children('option:not(:first)').remove();
+       // $('#specialite').children('option:not(:first)').remove();
+       // $('#option').children('option:not(:first)').remove();
+      }
+        else if (type==1)
+       {
+        $('#viewoptspecialite').show();
+        $('#viewoption').show();
+        $('#viewtxtetab').hide(); 
+        $('#viewsoptniv').show();
+        $('#viewoptetab').show();
+        $('#viewtxtpodipl').show();
+        $('#viewoptdipl').show();
+        $('#dateDebut').show();
+        $('#dateFin').show();
+        $('#plus').show();
+        $('#plus1').show(); 
+
+        var diplome=$('#diplome').val();
+          if (diplome==1||diplome==3||diplome==5)
+          {
+              if(diplome==5) 
+              {
+                $('#viewoption').hide();
+              }
+              else
+              {
+              $('#viewoptspecialite').hide();
+              $('#viewoption').hide();
+             
+             }
+            
+          }  
+               // Pour la formation diplômante : masquage des dates de début et fin
+            $('#viewdatedebut').hide();
+            $('#viewdatefin').hide();
+            $('#dateDebut').prop('required', true);
+            $('#dateFin').prop('required', true);
+            $('#dateObtentiondiplo').prop('required', true);
+
+        }
+            else
+            {
+          
+             $('#viewsoptniv').hide();
+             $('#viewtxtetab').show();
+             $('#viewoption').hide(); 
+             $('#viewoptspecialite').hide();
+             $('#viewoptetab').hide();
+             $('#viewtxtpodipl').hide();
+             $('#viewoptdipl').hide();
+             $('#plus').hide();
+             $('#plus1').hide();
+             // Masquer les champs "viewdatob" (date d'obtention du diplôme) et "dateDebut" et "dateFin"
+            //$('#viewdatob').hide();  // Cacher le champ "Date d'obtention du diplôme"
+            $('#viewdatedebut').show();
+            $('#viewdateFin').show();
+            // Retirer la contrainte "required" du champ dateObtentiondiplo
+            //$('#dateObtentiondiplo').prop('required', false); 
+            // Rendre les dates "Date de début" et "Date de fin" obligatoires
+            $('#dateDebut').prop('required', true);
+            $('#dateFin').prop('required', true);
+        }
+    
+         
+        });
+        
+       $('#typformat').change(function(){
+          var type=$(this).val();
+
+          if (type==1)
+          {  
+          
+              $('#viewoptspecialite').show();
+              $('#viewoption').show();
+              $('#viewtxtetab').show(); 
+              $('#viewsoptniv').show();
+              $('#viewoptetab').show();
+              $('#viewtxtpodipl').show();
+              $('#viewoptdipl').show();
+              $('#plus').show();
+              $('#plus1').show();
+              $('#specialite').attr({required:true});
+              $('#libelle').attr({required:true});
+              $('#autreetab').attr({required:false});
+              $('#niveau').attr({required:true});
+              $('#etab').attr({required:true});
+              $('#diplome').attr({required:true});
+              $('#viewdatob').show();  
+              $('#viewdatedebut').show();  // Masquer "Date de début"
+              $('#viewdatefin').show(); 
+                 // Retirer la contrainte "required" des dates "Date de début" et "Date de fin"
+            $('#dateDebut').prop('required', true); 
+            $('#dateFin').prop('required', true);
+            $('#dateObtentiondiplo').prop('required', true);
+             /* $('#viewstxtform').css({
+               position:absolute,
+               top: '144px', 
+               left:'36px',
+               width:'407px',
+              });*/
+          }
+          else
+          { 
+             $('#viewsoptniv').hide();
+             $('#viewtxtetab').show();
+             $('#viewoption').hide(); 
+             $('#viewoptspecialite').hide();
+             $('#viewoptetab').hide();
+             $('#viewtxtpodipl').hide();
+             $('#viewoptdipl').hide();
+             $('#plus').hide();
+             $('#plus1').hide();
+             $('#specialite').attr({required:false});
+             $('#libelle').attr({required:true});
+             $('#autreetab').attr({required:true});
+             $('#niveau').attr({required:false});
+             $('#etab').attr({required:false});
+             $('#diplome').attr({required:false});
+             $('#viewdatedebut').show();
+             $('#viewdatefin').show();
+             $('#viewdatob').show();
+             $('#dateObtentiondiplo').prop('required', false);
+           /*  $('#viewstxtform').css({
+               position: absolute,
+               top: '280px',
+               left:'607px',
+               width:'407px',
+              });*/
+              //niveau libelle diplome optdipl etab autreetab
+                    
+          }
+              
+           
+        });
+
+
+ /*$('#diplome').change(function(){
+          
+        $('#specialite').children('option:not(:first)').remove();
+        $('#option').children('option:not(:first)').remove();   
+        });
+
+ $('#specialite').change(function(){
+
+        $('#option').children('option:not(:first)').remove();   
+        });*/
+
+
+</script>
+
+<script type="text/javascript">
+   $('#btn_valid1').on('click', function (e) {
+      
+        e.preventDefault();
+ 
+        $.ajax({
+            type: $('#form_body_diplo').attr('method'),
+            url: $('#form_body_diplo').attr('action'),
+            data: $('#form_body_diplo').serialize()
+        })
+        .done(function (data) {
+          
+            if (typeof data.message !== 'undefined') {                //alert(data.message);
+                var monObjet = JSON.parse(data.value);
+               // console.log(monObjet);
+
+                  // Selectionner une option d'un selection à l'aide de son value
+                 $('#niveau option[value='+monObjet.niveau.id+']')
+                 .attr("selected", "seleted");
+                 $('#diplome')
+                 .append($("<option></option>")
+                 .attr("value", monObjet.id)
+                 .text(monObjet.libDiplome)
+                 .attr("selected", "seleted"));
+                 //alert(monObjet.libDiplome); 
+
+                // $('#id_deplacement_designation').val("");
+                 $('.form_error').empty();
+            }
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            if (typeof jqXHR.responseJSON !== 'undefined') {
+                if (jqXHR.responseJSON.hasOwnProperty('form')) {
+                    $('#form_body_diplo').html(jqXHR.responseJSON.form);
+                }
+ 
+                $('.form_error').html(jqXHR.responseJSON.message);
+ 
+            } else {
+                alert(errorThrown);
+            }
+ 
+        });
+    });                   
+</script>
+
+<script type="text/javascript">
+   $('#btn_valid2').on('click', function (e) {
+ 
+        e.preventDefault();
+ 
+        $.ajax({
+            type: $('#form_body_etab').attr('method'),
+            url: $('#form_body_etab').attr('action'),
+            data: $('#form_body_etab').serialize()
+       
+        })
+        .done(function (data) {
+            //alert(1);
+            if (typeof data.message !== 'undefined') {                //alert(data.message);
+                var monObjet = JSON.parse(data.value);
+                //console.log(monObjet);
+                  // Selectionner une option d'un selection à l'aide de son value
+                /* $('#sec option[value='+monObjet.secteur.id+']')
+                 .attr("selected", "seleted");*/
+                 $('#etab')
+                 .append($("<option></option>")
+                 .attr("value", monObjet.id)
+                 .text(monObjet.nomEtablissement)
+                 .attr("selected", "selected"));
+                $('#exampleModal1').modal('hide');
+                // $('#id_deplacement_designation').val("");
+                 $('.form_error').empty();
+            }
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            if (typeof jqXHR.responseJSON !== 'undefined') {
+                if (jqXHR.responseJSON.hasOwnProperty('form')) {
+                    $('#form_body_etab').html(jqXHR.responseJSON.form);
+                }
+ 
+                $('.form_error').html(jqXHR.responseJSON.message);
+ 
+            } else {
+              //alert(3);
+                alert(errorThrown);
+            }
+ 
+        });
+    });                   
+</script>
+
+
+
+<script type="text/javascript">
+{#function searchList($sourceval, $route, $destval, $div)
+{  
+  if($sourceval=="#diplome")
+     { 
+        
+      var diplome=$($sourceval).val();
+          if (diplome==1||diplome==3||diplome==5)
+          {   $('#libelle').val('');
+              if(diplome==5) 
+              {
+                $('#option').children('option:not(:first)').remove();
+                $('#viewoption').hide();
+              }
+              else
+              {
+              $('#specialite').children('option:not(:first)').remove();
+              $('#option').children('option:not(:first)').remove();
+              $('#viewoptspecialite').hide();
+              $('#viewoption').hide();
+              $('#specialite').attr({required:false});
+             }
+            
+          }
+          else
+          { 
+         
+              $('#viewoptspecialite').show();
+              $('#viewoption').show();
+              $('#specialite').attr({required:true});
+           }
+      }     
+     
+    $source = $($sourceval).val();
+  
+    //alert($source);
+    if ($source.length > 0 ){
+
+        $source=$source;
+        //showloader('#cacher');
+    }else{
+            $source=0;
+        }
+    
+    $paramroute = {'id': $source};
+   
+    //alert(Routing.generate($route, $paramroute));
+    //alert($div); exit;
+    //console.log($div);
+
+    $.ajax({
+       type: 'GET',
+       url: Routing.generate($route, $paramroute),
+       dataType: 'json',
+       success: function(data) {
+        //console.log(data);
+          // alert(jQuery.isEmptyObject(data));
+           
+
+           if (jQuery.isEmptyObject(data) == false){
+            //  alert("ok");
+               $($destval).children('option:not(:first)').remove();
+               //$($destval).append('<option>---- Choisir un Service-----</option>');
+               $.each(data, function(key, value) {
+                
+                    //console.log(value);
+                 $($destval).append('<option value= "' + value[0] + '">' + value[1] + '</option>');
+
+                // $($destval).html("ggggg");
+               
+               });
+               
+                 
+               
+            
+           }
+           else{
+               //console.log($sourceval);
+              //  alert("no");
+               $($destval).children('option:not(:first)').remove();
+              
+           }
+       }
+       });
+   
+} #}
+
+function searchList($sourceval, $route, $destval, $div)
+{  
+    // --- Récupère la valeur sélectionnée avant de vider le select
+    var selectedValue = $($destval).val();
+
+    if($sourceval=="#diplome")
+    { 
+        var diplome = $($sourceval).val();
+        if (diplome==1||diplome==3||diplome==5)
+        {   
+            $('#libelle').val('');
+            if(diplome==5) {
+                $('#option').children('option:not(:first)').remove();
+                $('#viewoption').hide();
+            } else {
+                $('#specialite').children('option:not(:first)').remove();
+                $('#option').children('option:not(:first)').remove();
+                $('#viewoptspecialite').hide();
+                $('#viewoption').hide();
+                $('#specialite').attr({required:false});
+            }
+        } else { 
+            $('#viewoptspecialite').show();
+            $('#viewoption').show();
+            $('#specialite').attr({required:true});
+        }
+    }     
+
+    $source = $($sourceval).val();
+    if ($source.length == 0) $source = 0;
+    $paramroute = {'id': $source};
+
+    $.ajax({
+        type: 'GET',
+        url: Routing.generate($route, $paramroute),
+        dataType: 'json',
+        success: function(data) {
+            if (jQuery.isEmptyObject(data) == false){
+                $($destval).children('option:not(:first)').remove();
+                $.each(data, function(key, value) {
+                    $($destval).append('<option value="' + value[0] + '">' + value[1] + '</option>');
+                });
+
+                // --- Réappliquer la valeur précédemment sélectionnée
+                if (selectedValue) {
+                    $($destval).val(selectedValue);
+                }
+            } else {
+                $($destval).children('option:not(:first)').remove();
+            }
+        }
+    });
+}
+
+</script>    
+{% endblock %}

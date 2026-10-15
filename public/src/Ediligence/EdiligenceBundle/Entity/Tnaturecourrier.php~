@@ -1,0 +1,35 @@
+<?php
+
+namespace Ediligence\EdiligenceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Tnaturecourrier
+ *
+ * @ORM\Table(name="tnaturecourrier")
+ * @ORM\Entity
+ */
+class Tnaturecourrier
+{
+     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+    
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="libNatCour", type="string", length=50, nullable=false)
+     */
+    private $libnatcour;
+
+   
+
+
+}

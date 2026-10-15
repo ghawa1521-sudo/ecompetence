@@ -1,0 +1,54 @@
+<?php
+
+namespace Ecompetence\EcompetenceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Agent_Langue
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Ecompetence\EcompetenceBundle\Entity\Agent_LangueRepository")
+ */
+class Agent_Langue
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+    
+     /**
+     * @ORM\ManyToOne(targetEntity="Agent\AgentBundle\Entity\Agent")
+     * @ORM\JoinColumn(name="agent_id", referencedColumnName="id", nullable=true)
+     */
+    private $agent; 
+   
+     /**
+     * @ORM\ManyToOne(targetEntity="Langue")
+     * @ORM\JoinColumn(name="langue_id", referencedColumnName="id", nullable=true)
+     */
+    private $langue; 
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="lire", type="string", length=15)
+     */
+    private $lire;
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="ecrire", type="string", length=15)
+     */
+    private $ecrire;
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="parler", type="string", length=15)
+     */
+    private $parler;
+}

@@ -1,0 +1,110 @@
+{% extends '::base.html.twig' %}
+{% block css %}
+    <link href="{{ asset('design/css/style.css') }}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{{asset('ediligence/assets/css/bootstrap-select.min.css')}}">
+{% endblock %}
+
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+    <style>
+        th{
+            text-align: left !important;
+        }
+        .dataTables_filter{
+            width: auto !important;
+        }
+    </style>
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+
+{% block title %}
+    Faire une proposition de congés
+{% endblock %}
+
+
+{% block body -%}
+    <div class="row">
+        <div class="col-md-6">{#
+            <span class="section">
+
+            </span>
+            #}
+            <div class="x_title">
+                <h2>Régularisation de congés<small> </small></h2>
+                <div class="clearfix"></div>
+            </div>
+            {#{dump(form.vars)}#}
+            <div class="">
+                {{ form_start(form) }}
+                {{ form_errors(form) }}
+                {{ form_label(form.agent, 'Agent', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                {{form_row(form.agent)}}
+           
+                {#{form_row(form.decision)}#}
+                {{ form_label(form.datedebut, 'Date de départ ', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                {{form_row(form.datedebut)}}
+                {{ form_label(form.datefin, 'Date de fin ', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                {{form_row(form.datefin)}}
+                {{ form_widget(form.objetFile) }}
+                {{form_row(form.typeConges)}}
+                    {{form_row(form.exercice)}}
+                {{form_row(form.externe)}}
+          
+                {{form_row(form.nbrejours)}}
+                {{form_row(form.datereprise)}}
+                
+                {{form_row(form.numCessation)}}
+                {#{form_row(form.numReprise)}#} 
+             
+                {{ form_label(form.objetFile, ' ') }}
+                {{ form_errors(form.objetFile) }}
+                
+                <input type="submit" class="btn btn-success" value="Enregistrer" />
+            </div>
+
+            {{ form_widget(form._token) }}
+            {{ form_end(form, {'render_rest': false}) }}
+
+        </div>
+
+        <div class="col-md-6 table-responsive">
+                <table class="records_chk table table-striped responsive-utilities jambo_table table-responsive" id="datatable" >
+                <thead>
+
+                    <tr class="headings">
+                        <th>
+                        </th>
+                        <th>Matricule</th>
+                        <th>Nom et Prénoms</th>
+                        <th>Service/Direction</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for liste in listeconges %}
+                        <tr>
+                            <td></td>
+                            <td>{{liste.agent.matricule}}</td>
+                            <td>{{liste.agent.concatNom}}</td>
+                            <td>{{liste.agent.getServiceActuel}}</td>
+                            <td>
+                                <a href="{{path('agent_identification_modif',{id:liste.id })}}" class="btn btn-danger">
+                                    Modifier
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    
+{% endblock %}
+{% block javascript %}
+
+    <script src="{{ asset('design/js/style.js') }}"></script>
+    <script src="{{ asset('ediligence/assets/js/bootstrap-select.min.js') }}"></script>
+{% endblock %}

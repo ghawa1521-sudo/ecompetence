@@ -1,0 +1,19 @@
+divers_index:
+    path:     /
+    defaults: { _controller: "EcompetenceBundle:Divers:new" }
+
+divers_new:
+    path:      /{id}/new
+    defaults: { _controller: "EcompetenceBundle:Divers:new" }
+
+divers_edit:
+    path:      /{id}/{ag}/edit
+    defaults: { _controller: "EcompetenceBundle:Divers:edit" }
+
+divers_liste:
+    path:      /{id}/liste
+    defaults: { _controller: "EcompetenceBundle:Divers:liste" }
+        
+divers_detail:
+    path:     /{id}/detail
+    defaults: { _controller: "EcompetenceBundle:Divers:detail" }

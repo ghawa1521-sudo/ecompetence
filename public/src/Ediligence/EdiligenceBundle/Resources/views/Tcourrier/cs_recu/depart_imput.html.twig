@@ -1,0 +1,76 @@
+{% extends '::ediligence/base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{asset('ediligence/assets/css/bootstrap-select.min.css')}}">
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('ediligence/assets/js/bootstrap-select.min.js') }}"></script>
+
+{% endblock %}
+
+{% block body %}
+    <div class="content-header">
+        <div class="header-section">
+            <h1>
+                <i class="gi gi-notes_2"></i>Transmettre courrier<br><small>Veuillez remplir les champs ci-dessous</small>
+            </h1>
+        </div>
+    </div>
+    <ul class="breadcrumb breadcrumb-top">
+        <li>Transmettre</li>
+        <li><a href="">Nouveau</a></li>
+    </ul>
+    <div class="row">
+        <div class="col-md-offset-1 col-md-10">
+            <form method="post" class="form-vertical col-md-12" style="color:#006;" name="frm_imputer" enctype="multipart/form-data" id="form_Imputation">
+                <div class="block">
+                    <!-- Basic Form Elements Title -->
+                    <div class="block-title">
+
+                        <h2><strong>Nouveau Courrier</strong></h2>
+                    </div>
+
+                    <div class="row" >
+                        <div class="col-md-12">
+                            <div class="bien">
+                                <table>
+                                    <tr >
+                                        <td align="right" width="25%"><b>COURRIER N°&nbsp;&nbsp;&nbsp;{{entities.id}}</b></td>
+                                        <td><b>{#{ entity.id}#}</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" width="25%" style="vertical-align: middle;"><b>OBJET:&nbsp;&nbsp;&nbsp;</b></td>
+                                        <td><b>{{entities.objet|raw|striptags|slice(0, 150) }}</b></td>
+                                    </tr>
+                                    <tr style="vertical-align: central;">
+                                        <td align="right" width="25%"><b>DE:&nbsp;&nbsp;&nbsp;</b></td>
+                                        <td>
+                                            <input id="De1" name="De" value="{{app.user.agent.matricule}}" checked="" disabled="" type="checkbox">
+                                            <label for="De1">{{app.user.agent.nom}}&nbsp;{{app.user.agent.prenoms}}</label>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>   
+
+                    <div class="row" >
+                        <div class="col-md-6" id="GDestt">
+                            {{ macro.entete_departimput(niveauservice, dirservice) }}
+                        </div>
+                            
+                            <button id="btnp" type="submit" value="eff_imputation" class="btn btn-primary pull-right form-control" name="a_eff_imputatio"><span class="glyphicon glyphicon-ok-sign"> EFFECTUER L'IMPUTATION</span>
+                            </button>
+                            <input type="hidden" name="ok" value="ok">
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <ul>
+        <li>
+            <a href="{{ path('interne') }}">Retour</a>
+        </li>
+    </ul>
+{% endblock %}

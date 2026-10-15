@@ -1,0 +1,78 @@
+<?php
+
+namespace Demandes\DemandesBundle\Form;
+
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Demandes\DemandesBundle\TypeDemande;
+use Doctrine\ORM\EntityRepository;
+
+
+class DemandeOkType extends AbstractType
+{
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
+
+     private $matricule;
+
+     public function __construct($matricule)
+     {
+
+         $this->matricule = $matricule;
+
+         //var_dump($this->todo);
+     }
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+         $nbrecopie = array(
+            1 => '1 copie ',
+            2 => '2 copies',
+            3 => '3 copies');
+
+        $builder
+            ->add('typeDemande', NULL,[
+              'attr' => array('required' => true),
+            'class'=>'DemandesBundle:TypeDemande',
+            'query_builder'=>function(EntityRepository $er) {
+            $querybuilder = $er->findTypeDemandePrive($this->matricule);
+            return $querybuilder;
+            },
+            'empty_value' => '-- Sélectionner le type de la Demande --',
+            ])
+            ->add('dateDeb','datetime', array('required' => false,'label'=>'Date de Début' , 'widget' => 'single_text', 'date_format' => 'dd-MM-yyyy H:i','format' => 'dd-MM-yyyy',
+                'attr' => array('class' => 'form-control datetimepicker')))
+
+            ->add('dateFin','datetime', array('required' => false,'label'=>'Date de Fin','widget' => 'single_text', 'date_format' => 'dd-MM-yyyy H:i','format' => 'dd-MM-yyyy',
+                'attr' => array('class' => 'form-control datetimepicker')))
+            ->add('objet',NULL,['required' => true,'label'=>'Motif de la demande'])
+            ->add('nbrecopie', 'choice', array('empty_value' => 'Choisir nombre de copie', 'label' => 'Nombre de copies', 'choices' => $nbrecopie,
+                        'expanded' => false,
+                        'multiple' => false,
+                        'required' => false,
+                        'attr' => array('class' => '')))
+            ->add('destination')
+        ;
+        
+    }
+
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => 'Demandes\DemandesBundle\Entity\Demande'
+        ));
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return 'demandes_demandesbundle_demande';
+    }
+}

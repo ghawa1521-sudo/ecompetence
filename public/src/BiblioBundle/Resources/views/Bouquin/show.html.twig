@@ -1,0 +1,70 @@
+{% extends '::biblio/base.html.twig' %}
+{% block title %}bouquin: {{ entity.libelle }}{% endblock %}
+{% block fil %}{{ entity.libelle }}{% endblock %}
+{% block body -%}
+    <h3 class="header smaller lighter blue">Détails &nbsp;<small>{{ entity.libelle }}</small></h3>
+    <div class="col-xs-12 col-sm-6">
+        <div class="profile-user-info profile-user-info-striped">
+            <div class="profile-info-row">
+                <div class="profile-info-name">Depuis le </div>
+                <div class="profile-info-value">
+                    <span >{{ entity.datecreation|date('d-m-Y H:i:s') }}</span>
+                </div>
+            </div>
+                {#
+            <div class="profile-info-row">
+                <div class="profile-info-name"> Code</div>
+                <div class="profile-info-value">
+                    <span class="" id="username">{{ entity.id }}</span>
+                </div>
+            </div>
+                #}
+            <div class="profile-info-row">
+                <div class="profile-info-name"> Dir. / Serv.</div>
+                <div class="profile-info-value">
+                    <span >{{ entity.direction.sigle }}</span>
+                </div>
+            </div>
+            <div class="profile-info-row">
+                <div class="profile-info-name"> Catégories</div>
+                <div class="profile-info-value">
+                    <span >{{ entity.categorie }}</span>
+                </div>
+            </div>
+            <div class="profile-info-row">
+                <div class="profile-info-name"> Titre</div>
+                <div class="profile-info-value">
+                    <span >{{ entity.libelle }}</span>
+                </div>
+            </div>
+            <div class="profile-info-row">
+                <div class="profile-info-name"> Détails</div>
+                <div class="profile-info-value">
+                    <span >{{ entity.details|raw }}</span>
+                </div>
+            </div>
+            <div class="profile-info-row">
+                <div class="profile-info-name"> Télécharger</div>
+                <div class="profile-info-value">
+                    <span ><a href="{{vich_uploader_asset(entity.pj, 'imageFile')}}"><i class="ace-icon fa fa-download bigger-125 blue"> Télécharger</i></a></span>
+                </div>
+            </div>
+            
+        </div>
+        <br/>
+        <a title="Retour" href="{{ app.request.headers.get('referer')}}" class="btn btn-danger btn-sm">
+            <i class="ace-icon fa fa-reply icon-only"></i>
+        </a>
+        {#
+        <a href="{{ path('bouquin_edit', { 'id': entity.id }) }}">
+            Modifier
+        </a>
+        {{ form(delete_form) }}
+        #}
+
+
+
+    </div>
+
+
+{% endblock %}

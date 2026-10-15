@@ -1,0 +1,55 @@
+<?php
+
+namespace Agent\AgentBundle\Form;
+
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
+class DeleguationType extends AbstractType
+{
+    private $users;
+
+    public function __construct($users = null) {
+        $this->users = $users;
+    }
+
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('dateDebut', 'datetime', array('required' => false, 'label' => 'Du', 'widget' => 'single_text', 'date_format' => 'dd-MM-yyyy H:i', 'format' => 'dd-MM-yyyy',
+                    'attr' => array('class' => 'form-control datetimepicker')))
+            ->add('dateFin', 'datetime', array('required' => false, 'label' => 'Au', 'widget' => 'single_text', 'date_format' => 'dd-MM-yyyy H:i', 'format' => 'dd-MM-yyyy',
+                    'attr' => array('class' => 'form-control datetimepicker')));
+            
+           /* ->add('fonctionalite', 'entity', ['class' => 'null',
+                    'required' => true,
+                    'empty_value' => '---- Choisir une fonctionnalite----',
+                    'attr' => ['class' => 'selectpicker', 'data-live-search' => 'true'],
+                    'choice_label' => ''
+                    ]);*/
+
+    }
+    
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => 'Agent\AgentBundle\Entity\Deleguation'
+        ));
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return 'agent_agentbundle_deleguation';
+    }
+}

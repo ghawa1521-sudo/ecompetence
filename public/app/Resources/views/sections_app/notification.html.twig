@@ -1,0 +1,50 @@
+
+                            <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-envelope-o"></i>
+                                <span class="badge bg-green">{{cnotif}}</span>
+                            </a>
+                            <ul id="menu1" class="dropdown-menu list-unstyled msg_list animated fadeInDown" role="menu">
+                                {% for notif in notifs %}
+                                    {% set datecreation = date(temps|date("m/d/y")).diff(date(notif.datecreation|date("m/d/y")))  %}
+                                {#    {{dump(date(temps|date("m/d/y")))}}
+                                    {{dump(date(notif.datecreation|date("m/d/y")))}} #}
+                                <li>
+                                    <a href="{{path('demande_show', {id : notif.id})}}">
+                                            <span class="image">
+                                                {% if (notif.emmeteur) %}<img src="{{ vich_uploader_asset(notif.emmeteur, 'imageFile') }}" alt="{{ notif.emmeteur.imageName }}" > {% endif %}  
+                                            </span>
+                                            <span>
+                                                <span>{{notif.emmeteur.nom}} {{notif.emmeteur.prenoms}}</span>
+                                            <span class="time">
+                                                
+                                                {% if (datecreation.days == 0) %}
+                                                    Aujourd'hui
+                                                {% elseif datecreation.days >= 1%}
+                                                Il y a {{datecreation.days}} jours
+                                                {% endif %}
+                                            </span>
+                                            </span>
+                                            <span class="message">
+                                                   {{notif.objet}}
+                                            </span>
+                                    </a>
+                                </li>
+                                {% endfor %}
+                                {% if cnotif == 0 %} 
+                                    <li>
+                                        <span>
+                                            Vous n'avez pas de nouvelle notification
+                                        </span>
+                                    </li>
+                                {% elseif cnotif>0 %}
+                                        <li>
+                                            <div class="text-center">
+                                                <a>
+                                                    <strong>Voir toutes les alertes</strong>
+                                                    <i class="fa fa-angle-right"></i>
+                                                </a>
+                                            </div>
+                                        </li>
+                                {% endif %}
+                                
+                            </ul>

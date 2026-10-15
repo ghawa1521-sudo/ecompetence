@@ -1,0 +1,121 @@
+affecter:
+    path:     /
+    defaults: { _controller: "AgentBundle:Affecter:index" }
+affecter_saaf:
+    path:     /saaf
+    defaults: { _controller: "AgentBundle:Affecter:listSaaf" }
+
+affecter_saaf_choix:
+    path:     /saaf/choix/{id}
+    defaults: { _controller: "AgentBundle:Affecter:listSaafChoix" }
+
+affecter_show:
+    path:     /{id}/show
+    defaults: { _controller: "AgentBundle:Affecter:show" }
+
+affecter_new:
+    path:     /new
+    defaults: { _controller: "AgentBundle:Affecter:new" }
+
+affecter_create:
+    path:     /create
+    defaults: { _controller: "AgentBundle:Affecter:create" }
+    methods:  POST
+
+affecter_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AgentBundle:Affecter:edit" }
+
+affecter_update:
+    path:     /{id}/update
+    defaults: { _controller: "AgentBundle:Affecter:update" }
+    methods:  [POST, PUT]
+
+affecter_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AgentBundle:Affecter:delete" }
+    methods:  [POST, DELETE]
+
+affecter_valid:
+    path:     /{id}/valid
+    defaults: { _controller: "AgentBundle:Affecter:valid" }
+    methods: [POST, PUT]
+
+affecter_print:
+    path:     /{id}/print
+    defaults: { _controller: "AgentBundle:Affecter:print" }
+
+affecter_view:
+    path:     /{id}/view
+    defaults: { _controller: "AgentBundle:Affecter:view" }
+
+affecter_print_test:
+    path:     /{id}/printest
+    defaults: { _controller: "AgentBundle:Affecter:printest" }
+affecter_direction:
+    path:     /{id}/dir
+    defaults: { _controller: "AgentBundle:Affecter:direction" }
+affecter_update_dir:
+    path:     /{id}/updatedir
+    defaults: { _controller: "AgentBundle:Affecter:updatedir" }
+    methods:  [POST, PUT]
+
+affecter_list_modif:
+    path:     /listModif
+    defaults: { _controller: "AgentBundle:Affecter:listModif" }
+
+affecter_list_valid:
+    path:     /listValid
+    defaults: { _controller: "AgentBundle:Affecter:listValid" }
+
+affecter_list_print_note:
+    path:     /list/print/note
+    defaults: { _controller: "AgentBundle:Affecter:listNote" }
+
+affecter_list_print_certif:
+    path:     /list/print/cert
+    defaults: { _controller: "AgentBundle:Affecter:listCertif" }
+
+affecter_list_num_note:
+    path:     /list/scan/note
+    defaults: { _controller: "AgentBundle:Affecter:numNote" }
+
+affecter_list_num_certif:
+    path:     /list/scan/cert
+    defaults: { _controller: "AgentBundle:Affecter:numCertif" }
+
+affecter_etat:
+    path:     /globalstate
+    defaults: { _controller: "AgentBundle:Affecter:etat" }
+
+affecter_numerise:
+    path:     /{id}/numerise
+    defaults: { _controller: "AgentBundle:Affecter:numerise" }
+
+affecter_directioncentrale_listetype:
+    path:     /{id}/ListeDc
+    defaults: { _controller: "AgentBundle:Affecter:ListeDirectionCentrale" }
+    methods:  GET
+    options:
+      expose: true
+
+affecter_sousDirection_listetype:
+    path:     /{id}/ListeSd
+    defaults: { _controller: "AgentBundle:Affecter:ListeSousDirection" }
+    methods:  GET
+    options:
+      expose: true
+
+affecter_serviceDirection_listetype:
+    path:     /{id}/ListeSc
+    defaults: { _controller: "AgentBundle:Affecter:ListeServiceDirection" }
+    methods:  GET
+    options:
+      expose: true
+
+affecter_mail:
+    path:     mail
+    defaults: { _controller: "AgentBundle:Affecter:testMail" }
+affecter_test:
+    path:     /testform
+    defaults: { _controller: "AgentBundle:Affecter:testform" }

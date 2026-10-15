@@ -1,0 +1,76 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+  
+           <br>
+                         <h2> Modification d'une expérience professionelles</h2>
+                          <hr>
+         <div id="wizard" class="form_wizard wizard_horizontal">
+            
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+        {{ form_errors(form) }}
+                <div class="col-md-3">
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        {{ form_label(form.dateDebExp, 'Date de début', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form.dateDebExp) }}
+                        {{ form_widget(form.dateDebExp) }}
+                    </div>
+                    <div class="form-group row">
+                        {{ form_label(form.dateFinExp, 'Date de fin', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form.dateFinExp) }}
+                        {{ form_widget(form.dateFinExp) }}
+                    </div>
+                    
+                     <div  id="viewsct" class="form-group row">
+                        {{ form_label(form.secteur, 'Secteur', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.secteur) }}
+                        {{ form_widget(form.secteur, {'id':'sec','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                    </div>
+                    
+                     <div  id="viewstr" class="form-group row">
+                        {{ form_label(form.structure, 'Nom Employeur', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.structure) }}
+                        {{ form_widget(form.structure, {'id':'str','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                      </div>
+                       <div id="viewautrestr" class="form-group row">
+                        {{ form_label(form.autrestructure, 'Autre', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.autrestructure) }}
+                        {{ form_widget(form.autrestructure, {'id':'autrestr','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                      </div>
+                    <div id="viewcvdg" class="form-group row">
+                        {{ form_label(form.cvdirectiongle, 'Direction générale', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.cvdirectiongle) }}
+                        {{ form_widget(form.cvdirectiongle, {'id':'cvdg','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                       </div>
+                       <div  id="viewcvdc" class="form-group row">
+                        {{ form_label(form.cvdirection, 'Direction', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.cvdirection) }}
+                        {{ form_widget(form.cvdirection, {'id':'cvdc','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                       </div>
+
+                    <div id="viewtxtpo" class="form-group row">
+                        {{ form_label(form.libExp, 'Poste occupé', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.libExp) }}
+                        {{ form_widget(form.libExp, {'id':'txtpo','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                    </div>
+                    <div id="viewoptpo" class="form-group row">
+                        {{ form_label(form.fonction, 'Poste occupé', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.fonction) }}
+                        {{ form_widget(form.fonction, {'id':'optpo','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                    </div>
+                   
+                   <div class="form-group row">
+                        {{ form_row(form._token) }}
+                        {{ form_widget(form.enregistrer, {'attr':{'class': 'btn btn-primary'}}) }}
+                        <input type="hidden" name="bouton" value="1">
+                    </div> 
+                           {{ form_end(form,{render_rest:false}) }}
+                    </div>
+                       </div> 
+
+
+   
+
+{% endblock %}

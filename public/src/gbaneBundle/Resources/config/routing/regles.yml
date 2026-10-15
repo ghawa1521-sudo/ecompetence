@@ -1,0 +1,30 @@
+regles:
+    path:     /
+    defaults: { _controller: "gbaneBundle:Regles:index" }
+
+regles_show:
+    path:     /{id}/show
+    defaults: { _controller: "gbaneBundle:Regles:show" }
+
+regles_new:
+    path:     /new
+    defaults: { _controller: "gbaneBundle:Regles:new" }
+
+regles_create:
+    path:     /create
+    defaults: { _controller: "gbaneBundle:Regles:create" }
+    methods:  POST
+
+regles_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "gbaneBundle:Regles:edit" }
+
+regles_update:
+    path:     /{id}/update
+    defaults: { _controller: "gbaneBundle:Regles:update" }
+    methods:  [POST, PUT]
+
+regles_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "gbaneBundle:Regles:delete" }
+    methods:  [POST, DELETE]

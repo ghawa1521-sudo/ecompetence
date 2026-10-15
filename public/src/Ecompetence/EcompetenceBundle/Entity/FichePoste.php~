@@ -1,0 +1,37 @@
+<?php
+
+namespace Ecompetence\EcompetenceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * FichePoste
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Ecompetence\EcompetenceBundle\Repository\FichePosteRepository")
+ */
+class FichePoste
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+ /**
+     * @ORM\ManyToOne(targetEntity="Competence")
+     * @ORM\JoinColumn(name="competence_id", referencedColumnName="id", nullable=true)
+     */
+    private $competence;
+    
+     /**
+     * @ORM\ManyToOne(targetEntity="Fonctioncompetence")
+     * @ORM\JoinColumn(name="fonction_id", referencedColumnName="id", nullable=true)
+     */
+    private $fonction;   
+    
+    
+}

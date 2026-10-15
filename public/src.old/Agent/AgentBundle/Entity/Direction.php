@@ -1,0 +1,398 @@
+<?php
+
+namespace Agent\AgentBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Direction
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Agent\AgentBundle\Repository\DirectionRepository")
+ */
+class Direction
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="CODE_DC", type="string", length=10)
+     */
+    private $code_dc;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="libDirect", type="string", length=255)
+     */
+    private $libDirect;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="sigle", type="string", length=100)
+     */
+    private $sigle;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="siegeDirect", type="string", length=255)
+     */
+    private $siegeDirect;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="immeuble", type="string", length=255)
+     */
+    private $immeuble;
+
+    // 0 Masculin; 1 Feminin
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="etatDirection", type="integer")
+     */
+    
+    private $etatDirection;
+    /**
+     * @ORM\ManyToOne(targetEntity="Agent\AgentBundle\Entity\DirectionGenerale",  cascade={"persist"})
+     * @ORM\JoinColumn(name="CODE_DG", referencedColumnName="CODE_DG", nullable=true)
+     */
+    private $directionGle;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="etage", type="string", length=10)
+     */
+    private $etage;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="rang", type="integer")
+     */
+    
+    private $rang = 0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="rang1", type="integer")
+     */
+    
+    private $rang1 = 0;
+
+   /**
+     * @var string
+     *
+     * @ORM\Column(name="article", type="string", length=10, nullable=true)
+     */
+    private $article;
+
+    
+
+    public function __toString()
+    {
+        return $this->getLibDirect();
+    }
+
+
+
+    public function directionArticle(){
+        if (in_array($this->id, [12,13,14,15,16,17,19])){
+             $retour = 'à la Direction Générale de l\'Economie' ; 
+         }else{
+            $retour= $this->article.' '.$this->libDirect;
+         }
+       
+       return $retour;
+    }
+
+
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set codeDc
+     *
+     * @param string $codeDc
+     *
+     * @return Direction
+     */
+    public function setCodeDc($codeDc)
+    {
+        $this->code_dc = $codeDc;
+
+        return $this;
+    }
+
+    /**
+     * Get codeDc
+     *
+     * @return string
+     */
+    public function getCodeDc()
+    {
+        return $this->code_dc;
+    }
+
+    /**
+     * Set libDirect
+     *
+     * @param string $libDirect
+     *
+     * @return Direction
+     */
+    public function setLibDirect($libDirect)
+    {
+        $this->libDirect = $libDirect;
+
+        return $this;
+    }
+
+    /**
+     * Get libDirect
+     *
+     * @return string
+     */
+    public function getLibDirect()
+    {
+        return $this->libDirect;
+    }
+
+    /**
+     * Set sigle
+     *
+     * @param string $sigle
+     *
+     * @return Direction
+     */
+    public function setSigle($sigle)
+    {
+        $this->sigle = $sigle;
+
+        return $this;
+    }
+
+    /**
+     * Get sigle
+     *
+     * @return string
+     */
+    public function getSigle()
+    {
+        return $this->sigle;
+    }
+
+    /**
+     * Set siegeDirect
+     *
+     * @param string $siegeDirect
+     *
+     * @return Direction
+     */
+    public function setSiegeDirect($siegeDirect)
+    {
+        $this->siegeDirect = $siegeDirect;
+
+        return $this;
+    }
+
+    /**
+     * Get siegeDirect
+     *
+     * @return string
+     */
+    public function getSiegeDirect()
+    {
+        return $this->siegeDirect;
+    }
+
+    /**
+     * Set immeuble
+     *
+     * @param string $immeuble
+     *
+     * @return Direction
+     */
+    public function setImmeuble($immeuble)
+    {
+        $this->immeuble = $immeuble;
+
+        return $this;
+    }
+
+    /**
+     * Get immeuble
+     *
+     * @return string
+     */
+    public function getImmeuble()
+    {
+        return $this->immeuble;
+    }
+
+    /**
+     * Set etatDirection
+     *
+     * @param integer $etatDirection
+     *
+     * @return Direction
+     */
+    public function setEtatDirection($etatDirection)
+    {
+        $this->etatDirection = $etatDirection;
+
+        return $this;
+    }
+
+    /**
+     * Get etatDirection
+     *
+     * @return integer
+     */
+    public function getEtatDirection()
+    {
+        return $this->etatDirection;
+    }
+
+    /**
+     * Set etage
+     *
+     * @param string $etage
+     *
+     * @return Direction
+     */
+    public function setEtage($etage)
+    {
+        $this->etage = $etage;
+
+        return $this;
+    }
+
+    /**
+     * Get etage
+     *
+     * @return string
+     */
+    public function getEtage()
+    {
+        return $this->etage;
+    }
+
+    /**
+     * Set directionGle
+     *
+     * @param \Agent\AgentBundle\Entity\DirectionGenerale $directionGle
+     *
+     * @return Direction
+     */
+    public function setDirectionGle(\Agent\AgentBundle\Entity\DirectionGenerale $directionGle = null)
+    {
+        $this->directionGle = $directionGle;
+
+        return $this;
+    }
+
+    /**
+     * Get directionGle
+     *
+     * @return \Agent\AgentBundle\Entity\DirectionGenerale
+     */
+    public function getDirectionGle()
+    {
+        return $this->directionGle;
+    }
+    
+    /**
+     * Set rang
+     *
+     * @param integer $rang
+     *
+     * @return Direction
+     */
+    public function setRang($rang)
+    {
+        $this->rang = $rang;
+
+        return $this;
+    }
+
+    /**
+     * Get rang
+     *
+     * @return integer
+     */
+    public function getRang()
+    {
+        return $this->rang;
+    }
+    
+    /**
+     * Set rang1
+     *
+     * @param integer $rang1
+     *
+     * @return Direction
+     */
+    public function setRang1($rang1)
+    {
+        $this->rang1 = $rang1;
+
+        return $this;
+    }
+
+    /**
+     * Get rang1
+     *
+     * @return integer
+     */
+    public function getRang1()
+    {
+        return $this->rang1;
+    }
+
+    /**
+     * Set article
+     *
+     * @param string $article
+     *
+     * @return Direction
+     */
+    public function setArticle($article)
+    {
+        $this->article = $article;
+
+        return $this;
+    }
+
+    /**
+     * Get article
+     *
+     * @return string
+     */
+    public function getArticle()
+    {
+        return $this->article;
+    }
+}

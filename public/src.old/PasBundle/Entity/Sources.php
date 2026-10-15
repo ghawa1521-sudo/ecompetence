@@ -1,0 +1,68 @@
+<?php
+
+namespace PasBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Sources
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="PasBundle\Repository\SourcesRepository")
+ */
+class Sources
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="libellesrc", type="string", length=500)
+     */
+    private $libellesrc;
+
+    public function __toString() {
+        return $this->getLibellesrc();
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set libellesrc
+     *
+     * @param string $libellesrc
+     *
+     * @return Sources
+     */
+    public function setLibellesrc($libellesrc)
+    {
+        $this->libellesrc = $libellesrc;
+
+        return $this;
+    }
+
+    /**
+     * Get libellesrc
+     *
+     * @return string
+     */
+    public function getLibellesrc()
+    {
+        return $this->libellesrc;
+    }
+}

@@ -1,0 +1,86 @@
+{% extends '::base.html.twig' %}
+
+
+{% block css %}
+   <link href="{{ asset('design/css/style.css') }}" rel="stylesheet"/>
+{% endblock %}
+
+
+
+{% block body -%}
+
+    <div class="col-md-push-3 col-md-6">
+      <div align="center">
+        <h3>Modifier ma demande </h3>
+      </div>
+      {{ form_start(edit_form) }}
+      {{ form_errors(edit_form) }}
+      {#{{ form(edit_form) }}#}
+
+      {{ form_label(edit_form.typeDemande)}}
+      {{ form_errors(edit_form.typeDemande) }}
+      {{ form_widget(edit_form.typeDemande, {'attr' : {'onClick' : 'openBlock()'}}) }}
+      <div id="masquer" style="display:none;">
+
+
+      {{ form_label(edit_form.dateDeb)}}
+      {{ form_errors(edit_form.dateDeb) }}
+      {{ form_widget(edit_form.dateDeb) }}
+
+      {{ form_label(edit_form.dateFin)}}
+      {{ form_errors(edit_form.dateFin) }}
+      {{ form_widget(edit_form.dateFin) }}
+
+      {{ form_label(edit_form.destination)}}
+      {{ form_errors(edit_form.destination) }}
+      {{ form_widget(edit_form.destination) }}
+
+      </div>
+      {{ form_label(edit_form.objet)}}
+      {{ form_errors(edit_form.objet) }}
+      {{ form_widget(edit_form.objet) }}
+
+
+      {{ form_row(edit_form._token) }}
+      <input type="submit" class="btn btn-success col-md-6" value="Modifier la Demande" />
+    </div>
+
+{#
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('demande') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>#}
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript">
+$(function(){
+  // On cache le div a afficher :
+//  $("#masquer").hide();
+openBlock();
+});
+function openBlock()
+{
+  combo= document.getElementById('demandes_demandesbundle_demande_typeDemande');
+//  alert(combo.value);
+  if(combo.value != "")
+  {
+    if(combo.value == 1)
+    {
+      document.getElementById('masquer').style.display='block';
+    }
+    else{
+      document.getElementById('masquer').style.display='none';
+    }
+  }
+  else {
+    document.getElementById('masquer').style.display='none';
+  }
+
+}
+</script>
+{% endblock %}
+
+

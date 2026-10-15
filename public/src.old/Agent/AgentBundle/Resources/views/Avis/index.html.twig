@@ -1,0 +1,262 @@
+{% extends '::base.html.twig' %}
+
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+
+{% block titre_page %}
+    <div>Aviser (<span style="color: red;">{% set val = demande|length + conge|length %}{{val}}</span>)</div>
+{% endblock %}
+{% block body -%}
+<ul class="nav nav-tabs bar_tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#home" aria-controls="message" role="tab" data-toggle="tab">DEMANDES SANS AVIS<label class="label label-danger">{% if(demande|length > 0) %}{{demande|length}}{% endif %}</a></li>
+
+      <li role="presentation"><a href="#serv1" aria-controls="home" role="tab" data-toggle="tab">CONGES SANS AVIS<label class="label label-danger">{% if(conge|length > 0) %}{{conge|length}}{% endif %}</a>
+      </li>
+
+      <li role="presentation"><a href="#serv2" aria-controls="message" role="tab" data-toggle="tab">DEMANDES AVEC AVIS</a></li>
+
+      <li role="presentation"><a href="#serv3" aria-controls="message" role="tab" data-toggle="tab">CONGES AVEC AVIS</a></li>
+      
+      
+      
+
+    </ul>
+    <div class="tab-content">
+
+      <div role="tabpanel" class="tab-pane" id="serv1">
+
+        <table class="records_list table table-striped responsive-utilities jambo_table bulk_action">
+            <thead>
+                <tr>
+                    <th>Date soumission</th>
+                    <th>Type de Congés</th>
+                    <th>Nom et prénoms</th>
+                    <th>Date de départ</th>
+                    <th>Date de fin</th>
+                    <th>Nombre de jours</th>
+
+                    <th>Date de reprise effective</th>
+                    <th>Etat</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entity in conge %}
+                    <tr>
+
+                        <td>{% if entity.datecreation %}{{ entity.datecreation|date('H:i:s d-m-Y') }}{% endif %}</td>
+                        <td>{{entity.typeConges.libelle}}</td>
+                        <td>{% if entity.agent %}{{entity.agent.nom}} {{entity.agent.prenoms}}{% endif %}</td>
+                        <td>{% if entity.datedebut %}{{ entity.datedebut|date('d-m-Y') }}{% endif %}</td>
+                        <td>{% if entity.datefin %}{{ entity.datefin|date('d-m-Y') }}{% endif %}</td>
+                        <td>{{entity.nbrejours}}</td>
+
+                        <td>{% if entity.datereprise %}{{ entity.datereprise|date('d-m-Y') }}{% endif %}</td>
+                        <td>
+                            {% if (entity.agent.Fonction.id in [5,7]) %}
+                                {{macro.EtatCongeResponsable(entity.etat,entity.niveau,entity.agent.retour_service.tab_lib[entity.niveau])}}
+                            {% elseif entity.niveau == 0 %}
+                                {{macro.EtatConge(entity.etat,entity.niveau,entity.agent.retour_service.tab_lib[entity.niveau])}}
+                            {% endif %}
+                        </td>
+                        <td>
+
+                            <div class="row">
+                                <a href="{{ path('avis_aviser', { 'id': entity.id,'objet':2,'action':1 }) }}" class="btn btn-success col-md-12" data-confirm="Etes-vous <strong>certain</strong> de vouloir Valider cette demande ?">Valider la Demande</a>
+
+
+                                <a href="{{ path('avis_aviser', { 'id': entity.id,'objet':2,'action':2 }) }}" class="btn btn-danger col-md-12">Rejeter la Demande</a>
+                            </div>
+
+                        </td>
+
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+      </div>
+      
+      <div role="tabpanel" class="tab-pane active" id="home">
+       
+        <table class="records_list table table-striped responsive-utilities jambo_table" width=100%>
+            <thead>
+                <tr>
+                    <th rowspan="2">Date Demande</th>
+                    <th rowspan="2">Nom et prénoms</th>
+                    <th rowspan="2">Type Demande</th>
+                    <th rowspan="2">Objet</th>
+                    <th rowspan="2">Période</th>
+                    <th rowspan="2">Destination</th>
+                    <th rowspan="2">Etat de la demande</th>
+                    <th colspan="2">Service Ressources Humaines</th>
+                    <th rowspan="2">Actions</th>
+                </tr>
+                <tr>
+                    <th>Date Réponse</th>
+                    <th>Etat Réponse</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entity in demande %}
+                    <tr>
+                        <td>{% if entity.datecreation %}{{ entity.datecreation|date('d-m-Y H:i:s') }}{% endif %}</td>
+                        <td>{{ entity.emmeteur.nom }} {{ entity.emmeteur.prenoms }}</td>
+                        <td>{{ entity.typeDemande }}</td>
+                        <td>{{ entity.objet }}</td>
+                        <td align="center">{{ entity.dateDeb|date('d-m-Y') }} <br>au<br> {{ entity.dateFin|date('d-m-Y') }}</td>
+                        <td>{{ entity.destination }}</td>
+                        <td align="center">
+                            {% if (entity.etatRepGrh == 0)  %}
+                                <span class="label label-info arrowed-in arrowed-in-right">Transmis au RH</span>
+                            {% elseif (entity.etatRepGrh == 1)  %}
+                                <span class="label label-success">Accepté</span>
+
+                            {% elseif (entity.etatEmmission ==2 or etatRepGrh == 2) %}
+                                <span class="label label-danger">Refusé</span>
+                            {% endif %}
+                        </td>
+                        <td>{% if entity.dateRepGrh %}{{ entity.dateRepGrh|date('d-m-Y H:i:s') }}{% endif %}</td>
+                        <td align="center">{% if (entity.etatRepGrh == 0) %}{# Etat 0  En attente#}
+                            <span class="label label-warning">En Attente</span>
+                            {% elseif (entity.etatRepGrh == 1) %}
+                                <span class="label label-info">Validé</span>
+                                {% elseif (entity.etatRepGrh == 2) %}
+                                    <span class="label label-danger">Refusé</span>
+                                    <br>
+                                    {{entity.motifRejet}}
+                                    {% endif %}
+                                    </td>
+                                    <td>
+
+                                        <div class="row">
+                                            <a href="{{ path('avis_aviser', { 'id': entity.id,'objet':1,'action':1 }) }}" class="btn btn-success col-md-12" data-confirm="Etes-vous <strong>certain</strong> de vouloir Valider cette demande ?">Valider la Demande</a>
+
+
+                                            <a href="{{ path('avis_aviser', { 'id': entity.id,'objet':1,'action':2 }) }}" class="btn btn-danger col-md-12">Rejeter la Demande</a>
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+        
+      </div>
+      <div role="tabpanel" class="tab-pane" id="serv3">
+            
+        <table class="records_list table table-striped responsive-utilities jambo_table bulk_action">
+            <thead>
+                <tr>
+                    <th>Date soumission</th>
+                    <th>Type de congés</th>
+                    <th>Nom et prénoms</th>
+                    <th>Date de départ</th>
+                    <th>Date de fin</th>
+                    <th>Nombre de jours</th>
+
+                    <th>Date de reprise effective</th>
+                    <th>Etat</th>
+                    <th>Avis</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entity in congeok %}
+                    <tr>
+
+                        <td>{% if entity.datecreation %}{{ entity.datecreation|date('H:i:s d-m-Y') }}{% endif %}</td>
+                        <td>{{entity.typeConges.libelle}}</td>
+                        <td>{% if entity.agent %}{{entity.agent.nom}} {{entity.agent.prenoms}}{% endif %}</td>
+                        <td>{% if entity.datedebut %}{{ entity.datedebut|date('d-m-Y') }}{% endif %}</td>
+                        <td>{% if entity.datefin %}{{ entity.datefin|date('d-m-Y') }}{% endif %}</td>
+                        <td>{{entity.nbrejours}}</td>
+
+                        <td>{% if entity.datereprise %}{{ entity.datereprise|date('d-m-Y') }}{% endif %}</td>
+                        <td>
+                            {% if (entity.agent.Fonction.id in [5,7]) %}
+                                {{macro.EtatCongeResponsable(entity.etat,entity.niveau,entity.agent.retour_service.tab_lib[entity.niveau])}}
+                            {% elseif entity.niveau == 0 %}
+                                {{macro.EtatConge(entity.etat,entity.niveau,entity.agent.retour_service.tab_lib[entity.niveau])}}
+                            {% endif %}
+                        </td>
+                        <td>
+                           {{entity.avis.getLibAvis|raw}}
+
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="serv2">
+       
+                            <table class="records_list table table-striped responsive-utilities jambo_table" width=100%>
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">Date Demande</th>
+                                        <th rowspan="2">Nom et prénoms</th>
+                                        <th rowspan="2">Type Demande</th>
+                                        <th rowspan="2">Objet</th>
+                                        <th rowspan="2">Période</th>
+                                        <th rowspan="2">Destination</th>
+                                        <th rowspan="2">Avis du SAAF</th>
+                                        <th rowspan="2">Etat de la demande</th>
+                                        <th colspan="2">Service Ressources Humaines</th>
+
+                                    </tr>
+                                    <tr>
+                                        <th>Date Réponse</th>
+                                        <th>Etat Réponse</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for entity in demandeok %}
+                                        <tr>
+                                            <td>{% if entity.datecreation %}{{ entity.datecreation|date('d-m-Y H:i:s') }}{% endif %}</td>
+                                            <td>{{ entity.emmeteur.nom }} {{ entity.emmeteur.prenoms }}</td>
+                                            <td>{{ entity.typeDemande }}</td>
+                                            <td>{{ entity.objet }}</td>
+                                            <td align="center">{{ entity.dateDeb|date('d-m-Y') }} <br>au<br> {{ entity.dateFin|date('d-m-Y') }}</td>
+                                            <td>{{ entity.destination }}</td>
+                                            <td>{{entity.avis.getLibAvis|raw}}</td>
+                                            <td align="center">
+                                                {% if (entity.etatRepGrh == 0)  %}
+                                                    <span class="label label-info arrowed-in arrowed-in-right">Transmis au RH</span>
+                                                {% elseif (entity.etatRepGrh == 1)  %}
+                                                    <span class="label label-success">Accepté</span>
+
+                                                {% elseif (entity.etatEmmission ==2 or etatRepGrh == 2) %}
+                                                    <span class="label label-danger">Refusé</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{% if entity.dateRepGrh %}{{ entity.dateRepGrh|date('d-m-Y H:i:s') }}{% endif %}</td>
+                                            <td align="center">{% if (entity.etatRepGrh == 0) %}{# Etat 0  En attente#}
+                                                <span class="label label-warning">En Attente</span>
+                                                {% elseif (entity.etatRepGrh == 1) %}
+                                                    <span class="label label-info">Validé</span>
+                                                    {% elseif (entity.etatRepGrh == 2) %}
+                                                        <span class="label label-danger">Refusé</span>
+                                                        <br>
+                                                        {{entity.motifRejet}}
+                                                        {% endif %}
+                                                        </td>
+
+                                                    </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+      </div>
+</div>
+
+
+       
+
+{% endblock %}
+{% block javascript %}
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+
+<div style="background-color: white; color:black;">
+    <h3><b>DEMANDE D'AUTORISATION D'ABSENCE</b></h3>
+
+    <br/><br/>Nom: {{entity.emmeteur.nom}}
+    <br/><br/>Prénoms: {{entity.emmeteur.prenoms}}
+    <br/><br/>Service: {{entity.emmeteur.Direction}}
+    <br/><br/>Emploi: {{entity.emmeteur.Emploi}}
+    <br/><br/>Fonction: {{entity.emmeteur.Fonction}}
+    <br/><br/>Période: {% if entity.dateDeb %}{{ entity.dateDeb|date('d-m-Y H:i:s') }}{% endif %} au {% if entity.dateFin %}{{ entity.dateFin|date('d-m-Y H:i:s') }}{% endif %}
+    <br/><br/>Destination: {{entity.destination}}
+    <br/><br/>Motif: {{entity.objet}}
+    <br/><br/><br/><br/>
+</div>
+
+        <ul class="record_actions">
+
+    <li>
+        <a href="{{ path('demande_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+</ul>
+{% endblock %}

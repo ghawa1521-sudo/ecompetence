@@ -1,0 +1,32 @@
+<?php
+
+namespace Ecompetence\EcompetenceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Niveau
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Ecompetence\EcompetenceBundle\Respositoty\NiveauRepository")
+ */
+class Niveau
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+ /**
+     * @var string
+     *
+     * @ORM\Column(name="LibNiveau", type="string", length=50)
+     */
+    private $libNiveau;
+   
+}
+

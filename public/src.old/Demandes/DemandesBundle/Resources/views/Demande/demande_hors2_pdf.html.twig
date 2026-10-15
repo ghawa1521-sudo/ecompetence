@@ -1,0 +1,137 @@
+{% extends app.request.attributes.get('_route')=='demande_print'
+? '::gabarit_print.html.twig'
+: '::gabarit_preview_hors.html.twig' %}
+
+{% block bootstrap %}
+    {% if app.request.attributes.get('_route')=='demande_print'%}
+        <link href="{{app.request.getSchemeAndHttpHost() ~ asset('design/css/bootstrap.min.css') }}" rel="stylesheet"/>
+
+    {% endif %}
+{% endblock %}
+{% block entete_droit1 %}//-)<br><br>Monsieur le Directeur de Cabinet Adjoint du Ministre de l'Economie et des Finances <br><br>{% endblock %}
+    {% block entete_droit2 %}//-) B I D J A N{% endblock %}
+{% block service %}
+    <span class="gras">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Le Directeur Général</span>
+
+{% endblock %}
+{% block titre %}
+    <div align="left" style="width: 100%; margin: auto;">
+        <table border=0 width="60%">
+            <tr><td class="ecriture" valign="top" rowspan="3" width="20%"><span class="gras"><u>Objet</u>:</span></td>
+                <td class="ecriture" style="padding-top: 0px;">Demande d'autorisation de</td>
+            </tr>
+            <tr><td class="ecriture">sortie du territoire de {{entity.emmeteur.getCivilite.libsitf}}</td></tr>
+            <tr><td class="ecriture">{{entity.emmeteur.concatNom|striptags}}</td></tr>
+        </table>
+    </div>
+
+{% endblock %}
+
+{% block ref %}<br><br><br>N°____________MEF/DGE/SRHMG/{{app.user.agent.nom|slice(0,1)~app.user.agent.prenoms|slice(0,1)~app.user.agent.nomJeuneFille|slice(0,1)}}{% endblock %}
+{% block datePdf %}{#{% if entity.datecreation %}{{ entity.datecreation|date('d-m-Y H:i:s') }}{% endif %}#}{% endblock %}
+{% block contenuPdf -%}
+
+    <div style="background-color: white; color:black; line-height:1.5em;">
+        J'ai l'honneur de vous soumettre la demande d'autorisation de sortie du territoire de
+        {{entity.emmeteur.getCivilite.libsitf}}
+
+        {{entity.emmeteur.concatNom|striptags}}, matricule {{entity.emmeteur.matricule}}, {{entity.emmeteur.emploi.libEmpl}}, en service à la Direction Générale de l'Economie
+<br/><br/>
+A cet effet, vous trouverez, joint à la présente, un projet d'autorisation y relatif.
+</div>
+</div>
+
+
+<div style="font-size:1em;">
+    <table width="100%" border="0">
+        <tr>
+            <td>
+                <u class="gras">Pièces jointes</u></b>
+            <table style=" font-size:15px; height:30px;">
+                <tr>
+                    <td>-1</td>
+                    <td>demande de l'intéressé(e)</td>
+                </tr>
+                <tr>
+                    <td>-1</td>
+                    <td>attestation de présence</td>
+                </tr>
+                <tr>
+                    <td>-1</td>
+                    <td>certificat de cessation de service</td>
+                </tr>
+                <tr>
+                    <td>-1</td>
+                    <td>attestation de travail</td>
+                </tr>
+            </table>
+            </td>
+            <td width="50%">
+                <div style="font-size:12pt;  float:right" class="gras">
+                      
+                    <br><br><br>
+                            {% if fonctionbase.getSignataireDg(date()) and fonctionbase.getSignataireDg(date())==1 %}
+                               
+                            {% else %}
+{#
+                                {{fonctionbase.getSignataireDg(date())['entete'] | raw}}
+                                <br>  <br>
+                                {{fonctionbase.getSignataireDg(date())['signataire'] | raw}}#}
+
+<u>{{fonctionbase.getSignataireDg(date())['entete'] | raw}}</u>
+<br><br>
+P.I Le {{fonctionbase.getSignataireDg(date())['directeur'] | raw}}
+<br><br><br><br><br>
+
+
+                            {% endif %}
+                        
+                    </div>
+            </td>
+        </tr>
+    </table>
+   
+   
+</div>
+<!--{% if is_granted('ROLE_RESPO') %}
+        <div class="row" id="verif">
+            <br/><br/>
+            <div align="center">
+                <label>Veuillez entrer votre mot de passe afin d\'éffectuer la validation de la demande</label><br/>
+                <div class="col-md-offset-4 col-sm-3 col-xs-3 col-lg-3 col-md-3">
+                    <form action="{{ path('demande_valid', { 'id': entity.id }) }}" method ="POST">
+                        <input id="mdp" name="mdp" type="password" class="form-control" placeholder="Votre Mot de Passe" />
+                        <input type="submit" class="btn btn-success btn-sm col-md-offset-5 col-md-2" value="valider">
+                    </form>
+                </div>
+            </div>
+        </form>
+
+        </div>
+        <div id="boutton">
+        <button id="btn-js" class="btn btn-success btn-sm col-md-offset-5 col-md-2" onclick="VerifPassword() ;"> Valider</button>
+        </div>
+        <br/>
+        <div>
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('demande_receive') }}">
+            Retour Demandes Reçues
+        </a>
+    </li>
+
+</ul>
+</div>
+{% endif %}
+
+    -->
+    <script src="{{ asset('design/js/style.js') }}"></script>
+
+    {% endblock %}
+{% block ampliationPdf %}
+
+
+    
+    
+   
+{% endblock %}

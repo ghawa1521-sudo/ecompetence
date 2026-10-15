@@ -1,0 +1,89 @@
+<?php
+
+namespace Ediligence\EdiligenceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Menu
+ *
+ * @ORM\Table(name="menu")
+ * @ORM\Entity(repositoryClass="Ediligence\EdiligenceBundle\Repository\MenuRepository")
+ */
+class Menu
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="ID_menu", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+    
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Lbl_menu", type="string", length=500, nullable=false)
+     */
+    private $lblMenu;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Typecompte", type="string", length=1000, nullable=true)
+     */
+    private $typecompte;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Lien_menu", type="string", length=200, nullable=false)
+     */
+    private $lienMenu;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="class_lien", type="string", length=200, nullable=true)
+     */
+    private $classLien;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="Ordre", type="integer", nullable=false)
+     */
+    private $ordre = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="Actif_menu", type="integer", nullable=false)
+     */
+    private $actifMenu = '0';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Cat_menu", type="string", length=10, nullable=false)
+     */
+    private $catMenu = '1';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="Param", type="integer", nullable=false)
+     */
+    private $param = '0';
+
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="countval", type="string", length=200, nullable=true)
+     */
+    private $countval;
+    
+}

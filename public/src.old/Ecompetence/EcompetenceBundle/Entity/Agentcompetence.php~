@@ -1,0 +1,37 @@
+<?php
+
+namespace Ecompetence\EcompetenceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Agentcompetence
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Ecompetence\EcompetenceBundle\Repository\AgentcompetenceRepository")
+ */
+class Agentcompetence
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+    /**
+     * @ORM\ManyToOne(targetEntity="Agent\AgentBundle\Entity\Agent")
+     * @ORM\JoinColumn(name="agent_id", referencedColumnName="id", nullable=true)
+     */
+    private $agent;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Domaine")
+     * @ORM\JoinColumn(name="competence_id", referencedColumnName="id", nullable=true)
+     */
+    private $competence;
+    
+
+
+}

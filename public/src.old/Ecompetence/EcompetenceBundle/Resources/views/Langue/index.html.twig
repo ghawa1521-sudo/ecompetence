@@ -1,0 +1,53 @@
+{% extends '::base.html.twig' %}
+
+    {% block body -%}
+        <div class="x_panel">
+        <hr>
+            <div class="row">
+            <div class="panel panel-success"> 
+            <div class="panel-heading"><h1>Liste des langues</h1></div>
+        
+             <div class="modal-header  panel-primary">
+                {#<h4 class="modal-title btn btn-success"><a href="{{ path('langue_newcreate')}}">Ajouter une langue</a></h4>#}
+                <a class=" btn btn-success" style='width:205px;' href="{{ path('langue_newcreate')}}">Ajouter une langue</a>
+             </div>   
+           
+     {#{% dump(entities) %}#}
+        <table class="table dataTable ok" style="text-align:center">
+            <thead>
+                <tr>
+                    
+                    <th>N°</th>
+                   <th>libellé  langue</th>
+                    <th>type langue</th>
+                    <th> Action</th>  
+                </tr>
+            </thead>
+            <tbody>
+            {% for entity in entities %}
+                <tr>
+                    <td>{{ entity.id }}</td>
+                    <td>{{ entity.liblangue }}</td>
+                    <td>{{ entity.TypeLangue }}</td>
+                    <td>
+                        <ul>
+                            
+                             <a class="btn btn-primary btn-sm" style='width:75px;'href="{{ path('langue_editlang', { 'id': entity.id}) }}">Modifier</a>
+                            
+                            {#<li>
+                             <a class="btn btn-success" style='width:85px;'href="{{ path('langue_delete', { 'id': entity.id}) }}">Supprimer</a>
+                            </li>#}
+                        </ul>
+                    </td>
+                </tr> 
+                
+            {%  endfor %}
+                
+            </tbody>
+            
+        </table>
+        
+        
+           
+    {% endblock %}
+    

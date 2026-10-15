@@ -1,0 +1,76 @@
+{# empty Twig template #}
+$('#btn_valid').on('click', function (e) {
+ 
+        e.preventDefault();
+ 
+        $.ajax({
+            type: $('#form_body').attr('method'),
+            url: $('#form_body').attr('action'),
+            data: $('#form_body').serialize()
+        })
+        .done(function (data) {
+            if (typeof data.message !== 'undefined') {
+               // alert(data.message);
+                
+                var monObjet = JSON.parse(data.value);
+                //console.log(monObjet);
+                //alert(monObjet.id);
+                $('.class_deplacement')
+                 .append($("<option></option>")
+                 .attr("value", monObjet.id)
+                 .text(monObjet.designation));
+
+                 //.attr("selected", "selected")
+
+                 $('#id_deplacement_designation').val("");
+                 $('.form_error').empty();
+            }
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            if (typeof jqXHR.responseJSON !== 'undefined') {
+                if (jqXHR.responseJSON.hasOwnProperty('form')) {
+                    $('#form_body').html(jqXHR.responseJSON.form);
+                }
+ 
+                $('.form_error').html(jqXHR.responseJSON.message);
+ 
+            } else {
+              //alert(3);
+                alert(errorThrown);
+            }
+ 
+        });
+    });
+
+///////////////////////////////////////////////
+public function createDeplacementAction(Request $request)
+    {
+    if (!$request->isXmlHttpRequest()) {
+        return new JsonResponse(array('message' => 'You can access this only using Ajax!'), 400);
+    }
+    $entity = new MoyenDeplacement();
+        $form = $this->createDeplacementForm($entity);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+       $em = $this->getDoctrine()->getManager();
+       $em->persist($entity);
+       $em->flush();
+
+$encoders = array(new JsonEncoder());
+$normalizers = array(new ObjectNormalizer());
+
+$serializer = new Serializer($normalizers, $encoders);
+
+$jsonContent = $serializer->serialize($entity, 'json');
+
+
+       return new JsonResponse(array('message' => 'Success!','value'=>$jsonContent), 200);
+    }
+    
+    $response = new JsonResponse(
+            array(
+       'message' => 'Veuillez renseigner correctement le formulaire' ), 400);
+ 
+    return $response;
+}

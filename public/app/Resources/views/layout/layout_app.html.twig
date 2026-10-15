@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+         {% if is_granted('ROLE_ADMIN') %}
+        <div class="wrapper skin-blue">
+            {% elseif is_granted('ROLE_MARQUETEUR') %}
+            {# Idem que le haut pour marqueur #}
+            <div class="wrapper skin-green">
+            {% elseif is_granted('ROLE_GERANT_STATION') %}
+                {# Idem que le haut pour gerant de station #}
+                <div class="wrapper skin-purple">
+                  {% else %}
+                         <div class="wrapper skin-red">
+                {% endif %}
+
+                {# le header  #}
+                {% include "::sections_app/header.html.twig" %}
+                {# la sidebar #}
+                {% include "::sections_app/main_sidebar.html.twig" %} 
+                {# le contenu  #}
+                {% block container_app%}	{% endblock container_app %}
+                {# le footer #}
+                {% include "::sections_app/footer.html.twig" %}
+            </div>
+            
+ {% endblock body %}

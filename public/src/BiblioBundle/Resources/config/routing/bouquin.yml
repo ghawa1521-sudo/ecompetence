@@ -1,0 +1,42 @@
+bouquin:
+    path:     /{todo}/index
+    defaults: { _controller: "BiblioBundle:Bouquin:index",todo:all }
+
+bouquin_all:
+    path:     /bookall
+    defaults: { _controller: "BiblioBundle:Bouquin:bookall" }
+
+bouquin_madir:
+    path:     /madir
+    defaults: { _controller: "BiblioBundle:Bouquin:madir" }
+
+bouquin_show:
+    path:     /{id}/show
+    defaults: { _controller: "BiblioBundle:Bouquin:show" }
+
+bouquin_download:
+    path:     /{image}/download
+    defaults: { _controller: "BiblioBundle:Bouquin:download" }
+
+bouquin_new:
+    path:     /new
+    defaults: { _controller: "BiblioBundle:Bouquin:new" }
+
+bouquin_create:
+    path:     /create
+    defaults: { _controller: "BiblioBundle:Bouquin:create" }
+    methods:  POST
+
+bouquin_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BiblioBundle:Bouquin:edit" }
+
+bouquin_update:
+    path:     /{id}/update
+    defaults: { _controller: "BiblioBundle:Bouquin:update" }
+    methods:  [POST, PUT]
+
+bouquin_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BiblioBundle:Bouquin:delete" }
+    methods:  [POST, DELETE]

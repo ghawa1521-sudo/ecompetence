@@ -1,0 +1,30 @@
+quota:
+    path:     /
+    defaults: { _controller: "DemandesBundle:Quota:index" }
+
+quota_show:
+    path:     /{id}/show
+    defaults: { _controller: "DemandesBundle:Quota:show" }
+
+quota_new:
+    path:     /new
+    defaults: { _controller: "DemandesBundle:Quota:new" }
+
+quota_create:
+    path:     /create
+    defaults: { _controller: "DemandesBundle:Quota:create" }
+    methods:  POST
+
+quota_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "DemandesBundle:Quota:edit" }
+
+quota_update:
+    path:     /{id}/update
+    defaults: { _controller: "DemandesBundle:Quota:update" }
+    methods:  [POST, PUT]
+
+quota_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "DemandesBundle:Quota:delete" }
+    methods:  [POST, DELETE]

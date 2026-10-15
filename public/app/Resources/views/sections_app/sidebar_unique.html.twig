@@ -1,0 +1,650 @@
+{% import "macro/macro.html.twig" as macro %}
+<style>
+    .menugrand{
+        color: #f6f4ff; font-weight: bolder; font-size: 0.85em;
+        cursor: pointer;
+    }
+    .menupetit{
+        font-size: 9pt;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .labelss{
+
+        text-align: center;
+        padding-right: 4px !important;
+        padding-left: 3px !important;
+        margin-right: 0px !important;
+        font-size: 10px !important;
+        width: 1px !important;
+        margin-right: 0px !important;
+    }
+    .notifBlock{
+        background-color: #d9534f;
+        color: white !important;
+        float: right ;
+        margin-right: 0px !important;
+        padding-right: 4px !important;
+        padding-left: 3px !important;
+        border-radius: 3px !important;
+    }
+</style>
+<div class="navbar nav_title" style="border: 0;" align="center">
+    <a href="#" class="site_title"> <marquee  BEHAVIOR=ALTERNATE><span>e-RH</span></marquee></a>
+</div>
+<div class="clearfix"></div>
+
+<!-- menu prile quick info -->
+<div class="profile">
+    <div class="profile_pic">
+        {% if (app.user.agent.imageName) %}
+            <a href="{{path('agent_homepage')}}">
+                <img src="{{ vich_uploader_asset(app.user.agent, 'imageFile') }}" alt="{{ app.user.agent.imageName }}" class="img-responsive profile_img img-circle" width="200 px">
+            </a>
+        {% elseif (app.user.agent.sexe.id == 1 ) %}
+            <img src="{{ asset('images/img_test_agent.png')}}" class="img-responsive profile_img img-circle" width="200 px">
+        {% elseif (app.user.agent.sexe.id == 2 ) %}
+            <img src="{{ asset('images/woman.png')}}" class="img-responsive profile_img img-circle" width="200 px">
+        {% endif %}
+
+    </div>
+    <div class="profile_info">
+        <span>Bienvenue,</span>
+        <h2>{{app.user.agent.nom}} {{app.user.agent.prenoms}}</h2>
+    </div>
+</div>
+<!-- /menu prile quick info -->
+
+<br />
+<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+    <div class="menu_section">
+        <h3>
+            {% if is_granted('ROLE_RESPO_SRHMG') %}
+                CHEF DE SERVICES RESSOURCES HUMAINES
+            {% elseif (is_granted('ROLE_RESPO') and (app.user.agent.fonction.id  == 10)) %}
+                DIRECTEUR GENERAL
+                {% if (app.user.agent.direction) %}
+                    {{app.user.agent.direction.sigle}}
+                {% endif %}
+            {% elseif (is_granted('ROLE_RESPO') and (app.user.agent.fonction.id  == 9)) %}
+                DIRECTEUR GENERAL ADJOINT
+                {% if (app.user.agent.direction) %}
+                    {{app.user.agent.direction.sigle}}
+                {% endif %}
+            {% elseif (is_granted('ROLE_RESPO') and (app.user.agent.fonction.id  == 7)) %}
+                DIRECTEUR
+                {% if (app.user.agent.direction) %}
+                    {{app.user.agent.direction.sigle}}
+                {% endif %}
+            {% elseif is_granted('ROLE_RESPO') and (app.user.agent.fonction.id == 6) %}
+                Sous-DIRECTEUR
+                {% if (app.user.agent.direction) %}
+                    {{app.user.agent.direction.sigle}}
+                {% endif %}
+            {% elseif is_granted('ROLE_RESPO') and (app.user.agent.fonction.id == 4) %}
+                Chef de Service
+                {% if (app.user.agent.direction) %}
+                    {{app.user.agent.direction.sigle}}
+                {% endif %}
+            {% elseif is_granted('ROLE_RESPO') and (app.user.agent.fonction.id == 5) %}
+                Chef de Service Rattaché
+                {% if (app.user.agent.direction) %}
+                    {{app.user.agent.direction.sigle}}
+                {% endif %}
+            {% elseif is_granted('ROLE_RESPO') and (app.user.agent.fonction.id == 3) %}
+                Chef de Section
+                {% if (app.user.agent.direction) %}
+                    {{app.user.agent.direction.sigle}}
+                {% endif %}
+            {% elseif (app.user.agent.fonction.id  == 8) %}
+                CONSEILLER TECHNIQUE
+                {% if (app.user.agent.direction) %}
+                    {{app.user.agent.direction.sigle}}
+                {% endif %}
+            {% elseif is_granted('ROLE_AGENT')%}
+                AGENT
+            {% endif %}
+        </h3>
+        {% set deleg = 0 %}
+        {% if is_granted('ROLE_RESPO_SRHMG') or is_granted('ROLE_RESPO') %}
+            {% if app.user.etat == 1 or app.user.etat is null %}
+                <div class="menu_section">
+                    <ul class="nav side-menu">
+                        <div style="color: #f6f4ff; font-weight: bolder; font-size: 1.2em;">MENU D'ADMINISTRATION</div>
+                        <li><a href="{{ path('agent_show',{id : app.user.agent.id}) }}"><i class="fa fa-home"></i> ACCUEIL <span class=""></span></a>
+
+                        </li>
+                        {% if is_granted('ROLE_RESPO_SRHMG') %}
+                            <li><a class="menugrand"><i class="fa ? fa-user"></i>GESTION DES AGENTS<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu" style="display: none">
+                                    <li>
+                                        <a href="{{ path('agent_new') }}">Régulariser un Agent</a>
+                                    </li>
+                                    <li><a href="{{ path('agent_list_modif') }}">Modifier les informations d'un Agent</a>
+                                    </li>
+                                    <li><a href="{{ path('agent') }}">Liste des Agents</a>
+                                    </li>
+                                    <li><a href="{{ path('agent_list_doc') }}">Ajouter Document</a></li>
+                                    <li><a href="{{ path('agent_designer') }}">Designer Responsable</a></li>
+                                    <li><a href="{{ path('regularisation_new',{id :1}) }}">Régularisation Emploi</a></li>
+                                    <li><a href="{{ path('regularisation_new',{id :2}) }}">Régularisation Fonction</a></li>
+                                    <li><a href="{{ path('regularisation_new',{id :3}) }}">Régularisation Contractuel</a></li>
+                                    <li><a href="{{ path('regularisation_position',{id :1}) }}">Cessation</a></li>
+                                <li><a href="{{ path('regularisation_position',{id :2}) }}">Retraite</a></li>
+                                <li><a href="{{ path('regularisation_del',{id :0, todo :0}) }}">Supprimer Agent</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
+
+                       <li><a class="menugrand"><i class="fa fa-user"></i>GESTION DE COMPETENCES<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu" style="display: none">
+                                    <li>
+                                        <a href="{{ path('agent_index') }}">Actualiser CV</a>
+                                    </li>
+                                   <!-- <li>
+                                    <a href="{{ path('agent_index') }}">Valider une formation</a>
+                                    </li>--> 
+                                    <li><a href="{{ path('agent_find_profile') }}">Recherche de profil</a>
+                                    </li>
+                                 {#  <li><a href="{{ path('agent') }}">Consulter un CV</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('domaine_new') }}">Enregister un domaine</a>
+                                    </li>#}
+                                    <li>
+                                        <a href="{{ path('domaine') }}">Liste des domaines de compétences</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('langue') }}">Langues</a>
+                                    </li>
+                                    {# <li>
+                                        <a href="{{ path('typelangue') }}">Ajouter un type de langue</a>
+                                    </li> #}
+                                    
+                                </ul>
+                            </li>
+
+                       <li><a class="menugrand" ><i class="fa fa-folder-open-o"></i>GESTION DES CARRIERES<span class="fa fa-chevron-down"></span></a>
+                          <ul class="nav child_menu" style="display: none">
+                            <li><a href="{{ path('gbane_agent') }}">Promouvoir agent </a>
+                            </li>
+                            <li><a href="{{ path('gbane_homepage') }}">Promouvoir </a>
+                            </li>
+                            <li><a href="{{ path('gbane_profil') }}">Tous les profils </a>
+                            </li>
+                            <li><a href="{{ path('regles') }}">Conditions d’éligibilité de promotion </a>
+                             <li><a href="{{ path('file_list') }}">Liste des decisions</a></li>
+                            
+                            </li>
+                            
+                          </ul>
+                       </li>
+
+                        <li><a class="menugrand"><i class="fa fa-share"></i>GESTION DES AFFECTATIONS{% if (menu.sum_affectation > 0)%}<label class="label label-danger">{{menu.sum_affectation}}</label>{% endif %}<span class="fa fa-chevron-down"></span></a>
+                            <ul class="nav child_menu" style="display: none">
+                                {% if is_granted('ROLE_RESPO_SRHMG') %}
+                                    <li>
+                                        <a href="{{ path('affecter_new') }}">Enregistrer un nouvel agent</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('affecter') }}">Affecter un Agent
+                                            {% if (menu.affectation_attente.count > 0)%}
+                                                <span class="notifBlock">{{menu.affectation_attente.count}}</span>
+                                            {% endif %}
+                                        </a>
+                                    </li>
+                                    <li><a href="{{ path('affecter_list_modif') }}">Modifier une Affectation</a>
+                                    </li>
+                                    <li><a href="{{ path('affecter_list_print_note') }}">Imprimer Note d'affectation
+                                            {% if (menu.affectation_impression.count > 0)%}
+                                                <span class="notifBlock">{{menu.affectation_impression.count}}</span>
+                                            {% endif %}
+                                        </a>
+                                    </li>
+                                    <li><a href="{{ path('affecter_list_num_note') }}">Joindre Note d'affectation
+                                            {% if (menu.affectation_num_note.count > 0)%}
+                                                <span class="notifBlock">{{menu.affectation_num_note.count}}</span>
+                                            {% endif %}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                <li><a href="{{ path('affecter_list_valid') }}">Valider les Prises de Services
+                                        {% if (menu.affectation_valid.count > 0)%}
+                                            <span class="notifBlock">{{menu.affectation_valid.count}}</span>
+                                        {% endif %}
+                                    </a>
+                                </li>
+                                {% if is_granted('ROLE_RESPO_SRHMG') %}
+                                    <li><a href="{{ path('affecter_list_print_certif') }}">Imprimer certificat de Prise de Service
+                                            {% if (menu.affectation_imprim_note.count > 0)%}
+                                                <span class="notifBlock">{{menu.affectation_imprim_note.count}}</span>
+                                            {% endif %}
+                                        </a>
+                                    </li>
+
+                                    <li><a href="{{ path('affecter_list_num_certif') }}">Joindre certificat de Prise de Service
+                                            {% if (menu.affectation_num_cert.count > 0)%}
+                                                <span class="notifBlock">{{menu.affectation_num_cert.count}}</span>
+                                            {% endif %}
+                                        </a>
+                                    </li>
+
+                                    <li><a href="{{ path('affecter_etat') }}">Suivi des Affectations</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </li>
+
+                        <li><a class="menugrand"><i class="fa fa-desktop"></i>  GESTION DES MUTATIONS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                {% if (menu.sum_mutation > 0)%}
+                                    <label class="label label-danger">{{menu.sum_mutation}}</label>
+                                {% endif %}
+                                <span class="fa fa-chevron-down"></span></a>
+                            <ul class="nav child_menu" style="display: none">
+                                {% if (app.user.agent.fonction is not null and app.user.agent.fonction.id == 10) or is_granted('ROLE_RESPO_SRHMG') %}
+                                    <li><a href="{{ path('mutation_new') }}">Muter un agent</a>
+                                    </li>
+                                {% endif %}
+
+                                {% if app.user.agent.getDroitMutationInterne %}
+                                    <li><a href="{{ path('mutation_changesrv') }}">Changement service</a></li>
+                                    {% endif%}
+
+                                <li><a href="{{ path('mutation_receive') }}">Mon service
+                                        {% if (menu.mutation_valid_respo.count > 0)%}
+                                            <span class="notifBlock">{{menu.mutation_valid_respo.count}}</span>
+                                        {% endif %}
+                                    </a>
+                                </li>
+                                {% if is_granted('ROLE_RESPO_SRHMG') %}
+                                    <li><a href="{{ path('mutation_receive', {'action':'others'}) }}">Autres Services
+                                            {% if (menu.mutation_valid_rh.count > 0)%}
+                                                <span class="notifBlock">{{menu.mutation_valid_rh.count}}</span>
+                                            {% endif %}
+                                        </a>
+                                    </li>
+                                    <li><a href="{{ path('mutation_receive', {'action':'print'}) }}">Imprimer Note de mutation
+                                            {% if (menu.mutation_print.count > 0)%}
+                                                <span class="notifBlock">{{menu.mutation_print.count}}</span>
+                                            {% endif %}
+                                        </a>
+                                    </li>
+                                    <li><a href="{{ path('mutation_receive', {'action':'scan'}) }}">Joindre Note de mutation
+                                            {% if (menu.mutation_scan.count > 0)%}
+                                                <span class="notifBlock">{{menu.mutation_scan.count}}</span>
+                                            {% endif %}
+                                        </a>
+
+                                    </li>
+                                {% endif %}
+                                {#<li><a href="{{ path('mutation_interim') }}">Designer interimaire</a></li>#}
+                            </ul>
+                        </li>
+                        <li><a class="menugrand"><i class="fa fa-calendar"></i>GESTION DES DEMANDES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% if (menu.sum_demande > 0)%}<label class="label label-danger">{{menu.sum_demande}}</label>{% endif %}<span class="fa fa-chevron-down"></span></a>
+                            <ul class="nav child_menu" style="display: none">
+                                <li><a href="{{ path('demande_abscence') }}">Enregister absence</a></li>
+                                <li><a href="{{ path('demande_receive') }}">
+                                        {% if app.user.agent.fonction is not null and app.user.agent.fonction.id == 10 %}
+                                            les demandes
+                                        {% else %}
+                                            Mon service
+                                        {% endif %}
+                                        {% if (menu.demande_perso.count > 0)%}
+                                            <span class="notifBlock">{{menu.demande_perso.count}}</span>
+                                        {% endif %}
+                                    </a>
+                                </li>
+{% if is_granted('ROLE_RESPO_SRHMG') %}
+
+                                    <li><a href="{{ path('demande_receive',{'action':'other'}) }}">Autres services
+                                            {% if (menu.demande_other > 0)%}
+                                                <span class="notifBlock">{{menu.demande_other}}</span>
+                                            {% endif %}
+                                        </a>
+                                    </li>
+                                    <li><a href="{{ path('demande_receive',{'action':'print'}) }}">Imprimer les actes
+                                            {% if (menu.demande_print > 0)%}
+                                                <span class="notifBlock">{{menu.demande_print}}</span>
+                                            {% endif %}
+                                        </a>
+                                    </li>
+                                    <li><a href="{{ path('demande_receive',{'action':'scan'}) }}">Joindre les actes
+                                            {% if (menu.demande_scan > 0)%}
+                                                <span class="notifBlock">{{menu.demande_scan}}</span>
+                                            {% endif %}
+                                        </a>
+                                    </li>
+                                    <li><a href="{{ path('quota') }}">Créer / Modifier les Quotas</a>
+                                    </li>
+                                {% endif %}
+                        </li>
+                    </ul>
+                    </li>
+
+                    <li>
+                        <a class="menugrand"><i class="fa fa-calendar"></i>GESTION DES CONGES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            {% if (menu.sum_cong_respo > 0)%}
+                                <label class="label label-danger">{{menu.sum_cong_respo}}</label>
+                            {% endif %}<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu" style="display: none">
+
+                            <li><a href="{{ path('conges',{'action':'default'}) }}">Valider congés mes agents
+                                    {% if (menu.conge_mon_service.count > 0)%}
+                                        <span class="notifBlock">{{menu.conge_mon_service.count}}</span>
+                                    {% endif %}
+                                </a>
+                            <li><a href="{{ path('conges',{'action':'reprises'}) }}">Valider reprises mes agents
+                                    {% if (menu.conge_mon_service_reprise.count > 0)%}
+                                        <span class="notifBlock">{{menu.conge_mon_service_reprise.count}}</span>
+                                    {% endif %}
+                                </a>
+
+{% if is_granted('ROLE_RESPO_SRHMG')%}
+
+                                <li><a href="{{ path('conges',{'action':'respo'}) }}">Valider congés Respo/ Cabinet
+                                        {% if (menu.conge_respo_service.count > 0)%}
+                                            <span class="notifBlock">{{menu.conge_respo_service.count}}</span>
+                                        {% endif %}
+                                    </a>
+                                </li>
+                                <li><a href="{{ path('conges',{'action':'other'}) }}">Valider congés autre service
+                                        {% if (menu.conge_autre_service.count > 0)%}
+                                            <span class="notifBlock">{{menu.conge_autre_service.count}}</span>
+                                        {% endif %}
+                                    </a>
+                                </li>
+                                <li><a href="{{ path('conges',{'action':'bac'}) }}">Imprimer actes
+                                        {% if (menu.conge_autre_bac.count > 0)%}
+                                            <span class="notifBlock">{{menu.conge_autre_bac.count}}</span>
+                                        {% endif %}
+                                    </a>
+                                </li>
+                                <li><a href="{{ path('conges',{'action':'joindre'}) }}">Joindre actes
+                                        {% if (menu.conge_autre_joindre.count > 0)%}
+                                            <span class="notifBlock">{{menu.conge_autre_joindre.count}}</span>
+                                        {% endif %}
+                                    </a>
+                                </li>
+                                {#
+                                                                <li><a href="{{ path('agent_identification_home') }}">Régularisation congés
+                                                                    </a>
+                                                                </li>
+                                                                #}
+                            {% endif %}
+                            <li><a href="{{ path('conges_suivi',{'action':'default'}) }}">Suivi</a>
+                            </li>
+                        </ul>
+                    </li>
+                    {% if is_granted('ROLE_RESPO_SRHMG') %}
+                        <li><a class="menugrand"><i class="fa fa-table"></i>GESTION DES DECISIONS<span class="fa fa-chevron-down"></span></a>
+                            <ul class="nav child_menu" style="display: none">
+                                <li><a href="{{ path('decision_new') }}">Ajouter Décision</a>
+                                </li>
+                                <li><a href="{{ path('decision',{todo:'consulter'}) }}">Consulter décision</a>
+                                </li>
+                                <li><a href="{{ path('decision',{todo:'ajouter'}) }}">Ajouter agent</a>
+                                </li>
+                                <li><a href="{{ path('decision',{todo:'retirer'}) }}">Retirer agent</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a class="menugrand"><i class="fa fa-table"></i>GESTION DES IMPUTATIONS<span class="fa fa-chevron-down"></span></a>
+                            <ul class="nav child_menu" style="display: none">
+                                <li><a href="{{ path('deleguer') }}">Effectuer les imputations</a>
+                                </li>
+
+
+                            </ul>
+                        </li>
+                        <li><a class="menugrand" href="{{ path('mutation_interim_printe') }}"><i class="fa fa-table"></i>IMPRIMER NOTE D'INTERIM</a></li>
+                            {#<li><a class="menugrand" href="{{ path('deleguer') }}"><i class="fa fa-table"></i>FAIRE DELEGUATION</a></li>#}
+                        {% endif %}
+                    <li><a class="menugrand" href="{{ path('mutation_interim') }}"><i class="fa fa-table"></i>ENREGISTRER INTERIMAIRE</a></li>
+
+                    <li><a class="menugrand" href="{{ path('mutation_saaf') }}"><i class="fa fa-table"></i>ENREGISTRER SAAF</a></li>
+                        {% if is_granted('ROLE_RESPO_SRHMG') %}
+                        <li><a class="menugrand" href="{{ path('news_index') }}"><i class="fa fa-table"></i>FLASH INFO</a></li>
+                        {% endif %}
+                    </ul>
+                    {#{macro.ActiveMenu()}#}
+                </div>
+            {% endif %}
+        {% endif %}
+
+        {% if app.user.etat == 0 or app.user.etat is null %}
+            <ul class="nav side-menu">
+                {% if is_granted('ROLE_RESPO_SRHMG') or is_granted('ROLE_RESPO') %}
+
+                    <div style="color: #f6f4ff; font-weight: bolder; font-size: 1.2em;">MON MENU</div>
+                {% else %}
+                    <li><a href="{{ path('agent_show',{id : app.user.agent.id}) }}"><i class="fa fa-home"></i> ACCUEIL </a>
+                    {% endif %}
+
+
+                    <ul class="nav child_menu" style="display: none">
+
+                    </ul>
+                </li>
+                {#{% if app.user.agent.direction is not null and app.user.agent.direction.id == 3 and not is_granted('ROLE_RESPO_SRHMG')%}
+
+                {% if menu_delegation is defined %}
+                    {% for menudelegationn in menu_delegation %}
+                        {% set mdl=menudelegationn[0] %}
+
+         <li><a class="menugrand" ><i class="fa fa-desktop"></i>  {{menudelegationn['fonctionalite'].categorie}}<span class="fa fa-chevron-down"></span></a>
+                            <ul class="nav child_menu" style="display: none">
+                        {% for item in mdl %}
+                             <li><a href="{{ path(item.rubriques.route) }}">{{item.rubriques.libelle}}</a>
+                                </li>
+                        {% endfor %}
+                                </ul>
+                        </li>
+
+
+                    {% endfor %}
+                {% endif %}
+                {% endif %}#}
+                {% if app.user.agent.Fonction.id != 10 %}
+                    <li><a class="menugrand" ><i class="fa fa-desktop"></i>GESTION DES DEMANDES<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu" style="display: none">
+                            <li><a href="{{ path('demande_do') }}">Demander un Acte</a>
+                            </li>
+                            <li><a href="{{ path('demande_send') }}">Suivre mes Demandes</a>
+                            </li>
+                        </ul>
+                    </li>
+                {% endif %}
+                {% if  (is_granted('ROLE_RESPO_SRHMG')== false) and (is_granted('ROLE_RESPO')== false) %}
+                    <li><a class="menugrand"><i class="fa fa-desktop"></i> GESTION DES MUTATIONS  <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu" style="display: none">
+                            <li><a href="{{ path('mutation_new') }}">Faire une Demande</a>
+                            </li>
+                            <li><a href="{{ path('mutation_send') }}">Suivre mes Demandes</a>
+                            </li>
+                        </ul>
+                    </li>
+                {% endif %}
+                {% if ('ROLE_CONGE' in app.user.roles)==false %}
+                {# {% if is_granted('ROLE_CONGE')==false %}#}{% endif %}
+                {% if app.user.agent.Fonction.id != 10 %}
+                    <li><a href="#" class="menugrand"><i class="fa fa-table"></i>GESTION DES CONGES
+                            {% if (menu.conge_actif.count > 0) %}
+                                <label class="label label-danger">{{menu.conge_actif.count}}</label>
+                            {% endif %}
+                            <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu" style="display: none">
+                            <li><a href="{{ path('conges_new') }}">Faire une demande</a>
+                            </li>
+                            <li><a href="{{ path('conges_active') }}">Mes congés
+                                    {% if (menu.sum_cong_perso > 0) %}
+                                        <label class="label label-danger">{{menu.sum_cong_perso}}</label>
+                                    {% endif %}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                {% endif %}
+
+
+            </ul>
+
+            <div class="menu_section">
+
+                <ul class="nav side-menu">
+                    <li><a class="menugrand"><i class="fa fa-table"></i>ANNUAIRE DGE  <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu" style="display: none">
+                            <li><a href="{{path('contact')}}">Mon annuaire</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li><a><i class="fa fa-table"></i>TABLEAU DE BORD  <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu" style="display: none">
+                            <li><a href="{{ path('agent_tableau',{id : app.user.agent.id}) }}">Tableau de Bord</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a class="menugrand"><i class="fa fa-table"></i>MON PROFIL<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu" style="display: none">
+                            <li><a href="{{ path('agent_show',{id : app.user.agent.id}) }}">Mes Infos</a>
+                            </li>
+                            {#<li><a href="{{ path('agent_tableau',{id : app.user.agent.id}) }}">Tableau de Bord</a>
+                            </li>#}
+                            <li><a href="{{ path('fos_user_change_password') }}">Modifier mon Mot de Passe</a>
+                            </li>
+                            <li><a href="/images/document/tuto_all.pdf" target="_blank">Télécharger le manuel de formation</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+
+            </div>
+            {#% if  (is_granted('ROLE_RESPO_SRHMG')== true) or (is_granted('ROLE_RESPO')== true) %}
+                {{macro.ActiveMenu()}}
+           {% endif %#}
+        {% endif %}
+        {% if is_granted('ROLE_SAAF')  %}
+            {% if app.user.etat == 1 or app.user.etat is null %}
+                <div class="menu_section">
+                    <ul class="nav side-menu">
+                        <div style="color: #f6f4ff; font-weight: bolder; font-size: 1.2em;">MENU D'ADMINISTRATION</div>
+                        <li><a href="{{ path('agent_show',{id : app.user.agent.id}) }}"><i class="fa fa-home"></i> ACCUEIL <span class=""></span></a>
+
+                        </li>
+
+                        <li><a class="menugrand"><i class="fa fa-share"></i>GESTION DES AFFECTATIONS<label class="label label-danger"></label><span class="fa fa-chevron-down"></span></a>
+                            <ul class="nav child_menu" style="display: none">
+
+                                <li>
+                                    <a href="{{ path('affecter_saaf') }}">Affecter un Agent
+
+                                        <span class="notifBlock"></span>
+
+                                    </a>
+                                </li>
+
+
+                            </ul>
+                        </li>
+
+                        <li><a class="menugrand"><i class="fa fa-share"></i>GESTION DES DEMANDES<label class="label label-danger"></label><span class="fa fa-chevron-down"></span></a>
+                            <ul class="nav child_menu" style="display: none">
+
+                                <li>
+                                    <a href="{{ path('avis') }}">Donner avis
+
+                                        <span class="notifBlock"></span>
+
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('demande_saaf_new') }}">Initier demande
+
+                                        <span class="notifBlock"></span>
+
+                                    </a>
+                                </li>
+                                <li><a href="{{ path('demande_abscence') }}">Enregister absence</a></li>
+                            </ul>
+                        </li>
+
+<li>
+    <a class="menugrand">
+        <i class="fa fa-calendar"></i>GESTION DES CONGES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fa fa-chevron-down"></span>
+    </a>
+
+    <ul class="nav child_menu" style="display: none">
+
+        <li>
+            <a href="{{ path('agent_identification_home') }}">Régularisation congés
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('conges',{'action':'reprises'}) }}">Valider reprises mes agents
+
+
+            </a>
+        </li>
+<li>
+    <a href="{{ path('conges_suivi',{'action':'default'}) }}">Suivi</a>
+</li>
+
+
+
+    </ul>
+</li>
+
+
+                    </ul>
+                    </li>
+
+
+
+                    </ul>
+                    {#{macro.ActiveMenu()}#}
+                </div>
+            {% endif %}
+        {% endif %}
+
+        {% if app.user.agent.direction is not null and app.user.agent.direction.id == 3 and not is_granted('ROLE_RESPO_SRHMG')%}
+
+            {% if menu_delegation is defined %}
+                {% set deleg = 1 %}
+                {% if app.user.etat == 2 or app.user.etat is null  %}
+                    <div class="menu_section">
+                        <ul class="nav side-menu">
+                            <div style="color: #f6f4ff; font-weight: bolder; font-size: 1.2em;">MENU DELEGATION</div>
+                            <li><a href="{{ path('agent_show',{id : app.user.agent.id}) }}"><i class="fa fa-home"></i> ACCUEIL <span class=""></span></a>
+
+                            </li>
+                            {% for menudelegationn in menu_delegation %}
+                                {% set mdl=menudelegationn[0] %}
+
+
+                                <li>
+                                    <a class="menugrand" ><i class="fa fa-desktop"></i>  {{menudelegationn['fonctionalite'].categorie}}<span class="fa fa-chevron-down"></span>
+                                    </a>
+                                    <ul class="nav child_menu" style="display: none">
+                                        {% for item in mdl %}
+                                            {#{% dump(fonctionbase.genererateUrl(item.rubriques.route,item.rubriques.getTableau())) %}#}
+                                            <li><a href="{{ path(item.rubriques.route,item.rubriques.getTableau())}}">{{item.rubriques.libelle}}</a></li>
+                                            {% endfor %}
+                                    </ul>
+                                </li>
+                                <li><a href="{{path('stat_details', { 'id': 8 })}}"><i class="fa fa-desktop"></i> Stat. par type d'acte <span class=""></span></a></li>
+
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+
+        {% if  (is_granted('ROLE_RESPO_SRHMG')== true) or (is_granted('ROLE_RESPO')== true) or (is_granted('ROLE_SAAF')== true) or (menu_delegation is defined and menu_delegation != null)  %}
+            {{macro.ActiveMenu(interim,deleg)}}
+        {% endif %}
+
+
+    </div>
+</div>

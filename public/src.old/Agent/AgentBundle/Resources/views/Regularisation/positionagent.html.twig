@@ -1,0 +1,134 @@
+{% extends '::base.html.twig' %}
+
+{% block css %}
+    <link href="{{ asset('design/css/style.css') }}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{{asset('ediligence/assets/css/bootstrap-select.min.css')}}">
+{% endblock %}
+
+
+
+{% block titre_page %}   
+
+{% endblock %}
+
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+    <style>
+        th{
+            text-align: left !important;
+        }
+        .dataTables_filter{
+            width: auto !important;
+        }
+    </style>
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+
+{% block body -%}
+    <div class="row">
+        <div class="">
+            {% if app.request.hasPreviousSession %}
+                {% for type, messages in app.session.flashbag.all() %}
+                    <div class="alert alert-{{ type }}">
+                        <ul>
+                            {% for message in messages %}
+                                <li>
+                                    {{ message }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+         <h1>{% if id == 1 %} FAIRE UNE MISE A DISPOSITION {% else %} RETRAITE {% endif %}</h1><br>
+        {{ form_start(form,{'attr':{'id':'form_chk'}}) }}
+        <div class="col-md-4">
+            {{ form_errors(form) }}
+            <div>
+                {{ form_row(form.agent) }}
+            </div>
+            <div>
+                {{ form_row(form.numNote) }}
+            </div>
+            <div>
+                {{ form_row(form.dateNumNote) }}
+            </div>
+            <div>
+                 {{ form_label(form.pj.docFile, 'Preuve justificatif') }}
+
+                 {{ form_widget(form.pj.docFile) }}
+            </div>
+            <div>&nbsp;</div>
+            <div>
+                 {{ form_label(form.objetnote, 'Motif') }}
+
+                 {{ form_widget(form.objetnote) }}
+            </div>
+            <div>
+                {{ form_row(form.dateDetachement) }}
+            </div>
+            <div>&nbsp;</div>
+            {% if id == 1 %}
+                 {{ form_label(form.Provenance, 'Destination') }}
+                 {{ form_widget(form.Provenance) }}
+            {% endif %}
+            <div>&nbsp;</div>
+            <div>
+                {{ form_widget(form.Enregistrer) }}
+            </div>
+        </div>
+        <div class="col-md-8 table-responsive"> 
+            <table class="records_chk table table-striped responsive-utilities jambo_table table-responsive" id="datatable" >
+                <thead>
+
+                    <tr class="headings">
+                        <th>
+                        </th>
+                        <th>Matricule</th>
+                        <th>Nom et prénoms</th>
+                        <th>Etat</th>
+                        <th>Date d'effet</th>
+                         {% if id == 1 %}
+                        <th>Provenance</th>
+                         {% endif %}
+
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for liste_agents in listeimprimer %}
+                        <tr>
+                            <td></td>
+                            <td>{{liste_agents.detachement.agent.matricule}}</td>
+                            <td>{{liste_agents.detachement.agent.concatNom}}</td>
+                            <td>{% if liste_agents.detachement and liste_agents.detachement.naturedetachement %} {{liste_agents.detachement.naturedetachement.nature}} {% endif %}</td>
+                            <td>{{liste_agents.detachement.dateDetachement|date('d-m-Y')}}</td> 
+                            {% if id == 1 %}
+                            <td>{{liste_agents.detachement.Provenance.ministere}}</td>
+                            {% endif %}
+                            <td>
+                                {#<a href="{{ path('regularisation_position', {'id': id, 'modif': liste_agents.detachement.id }) }}" class="btn btn-danger btn-sm col-md-12" data-confirm="Etes-vous <strong>certain</strong> de vouloir Valider cette demande ?">Modifier</a>#}
+                                {#% if id == 1 %#}
+                                <a href="{{ path('regularisation_detachprint', {'id': liste_agents.detachement.id, 'nature': liste_agents.detachement.naturedetachement.id }) }}" class="btn btn-success btn-sm col-md-12">Imprimer</a>
+                                {#% endif %#}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {{ form_widget(form._token) }}
+        {{ form_end(form, {'render_rest': false}) }}
+    </div>
+{% endblock %}
+
+{% block javascript %}
+
+    <script src="{{ asset('design/js/style.js') }}"></script>
+    <script src="{{ asset('ediligence/assets/js/bootstrap-select.min.js') }}"></script>
+{% endblock %}

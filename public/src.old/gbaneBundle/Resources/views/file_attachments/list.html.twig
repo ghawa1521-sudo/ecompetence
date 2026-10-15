@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Liste des fichiers uploadés</h1>
+    <ul>
+        {% for file in files %}
+            <li>
+                {{ file.filename }}
+                <a href="{{ path('file_delete', {'id': file.id}) }}" data-method="delete">Supprimer</a>
+            </li>
+        {% else %}
+            <li>Aucun fichier trouvé.</li>
+        {% endfor %}
+    </ul>
+
+    <form action="{{ path('file_upload') }}" method="post" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <button type="submit">Uploader</button>
+    </form>
+{% endblock %}

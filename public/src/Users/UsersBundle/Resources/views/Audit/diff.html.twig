@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+{% endblock %}
+{% block body %}
+    <h1>{{ audit_assoc(log.source) }}<small>audit diff</small></h1>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="fa fa-archive"></i> {{ audit_assoc(log.source) }}</h3>
+        </div>
+
+        {% if log.action == 'insert' %}
+            <ul class="list-group">
+                {% for field in fields %}
+                    <li class="list-group-item">
+
+                        <span class="badge">{{ audit_value(field.new) }}</span>
+                        {{ audit_value(field.col) }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <table class="table table-striped">
+                <tr>
+                    <th>Champ</th>
+                    <th>Ancien</th>
+                    <th>Nouveau</th>
+                </tr>
+                {% for field in fields %}
+                    <tr>
+                        <td>{{ field.col }}</td>
+                        <td>{{ audit_value(field.old) }}</td>
+                        <td>{{ audit_value(field.new) }}</td>
+                    </tr>
+                {% endfor %}
+
+
+            </table>
+        {% endif %}
+
+    </div>
+{% endblock %}

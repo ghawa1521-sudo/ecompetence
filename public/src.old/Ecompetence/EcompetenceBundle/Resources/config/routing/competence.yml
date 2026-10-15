@@ -1,0 +1,40 @@
+competence_index:
+    path:     /
+    defaults: { _controller: "EcompetenceBundle:Competence:new" }
+    
+competence_new:
+    path:      /{id}/new
+    defaults: { _controller: "EcompetenceBundle:Competence:new" }
+
+competence_recap:
+    path:      /{id}/recap
+    defaults: { _controller: "EcompetenceBundle:Competence:recap" }
+
+competence_edit:
+    path:      /{id}/{ag}/edit
+    defaults: { _controller: "EcompetenceBundle:Competence:edit" }
+
+competence_api:
+    path:     /competenceapi
+    defaults: { _controller: "EcompetenceBundle:Profile:competenceapi" }
+    methods:  [GET,POST]
+    options:
+      expose: true
+
+competence_ajoutCompetence:
+    path:     /ajoutCompetence
+    defaults: { _controller: "EcompetenceBundle:Competence:ajoutCompetence" }
+
+competence_create:
+    path:     /create
+    defaults: { _controller: "EcompetenceBundle:Competence:create" }
+    methods:  POST
+
+competence_createdomaine:
+    path:     /createdomaine
+    defaults: { _controller: "EcompetenceBundle:Competence:createdomaine" }
+    methods:  POST
+
+#competence_newcomp:
+ #   path:      /newcomp
+ #   defaults: { _controller: "EcompetenceBundle:Competence:newcomp" }

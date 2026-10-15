@@ -1,0 +1,125 @@
+{% extends '::base.html.twig' %}
+
+{% block css %}
+    <link href="{{ asset('design/css/style.css') }}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{{asset('ediligence/assets/css/bootstrap-select.min.css')}}">
+{% endblock %}
+
+
+
+{% block titre_page %}   
+
+{% endblock %}
+
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+    <style>
+        th{
+            text-align: left !important;
+        }
+        .dataTables_filter{
+            width: auto !important;
+        }
+    </style>
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+
+{% block body -%}
+    {{ form_start(form,{'attr':{'id':'form_chk'}}) }}
+    {{ form_errors(form) }}
+ 
+<div class="col-md-6">
+    {{form_row(form.dateDebut)}}
+    {{form_row(form.dateFin)}}
+     
+     <table border="1" width="50%" class="table table-striped records_list responsive-utilities jambo_table table-responsive">
+
+        <tr><td>Fonctionnalité</td><td>Rubrique</td><td>Section Gestion du personnel</td><td>Section Renforcement des capacités</td><td>chargé d'études</td></tr>
+        {% for key, fonc in tab %}
+            
+            {% for val,rub in fonc %}
+            <tr>
+                {% if val ==1 %}
+                <td rowspan="{{fonc|length}}">{{key}}</td>
+                {% endif %}
+
+
+                <td>{{rub}}</td>
+                <td>
+                    <select>
+                        <option>Choisir un collaborateur</option>
+                        {% for personnel in gpas %}
+                        <option>{{personnel.nom}} {{personnel.prenoms}}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <select>
+                    <option>Choisir un collaborateur</option>
+                    {% for personnel in rcgp %}
+                    <option>{{personnel.nom}} {{personnel.prenoms}}</option>
+                    {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <select>
+                <option>Choisir un collaborateur</option>
+                {% for personnel in charge %}
+                <option>{{personnel.nom}} {{personnel.prenoms}}</option>
+                {% endfor %}
+                </select>
+                </td>
+            </tr>
+            {% endfor %}
+        {% endfor %}
+        {#}
+        <tr>
+            <td rowspan="7">Enregistrement d'un nouvel agent</td>
+            <td>enregistrer un agent</td>
+            <td>
+            <select>
+                <option>Choisir un collaborateur</option>
+                {% for personnel in gpas %}
+                <option>{{personnel.nom}} {{personnel.prenoms}}</option>
+                {% endfor %}
+                
+            </select>
+            </td>
+            <td>
+                <select>
+                <option>Choisir un collaborateur</option>
+                {% for personnel in rcgp %}
+                <option>{{personnel.nom}} {{personnel.prenoms}}</option>
+                {% endfor %}
+                </select>
+            </td>
+            <td>
+            <select>
+                <option>Choisir un collaborateur</option>
+                {% for personnel in charge %}
+                <option>{{personnel.nom}} {{personnel.prenoms}}</option>
+                {% endfor %}
+                </select></td>
+        </tr>
+        <tr><td>Ajouter document</td><td></td><td></td><td></td></tr>
+        <tr><td>affecter un agent</td><td></td><td></td><td></td></tr>
+        <tr><td>Impression note d'affectation</td><td></td><td></td><td></td></tr>
+        <tr><td>Joindre note d'affectation</td><td></td><td></td><td></td></tr>
+        <tr><td>Impression certificat de prise de service</td><td></td><td></td><td></td></tr>
+        <tr><td>Joindre certificat de prise de service</td><td></td><td></td><td></td></tr>#}
+    </table>
+</div>
+<div class="col-md-6"><table> <tr>  <td>    a</td></tr>  </table>
+    </div>
+
+
+    {{ form_end(form, {'render_rest': true}) }}
+{% endblock %}
+
+{% block javascript %}
+
+    <script src="{{ asset('design/js/style.js') }}"></script>
+    <script src="{{ asset('ediligence/assets/js/bootstrap-select.min.js') }}"></script>
+{% endblock %}

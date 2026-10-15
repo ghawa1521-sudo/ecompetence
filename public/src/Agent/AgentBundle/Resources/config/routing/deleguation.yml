@@ -1,0 +1,30 @@
+deleguation:
+    path:     /
+    defaults: { _controller: "AgentBundle:Deleguation:index" }
+
+deleguation_show:
+    path:     /{id}/show
+    defaults: { _controller: "AgentBundle:Deleguation:show" }
+
+deleguation_new:
+    path:     /new
+    defaults: { _controller: "AgentBundle:Deleguation:new" }
+
+deleguation_create:
+    path:     /create
+    defaults: { _controller: "AgentBundle:Deleguation:create" }
+    methods:  POST
+
+deleguation_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AgentBundle:Deleguation:edit" }
+
+deleguation_update:
+    path:     /{id}/update
+    defaults: { _controller: "AgentBundle:Deleguation:update" }
+    methods:  [POST, PUT]
+
+deleguation_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AgentBundle:Deleguation:delete" }
+    methods:  [POST, DELETE]

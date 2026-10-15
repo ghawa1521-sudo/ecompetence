@@ -1,0 +1,12 @@
+demandes_quota:
+    resource: "@DemandesBundle/Resources/config/routing/quota.yml"
+    prefix:   /quota
+
+demandes_demande:
+    resource: "@DemandesBundle/Resources/config/routing/demande.yml"
+    prefix:   /demande
+
+demandes_typedemande:
+    resource: "@DemandesBundle/Resources/config/routing/typedemande.yml"
+    prefix:   /typedemande
+

@@ -1,0 +1,330 @@
+{% block header %}
+    <!--[if lt IE 8]>
+           <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+       <![endif]-->
+    <nav class="site-navbar navbar navbar-inverse navbar-fixed-top navbar-mega"
+         role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle hamburger hamburger-close navbar-toggle-left hided"
+                    data-toggle="menubar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="hamburger-bar"></span>
+            </button>
+            <button type="button" class="navbar-toggle collapsed" data-target="#site-navbar-collapse"
+                    data-toggle="collapse">
+                <i class="icon md-more" aria-hidden="true"></i>
+            </button>
+            <a class="navbar-brand navbar-brand-center" href="{{ path('homepage') }}">
+                <img class="navbar-brand-logo navbar-brand-logo-normal" src="{{asset('assets/images/logo.png') }}"
+                     title="PgP">
+                <img class="navbar-brand-logo navbar-brand-logo-special" src="{{asset('assets/images/logo.png') }}"
+                     title="PgP">
+                <span class="navbar-brand-text hidden-xs">PgP</span>
+            </a>
+            <button type="button" class="navbar-toggle collapsed" data-target="#site-navbar-search"
+                    data-toggle="collapse">
+                <span class="sr-only">Toggle Search</span>
+                <i class="icon md-search" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="navbar-container container-fluid">
+            <!-- Navbar Collapse -->
+            <div class="collapse navbar-collapse navbar-collapse-toolbar" id="site-navbar-collapse">
+                <!-- Navbar Toolbar -->
+                <ul class="nav navbar-toolbar">
+                    <li class="hidden-float" id="toggleMenubar">
+                        <a data-toggle="menubar" href="#" role="button">
+                            <i class="icon hamburger hamburger-arrow-left">
+                                <span class="sr-only">Toggle menubar</span>
+                                <span class="hamburger-bar"></span>
+                            </i>
+                        </a>
+                    </li>
+                    <li class="hidden-xs" id="toggleFullscreen">
+                        <a class="icon icon-fullscreen" data-toggle="fullscreen" href="#" role="button">
+                            <span class="sr-only">Toggle fullscreen</span>
+                        </a>
+                    </li>
+                    <li class="dropdown dropdown-fw dropdown-mega">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"
+                           data-animation="fade" role="button": Espace Distributeur>Espace Distributeur / Utilisateur connecté: {{app.user.username }} ({{app.user.email }})  </a>
+                    </li>
+
+                </ul>
+                <!-- End Navbar Toolbar -->
+                <!-- Navbar Toolbar Right -->
+                <ul class="nav navbar-toolbar navbar-right navbar-toolbar-right">
+                    {# <li style="font-size: 12px; font-weight: bold; color: #efe24b"> 
+                          <i>By Offset Consulting & MAGIF Services</i>
+  
+                      </li>#}
+                    <li class="dropdown">
+                        <a class="navbar-avatar dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"
+                           data-animation="scale-up" role="button">
+                            <span class="avatar avatar-online">
+                                <img src="{{asset('global/portraits/user.png') }}" alt="...">
+                                <i></i>
+                            </span>
+                        </a>
+
+                        <ul class="dropdown-menu" role="menu">
+                            {#
+                            <li role="presentation">
+                                <a href="{{path('fos_user_change_password')}}" role="menuitem"><i class="icon md-account" aria-hidden="true"></i> Changer le mot de passe</a>
+                            </li>
+                            <li role="presentation">
+                                <a href="javascript:void(0)" role="menuitem"><i class="icon md-card" aria-hidden="true"></i> Billing</a>
+                            </li>
+                            <li role="presentation">
+                                <a href="javascript:void(0)" role="menuitem"><i class="icon md-settings" aria-hidden="true"></i> Settings</a>
+                            </li>#}
+                            <li class="divider" role="presentation"></li>
+                            <li role="presentation">
+                                <a href="{{path('fos_user_security_logout')}}" role="menuitem"><i class="icon md-power" aria-hidden="true"></i> Logout</a>
+                            </li>
+                        </ul>
+                    </li>
+                    {{ render(controller('AppBundle:Default:notification')) }}
+
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" href="javascript:void(0)" title="Messages" aria-expanded="false"
+                           data-animation="scale-up" role="button">
+                            <i class="icon md-email" aria-hidden="true"></i>
+                            <span class="badge badge-info up">3</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right dropdown-menu-media" role="menu">
+                            <li class="dropdown-menu-header" role="presentation">
+                                <h5>MESSAGES</h5>
+                                <span class="label label-round label-info">New 3</span>
+                            </li>
+                            <li class="list-group" role="presentation">
+                                <div data-role="container">
+                                    <div data-role="content">
+                                        <a class="list-group-item" href="javascript:void(0)" role="menuitem">
+                                            <div class="media">
+                                                <div class="media-left padding-right-10">
+                                                    <span class="avatar avatar-sm avatar-online">
+                                                        <img src="{{asset('global/portraits/user.png') }}" alt="..." />
+                                                        <i></i>
+                                                    </span>
+                                                </div>
+                                                <div class="media-body">
+                                                    <h6 class="media-heading">Mary Adams</h6>
+                                                    <div class="media-meta">
+                                                        <time datetime="2015-06-17T20:22:05+08:00">30 minutes ago</time>
+                                                    </div>
+                                                    <div class="media-detail">Anyways, i would like just do it</div>
+                                                </div>
+                                            </div>
+                                        </a>
+
+                                        <a class="list-group-item" href="javascript:void(0)" role="menuitem">
+                                            <div class="media">
+                                                <div class="media-left padding-right-10">
+                                                    <span class="avatar avatar-sm avatar-busy">
+                                                        <img src="{{asset('global/portraits/user.png') }}" alt="..." />
+                                                        <i></i>
+                                                    </span>
+                                                </div>
+                                                <div class="media-body">
+                                                    <h6 class="media-heading">June Lane</h6>
+                                                    <div class="media-meta">
+                                                        <time datetime="2015-06-16T18:38:40+08:00">2 days ago</time>
+                                                    </div>
+                                                    <div class="media-detail">Lorem ipsum Id consectetur et minim</div>
+                                                </div>
+                                            </div>
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="dropdown-menu-footer" role="presentation">
+                                <a class="dropdown-menu-footer-btn" href="javascript:void(0)" role="button">
+                                    <i class="icon md-settings" aria-hidden="true"></i>
+                                </a>
+                                <a href="javascript:void(0)" role="menuitem">
+                                    See all messages
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+                <!-- End Navbar Toolbar Right -->
+            </div>
+            <!-- End Navbar Collapse -->
+            <!-- Site Navbar Seach -->
+            <div class="collapse navbar-search-overlap" id="site-navbar-search">
+                <form role="search">
+                    <div class="form-group">
+                        <div class="input-search">
+                            <i class="input-search-icon md-search" aria-hidden="true"></i>
+                            <input type="text" class="form-control" name="site-search" placeholder="Recherche...">
+                            <button type="button" class="input-search-close icon md-close" data-target="#site-navbar-search"
+                                    data-toggle="collapse" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- End Site Navbar Seach -->
+        </div>
+    </nav>
+
+    <nav class="navbar navbar-default gppnav">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <!-------------------------------menu admin------------------------------------------------------>                       
+                    {% if is_granted('ROLE_DISTRI') %}
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="site-menu-icon md-google-pages" aria-hidden="true"></i>
+                                <span class="site-menu-title">Gestion des Déclarations</span>
+
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="">
+                                    <a class="animsition-link" href="{{ path('declaration_new') }}">
+                                        <span class="site-menu-title">Saisir Bordereaux</span>
+                                    </a>
+                                </li>
+
+                                <!-------------------------------sous menu Gestion Liste déclarations------------------------------------------------------>                                                 
+                                <li class="dropdown-submenu">
+                                    <a href="javascript:void(0)">
+                                        <span class="site-menu-title">Liste déclarations</span>
+
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+
+                                        <li class="">
+                                            <a class="animsition-link" href="{{ path('distributeur_indexdecl',{'typePdt':2}) }}">
+                                                <span class="site-menu-title">Carburant</span>
+                                            </a>
+                                        </li>
+                                        <li class="">
+                                            <a class="animsition-link" href="{{ path('distributeur_indexdecl',{'typePdt':1}) }}">
+                                                <span class="site-menu-title">Gaz</span>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li> 
+
+                                <!-------------------------------sous menu Gestion Fiches Synthèses------------------------------------------------------>                                                 
+                                <li class="dropdown-submenu">
+                                    <a href="javascript:void(0)">
+                                        <span class="site-menu-title">Fiches Synthèses</span>
+
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+
+                                        <li class="">
+                                            <a class="animsition-link" href="{{ path('declaration_research',{'typeproduit':2}) }}">
+                                                <span class="site-menu-title">Carburant</span>
+                                            </a>
+                                        </li>
+                                        <li class="">
+                                            <a class="animsition-link" href="{{ path('declaration_research',{'typeproduit':1}) }}">
+                                                <span class="site-menu-title">Gaz</span>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li> 
+                                {#
+                                <li class="">
+                                    <a class="animsition-link" href="{{ path('declaration_indexDist') }}">
+                                        <span class="site-menu-title">Etat des Saisies</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a class="animsition-link" href="{{ path('declaration_research') }}">
+                                        <span class="site-menu-title">Fiche Synthèses</span>
+                                    </a>
+                                </li>#}
+                                <li class="">
+                                    <a class="animsition-link" href="{{ path('declaration_autoriser') }}">
+                                        <span class="site-menu-title">Mes demandes de Modification</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a class="animsition-link" href="{{ path('comptedist_index') }}">
+                                        <span class="site-menu-title">Etat des Opérations</span>
+
+                                    </a>
+                                </li> 
+
+                                <!-------------------------------sous menu Gestion des Sites Agrées------------------------------------------------------>                                                 
+                                <li class="dropdown-submenu">
+                                    <a href="javascript:void(0)">
+                                        <span class="site-menu-title">Mes Sites Agréés</span>
+
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+
+                                        <li class="">
+                                            <a class="animsition-link" href="{{ path('siteagree_indexDist',{'todo':2}) }}">
+                                                <span class="site-menu-title">Les Sites Réseaux</span>
+                                            </a>
+                                        </li>
+                                        <li class="">
+                                            <a class="animsition-link" href="{{ path('siteagree_indexDist',{'todo':1}) }}">
+                                                <span class="site-menu-title">Les Dépots Conso</span>
+                                            </a>
+                                        </li>
+
+                                        {#
+                                        <li class="">
+                                            <a class="animsition-link" href="#">
+                                                <span class="site-menu-title">Suspendre</span>
+                                            </a>
+                                        </li>#}
+
+                                    </ul>
+                                </li>                                               
+                                {#
+                             
+                             <li class="">
+                                 <a class="animsition-link" href="{{ path('siteagree_indexDist') }}">
+                                     <span class="site-menu-title">Mes Sites Agréés</span>
+                                 </a>
+                             </li>#}
+                            </ul>
+                        </li>
+                    {% endif  %}
+                    <!-------------------------------fin menu admin------------------------------------------------------>    
+                    <li class="dropdown">
+                        <a href="{{ path('telechargement',{'fileNames':'support_de_formation_distributeur.pdf'})}}" title="télécharger le support de formation">
+                           {#<a href="{{ absolute_url(asset('support_de_formation_distributeur_obs_waf.pdf')) }}" >>#}
+
+                           <img class="icon icon-pad-right" src="{{ absolute_url(asset('assets/images/imprimer.png')) }}">télécharger le manuel de formation
+                        </a>
+
+                    </li>
+
+
+
+                </ul>
+                </ul>
+
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+
+
+
+{% endblock header %}

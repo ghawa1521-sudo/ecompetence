@@ -1,0 +1,116 @@
+
+{% extends '::base.html.twig' %}
+
+{% block css %}
+<link href="{{ asset('design/css/style.css') }}" rel="stylesheet"/>
+<link rel="stylesheet" href="{{asset('ediligence/assets/css/bootstrap-select.min.css')}}">
+
+<style>
+    input[type="checkbox"] {
+        display: none;
+    }
+
+    label[for$="_delete"] {
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block titre_page %}
+{% endblock %}
+
+{% block body %}
+<div class="row">
+
+    {# FLASH MESSAGES #}
+    {% if app.request.hasPreviousSession %}
+        {% for type, messages in app.session.flashbag.all() %}
+            <div class="alert alert-{{ type }}">
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+</div>
+
+<div class="row">
+  {{ form_start(form,{'attr':{'id':'form_chk'}}) }}
+    <h3>JOINDRE UNE NOTE DE REGULARISATION</h3>
+
+    {# ===== INFOS AGENT ===== #}
+    <div class="col-md-4">
+        <div class="panel panel-info">
+            <div class="panel-heading">Informations régularisation Agent</div>
+            <div class="panel-body">
+
+                <p><strong>Matricule :</strong> {{ entity.agent.matricule }}</p>
+                <p><strong>Agent  :</strong> {{ entity.agent.nom }} {{ entity.agent.prenoms }}</p>
+
+                <p>
+    <strong>Date de prise d'effet :</strong>
+    {% if entity.dateNew %}
+        {{ entity.dateNew|date('d/m/Y') }}
+    {% endif %}
+</p>
+                
+                <p>
+                    <strong>Nouvelle affectation :</strong>
+
+                    {% if newEmploi is defined and newEmploi %}
+                        {{ newEmploi }}
+                    {% elseif newFonction is defined and newFonction %}
+                        {{ newFonction }}
+                    {% elseif entity.nature == 3 %}
+                        Fonctionnaire
+                    {% else %}
+                        Non renseignée
+                    {% endif %}
+                </p>
+                          
+
+            </div>
+        </div>
+    </div>
+
+    {# ===== FORMULAIRE ===== #}
+    {{ form_row(form._token) }}
+    <div class="col-md-8">
+
+        
+     
+
+            {{ form_errors(form) }}
+
+            <div class="form-group">
+                {{ form_label(form.pjNumerise.docFile, 'Pièce justificative signée') }}
+                {{ form_widget(form.pjNumerise.docFile) }}
+                {{ form_errors(form.pjNumerise.docFile) }}
+            </div>
+
+            <br>
+
+            <div class="form-group">
+                {{ form_row(form.dateSigneNew) }}
+            </div>
+
+            <br>
+
+            <input type="submit"
+                   class="btn btn-success"
+                   value="Enregistrer">
+
+        
+
+    </div>
+{{ form_end(form, {'render_rest': false}) }}
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script src="{{ asset('design/js/style.js') }}"></script>
+<script src="{{ asset('ediligence/assets/js/bootstrap-select.min.js') }}"></script>
+{% endblock %}

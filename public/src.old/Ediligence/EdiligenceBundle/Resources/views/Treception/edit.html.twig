@@ -1,0 +1,56 @@
+{% extends '::ediligence/base.html.twig' %}
+
+{% block body %}
+<div class="content-header">
+    <div class="header-section">
+        <h1>
+            <i class="gi gi-notes_2"></i>Diligences imputées<br><small>Veuillez remplir les champs ci-dessous</small>
+        </h1>
+    </div>
+</div>
+<ul class="breadcrumb breadcrumb-top">
+    <li>Modifier Registre</li>
+    <!--<li><a href="">Nouveau</a></li>-->
+</ul>
+<div class="row">
+    <div class="col-md-offset-2 col-md-8">
+        <div class="block">
+            <!-- Basic Form Elements Title -->
+            <div class="block-title">
+
+                <h2><strong>Modifier diligence</strong></h2>
+            </div>
+
+            <div style="float:right;" class="bien2">
+                <b>COURRIER:N° &nbsp; {{imputation.courrier.id}}</b>
+            </div>
+            <div class="bien">
+                <b>Par: <font color="#000000">&nbsp;{{imputation.matriculeImput.nom}}&nbsp;{{imputation.matriculeImput.prenoms}}</font></b><br>
+                <b>A: <font color="#000000">&nbsp;&nbsp;{{imputdir[0].matriculeimpute.nom}}&nbsp;{{imputdir[0].matriculeimpute.prenoms}}</font></b><br>
+                <b>OBJET:<font color="#000000">&nbsp;{{imputation.courrier.objet|raw|striptags|slice(0, 150) }}</font></b>
+            </div>
+            <div class="form-group bien">
+                <font size="+1"><b>INSTRUCTIONS</b></font><br>
+                <font color="#000000">
+                  {% set val=0 %}
+                  {% for entitie in entities%}
+                  {% set val=val +1%}
+                <br>
+                  {{val}} - {{entitie.instImput.libIbstruction|raw}}<br>    
+                    {% endfor %}
+                </font>
+            </div>
+            <!-- END Form Elements Title -->
+                {{ form_start(edit_form) }}
+                {{ form_row(edit_form.idImput,  {'attr': {'value': imputation.id }} ) }}
+                {{ form_end(edit_form) }}
+        </div>
+
+    </div>
+</div>
+<ul>
+    <li>
+        <a href="{{ path('reception') }}">Retour</a>
+    </li>
+</ul>
+{% endblock %}

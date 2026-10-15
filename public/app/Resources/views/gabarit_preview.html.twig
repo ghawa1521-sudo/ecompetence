@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block bootstrap %}{% endblock %}
+    <style>
+    @media print {
+
+                #printa { /* Or specify a table class */
+                    height: 100% !important;
+                    overflow: hidden;
+                    page-break-after: always;
+
+                }
+                  table{
+                    height: 99%;
+                  }
+                  footer{
+                    color: white !important;
+                  }
+                body{
+                    -webkit-print-color-adjust:exact !important;
+                    color-adjust:exact !important;
+                    width:210mm !important; 
+                    height:300mm !important;
+                    margin-top: 5px !important;
+                    margin-bottom: 2px !important;
+                    
+                    
+                    font-size: 16pt;
+                }
+               
+                #footer {
+                    position: fixed;
+                    bottom: 0;
+                    width: 100%;
+                    color: #ffffff !important;
+                    text-decoration-color: white !important;
+                    font-size: 12pt;
+                }
+                #footer-right {
+                    position: fixed;
+                    bottom: 0;
+                    right: 0;
+                }
+            }
+    @font-face {
+     font-family: 'CenturyFont';
+        src:  url("{{app.request.getSchemeAndHttpHost() ~ asset('design/fonts/CenturyGothicRegular.ttf') }}") format('truetype');
+   }
+    @font-face {
+        font-family: 'CenturyFontBold';
+        src:  url("{{app.request.getSchemeAndHttpHost() ~ asset('design/fonts/Century-gothic-bold.ttf') }}") format('truetype');
+    }
+    .gras{
+        font-family: CenturyFontBold !important;
+        font-weight: bold;
+    }
+
+   @page{
+     margin-top: 2px;
+     margin-bottom: 10px !important;
+    
+
+   }
+       #entete{
+         position: relative;
+         margin-left: -50px;
+         margin-right: 10px;
+       }
+      #footer {
+        -webkit-print-color-adjust:exact !important;
+        color-adjust:exact !important;
+    
+        margin-left: 0px;
+        margin-right: 0px;
+        color: rgb(255,255,255) !important;;
+        background-color: #65e43b;
+        bottom: 0px;
+        height: 50px;
+        width: 100%;
+        font-size: 12pt;
+      }
+
+
+
+    </style>
+</head>
+<body>
+  <div  style="font-family: CenturyFont; height:300mm;">
+  <table class="printa" border="0" height="95%" width="100%" style="background-color: green !important;">
+      
+      <tr>
+          <td width="4%"></td>
+      <td height="1%">
+        
+      </td>
+      <td width="15%">&nbsp;</td>
+      <td width="32%"></td><td width="1%"></td>
+    </tr>
+      <tr>
+          <td></td>
+      <td height="1%">
+        {{app.user.agent.nom|slice(0,1)~app.user.agent.prenoms|slice(0,1)~app.user.agent.nomJeuneFille|slice(0,1)}}
+      </td>
+      <td>&nbsp;</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+        <td></td>
+      <td height="1%">
+       MINISTERE DE L'ECONOMIE ET DES FINANCES
+      </td>
+      <td></td>
+      <td>REPUBLIQUE DE C&Ocirc;TE D'IVOIRE</td>
+      <td></td>
+    </tr>
+    <tr>
+        <td></td>
+      <td height="1%">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-----------------------
+      </td>
+      <td></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Union - Discipline - Travail</td>
+      <td></td>
+     
+    </tr>
+    <tr>
+        <td></td>
+      <td height="1%">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;
+        <img src="{{app.request.getSchemeAndHttpHost() ~ asset('images/logoDGE.png') }}" width="150px" />
+      </td>
+      <td></td>
+      <td valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-----------------------</td>
+      <td></td>
+    </tr>
+    <tr>
+        <td></td>
+      <td height="1%">
+      </td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+        <td></td>
+      <td height="1%">
+       DIRECTION GENERALE DE L'ECONOMIE
+      </td>
+      <td></td>
+      <td>Abidjan, le {% block datePdf %}{% endblock %}</td>
+      <td></td>
+    </tr>
+    <tr>
+        <td></td>
+      <td height="1%">
+       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-----------------------
+      </td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+        <td></td>
+      <td height="1%">
+        {% block service %}{% endblock %}
+      </td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+   
+    
+    <tr>
+        <td></td>
+      <td height="1%">
+      {% block sousService %}{% endblock%}
+      </td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+        <td></td>
+      <td height="1%">
+       
+      </td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+        <td></td>
+      <td height="1%">
+       
+      </td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+    <tr>
+        <td></td>
+      <td height="1%">
+         {% block ref %} {% endblock %}
+      </td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    {#<tr style="line-height: 1.3em; font-size: 10pt;">
+      <td width="50%" height="25%" valign="top">
+          <div align="center">
+          <div style="text-align:left;">MINISTERE DE L'ECONOMIE ET DES FINANCES
+          </div>
+          <div>-----------------------</div> <br>
+          <div>
+          <img src="{{app.request.getSchemeAndHttpHost() ~ asset('images/logoDGE.png') }}" width="150px" />
+          </div>
+          <br>          
+          <div style="text-align:left;">DIRECTION GENERALE DE L'ECONOMIE</div>
+         
+          -----------------------
+          <br />
+          <div style="text-align:center;">
+            <div style="font-size: 14pt;">
+              {% block service %}{% endblock %}
+            </div>
+          <div style="text-align:left; margin-top:100px;">
+              {% block ref %} {% endblock %}
+          </div>
+
+        </div>
+      </td>
+      <td width="15%"></td>
+      <td valign="top">
+        <table border="1" height="100%" style="line-height:1.4em; background-color: red;">
+          <tr> 
+            <td valign="top">
+           REPUBLIQUE DE COTE D'IVOIRE
+          
+          <br>
+          <div style="text-align:center;">
+          Union - Discipline - Travail
+          <br>-----------------------
+        </div>
+          </td>
+          
+          </tr>
+          <tr><td valign="top">a</td></tr>
+          <tr><td>
+          <div style="text-align:left;" valign="bottom">
+                Abidjan, le {#{% block datePdf %}{% endblock %} 
+          </div>
+          </td></tr>
+          </table>
+        </td>
+    </tr>#}
+    <tr>
+          <td width="4%"></td>
+      <td height="1%">
+        
+      </td>
+      <td width="15%">&nbsp;</td>
+      <td width="32%" ><span  class="gras">{% block entete_droit1 %}{% endblock %}</span></td><td width="1%"></td>
+    </tr>
+    <tr>
+          <td width="4%"></td>
+      <td height="1%">
+        
+      </td>
+      <td width="15%">&nbsp;</td>
+      <td width="32%"><span class="gras">{% block entete_droit2 %}{% endblock %}</span></td><td width="1%"></td>
+    </tr>
+    <tr>
+        <td></td>
+      <td colspan="3" height="15%">
+        <div class="row" align="center">
+
+          <h3> {% block titre %} {% endblock %}</h3>
+        </div>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+        <td></td>
+      <td colspan="3" height="40%" valign="top">
+        <div style="font-size:15pt; text-align: justify; margin-top:5px; ">
+      {% block contenuPdf %} {% endblock %}
+      </div>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+        <td></td>
+      <td height="25%" style="font-size:12pt;" valign="top">
+        {% block ampliationPdf %}{% endblock %}
+      </td>
+      <td colspan="2">{% block signature %}{% endblock %}</td>
+      <td></td>
+    </tr>
+    
+       
+      
+  </table>
+{#{% if app.request.attributes.get('_route')=='affecter_print'%}#}
+  
+  <div  id="footer" align="center" style="font-family: Century Gothic; width:100%";>
+          <div style="width:90%; float:left;">Direction Générale de l'Economie (DGE), sise au 6éme étage, Imm. SCIAM Plateau.
+          <br/>Tél : (225) 20 20 09 09 / 20 20 09 03 / Fax: (225) 20 22 54 36 | édition e-RH
+          </div>
+          <div style="float:right; margin-right:10px; height:100%">
+            {{ qr | raw }}
+          </div>
+
+  </div>
+
+{#{% endif %}
+
+{#
+<div id="footer" align="center" style="font-family: Century Gothic;">
+  Service des Ressources Humaines et des Moyens Généraux (SRHMG), sis au 4èm étage, Imm. ALLIANCE, plateau.
+  <br/>Tél : (225) 20 21 54 32
+</div>#}
+
+</body>
+
+</html>

@@ -1,0 +1,34 @@
+decision:
+    path:     /{todo}/index
+    defaults: { _controller: "AgentBundle:Decision:index",todo:consulter }
+
+decision_show:
+    path:     /{id}/show
+    defaults: { _controller: "AgentBundle:Decision:show" }
+
+decision_new:
+    path:     /new
+    defaults: { _controller: "AgentBundle:Decision:new" }
+
+decision_create:
+    path:     /create
+    defaults: { _controller: "AgentBundle:Decision:create" }
+    methods:  [POST,GET]
+
+decision_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AgentBundle:Decision:edit" }
+    
+decision_deletelist:
+    path:     /{id}/deletelist
+    defaults: { _controller: "AgentBundle:Decision:deleteList" }
+
+decision_update:
+    path:     /{id}/update
+    defaults: { _controller: "AgentBundle:Decision:update" }
+    methods:  [POST, PUT]
+
+decision_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AgentBundle:Decision:delete" }
+    methods:  [POST, DELETE]

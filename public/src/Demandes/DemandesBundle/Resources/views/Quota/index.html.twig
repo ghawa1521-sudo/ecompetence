@@ -1,0 +1,44 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+<div class="col-md-12">
+
+  <h1>Modifier le Quota des Demandes</h1>
+
+
+
+    <table class="table records_list">
+        <thead>
+            <tr>
+                <th>Type de Demande</th>
+                <th>Période Quota</th>
+                <th>Nombre de Demande Autorisé</th>
+                <th>Délai Avant la Demande</th>   
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr align="center">
+
+                <td align="center">{{entity.TypeDemande}}</td>
+                <td>{{entity.periode}}</td>
+                <td>{{ entity.nbreQuota }}</td>
+                <td>{{ entity.nbreJoursAvant }}</td>
+                
+                <td>
+                  <a class="btn btn-info" href="{{ path('quota_edit', { 'id': entity.id }) }}">Modifier</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+<div align="center">
+
+            <a class ="btn btn-primary" href="{{ path('quota_new') }}">
+                Ajouter un Quota pour un autre Type de Demande
+            </a>
+
+</div>
+  </div>
+    {% endblock %}

@@ -1,0 +1,8 @@
+topic_notification:
+    channel: users/{matricule}/notification
+    handler:
+        callback: 'topic.notification'
+    requirements:
+        matricule:
+            pattern: "\d+"
+            wildcard: true

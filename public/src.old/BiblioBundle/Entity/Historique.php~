@@ -1,0 +1,42 @@
+<?php
+
+namespace BiblioBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Historique
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="BiblioBundle\Repository\HistoriqueRepository")
+ */
+class Historique
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date", type="datetime")
+     */
+    private $date;
+    
+    
+      /**
+     * @ORM\ManyToOne(targetEntity="Bouquin")
+     */
+    private $bouquin;
+    
+    /**
+    * @ORM\ManyToOne(targetEntity="Users\UsersBundle\Entity\Users")
+    */
+    private $user;
+}
+

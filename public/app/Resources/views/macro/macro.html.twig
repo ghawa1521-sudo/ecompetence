@@ -1,0 +1,187 @@
+{% macro EtatConge(etat,niveau,service) %}
+    {% if niveau== 0 and etat == 0%} Validé & Transmis au RH
+        <label class="label label-success"></label>
+
+    {% elseif niveau== 0 and etat == 1%}Cert</label>ificat de cessation généré
+    <label class="label label-success">
+
+    {% elseif niveau== 0 and etat == 2%}Congé Refusé
+        <label class="label label-danger"></label>
+
+    {% elseif niveau== 0 and etat == 3%}Certificat de reprise généré
+        <label class="label label-success"></label>
+
+    {% elseif niveau== 0 and etat == 4%}
+
+    {% elseif niveau > 0 and etat == 0%}Transmis au {{service}}
+        <label class="label label-warning"></label>
+
+    {% elseif niveau > 0 and etat == 1%}
+        <label class="label label-success">Validé & Transmis au {{service}}</label>
+
+    {% elseif niveau > 0 and etat == 2%}Refusé par {{service}}
+        <label class="label label-danger"></label>
+
+    {% endif %}
+
+{% endmacro %}
+
+{% macro EtatCongeResponsable(etat,niveau,service) %}
+    {% if niveau== 0 and etat == 0%} Transmis au DGE
+        <label class="label label-success"></label>
+
+    {% elseif niveau== 0 and etat == 1%}Certificat de cessation généré
+        <label class="label label-success"></label>
+
+    {% elseif niveau== 0 and etat == 2%}Congé Refusé
+        <label class="label label-danger"></label>
+
+    {% elseif niveau== 0 and etat == 3%}Certificat de reprise généré
+        <label class="label label-success"></label>
+
+    {% elseif niveau== 0 and etat == 4%}
+
+    {% elseif niveau > 0 and etat == 0%}Transmis au DGE
+        <label class="label label-warning"></label>
+
+    {% elseif niveau > 0 and etat == 1%}
+        <label class="label label-success">Validé & Transmis au {{service}}</label>
+
+    {% elseif niveau > 0 and etat == 2%}Refusé par DGE
+        <label class="label label-danger"></label>
+
+    {% endif %}
+
+{% endmacro %}
+
+{% macro ActiveMenu(interim=null,deleg=null) %}
+    {% if is_granted('ROLE_PREVIOUS_ADMIN') == false %}
+            {% if app.user.etat == 0 or app.user.etat is null %}
+                <div><a style="color: #f6f4ff; font-weight: bolder; font-size: 1.2em;" href="{{ path('agent_menu',{'id':'1'}) }}"><i class="fa fa-sign-out" ></i>Activer administration</a></div>
+            {% endif %}
+            {% if app.user.etat == 1 or app.user.etat is null %}
+                <div><a style="color: #f6f4ff; font-weight: bolder; font-size: 1.2em;" href="{{ path('agent_menu',{'id':'0'}) }}"><i class="fa fa-sign-out" ></i>Activer mon menu</a></div>
+            {% endif %}
+    {% endif %}
+    {% if interim is defined and is_granted('ROLE_PREVIOUS_ADMIN')== false %}
+        {% for interims in interim %}
+            <div><a style="color: #f6f4ff; font-weight: bolder; font-size: 1.2em;" href="{{ path('agent_homepage',{'_interim_user' : interims.interime.matricule}) }}"><i class="fa fa-sign-out" ></i>Activer intérim {{interims.interime.retour_service.lib}}</a></div>
+
+        {% endfor %}
+    {% endif%}
+   {% if deleg == 1 %}
+     {% if app.user.etat == 2 %}
+        <div><a style="color: #f6f4ff; font-weight: bolder; font-size: 1.2em;" href="{{ path('agent_menu',{'id':'0'}) }}"><i class="fa fa-sign-out" ></i>Activer mon menu</a></div>
+        <div><a style="color: #f6f4ff; font-weight: bolder; font-size: 1.2em;" href="{{ path('agent_menu',{'id':'1'}) }}"><i class="fa fa-sign-out" ></i>Activer administration</a></div>  
+    {% else %}
+        <div><a style="color: #f6f4ff; font-weight: bolder; font-size: 1.2em;" href="{{ path('agent_menu',{'id':'2'}) }}"><i class="fa fa-sign-out" ></i>Activer deleguation</a></div>
+    {% endif %}
+
+    {% endif %}
+
+{% endmacro %}
+
+
+{% macro remaining_time(timelimit, todaysdate) %}
+
+    {% set difference = date(timelimit).diff(date(todaysdate)) %}
+    {% set leftDays = difference.d %}
+    {% set leftMonths = difference.m %}
+    {% set leftYears = difference.y %}
+
+    {% set etat = '' %}
+    {% set etatmois = '' %}
+    {% set etatday = '' %}
+
+
+    {% if leftYears == 1 %}
+        {% set etat= leftYears ~ ' an'%}
+
+    {% elseif leftYears >= 2  %}
+        {% set etat= leftYears ~ ' ans'%}
+    {% endif %}
+
+    {% if leftMonths >= 1 %}
+        {% set etatmois = leftMonths ~ ' mois'%}
+    {% endif %}
+
+
+    {% if leftDays == 0 or leftDays == 1 %}
+        {% set etatday = leftDays ~ ' jour'%}
+    {% elseif leftDays > 1 %}
+        {% set etatday = leftDays ~ ' jours'%}
+    {% endif %}
+
+
+    {% if timelimit|date("Y-m-d") >= todaysdate|date("Y-m-d") %}
+        <font color="blue"><b>{{etat}} {{etatmois}} {{etatday}} restant</b></font>
+    {% elseif timelimit|date("Y-m-d") < todaysdate|date("Y-m-d") %}
+        <font color="red">expiré depuis {{etat}} {{etatmois}} {{etatday}} </font>
+    {% endif %}
+
+{% endmacro %}
+{% macro bar_interim() %}
+    {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+        {{ render(controller('AgentBundle:Default:menuinterim')) }}
+
+        <div class="row" style="color:white; background-color: #d10a11;">
+            <div class="col-md-12" style="vertical-align: middle; width: 100%;">
+                <div class="col-md-10" style="vertical-align: middle;">
+                    <strong>
+                        Vous êtes connecté en tant que:
+                        {% if is_granted('ROLE_RESPO_SRHMG') %}
+                            CHEF DE SERVICES RESSOURCES HUMAINES
+                        {% elseif (is_granted('ROLE_RESPO') and (app.user.agent.fonction.id  == 10)) %}
+                            DIRECTEUR GENERAL
+                            {% if (app.user.agent.direction) %}
+                                {{app.user.agent.direction.sigle}}
+                            {% endif %}
+                        {% elseif (is_granted('ROLE_RESPO') and (app.user.agent.fonction.id  == 9)) %}
+                            DIRECTEUR GENERAL ADJOINT
+                            {% if (app.user.agent.direction) %}
+                                {{app.user.agent.direction.sigle}}
+                            {% endif %}
+                        {% elseif (is_granted('ROLE_RESPO') and (app.user.agent.fonction.id  == 7)) %}
+                            DIRECTEUR
+                            {% if (app.user.agent.direction) %}
+                                {{app.user.agent.direction.sigle}}
+                            {% endif %}
+                        {% elseif is_granted('ROLE_RESPO') and (app.user.agent.fonction.id == 6) %}
+                            Sous-DIRECTEUR
+                            {% if (app.user.agent.direction) %}
+                                {{app.user.agent.direction.sigle}}
+                            {% endif %}
+                        {% elseif is_granted('ROLE_RESPO') and (app.user.agent.fonction.id == 4) %}
+                            Chef de Service
+                            {% if (app.user.agent.direction) %}
+                                {{app.user.agent.direction.sigle}}
+                            {% endif %}
+                        {% elseif is_granted('ROLE_RESPO') and (app.user.agent.fonction.id == 5) %}
+                            Chef de Service Rattaché
+                            {% if (app.user.agent.direction) %}
+                                {{app.user.agent.direction.sigle}}
+                            {% endif %}
+                        {% elseif is_granted('ROLE_RESPO') and (app.user.agent.fonction.id == 3) %}
+                            Chef de Section
+                            {% if (app.user.agent.direction) %}
+                                {{app.user.agent.direction.sigle}}
+                            {% endif %}
+                        {% elseif (app.user.agent.fonction.id  == 8) %}
+                            CONSEILLER TECHNIQUE
+                            {% if (app.user.agent.direction) %}
+                                {{app.user.agent.direction.sigle}}
+                            {% endif %}
+                        {% elseif is_granted('ROLE_AGENT')%}
+                            AGENT
+                        {% endif %}
+                        /
+                        {{app.user.agent.ConcatNom}}
+                    </strong>
+                </div>
+                <div class="col-md-2  pull-right">
+                    <a style="color:white; font-weight: bold;" href="{{ path('agent_homepage', {'_interim_user': '_exit'}) }}" >Revenir à mon espace</a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endmacro %}

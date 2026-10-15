@@ -1,0 +1,439 @@
+{% extends '::base.html.twig' %}
+{%from "EcompetenceBundle:macro:macro.html.twig" import recursiveDomaine,recursiveDomaineAff%}
+
+
+{% block body %}
+   
+
+            <style>
+        th{
+        color:white;
+        border:1px solid white;
+        font-weight:bold;
+        }
+        td{
+         color:black;
+         font-weight:bold; 
+         border:1px solid lightgray
+        }
+        thead{border:1px solid white;background-color: #008080;
+        }
+        a{
+          font-weight:bold; 
+        }
+         </style>
+        
+                 <!-- page content -->
+               <div>
+                            <div class="x_panel" style="background-color:white;border-radius: 4px;">
+                             
+                                <div class="x_content">
+
+                                    <div class="col-md-8 col-sm-3 col-xs-12 profile_left">
+
+                     
+                          <table>                 
+                         
+                          <tr>  
+                         
+                                    <td style="font-weight: bold;font-size:20px; border:0px"> <b>
+                                        {% if (agent.nom) %}
+                                        {{ agent.nom }}
+                                        {% endif %}
+                                        {% if (agent.prenoms) %}
+                                        {{ agent.prenoms }}
+                                        {% endif %}</b>
+                                        {% if (agent.matricule) %}
+                                            <b  style="color: red;" >{{ ' ('~agent.matricule~')' }} </b>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>                                      
+                                      <td style="font-size:16px; border:0px;font-weight:normal;">
+                                        {% if (agent.emploi) %}
+                                        {{ agent.emploi.libEmpl }}
+                                        {% endif %}
+                                    </td>
+                            
+                                 <tr>
+                                   <td style="font-size:16px; border:0px;font-weight:normal;">
+                                        {% if (agent.dateNaiss) %}
+                                        Né le {{ agent.dateNaiss|date('d-m-Y') }} 
+                                        {% endif %}
+                                        {% if (agent.LieuNaissance) %}
+                                         à {{agent.LieuNaissance.lieuNaiss}} 
+                                        {% endif %}</td>
+                                </tr>
+                                 <tr>
+                                   
+                                    <td style="font-size:16px; border:0px;font-weight:normal;">
+                                        {% if (agent.telPort) %}
+                                        Tèl:{{agent.telPort}}</td>
+                                        {% endif %}
+                                </tr>
+
+                                <tr>
+                                    
+                                    <td style="font-size:16px; border:0px;font-weight:normal;">Email :
+                                        {% if (agent.email) %}{{agent.email}}{% endif %}</td>
+                                </tr>
+                                <tr>
+                                  
+                                    <td style="font-size:16px; border:0px;font-weight:normal;">{% if (entity.emailPerso) %}{{agent.emailPerso}}{% endif %}
+                                    {%for adr in agent.adresse%}
+                                        {{adr.email}} / 
+                                    {% endfor %}
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                  
+                                    <td style="font-size:16px; border:0px;font-weight:normal;">{% if (agent.situationMatri) %}{{ agent.situationMatri }}{% endif %} 
+                                        {% if (agent.nbEnf) %}/ {{ agent.nbEnf }} enfant(s){% endif %} </td>
+                                </tr>
+                          </table>  
+          {#     {% if (entity.imageName) %}
+             <img src="{{ vich_uploader_asset(entity, 'imageFile') }}" alt="{{ entity.imageName }} Avatar">
+             
+          {% elseif (entity.sexe.id == 1 ) %}
+                <img src="{{ asset('images/img_test_agent.png')}}" Avatar>
+            {% elseif (entity.sexe.id == 2 ) %}
+                <img src="{{ asset('images/woman.png')}}" Avatar>
+            {% endif %}
+             #}                                     
+                                                    
+       
+                                           <!-- end of image cropping -->
+       </div>  
+            
+             <div class="col-lg-offset-1 col-md-3  profile_left">
+
+                                        <div class="profile_img">
+
+                                            
+           <div id="cropE-avatar">
+                                            
+          <div class="avatar-view" title="Change the avatar">                                      
+           {% if (agent.imageName) %}
+             <img src="{{ vich_uploader_asset(agent, 'imageFile') }}" alt="{{ agent.imageName }} Avatar">
+             
+          {% elseif (agent.sexe.id == 1 ) %}
+                <img src="{{ asset('images/img_test_agent.png')}}" Avatar>
+            {% elseif (agent.sexe.id == 2 ) %}
+                <img src="{{ asset('images/woman.png')}}" Avatar>
+            {% endif %}
+                                                
+                                                    
+             </div>                                          
+      </div>
+          </div>
+        </div>
+       </div>
+      </div>
+  </div>
+       
+         </style>
+        <div class="x_panel">
+         <hr>
+       <div>
+       <div class="row">
+        <div class="panel panel-success">
+            <div class="panel-heading"><h2 style="color:orangered;">Domaines de compétence</h2></div>
+            <div class="panel-body">
+              {% if competences %}
+                                <div id="">
+                                    <ul> 
+                                      
+                                        {% for pere in  peres %}
+                                           {{recursiveDomaineAff(pere.competence,cp)}}
+                                        {#{% for listedomaine in listedomaines %}
+                                           {% if (listedomaine.parent==null)%}
+                                            
+                                            {{recursiveDomaine(listedomaine)}}
+                                          {% endif %}#}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                {% endif %}
+            </div>
+           </div>
+   
+            </div> 
+           
+            
+           <div class="row">
+           <div class="panel panel-success">
+            <div class="panel-heading"><h2 style="color:orangered;">Expériences professionelles</h2></div>
+            <div class="panel-body">
+                  
+                          
+             <table class="table dataTable" style="text-align:center;"> 
+             <thead>
+               <tr>  
+                 <th> Période</th>
+                 <th> Employeur</th>
+                 <th> Poste occupé</th>
+                 <th> Action</th>
+                </tr>         
+             </thead>
+             <tbody>
+                             
+                 {% for entities in entity%}
+                
+               <tr>
+                <td>
+                      {%if(entities.dateDebExp)%} Du {{entities.dateDebExp|date('d-m-Y')}} {%endif%}
+                      {%if(entities.dateFinExp)%} au {{entities.dateFinExp|date('d-m-Y')}}{%else%} à Aujourd'hui {%endif%}
+                 </td>
+                 <td>
+                    {%if(entities.structure.libStructure)%}{{entities.structure.libStructure}}{%endif%}
+                 </td>
+                  <td>
+                    {%if(entities.libExp)%}  {{entities.libExp}}{%elseif(entities.fonction)%}{{entities.fonction.LibFonc}} {%endif%}
+                  
+                 </td>
+                 <td width="200px">
+                    <a class="btn btn-success" href="{{ path('experience_detail', { 'id': entities.id,'ag':entities.agent.id }) }}">Détail</a>
+                    <a class="btn btn-success" href="{{ path('experience_edit', { 'id': entities.id,'ag':entities.agent.id }) }}">Modifier</a>
+                   
+                 </td>
+               </tr>  
+       
+                
+               {%endfor%}
+             </tbody>
+
+              </table> 
+             </div>
+             </div>
+             </div>
+            
+           
+       
+            <div class="row">
+            <div class="panel panel-success">
+            <div class="panel-heading"><h2 style="color:orangered;">Formations</h2></div>
+            <div class="panel-body">
+                            
+             <table class="table dataTable" style="text-align:center"> 
+             <thead>
+               <tr>  
+                 <th> Date de début</th>
+                 <th> Diplôme</th>
+                 <th> Niveau</th>
+                 <th> Institut</th>
+                  <th> Date du diplôme</th>
+                  <th> Action</th>
+                </tr>         
+             </thead>
+             <tbody>
+                
+                 {% for format in formation%}
+               <tr>
+                <td>
+                       {%if(format.dateDebFormation)%}{{format.dateDebFormation|date('d-m-Y')}} {%endif%}
+                 </td>
+                 <td>
+                       {%if(format.diplome)%}{{format.diplome.libDiplome}}{%elseif(format.libFormation) %}{{format.libFormation}} {%endif%}
+                 </td>
+                
+                 <td>
+                      {%if(format.niveauFormation)%}{{format.niveauFormation}} {%endif%}
+                 </td>
+                   
+                 <td>
+                 {%if(format.etablissement)%}{{format.etablissement.nometablissement}}{%elseif(format.autreetablissement)%}{{format.autreetablissement}}{%endif%}
+                 </td>
+                 <td>
+                       {%if(format.dateObtentiondiplo)%} {{format.dateObtentiondiplo|date('d-m-Y')}}{%endif%} 
+                 </td>
+                 <td width="200px">
+                    <a class="btn btn-success" href="{{ path('formation_detail', { 'id': format.id,'ag':format.agent.id }) }}"> Detail </a>
+                 <a class="btn btn-success" href="{{ path('formation_edit', { 'id': format.id,'ag':format.agent.id }) }}">Modifier</a>
+                 </td>
+               </tr>  
+    
+                
+               {%endfor%}
+             </tbody>
+
+          </table>  
+          </div>
+          </div>
+          </div> 
+        </div>         
+                
+             
+        <div class="row">
+        <div class="panel panel-success">
+            <div class="panel-heading"><h2 style="color:orangered;">Niveau de langue</h2></div>
+            <div class="panel-body">
+            {%if (niveaulangue)%}   
+            {%for nivlang in niveaulangue%}
+                <div class="row">
+                    <div class="col-md-5">
+                        <label>{{nivlang.langue.liblangue}}</label>
+                    </div>
+                    <div class="col-md-3">
+                       <label>Lire</label>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label style="color:orange;">
+                       
+                            {%if (nivlang.lire==1)%} Faibble
+                            {%elseif(nivlang.lire==2)%}Passable
+                            {%elseif(nivlang.lire==3)%}Courant
+                            {%else%}Excellent 
+                            {%endif%} </label><br>
+                        <label>Ecrire</label>:&nbsp;&nbsp;<label style="color:orange;">
+                          {%if (nivlang.ecrire==1)%}Faibble
+                            {%elseif(nivlang.ecrire==2)%}Passable
+                            {%elseif(nivlang.ecrire==3)%}Courant
+                            {%else%}Excellent 
+                            {%endif%}
+                                </label><br>
+                        <label>Parler</label>:&nbsp;&nbsp;<label style="color:orange;">
+                        {%if (nivlang.parler==1)%} Faibble
+                            {%elseif(nivlang.parler==2)%}Passable
+                            {%elseif(nivlang.parler==3)%}Courant
+                            {%else%}Excellent 
+                            {%endif%}
+                        </label><br>
+                    </div>
+                </div><hr>
+          {%endfor%}         
+          {%endif%} 
+            </div>
+        </div>
+   
+          </div>   
+          </div>  
+  </div>             
+        
+ 
+</ul>
+<style>
+.help-block{
+color:red;
+font-weight:bold;
+}
+</style>
+{% endblock %}
+
+{% block javascript %}
+
+<script type="text/javascript" src="{{ asset('design/js/wizard/jquery.smartWizard.js') }}"></script>
+<script src="{{ asset('design/js/nicescroll/jquery.nicescroll.min.js') }}"></script>
+
+<script type="text/javascript">
+        $(document).ready(function () {
+            // Smart Wizard
+            $('#wizard').smartWizard();
+
+            function onFinishCallback() {
+                $('#wizard').smartWizard('showMessage', 'Finish Clicked');
+                //alert('Finish Clicked');
+            }
+        });
+
+        $(document).ready(function () {
+            // Smart Wizard
+            $('#wizard_verticle').smartWizard({
+                transitionEffect: 'slide'
+            });
+
+        });
+        
+      
+                
+</script>
+
+ <script type="text/javascript">
+            $(document).ready(function () {
+                var tree = $('#tree').tree({
+                    primaryKey: 'id',
+                    uiLibrary: 'bootstrap',
+                    dataSource: Routing.generate('agent_cv_api'),
+                    checkboxes: true
+                });
+
+                $.ajax({
+                    type: "GET",
+                    url: Routing.generate('agent_cv_api'),
+                    dataType: "json",
+                    success: function(data) { 
+                        console.log(data);
+                    }   
+                });
+            });
+    </script>
+
+<script type="text/javascript">
+function searchList($sourceval, $route, $destval, $div)
+{
+    $source = $($sourceval).val();
+  
+    if($sourceval=='#sec')
+    { 
+        if($source==1)
+      {   
+        $('#viewtxtpo').hide();
+        $('#viewoptpo').show();
+      }
+      else
+      {
+       $('#viewtxtpo').show(); 
+       $('#viewoptpo').hide();
+      }
+    }
+    //alert($source);
+    if ($source.length > 0 ){
+
+        $source=$source;
+        //showloader('#cacher');
+    }else{
+            $source=0;
+        }
+    
+    $paramroute = {'id': $source};
+   
+    //alert(Routing.generate($route, $paramroute));
+    //alert($div); exit;
+    //console.log($div);
+
+    $.ajax({
+       type: 'GET',
+       url: Routing.generate($route, $paramroute),
+       dataType: 'json',
+       success: function(data) {
+        //console.log(data);
+          // alert(jQuery.isEmptyObject(data));
+           
+
+           if (jQuery.isEmptyObject(data) == false){
+            //  alert("ok");
+               $($destval).children('option:not(:first)').remove();
+               //$($destval).append('<option>---- Choisir un Service-----</option>');
+               $.each(data, function(key, value) {
+                
+                    //console.log(value);
+                 $($destval).append('<option value= "' + key + '">' + value[0] + '</option>');
+
+                // $($destval).html("ggggg");
+               
+               });
+               
+                 
+               
+            
+           }
+           else{
+               //console.log($sourceval);
+              //  alert("no");
+               $($destval).children('option:not(:first)').remove();
+              
+           }
+       }
+       });
+   
+}
+
+             </script>    
+{% endblock %}

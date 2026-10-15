@@ -1,0 +1,140 @@
+
+{% extends '::ediligence/base.html.twig' %}
+
+{% block body %}{% if tmptraitement %} {% set trt = 1 %} {% else %}{% set trt = 0 %} {% endif %}
+
+<style>.col-md-8 { width: 70.66666667%;}</style>
+
+{% set cpt = 0 %}{% set dossier = 0 %}
+    <div class="content-header">
+        <div class="header-section">
+            <h1>
+                <i class="gi gi-notes_2"></i>Diligences à cordonner<br><small>&nbsp;</small>
+            </h1>
+        </div>
+    </div>
+    <ul class="breadcrumb breadcrumb-top">
+        <li>Cordonner une diligence</li>
+        <!--<li><a href="">Nouveau</a></li>-->
+    </ul>
+    <div class="row">
+        <form method="post" class="form-vertical col-md-12" style="color:#006;" name="frm_imputer" enctype="multipart/form-data" id="form_Imputation" action="{{path('coordinateur_trt')}}">
+            <div class="col-md-offset-2 col-md-8">
+                <div class="block">
+                    <!-- Basic Form Elements Title -->
+                    <div class="block-title">
+
+                        <h2><strong>Transmettre Diligence</strong></h2>
+                    </div>
+                    <div style="float:right;" class="bien2">
+                        <b>COURRIER: N° &nbsp; {{entities[0].courrier.id}}</b>
+                    </div>
+                    <div class="bien">
+                        <b>OBJET:<font color="#000000">&nbsp;{{entities[0].courrier.objet|raw|striptags|slice(0, 150) }}</font></b>
+                    </div>
+                    <div class="form-group bien">
+                        <font size="+1"><b>INSTRUCTIONS</b></font><br><br>
+                        <font color="#000000">
+                        {% set val=0 %}
+                        <table width="100%" class="table table-bordered table-striped table-hover table-condensed">
+                            <tr>
+                                <td></td><td>INSTRUCTIONS</td><td>DIRECTIONS</td>
+                            </tr>
+                        {% for dir in direction %}
+                            {% set val=val +1%}
+                            <tr>
+                                <td>{{val}}</td>
+                                <td>{{dir.libIbstruction|raw}}</td>
+                                <td>{{dir.service}}</td>
+                            </tr>
+                            {#{val}} - {{entitie.instImput.libIbstruction|raw}#}    
+                        {% endfor %}
+                        </table>
+                        </font>
+                    </div>
+                    <div class="form-group bien">
+                        <font size="+1"><b>DIFFERENTES REPONSES RECUES</b></font><br><br> 
+                        <font color="#000000">
+                        <table width="100%" class="table table-bordered table-striped table-hover table-condensed">
+                            <tr>
+                                <td>Service</td><td>Etat</td><td>Télécharger</td><td>Date transmission</td><td>Renvoyer traitement</td>
+                            </tr>
+                            {% for direction in dirimput%}
+                                {% if direction.tr.pjtraitement.imageName is not defined %}
+                                    {% set etat = 'En cours' %}
+                                    {% set telecharger = 'Néant' %}
+                                {% else %}
+                                    {% set etat = 'Transmis' %}
+                                    {% set telecharger ='<a class="red" href="'~vich_uploader_asset(direction.tr.pjtraitement, 'imageFile')~'" title="Télécharger"  class="tooltip-info" data-rel="tooltip" data-original-title="Télécharger"><i class="ace-icon fa fa-download bigger-130"></i></a>'%}
+                                    {% set dossier = dossier + 1 %}
+                                {% endif %}
+                                <tr>
+                                    <td>{{direction.service}} ({{direction.nom}}&nbsp;{{direction.prenoms}})</td>
+                                    <td>{{etat}}</td>
+                                    <td>{{telecharger|raw}}</td>
+                                    <td>
+                                        {% if direction.tr%}{{direction.tr.datetraitement|date('d-m-Y')}}{% else %}Néant{% endif %} 
+                                        <input type="hidden" name="imputdir[]" value="{{direction.id}}">
+                                        <input type="hidden" name="imput" value="{{id}}">
+                                        <input type="hidden" name="scecord" value="{{scecord}}">
+                                    </td>
+                                    <td>{% if direction.tr%}
+                                        <a href="{{ path('coordinateur_ret', { 'id': direction.id }) }}"><i class="gi gi-circle_arrow_left"></i></a>
+                                        {% else %}Néant
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    {% if rejet %}
+                    <div class="form-group bien">
+                        <font size="+1"><b>DIFFERENTES REPONSES REJETEES</b></font><br><br> 
+                        <font color="#000000">
+                        <table width="100%" class="table table-bordered table-striped table-hover table-condensed">
+                          <tr>
+                              <td>Service</td><td>Etat</td><td>Télécharger</td><td>Date transmission</td><td>Date rejet</td>
+                          </tr>
+                          {% for throw in rejet%}
+                                {% if throw.tr.pjtraitement.imageName is not defined %}
+                                    {% set etat = 'En cours' %}
+                                    {% set telecharger = 'Néant' %}
+                                {% else %}
+                                    {% set etat = 'Rejeté' %}
+                                    {% set telecharger ='<a class="red" href="'~vich_uploader_asset(throw.tr.pjtraitement, 'imageFile')~'" title="Télécharger"  class="tooltip-info" data-rel="tooltip" data-original-title="Télécharger"><i class="ace-icon fa fa-download bigger-130"></i></a>'%}
+                                {% endif %}
+                                <tr>
+                                    <td>{{throw.service}} ({{throw.nom}}&nbsp;{{throw.prenoms}})</td>
+                                    <td>{{etat}}</td>
+                                    <td>{{telecharger|raw}}</td>
+                                    <td>
+                                        {% if throw.tr%}{{throw.tr.datetraitement|date('d-m-Y')}}{% else %}Néant{% endif %} 
+                                    </td>
+                                    <td>
+                                        {% if throw.tr%}{{throw.tr.daterejet|date('d-m-Y')}}{% else %}Néant{% endif %} 
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                        </font>
+                    </div>
+                    {% endif %}
+                     {#% set dossier = 2 %#}
+                     {#% if (entities[0].nbrePers == dossier) %#}
+                    <button id="btnp" type="submit" value="traiter" class="btn btn-primary pull-right form-control" name="traiter"><span class="gi gi-ok-sign"> Traiter </span></button>
+                     {#%  else %}
+                        {% if dossier>0 %}
+                    <button id="btnp" type="submit" value="traiter" class="btn btn-primary pull-right form-control" name="traiter"><span class="gi gi-ok-sign"> Traiter </span></button>  
+                        {% endif %#}
+                     {#% endif %#}
+                    <a class="btn btn-primary pull-right form-control" href="{{ path('courrier_csrecu') }}">Retour</a>   
+                </div>
+        </form>
+    </div>
+</div>
+<ul>
+    <li>
+        <a href="{{ path('reception') }}">&nbsp;</a>
+    </li>
+</ul>
+{% endblock %}

@@ -1,0 +1,53 @@
+experience_index:
+    path:     /
+    defaults: { _controller: "EcompetenceBundle:Experience:new" }
+    
+experience_new:
+    path:      /{id}/new
+    defaults: { _controller: "EcompetenceBundle:Experience:new" }
+
+experience_edit:
+    path:      /{id}/{ag}/edit
+    defaults: { _controller: "EcompetenceBundle:Experience:edit" }
+
+experience_detail:
+    path:      /{id}/detail
+    defaults: { _controller: "EcompetenceBundle:Experience:detail" }
+    
+affecter_directioncentrale_listetype:
+    path:     /{id}/ListeDc
+    defaults: { _controller: "EcompetenceBundle:Experience:ListeDirection" }
+    methods:  GET
+    options:
+      expose: true
+      
+affecter_structure_listetype:
+    path:     /{id}/ListeSt
+    defaults: { _controller: "EcompetenceBundle:Experience:ListeEmployeur" }
+    methods:  GET
+    options:
+      expose: true
+      
+affecter_directiongeneral_listetype:
+    path:     /{id}/ListeDg
+    defaults: { _controller: "EcompetenceBundle:Experience:ListeDirectionGenerale" }
+    methods:  GET
+    options:
+      expose: true
+
+experience_liste:
+    path:      /{id}/liste
+    defaults: { _controller: "EcompetenceBundle:Experience:liste" }
+
+ajout_structure:
+    path:     /ajout
+    defaults: { _controller: "EcompetenceBundle:Experience:ajoutstructure" }
+    methods:  POST
+    
+experience_newtest:
+    path:      /{id}/newtest
+    defaults: { _controller: "EcompetenceBundle:Experience:test" }
+
+experience_calcul:
+    path:      /{num1}/{num2}/calcul
+    defaults: { _controller: "EcompetenceBundle:Experience:calcul" }

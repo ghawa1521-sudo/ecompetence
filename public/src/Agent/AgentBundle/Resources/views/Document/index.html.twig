@@ -1,0 +1,55 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Documents de l'Agent {{agent.nom}}</h1>
+
+    <div>
+            <a class='btn btn-info' href="{{ path('document_new', { 'matricule': agent.id }) }}">
+                Ajouter un document
+            </a>
+
+    </div>
+     <table class="records_list table table-striped">
+        <thead>
+            <tr align="left">
+                <th>Id</th>
+                <th>Libelle</th>
+                <th>Doc_name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td>{{ entity.id }}</td>
+                <td>{{ entity.libelle }}</td>
+                <td>{{ entity.docname }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ vich_uploader_asset(entity, 'docFile')}}">Télécharger</a>
+                    </li>
+                    {% if is_granted('ROLE_RESPO_SRHMG') %}
+                    <li>
+                        <a href="{{ path('document_edit', { 'id': entity.id }) }}">Modifier</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        <td></td>
+        <td>Curriculum Vitae</td>
+        <td>{{ agent.cvName }}</td>
+        <td>
+          <ul>
+              <li>
+                  <a href="{{ vich_uploader_asset(agent, 'cvFile')}}">Télécharger</a>
+              </li>
+          </ul>
+        </td>
+        </tbody>
+    </table>
+
+
+    {% endblock %}

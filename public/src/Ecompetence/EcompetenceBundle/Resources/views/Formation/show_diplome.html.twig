@@ -1,0 +1,203 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    
+            <!-- page content -->
+                          <div style="padding-left:85px;padding-right:85px;">
+                            <div class="x_panel" style="background-color:white;border-radius: 4px;">
+                             
+                                <div class="x_content">
+
+                                    <div class="col-md-7 col-sm-3 col-xs-12 profile_left">
+
+                     
+                          <table>                 
+                         
+                          <tr>  
+                         
+                                    <td style="font-weight: bold;font-size:20px;"> <b>
+                                        {% if (entity.nom) %}
+                                        {{ entity.nom }}
+                                        {% endif %}
+                                        {% if (entity.prenoms) %}
+                                        {{ entity.prenoms }}
+                                        {% endif %}</b>
+                                        {% if (entity.matricule) %}
+                                            <b  style="color: red;" >{{ ' ('~entity.matricule~')' }} </b>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>                                      
+                                      <td style="font-size:16px;">{% if (entity.emploi) %}
+                                        {{ entity.emploi.libEmpl }}
+                                        {% endif %}
+                                    </td>
+                            
+                                 <tr>
+                                   <td style="font-size:16px;">
+                                        {% if (entity.dateNaiss) %}
+                                        Né le {{ entity.dateNaiss|date('d-m-Y') }} 
+                                        {% endif %}
+                                        {% if (entity.LieuNaissance) %}
+                                         à {{entity.LieuNaissance.lieuNaiss}} 
+                                        {% endif %}</td>
+                                </tr>
+                                 <tr>
+                                   
+                                    <td style="font-size:16px;">
+                                        {% if (entity.telPort) %}
+                                        Tèl:{{entity.telPort}}</td>
+                                        {% endif %}
+                                </tr>
+
+                                <tr>
+                                    
+                                    <td style="font-size:16px;">Email :
+                                        {% if (entity.email) %}{{entity.email}}{% endif %}</td>
+                                </tr>
+                                <tr>
+                                  
+                                    <td style="font-size:16px;">{% if (entity.emailPerso) %}{{entity.emailPerso}}{% endif %}
+                                    {%for adr in entity.adresse%}
+                                        {{adr.email}} / 
+                                    {% endfor %}
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                  
+                                    <td style="font-size:16px;">{% if (entity.situationMatri) %}{{ entity.situationMatri }}{% endif %} 
+                                        {% if (entity.nbEnf) %}/ {{ entity.nbEnf }} enfant(s){% endif %} </td>
+                                </tr>
+                          </table>  
+          {#     {% if (entity.imageName) %}
+             <img src="{{ vich_uploader_asset(entity, 'imageFile') }}" alt="{{ entity.imageName }} Avatar">
+             
+          {% elseif (entity.sexe.id == 1 ) %}
+                <img src="{{ asset('images/img_test_agent.png')}}" Avatar>
+            {% elseif (entity.sexe.id == 2 ) %}
+                <img src="{{ asset('images/woman.png')}}" Avatar>
+            {% endif %}
+             #}                                     
+                                                    
+       
+                                           <!-- end of image cropping -->
+       </div>  
+            
+             <div class="col-lg-offset-1 col-md-3  profile_left">
+
+                                        <div class="profile_img">
+
+                                            
+           <div id="cropE-avatar">
+                                            
+          <div class="avatar-view" title="Change the avatar">                                      
+           {% if (entity.imageName) %}
+             <img src="{{ vich_uploader_asset(entity, 'imageFile') }}" alt="{{ entity.imageName }} Avatar">
+             
+          {% elseif (entity.sexe.id == 1 ) %}
+                <img src="{{ asset('images/img_test_agent.png')}}" Avatar>
+            {% elseif (entity.sexe.id == 2 ) %}
+                <img src="{{ asset('images/woman.png')}}" Avatar>
+            {% endif %}
+                                                
+                                                    
+             </div>                                          
+      </div>
+          </div>
+        </div>
+       </div>
+      </div>
+ </div>
+    
+    <style type="text/css">
+        td{
+            color:black;
+        }
+        th{
+            text-align: left;
+        }
+        p{color:black;}
+    </style>
+    
+ <div class="col-lg-1"> 
+ </div>    
+ <div class="col-lg-10">    
+  <div class="row">
+           <div class="panel panel-success">
+            <div class="panel-heading"><h2 style="color:orangered;">Détail sur la formation</h2></div>
+            <div class="panel-body">
+ 
+ <table style='width:100%;margin-left:2px;'>
+       <tbody >
+       {# {%dump(formation)%} #}
+           {%if(formation)%} 
+          
+            <tr role='row'>
+                
+                <th width="10%">Date du diplôme    :</th>
+                <td width="45%">{{formation.dateObtentiondiplo|date('d-m-Y') }}</td>
+                <th  width="15%">Niveau d'étude: </th>
+                <td  width="25%">{%if(formation.niveauFormation)%}{{formation.niveauFormation}}{%else%} Inconnu {%endif%}</td>
+              
+            </tr>
+            
+            <tr>
+                 <th width="10%">Diplôme: </th>
+                 <td width="45%">{%if(formation.diplome)%}{{formation.diplome.libDiplome}}{%elseif(formation.libFormation) %}{{formation.libFormation}} {%endif%}</td>
+              
+                 <th width="15%">Spécialité:</th>
+                 <td width="25%">{%if(formation.specialite)%}{{formation.specialite.libspecialite}}{%endif%} </td> 
+               {#  {%if(format.libFormation)%}{{format.libFormation}} {%elseif(format.diplome) %}{{format.diplome.libDiplome}} 
+               {%if(format.specialite)%}{{format.specialite.libspecialite}} {%if(format.option)%} Option{{format.option.libOption}} {%endif%}  {%endif%}{%endif%}#}
+            </tr>
+
+               {#  {%if(format.libFormation)%}{{format.libFormation}} {%elseif(format.diplome) %}{{format.diplome.libDiplome}} {%if(format.specialite)%}{{format.specialite.libspecialite}} {%if(format.option)%} Option{{format.option.libOption}} {%endif%}  {%endif%}{%endif%}#}
+            </tr>
+
+           
+            <tr>
+            	{%if(formation.option)%}
+                 <th width="15%">Option:</th>
+                 <td width="25%">{{formation.option.libOption}}</td> {%endif%} 
+                <th style=""width="15%">Etablissement :</th>
+                <td>{%if(formation.etablissement)%}{{formation.etablissement.nometablissement}}{%elseif(formation.autreetablissement)%}{{formation.autreetablissement}} {%endif%}</td> 
+            </tr>
+
+              <tr>
+                <th width="15%">Type de Formation:</th>
+                <td width="25%">
+                {% if formation.typeformation %}
+                    {{ formation.typeformation.libTypeFormation }}
+                {% endif %}
+                </td>
+            </tr>
+            <tr> 
+               <td colspan="4" >   <hr style="border:0.5px solid orange"> </td>
+            </tr>
+           {% endif%}
+         </tbody>     
+</table>
+          <br>
+          {% if formation.pj is defined and formation.pj %}
+ <button value="{{ vich_uploader_asset(formation.pj, 'imageFile')}}" class="btn btn-primary btnShow">Visualiser le diplôme</button>  
+ {% else %}
+    <span class="text-danger" style="font-weight:bold;">Aucun diplôme attaché</span>
+{% endif %}
+ <a class="btn btn-success" style='width:155px;' href="{{ path('formation_valider', { 'id': formation.id}) }}">Valider le diplôme</a>
+ <a class="btn btn-danger" style='width:155px;' href="{{ path('formation_refuser', { 'id': formation.id}) }}">Refuser le diplôme</a>
+</div>
+<div class="col-lg-1"> 
+</div>        
+</div>
+</div>
+
+ {% endblock %}
+ {% block javascript %}
+
+    <script src="{{ asset('design/js/icheck/icheck.min.js') }}"></script>
+    <script src="{{ asset('design/js/cropping/cropper.min.js') }}"></script>
+    <script src="{{ asset('design/js/cropping/main.js') }}"></script>
+    <script src="{{ asset('design/js/moris/raphael-min.js')}}"></script>
+    <script src="{{ asset('design/js/moris/morris.js')}}"></script>
+{% endblock %}

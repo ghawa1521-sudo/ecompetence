@@ -1,0 +1,103 @@
+<?php
+
+namespace Agent\AgentBundle\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Agent\AgentBundle\Entity\Deleguation;
+use Agent\AgentBundle\Form\DeleguationType;
+
+
+class DeleguationController extends Controller
+{
+	public function indexAction(){
+		 $em = $this->getDoctrine()->getManager();
+
+		 $users = $this->getUser();
+         $form = $this->Formdeleguation($users);
+         $gpas=$em->getRepository('AgentBundle:Agent')->findBy(['Fonction'=>[3,4], 'Direction'=>3, 'code_sd'=>"SD0006"]);
+         $rcgp=$em->getRepository('AgentBundle:Agent')->findBy(['Fonction'=>[3,4], 'Direction'=>3, 'code_sd'=>"SD0007"]);
+         $charge=$em->getRepository('AgentBundle:Agent')->findBy(['Fonction'=>[1,2], 'Direction'=>3]);
+         $fonctionnalite=[
+         					1=>'Enregistrement nouvel agent',
+     						2=>'Autorisation d\'absence',
+     						3=>'Congé annuel',
+     						4=>'Attestation de présence',
+     						5=>'Certificat de travail',
+     						6=>'Mariage',
+     						7=>'Décès conjoint',
+     						8=>'Couche ou allaitement',
+     						9=>'Maladie courte durée',
+     						10=>'Maladie courte durée',
+     						11=>'Mutation'];
+         $rubrique[1]=[
+         					1=>'Enregistrer agent',
+         					2=>'Ajouter document',
+         					3=>'affecter agent',
+         					4=>'Impression note affectation',
+         					5=>'Joindre note affectation',
+         					6=>'Valider prise de service',
+         					7=>'Impression certificat prise de service',
+         					8=>'Joindre certificat prise de service'];
+        $rubrique[2]=
+         					[1=>'Validation',
+         					2=>'Impression acte'];
+
+        $rubrique[3]=		[1=>'Enregistrement des décisions',
+         					2=>'Ajout des agents sur les décisions',
+         					3=>'Validation des congés',
+         					4=>'Impression cessation de service',
+         					5=>'Impression reprise de service'];
+         					/*
+         					
+         					4=>'Validation',
+         					4=>'Impression acte',
+         					5=>'Validation',
+         					5=>'Impression acte',
+         					6=>'Validation',
+         					6=>'Impression acte',
+         					7=>'Validation',
+         					7=>'Impression acte',
+         					8=>'Validation',
+         					8=>'Impression acte',
+         					9=>'Validation',
+         					9=>'Impression acte',
+         					10=>'Validation',
+         					10=>'Impression acte',
+         					11=>'Validation',
+         					11=>'Impression acte'
+         					];*/
+         					
+         			//dump($rubrique); die;
+$tab=['Enregistrement nouvel agent'=>[
+         					1=>'Enregistrer agent',
+         					2=>'Ajouter document',
+         					3=>'affecter agent',
+         					4=>'Impression note affectation',
+         					5=>'Joindre note affectation',
+         					6=>'Valider prise de service',
+         					7=>'Impression certificat prise de service',
+         					8=>'Joindre certificat prise de service']];
+        //$attente = $em->getRepository('AgentBundle:Affecter')->findAll([''], ['id' => 'DESC']);
+
+        return $this->render('AgentBundle:Deleguation:attrib_deleguation.html.twig', array(
+            'form' => $form->createView(),
+            'gpas' => $gpas,
+            'rcgp' => $rcgp,
+            'charge' => $charge,
+            'rubrique'=>$rubrique,
+            'fonctionnalite'=>$fonctionnalite,
+            'tab'=>$tab,
+        ));
+	}
+
+
+private function Formdeleguation($users) {
+        $form = $this->createForm(new DeleguationType($users), null, array(
+            'action' => $this->generateUrl('mutation_createchange'),
+            'method' => 'POST',
+        ));
+        $form->add('submit', 'submit', array('label' => 'DELEGUER'));
+        return $form;
+    }
+
+}

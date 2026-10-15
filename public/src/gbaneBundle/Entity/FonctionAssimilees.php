@@ -1,0 +1,136 @@
+<?php
+
+namespace gbaneBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * FonctionAssimilees
+ *
+ * @ORM\Table(name="fonction_assimilees")
+ * @ORM\Entity(repositoryClass="gbaneBundle\Repository\FonctionAssimileesRepository")
+ */
+class FonctionAssimilees
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="lib_fonct_ass", type="string", length=50, nullable=false)
+     */
+    private $libFonctAss;
+    
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="poids_fonct_ass", type="integer")
+     */
+    private $poidsFonctAss;
+    
+   /**
+     * @var Agent\AgentBundle\Entity\Fonction
+     *
+     * @ORM\ManyToOne(targetEntity="Agent\AgentBundle\Entity\Fonction")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_fonction", referencedColumnName="id")
+     * })
+     */
+    private $idFonction;
+    
+    
+     public function __toString() {
+        return $this->getLibFonctAss();
+    }
+    
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set libFonctAss
+     *
+     * @param string $libFonctAss
+     *
+     * @return FonctionAssimilees
+     */
+    public function setLibFonctAss($libFonctAss)
+    {
+        $this->libFonctAss = $libFonctAss;
+
+        return $this;
+    }
+
+    /**
+     * Get libFonctAss
+     *
+     * @return string
+     */
+    public function getLibFonctAss()
+    {
+        return $this->libFonctAss;
+    }
+
+
+    /**
+     * Set idFonction
+     *
+     * @param \Agent\AgentBundle\Entity\Fonction $idFonction
+     *
+     * @return FonctionAssimilees
+     */
+    public function setIdFonction(\Agent\AgentBundle\Entity\Fonction $idFonction = null)
+    {
+        $this->idFonction = $idFonction;
+
+        return $this;
+    }
+
+    /**
+     * Get idFonction
+     *
+     * @return \Agent\AgentBundle\Entity\Fonction
+     */
+    public function getIdFonction()
+    {
+        return $this->idFonction;
+    }
+
+    /**
+     * Set poidsFonctAss
+     *
+     * @param integer $poidsFonctAss
+     *
+     * @return FonctionAssimilees
+     */
+    public function setPoidsFonctAss($poidsFonctAss)
+    {
+        $this->poidsFonctAss = $poidsFonctAss;
+
+        return $this;
+    }
+
+    /**
+     * Get poidsFonctAss
+     *
+     * @return integer
+     */
+    public function getPoidsFonctAss()
+    {
+        return $this->poidsFonctAss;
+    }
+}

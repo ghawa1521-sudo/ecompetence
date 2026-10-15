@@ -1,0 +1,111 @@
+{% extends app.request.attributes.get('_route')=='mutation_print' 
+? '::gabarit_print.html.twig' 
+: '::gabarit_preview.html.twig' %}
+{% block service %}
+<span class="gras">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Le Directeur Général</span>
+<br>
+{% endblock %}
+
+{% block ref %}N°:................../MEF/DGE/SRHMG{% endblock %}
+
+{% block titre %}
+    <div align="center" style="font-size:30px; font-family:CenturyFontBold !important; border: solid; border-radius: 15px; width: 60%; margin: auto;">
+       <span class="gras">NOTE DE MUTATION</span> 
+    </div>
+{% endblock %}
+    {% block datePdf %}
+
+    {% endblock %}
+    {% block contenuPdf -%}
+
+        <div style="background-color: white; color:black; line-height: 2em;">
+            {#{% if entity.emmeteur.sexe.id == 1 %}
+
+                Monsieur {{entity.emmeteur.nom}} {{entity.emmeteur.prenoms}}
+            {% elseif entity.emmeteur.sexe.id == 2 %}
+                {% if  entity.emmeteur.situationMatri.id == 1  %}Mademoiselle {{entity.emmeteur.nom}} {{entity.emmeteur.prenoms}} {% endif %}
+                {% if  entity.emmeteur.situationMatri.id == 2  %}Madame {{entity.emmeteur.nom}} née {{entity.emmeteur.nomJeuneFille}}{% endif %}
+
+            {% endif %}#}{{entity.emmeteur.getCivilite.libsitf}} {{entity.emmeteur.concatNom}}, matricule {{entity.emmeteur.matricule}}, {{entity.emmeteur.Emploi}}, précédemment {% if entity.origine.id in [12,13,14,15,16,17,19] %}en service à la Direction Générale de l'Economie{% elseif entity.origine.id in [18] %} au {{entity.origine}}{% elseif entity.origine.id in [11] %}en service à la {{entity.origine}} ({{entity.origine.Sigle}}){% else %}{% if entity.origine.etatDirection==0 %}au {{entity.origine}} ({{entity.origine.Sigle}}){% elseif entity.origine.etatDirection==1 %}en service à la {{entity.origine}} ({{entity.origine.Sigle}}){% endif %}{% endif %}, est muté{% if entity.emmeteur.sexe.id == 2 %}e{% endif %} 
+            {% if entity.destination.id in [12,13,14,15,16,17,19] %}à la Direction Générale de l'Economie{% elseif entity.destination.id in [18] %} au {{entity.destination}} {% elseif entity.destination.id in [11] %}à la {{entity.destination}} ({{entity.destination.Sigle}}) {% else %}{% if entity.destination.etatDirection==0 %}au {{entity.destination}} ({{entity.destination.Sigle}}) {% elseif entity.destination.etatDirection==1 %}à la {{entity.destination}} ({{entity.destination.Sigle}}) {% endif %} de la Direction Générale de l'Economie (DGE),
+        {% endif %}
+            à compter de la date de signature de la présente note.
+
+
+            
+
+        </div>
+
+<br><br><br>
+        <div style="font-size: 1em;">
+    <div class="col-md-6">
+        <table cellsapcing="5">
+            <tr><td>
+            <span class="gras">AMPLIATIONS :</span>
+                </td>
+                <td></td>
+            </tr>
+            <!--
+            <tr>
+            <td>MEF/DGE</td><td>1</td>
+            </tr>
+        --> 
+            {% if entity.destination.sigle != "SRHMG"  %}
+            <tr>
+            <td>{% if entity.destination.id in [12,13,14,15,16,17,18,19] %} DGE {% else %} {{entity.destination.sigle}} {% endif %}</td><td>1</td>
+            </tr>
+             {% endif %}
+            <tr>
+            <td>{% if entity.origine.id in [12,13,14,15,16,17,18,19] %} DGE {% else %} {{entity.origine.sigle}} {% endif %}</td><td>1</td>
+            </tr>
+            
+
+            <tr>
+            <td>INTERESSE(E)</td><td>1</td>
+            </tr>
+            <tr>
+            <td>DOSSIER</td><td>1</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<!--{% if is_granted('ROLE_RESPO') %}
+        <div class="row" id="verif">
+            <br/><br/>
+            <div align="center">
+                <label>Veuillez entrer votre mot de passe afin d\'éffectuer la validation de la demande</label><br/>
+                <div class="col-md-offset-4 col-sm-3 col-xs-3 col-lg-3 col-md-3">
+                    <form action="{{ path('demande_valid', { 'id': entity.id }) }}" method ="POST">
+                        <input id="mdp" name="mdp" type="password" class="form-control" placeholder="Votre Mot de Passe" />
+                        <input type="submit" class="btn btn-success btn-sm col-md-offset-5 col-md-2" value="valider">
+                    </form>
+                </div>
+            </div>
+        </form>
+
+        </div>
+        <div id="boutton">
+        <button id="btn-js" class="btn btn-success btn-sm col-md-offset-5 col-md-2" onclick="VerifPassword() ;"> Valider</button>
+        </div>
+        <br/>
+        <div>
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('demande_receive') }}">
+            Retour Demandes Reçues
+        </a>
+    </li>
+
+</ul>
+</div>
+{% endif %}
+
+-->
+<script src="{{ asset('design/js/style.js') }}"></script>
+
+    {% endblock %}
+
+    {% block ampliationPdf %}
+    
+
+        {% endblock %}

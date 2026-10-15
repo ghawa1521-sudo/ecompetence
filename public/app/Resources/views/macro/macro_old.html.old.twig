@@ -1,0 +1,44 @@
+{% macro EtatConge(etat,niveau,service) %}
+    {% if niveau== 0 and etat == 0%} Validé & Transmis au RH
+        <label class="label label-success"></label>
+                
+    {% elseif niveau== 0 and etat == 1%}Cert</label>ificat de cessation généré
+        <label class="label label-success">
+                
+    {% elseif niveau== 0 and etat == 2%}Congé Refusé
+        <label class="label label-danger"></label>
+        
+    {% elseif niveau== 0 and etat == 3%}Certificat de reprise généré
+        <label class="label label-success"></label>
+                
+    {% elseif niveau== 0 and etat == 4%}
+
+    {% elseif niveau > 0 and etat == 0%}Transmis au {{service}}
+        <label class="label label-warning"></label>
+            
+        {% elseif niveau > 0 and etat == 1%}
+            <label class="label label-success">Validé & Transmis au {{service}}</label>
+                
+            {% elseif niveau > 0 and etat == 2%}Refusé par {{service}}
+                <label class="label label-danger"></label>
+                    
+                {% endif %}
+                 
+            
+            {#
+            {% if etat == 0%}
+                <label class="label label-warning">
+                    Transmis
+                {% elseif etat == 1%}
+                    <label class="label label-success">
+                        Validé & Transmis
+                    {% elseif etat == 2%}
+                        <label class="label label-danger">
+                        {% endif %}
+
+                        {% if niveau >= 0 %}
+                            au {{service}}
+                        {% endif %}
+                    </label>
+                    #}
+        {% endmacro %}%

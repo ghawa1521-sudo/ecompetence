@@ -1,0 +1,97 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+<div class="col-md-push-3 col-md-8">
+
+
+{% if is_granted('ROLE_RESPO_SRHMG') and entity.etatAffectation == 1 %}
+<h3>Numériser la note d'Affectation</h3>
+{% endif %}
+{% if is_granted('ROLE_RESPO_SRHMG') and entity.etatAffectation == 2 %}
+<h3>Numériser le Certificat de Prise de Service</h3>
+{% endif %}
+{% if is_granted('ROLE_RESPO') and entity.etatAffectation == 1 and entity.signeNote == 1 %}
+<h3>Valider la prise de service</h3>
+{% endif %}
+</div>
+    <div class="col-md-6 col-md-push-3">
+        <form action="{{path('affecter_valid', {'id':entity.id})}}" method='POST'>
+    <table class="record_properties table table-striped">
+        <tbody>
+
+            <tr>
+                <td><b>Matricule</b></td>
+                <td>{{ entity.agent.matricule }}</td>
+            </tr>
+            <tr>
+                <td><b>Nom</b></td>
+                <td>{{ entity.agent.nom }}</td>
+            </tr>
+            <tr>
+                <td><b>Prénoms</b></td>
+                <td>{{ entity.agent.prenoms }}</td>
+            </tr>
+            {% if (entity.agent.nomJeuneFille)%}
+            <tr>
+                <td><b>Nom de Jeune Fille</b></td>
+                <td>{{ entity.agent.nomJeuneFille }}</td>
+            </tr>
+            {% endif %}
+
+            <tr>
+                <td><b>Emploi</b></td>
+                <td>{{ entity.agent.emploi }}</td>
+            </tr>
+
+            <tr>
+                <td><b>Description des Compétences</b></td>
+                <td>{{ entity.agent.DescriComp }}</td>
+            </tr>
+
+            <tr>
+                <td><b>{% if is_granted('ROLE_RESPO_SRHMG') and entity.etatAffectation == 1 %}
+                Date de Signature de la note d'Affectation
+                </b>
+                {% endif %}
+                {% if is_granted('ROLE_RESPO_SRHMG') and entity.etatAffectation == 2 %}
+                <h3>Date de Signature du Certificat de Prise de Service</h3>
+
+                {% endif %}
+                {% if is_granted('ROLE_RESPO') and entity.etatAffectation == 1 and entity.signeNote == 1 %}
+                Validation de la prise de service
+                {% endif %}</b></td>
+                <td><input type="datetime" id="dateP" name="dateP" class='form-control datetimepicker' required='required'/></td>
+            </tr>
+            <tr>
+              <td><b>
+              {% if is_granted('ROLE_RESPO_SRHMG') and entity.etatAffectation == 1 %}
+                Joindre le Note d'affectaion
+              {% endif %}
+              {% if is_granted('ROLE_RESPO_SRHMG') and entity.etatAffectation == 2 %}
+              Joindre le Certificat de prise de Service
+              {% endif %}
+            </b></td>
+            <td>
+              {% if (is_granted('ROLE_RESPO_SRHMG') and entity.etatAffectation == 1) or ( is_granted('ROLE_RESPO_SRHMG') and entity.etatAffectation == 2) %}
+
+
+
+              {% endif %}
+            </td>
+            </tr>
+            <tr><td colspan='2'>
+          {% if is_granted('ROLE_RESPO_SRHMG') and entity.etatAffectation == 1 %}<input type='submit' value='Valider la Date de Signature' class='col-md-6 col-md-push-4 btn btn-success'/>
+          {% elseif is_granted('ROLE_RESPO_SRHMG') and entity.etatAffectation == 2 %}<input type='submit' value='Valider la Date de Signature' class='col-md-6 col-md-push-4 btn btn-success'/>
+          {% elseif is_granted('ROLE_RESPO') and entity.etatAffectation == 1 and entity.signeNote == 1 %}<input type='submit' value='Valider la Prise de Service' class='col-md-6 col-md-push-4 btn btn-success'/> {% endif %}
+            </td></tr>
+        </tbody>
+    </table>
+
+        </form>
+    </div>
+{% endblock %}
+{% block javascript %}
+<script src="{{ asset('design/js/style.js') }}"></script>
+
+{% endblock %}
+{#data-confirm="Etes-vous <strong>certain</strong> de vouloir Valider cette Affectation ?"#}

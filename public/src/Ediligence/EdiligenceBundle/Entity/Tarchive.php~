@@ -1,0 +1,79 @@
+<?php
+
+namespace Ediligence\EdiligenceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Tarchive
+ *
+ * @ORM\Table(name="tarchive")
+ * @ORM\Entity(repositoryClass="Ediligence\EdiligenceBundle\Repository\TarchiveRepository")
+ */
+class Tarchive
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+    
+    
+    
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="Date_archive", type="datetime", nullable=false)
+     */
+    private $dateArchive;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Agent\AgentBundle\Entity\Pj", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $nomFichier;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="Matricule_archiveur", type="integer", nullable=false)
+     */
+    private $matriculeArchiveur = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="Numtraitement", type="integer", nullable=false)
+     */
+    private $numtraitement = '0';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Obsrv", type="string", length=500, nullable=true)
+     */
+    private $obsrv;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Service_archive", type="string", length=20, nullable=true)
+     */
+    private $serviceArchive;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="CodeCourrier", type="integer", nullable=false)
+     */
+    private $codecourrier = '0';
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Ediligence\EdiligenceBundle\Entity\Ttraitement", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $traitements;
+}

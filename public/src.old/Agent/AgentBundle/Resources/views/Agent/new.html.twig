@@ -1,0 +1,468 @@
+{% extends '::base.html.twig' %}
+{% block css %}
+   <link href="{{ asset('design/css/style.css') }}" rel="stylesheet"/>
+       <link rel="stylesheet" href="{{asset('ediligence/assets/css/bootstrap-select.min.css')}}">
+{% endblock %}
+{% block body %}
+    <h1 xmlns="http://www.w3.org/1999/html">Enregistrer un agent</h1>
+<div id="wizard" class="form_wizard wizard_horizontal">
+
+
+        <ul class="wizard_steps">
+                <li>
+                    <a href="#step-1">
+                        <span class="step_no">1</span>
+                        <span class="step_descr">
+                            Etape 1<br />
+                            <small>Informations personnelles</small>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#step-2">
+                        <span class="step_no">2</span>
+                        <span class="step_descr">
+                Etape 2<br />
+                <small>Situation professionnelle</small>
+            </span>
+                    </a>
+                    <li>
+                    <a href="#step-3">
+                        <span class="step_no">3</span>
+                        <span class="step_descr">
+                Etape 3<br />
+                <small>Situation professionnelle (suite) </small>
+            </span>
+                    </a>
+                </li>
+
+                </li>
+                <li>
+                    <a href="#step-4">
+                        <span class="step_no">4</span>
+                        <span class="step_descr">
+                Etape 4<br />
+                <small>Services</small>
+            </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#step-5">
+                        <span class="step_no">4</span>
+                        <span class="step_descr">
+                Etape 5<br />
+                <small>Autres Informations</small>
+            </span>
+                    </a>
+                </li>
+
+        </ul>
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+        <div id="step-1">
+        <div class="x_panel">
+        <h2> Informations personnelles</h2>
+        <hr>
+                <div class="col-md-5">
+                    <div class="form-group row">
+                        {{ form_label(form.matricule, 'Matricule', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}<span style="color:red">**</span>
+                        {{ form_errors(form.matricule) }}
+                        {{ form_widget(form.matricule, {'attr':{'class': 'form-control col-md-7 col-xs-12'}}) }}
+                    </div>
+                    <div class="form-group row">
+                        {{ form_label(form.Sexe, 'Genre', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}<span style="color:red">**</span>
+                        {{ form_errors(form.Sexe) }}
+                        {{ form_widget(form.Sexe, { 'attr': {'onChange': 'active()'} } , {'attr': {'disabled' : 'disabled'} }) }}
+                    </div>
+                    <div class="form-group row">
+                        {{ form_label(form.situationMatri, 'Situation Matrimoniale', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}<span style="color:red">**</span>
+                        {{ form_errors(form.situationMatri) }}
+                        {{ form_widget(form.situationMatri, { 'attr': {'onChange': 'active()'} } ) }}
+                    </div>
+                    <div class="form-group row">
+                        {{ form_label(form.nom, 'Nom', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}<span style="color:red">**</span>
+                        {{ form_errors(form.nom) }}
+                        {{ form_widget(form.nom) }}
+                    </div>
+                    <div class="form-group row">
+                        {{ form_label(form.prenoms, 'prenoms', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form.prenoms) }}
+                        {{ form_widget(form.prenoms) }}
+                    </div>
+                    <div class="form-group row">
+                        {{ form_label(form.nomJeuneFille, 'Nom de Jeune Fille', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.nomJeuneFille) }}
+                        {{ form_widget(form.nomJeuneFille) }}
+                    </div>
+
+
+
+
+                </div>
+
+                <div class="col-lg-offset-2 col-md-5">
+
+                    <div class="form-group row">
+                        {{ form_label(form.dateNaiss, 'date de Naissance', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}<span style="color:red">**</span>
+                        {{ form_errors(form.dateNaiss) }}
+                        {{ form_widget(form.dateNaiss,{'attr':{'id': 'single_cal1'}}) }}
+                    </div>
+                    <div class="form-group row">
+                        {{ form_label(form.Lieu_Naissance, 'Lieu de Naissance', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.Lieu_Naissance) }}
+                        {{ form_widget(form.Lieu_Naissance) }}
+                    </div>
+
+
+                    <div class="form-group row">
+                        {{ form_label(form.nbEnf, 'Nombre d enfant', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.nbEnf) }}
+                        {{ form_widget(form.nbEnf) }}
+                    </div>
+
+                    <div class="form-group row">
+                        {{ form_label(form.situationMili, 'situation Militaire', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.situationMili) }}
+                        {{ form_widget(form.situationMili) }}
+                    </div>
+                    <div class="form-group row">
+                        {{ form_label(form.cvFile, 'Curriculum Vitae', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.cvFile) }}
+                        {{ form_widget(form.cvFile) }}
+                    </div>
+                    <div class="form-group row">
+                        {{ form_label(form.imageFile, 'Photo', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.imageFile) }}
+                        {{ form_widget(form.imageFile) }}
+                    </div>
+
+                </div>
+        </div>
+        </div>
+        <div id="step-2">
+        <div class="x_panel">
+           <h2> Situation professionnelle</h2>
+            <hr>
+            <div class="col-md-5">
+
+                <div class="form-group row">
+                        {{ form_label(form.Type, 'Type Agent', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.Type) }}
+                        {{ form_widget(form.Type) }}
+                </div>
+                <div class="form-group row">
+
+                       {{ form_label(form.Emploi, 'Emploi', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}<span style="color:red">**</span>
+                       {{ form_errors(form.Emploi) }}
+                       {{ form_widget(form.Emploi, {'id':'employ','attr': {'onChange': 'giveGrade(); giveClasse("#hiddengrade","agent_classe_listetype","#classe", "#viewcl");'}}) }}
+
+               </div>
+
+               <div class="form-group row">
+                 <label class="control-label col-md-6 col-sm-6 col-xs-12" for="grade">Grade</label>
+                 <input type="text" id="grade" readonly=readonly class="form-control col-md-7 col-xs-12 form-control" />
+                 <input type="hidden" id="hiddengrade" readonly=readonly class="form-control col-md-7 col-xs-12 form-control" />
+                 
+               </div>
+{#
+                <div class="form-group row">
+                        {{ form_label(form.Grade, 'Grade', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.Grade) }}
+                        {{ form_widget(form.Grade) }}
+                </div>
+#}
+
+
+            </div>
+
+
+            <div class="col-md-5 col-lg-offset-2">
+              {#
+                 <div class="form-group row">
+                        {{ form_label(form.Direction, 'Direction', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.Direction) }}
+                        {{ form_widget(form.Direction) }}
+                </div>
+                #}
+                <div class="form-group row" id="viewcl">
+                        {{ form_label(form.Classe, 'Classe', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}<span style="color:red">**</span>
+                        {{ form_errors(form.Classe) }}
+                        {{ form_widget(form.Classe, {'id':'classe','attr': {'disabled': 'disabled', 'onChange':'giveClasse("#classe","agent_echelon_listetype","#echelon", "#viewcl");'}}) }}
+                </div>
+
+                <div class="form-group row">
+                        {{ form_label(form.Echelon, 'Echelon', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}<span style="color:red">**</span>
+                        {{ form_errors(form.Echelon) }}
+                        {{ form_widget(form.Echelon, {'id':'echelon','attr': {'disabled': 'disabled','onChange':'giveClasse("#echelon","agent_indice_listetype","#indice", "#viewcl");'}}) }}
+                </div>
+                 <div class="form-group row">
+                                {{ form_label(form.indice, 'Indice', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                                {{ form_errors(form.indice) }}
+                                {{ form_widget(form.indice, {'id':'indice','attr': {'disabled': 'disabled'}}) }}
+                 </div>
+                
+                 <div class="form-group row">
+                                {{ form_label(form.Fonction, 'Fonction', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                                {{ form_errors(form.Fonction) }}
+                                {{ form_widget(form.Fonction, {'id':'fonction'}) }}
+                 </div>
+
+            </div>
+            <div class="form-group col-md-12">
+                        {{ form_label(form.descriComp, 'description des Competences', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.descriComp) }}
+                        {{ form_widget(form.descriComp) }}
+            </div>
+
+
+     </div>
+        </div>
+
+        <div id="step-3">
+            <div class="x_panel">
+               <h2> Situation professionnelle (suite)</h2>
+                <hr>
+                    <div class="col-md-5">
+                        <div class="form-group row">
+                        {{ form_label(form.datePremierService, 'Date 1ere prise Service dans l\'Administration', {'label_attr': {'class': 'control-label col-md-12 col-sm-12 col-xs-12'}} ) }}
+                        {{ form_errors(form.datePremierService) }}
+                        {{ form_widget(form.datePremierService) }}
+                        </div>
+                        <div class="form-group row">
+                        {{ form_label(form.datePriseServiceDge, 'Date 1ere prise Service DGE', {'label_attr': {'class': 'control-label col-md-12 col-sm-12 col-xs-12'}} ) }}<span style="color:red">**</span>
+                        {{ form_errors(form.datePriseServiceDge) }}
+                        {{ form_widget(form.datePriseServiceDge) }}
+                        </div>
+                        <div class="form-group row">
+                                {{ form_label(form.Provenance, 'Origine', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                                {{ form_errors(form.Provenance) }}
+                                {{ form_widget(form.Provenance) }}
+                        </div>
+                        
+
+
+                    </div>
+                    <div class="col-md-5 col-lg-offset-2">
+
+                        <div class="form-group row">
+                                {{ form_label(form.Syndicat, 'Syndicat', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                                {{ form_errors(form.Syndicat) }}
+                                {{ form_widget(form.Syndicat) }}
+                        </div>
+                        <div class="form-group row">
+                               {{ form_label(form.Titre, 'Titre', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                               {{ form_errors(form.Titre) }}
+                               {{ form_widget(form.Titre) }}
+                       </div>
+                        <div class="form-group row">
+                            {{ form_label(form.email, 'E-mail', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                            {{ form_errors(form.email) }}
+                            {{ form_widget(form.email) }}
+                        </div>
+                        
+                    </div>
+            </div>
+        </div>
+        <div id="step-4">
+        <div  class="x_panel">
+            <h2> Services</h2>
+            <hr>
+            <div class="col-md-push-4 col-md-4">
+
+                <div id="cacher" style="min-height:300px;">
+        
+        <div id="viewdg">
+        
+        {{ form_row(form.code_dg, {'id':'dg', 'attr':{'required':'required'}}) }}
+        </div>
+        <div id="viewdc">
+          {{ form_row(form.Direction, {'id':'dc', 'attr':{'required':'required'}}) }}
+
+        </div>
+        <div id="viewsd">
+            {{ form_label(form.code_sd, null ,{
+                'label_attr':{'id':'label_sd'}
+            }) }}
+            {{ form_widget(form.code_sd, {'id':'sd'}) }}
+
+        </div>
+        <div id="viewsc">
+          {{ form_row(form.code_sc, {'id':'sc'}) }}
+        </div>
+      </div>
+            </div>
+        </div>
+    	</div>
+        <div id="step-5">
+        <div  class="x_panel">
+            <h2> Autres Informations</h2>
+            <hr>
+            <div class="col-md-5">
+
+                <div class="form-group row">
+                        {{ form_label(form.nomPere, 'Nom et Prenoms du Pere', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.nomPere) }}
+                        {{ form_widget(form.nomPere) }}
+                </div>
+
+                <div class="form-group row">
+                        {{ form_label(form.nomMere, 'Nom et Prenoms de la Mere', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.nomMere) }}
+                        {{ form_widget(form.nomMere) }}
+                </div>
+
+                <div class="form-group row">
+                        {{ form_label(form.nomConjoint, 'Nom et Prenoms Conjoint', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.nomConjoint) }}
+                        {{ form_widget(form.nomConjoint) }}
+                </div>
+
+                <div class="form-group row">
+                        {{ form_label(form.telConjoint, 'Telephone Conjoint', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.telConjoint) }}
+                        {{ form_widget(form.telConjoint) }}
+                </div>
+                <div class="form-group row">
+                    {{ form_label(form.quartier, 'Quartier', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                    {{ form_errors(form.quartier) }}
+                    {{ form_widget(form.quartier) }}
+                </div>
+
+
+            </div>
+
+            <div class="col-md-5 col-lg-offset-2">
+
+                <div class="form-group row">
+                        {{ form_label(form.telPort, 'Telephone Agent', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.telPort) }}
+                        {{ form_widget(form.telPort) }}
+                </div>
+                <div class="form-group row">
+                    {{ form_label(form.persUrgent1, 'Personne à Contacter en cas d\'urgence', {'label_attr': {'class': 'control-label col-md-12 col-sm-12 col-xs-12'}} ) }}<span style="color:red">**</span>
+                    {{ form_errors(form.persUrgent1) }}
+                    {{ form_widget(form.persUrgent1) }}
+                </div>
+                <div class="form-group row">
+                    {{ form_label(form.telUrgent1, 'Telephone Urgence', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}<span style="color:red">**</span>
+                    {{ form_errors(form.telUrgent1) }}
+                    {{ form_widget(form.telUrgent1) }}
+                </div>
+                <div class="form-group row">
+                        {{ form_label(form.persUrgent2, 'Personne à Contacter en cas d\'urgence', {'label_attr': {'class': 'control-label col-md-12 col-sm-12 col-xs-12'}} ) }}
+                        {{ form_errors(form.persUrgent2) }}
+                        {{ form_widget(form.persUrgent2) }}
+                </div>
+                <div class="form-group row">
+                    {{ form_label(form.telUrgent2, 'Telephone Urgence', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                    {{ form_errors(form.telUrgent2) }}
+                    {{ form_widget(form.telUrgent2) }}
+                </div>
+
+            </div>
+                {{ form_row(form._token) }}
+                <input type="submit" class="btn btn-success btn-lg col-md-offset-4 col-md-4" value="Enregistrer Agent" />
+         </div>
+        </div>
+
+
+{{ form_end(form, {'render_rest': false}) }}
+</div>
+
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('agent') }}">
+            Retour à la Liste
+        </a>
+    </li>
+</ul>
+<style>
+.help-block{
+color:red;
+font-weight:bold;
+}
+</style>
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript" src="{{ asset('design/js/wizard/jquery.smartWizard.js') }}"></script>
+<script src="{{ asset('design/js/nicescroll/jquery.nicescroll.min.js') }}"></script>
+<script src="{{ asset('design/js/style.js') }}"></script>
+ <script src="{{ asset('ediligence/assets/js/bootstrap-select.min.js') }}"></script>
+ <script type="text/javascript">
+        $(document).ready(function () {
+            // Smart Wizard
+            $('#wizard').smartWizard();
+
+            function onFinishCallback() {
+                $('#wizard').smartWizard('showMessage', 'Finish Clicked');
+                //alert('Finish Clicked');
+            }
+        });
+
+        $(document).ready(function () {
+            // Smart Wizard
+            $('#wizard_verticle').smartWizard({
+                transitionEffect: 'slide'
+            });
+
+        });
+    </script>
+   
+    <script type="text/javascript">
+    var tab=[];
+    var tabs=[];
+    {%for emp in emploi %}
+      tab[{{emp.id}}]="{{emp.grade.libGrade}}";
+      tabs[{{emp.id}}]="{{emp.grade.id}}";
+    {% endfor %}
+    function giveGrade(){
+      id=$('#employ').val();
+      $('#grade').val(tab[id]);
+      $('#hiddengrade').val(tabs[id]);
+    
+    }
+
+    function giveClasse($sourceval, $route, $destval, $div){
+   // alert($route);
+      $($destval).prop('disabled', false);
+       $source = $($sourceval).val();
+        if ($source.length > 0 ){
+
+        $source=$source;
+        //showloader('#cacher');
+    }else{
+            $source=0;
+        }
+    
+    $paramroute = {'id': $source};
+
+   //alert($source);
+     $.ajax({
+       type: 'GET',
+       url: Routing.generate($route, $paramroute),
+       dataType: 'json',
+       success: function(data) {
+        if (jQuery.isEmptyObject(data) == false){
+              // alert("ok");
+              $($destval).children('option:not(:first)').remove();
+              $.each(data, function(key, value) {
+              if ($($destval).is("input")){
+              $($destval).val(value[0]);
+          } else if ($($destval).is("select")){
+               
+                 $($destval).append('<option value= "' + key + '">' + value[0] + '</option>');
+             }
+           });
+   }
+}});
+    }
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#agent_agentbundle_agent_nomJeuneFille').prop('disabled', true);;
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,115 @@
+
+{% extends app.request.attributes.get('_route')=='affecter_print' 
+? '::gabarit_print.html.twig' 
+: '::gabarit_preview.html.twig' %}
+
+{% block bootstrap %}
+    {% if app.request.attributes.get('_route')=='affecter_print'%}
+    <link href="{{app.request.getSchemeAndHttpHost() ~ asset('design/css/bootstrap.min.css') }}" rel="stylesheet"/>
+    
+{% endif %}
+{% endblock %}
+{% block service %}
+<span class="gras">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Le Directeur Général</span>
+<br>
+{% endblock %}
+
+{% block ref %}N°:................../MEF/DGE/SRHMG{% endblock %}
+
+{% block titre %}
+    <div align="center" style="font-size:30px; font-family:CenturyFontBold !important; border: solid 2px; border-radius: 10px; width: 60%; margin: auto;">
+       <span class="gras">NOTE D'AFFECTATION</span> 
+    </div>
+{% endblock %}
+    {% block datePdf %}
+
+    {% endblock %}
+    {% block contenuPdf -%}
+
+        <div style="background-color: white; color:black; line-height: 2em;">
+            
+               
+                {{entity.agent.getCivilite.libsitf}} {{entity.agent.concatNom}}, {% if entity.agent.Type.id == 1 %}{% if 'CE' in entity.agent.matricule %}N° candidature {% else %}matricule {% endif %}{{entity.agent.matricule}},{% endif %} {{entity.agent.Emploi}}, est affecté{% if entity.agent.sexe.id == 2 %}e{% endif %}
+            {% if  entity.agent.direction.id == 16 %} à la Direction Générale de l'Economie{% else %}{% if  entity.agent.direction.etatDirection == 0 %} au {% else %}à la {% endif %}{{entity.agent.Direction}} de la Direction Générale de l'Economie (DGE){% endif %},
+            à compter de la date de signature de la présente note.
+
+
+            
+
+        </div>
+
+<br><br><br><br>
+
+        
+<!--{% if is_granted('ROLE_RESPO') %}
+        <div class="row" id="verif">
+            <br/><br/>
+            <div align="center">
+                <label>Veuillez entrer votre mot de passe afin d\'éffectuer la validation de la demande</label><br/>
+                <div class="col-md-offset-4 col-sm-3 col-xs-3 col-lg-3 col-md-3">
+                    <form action="{{ path('demande_valid', { 'id': entity.id }) }}" method ="POST">
+                        <input id="mdp" name="mdp" type="password" class="form-control" placeholder="Votre Mot de Passe" />
+                        <input type="submit" class="btn btn-success btn-sm col-md-offset-5 col-md-2" value="valider">
+                    </form>
+                </div>
+            </div>
+        </form>
+
+        </div>
+        <div id="boutton">
+        <button id="btn-js" class="btn btn-success btn-sm col-md-offset-5 col-md-2" onclick="VerifPassword() ;"> Valider</button>
+        </div>
+        <br/>
+        <div>
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('demande_receive') }}">
+            Retour Demandes Reçues
+        </a>
+    </li>
+
+</ul>
+</div>
+{% endif %}
+
+-->
+<script src="{{ asset('design/js/style.js') }}"></script>
+
+    {% endblock %}
+  
+    {% block ampliationPdf %}
+    <div style="font-size: 16pt;">
+    <div class="col-md-6">
+        <table cellsapcing="5">
+            <tr><td>
+            <span class="gras">AMPLIATIONS&nbsp;:</span>
+                </td>
+                <td></td>
+            </tr>
+                        <tr>
+            <td>MEF/DRH</td><td>1</td>
+            </tr>
+            <!--
+            <tr>
+            <td>MEF/DGE</td><td>1</td>
+            </tr>
+        --> <tr>
+            <td>SRHMG</td><td>1</td>
+            </tr>
+            <tr>
+            <td>{{entity.agent.direction.sigle}}</td><td>1</td>
+            </tr>
+            
+
+            <tr>
+            <td>INTERESSE(E)</td><td>1</td>
+            </tr>
+
+            <tr>
+            <td>DOSSIER</td><td>1</td>
+            </tr>
+             
+        </table>
+    </div>
+</div>
+        {% endblock %}

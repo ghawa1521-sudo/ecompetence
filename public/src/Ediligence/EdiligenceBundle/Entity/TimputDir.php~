@@ -1,0 +1,74 @@
+<?php
+
+namespace Ediligence\EdiligenceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * TimputDir
+ *
+ * @ORM\Table(name="timput_dir", indexes={@ORM\Index(name="id", columns={"id"}), @ORM\Index(name="Service_imput", columns={"Service_imput"})})
+ * @ORM\Entity(repositoryClass="Ediligence\EdiligenceBundle\Repository\TimputDirRepository")
+ */
+class TimputDir {
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Timputations", cascade="persist", inversedBy="imputdir")
+     * @ORM\JoinColumn(nullable=false)
+     */
+
+    private $imputation;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Service_imput", type="string", length=20, nullable=false)
+     */
+    private $serviceImput;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="Imput_matricule", type="string", nullable=false)
+     */
+    private $imputMatricule = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="Etat_imput_dir", type="integer", nullable=false)
+     */
+    private $etatImputDir = '0';
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Agent\AgentBundle\Entity\Agent",  cascade={"persist"})
+     * @ORM\JoinColumn(name="matriculeimpute", referencedColumnName="matricule", nullable=true)
+     */
+    
+    private $matriculeimpute;
+   
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="desactive", type="integer", nullable=false)
+     */
+    private $desactive = '0';
+    
+    
+    public function __toString() {
+        return $this->getId().'';
+    }
+
+    
+
+    
+}

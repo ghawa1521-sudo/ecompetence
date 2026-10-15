@@ -1,0 +1,38 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: mariadb
+    database_port: 3306
+    database_name: bd_grh_ecomp
+    database_user: root
+    database_password: root
+    # Local Docker mail catcher (MailHog), reachable by containers on `db`.
+    mailer_transport: smtp
+    mailer_host: mailhog
+    mailer_user: null
+    mailer_password: null
+    secret: 15c4f827b94a07ea00af1d231989d5d9ba88f993
+    gos_server_host: 127.0.0.1
+    gos_server_port: 8026
+    gos_client_session_handler: null
+twig:
+    globals:
+        telephone: ''
+        cel: ''
+        logo: ''
+        logoSize: ''
+        dgName: 'SAIN Oguié'
+        dgAname: 'Virginie ACKA - AKE'
+        dirCabName: 'Adama COULIBALY'
+        dirCabCivil: Monsieur
+        ministere: 'Ministère de l''Economie et des Finances'
+        dircab:
+            dircab1:
+                id: 1
+                civilite: Monsieur
+                qualite: 'Directeur de Cabinet du Ministre de l''Economie et des Finances'
+                nom: 'ADAMA COULIBALY'
+            dircab2:
+                id: 2
+                civilite: Monsieur
+                qualite: 'Directeur de Cabinet Adjoint du Ministre de l''Economie et des Finances'
+                nom: 'YAPO AKPESS BERNARD'

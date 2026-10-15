@@ -1,0 +1,70 @@
+{% extends '::ediligence/base.html.twig' %}
+
+{% block body %}
+    
+     <div class="content-header">
+        <div class="header-section">
+            <h1><i class="gi gi-envelope"></i> Dossier<br><small>Mes diligences</small></h1>
+        </div>
+    </div>
+    <ul class="breadcrumb breadcrumb-top">
+        <li>Actions</li>
+        <li><a href="">Mes Dossiers</a></li>
+    </ul>
+    <div class="block full">
+        <div class="block-title">
+            <h2><strong>Liste</strong> dossiers</h2>
+        </div>{#
+        <p><a href="https://dge.ci" target="_blank">DataTables</a> is a plug-in for the Jquery Javascript library. It is a highly flexible tool, based upon the foundations of progressive enhancement, which will add advanced interaction controls to any HTML table. It is integrated with template's design and it offers many features such as on-the-fly filtering and variable length pagination.</p>
+#}
+
+        <div class="table-responsive">
+            <table id="example-datatable" class="table table-vcenter table-condensed table-bordered">
+                <thead>
+                    <tr>
+                        <th>Num</th>
+                        <th>Exp</th>
+                        <th>Provenance</th>
+                        <th>Objet</th>
+                        <th>Date imputation</th>
+                        <th>Delai</th>
+                        {# <th>Télécharger</th>#}
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set i = 0 %}
+                    {% for entity in entities %}
+                         {% set i = i + 1 %}
+                        <tr>
+                            <td><a href="{{ path('courrier_show', { 'id': entity.id }) }}">{{ i }}</a></td>
+                            <td>{{ entity.courrier.adresseenreg }}</td>
+                            <td>{{ entity.courrier.sourceCour }}</td>
+                            <td>{{ entity.courrier.objet|raw|striptags|slice(0, 150) }}</td>
+                            <td>{{ entity.dateImput|date('d-m-Y') }}</td>
+                            <td>
+                                {{ entity.delaiImput|date('d-m-Y') }}<font color="red">&nbsp;&nbsp;&nbsp;{{(date(entity.delaiImput).diff(date(entity.dateImput))).days}}&nbsp;jour(s)</font>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                {{jauge[entity.id]|raw}}
+                            </td>
+                            {#<td><a class="red" href="{{vich_uploader_asset(entity.courrier.piecejointe, 'imageFile')}}" title="Télécharger"  class="tooltip-info" data-rel="tooltip" data-original-title="Télécharger"><i class="ace-icon fa fa-download bigger-130"></i></a></td>#}
+                            <td class="text-center">
+                                <div class="btn-group btn-group-xs">
+                                    {#<a href="{{ path('courrier_show', { 'id': entity.id }) }}" data-toggle="tooltip" title="Consulter" class="btn btn-default"><i class="fa fa-envelope"></i></a>#}
+                                    {# <a href="{{ path('reception_new', { 'id': entity.id }) }}" data-toggle="tooltip" title="Enregistrer" class="btn btn-danger"><i class="fa fa-pencil"></i></a>#}
+                                    
+                                    <a href="{{ path('reception_new', { 'id': entity.id }) }}" class="btn btn-success"><span class="glyphicon glyphicon-inbox"></span> Enregistrer</a> 
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <ul>
+            <li>
+                <a href="{{ path('courrier_new') }}">Transmettre diligence</a>
+            </li>
+        </ul>
+    </div>
+    {% endblock %}

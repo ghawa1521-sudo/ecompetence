@@ -1,0 +1,942 @@
+<?php
+
+namespace Agent\AgentBundle\Entity;
+
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Agent\AgentBundle\Entity\SousDirection;
+use Agent\AgentBundle\Entity\ServiceDirection;
+use Agent\AgentBundle\Entity\Direction;
+use Agent\AgentBundle\Entity\DirectionGenerale;
+
+/**
+ * Conges
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Agent\AgentBundle\Repository\CongesRepository")
+ * @Vich\Uploadable
+ *
+ */
+class Conges
+{
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datecreation", type="datetime", nullable=true)
+     */
+    private $datecreation;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datedebut", type="datetime", nullable=true)
+     * @Assert\Expression("(this.isValideDate())",message="Votre date n'est pas valide")
+     */
+    private $datedebut;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datefin", type="datetime", nullable=true)
+     */
+    private $datefin;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="etat", type="integer")
+     */
+    private $etat;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datereprise", type="datetime", nullable=true)
+     * @Assert\LessThanOrEqual("today",message="Désolé, vous ne pouvez pas saisir une date du futur!")
+     */
+    private $datereprise;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Exercice",  cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $exercice;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="nbrejours", type="integer",nullable=true)
+     */
+    private $nbrejours = 0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="niveau", type="integer",nullable=true)
+     */
+    private $niveau = 0;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Agent\AgentBundle\Entity\Agent",  cascade={"persist"})
+     * @ORM\JoinColumn(name="agent", referencedColumnName="id")
+     */
+    private $agent;  ///////Emmétteur de la demande.
+
+    /**
+     * @ORM\ManyToOne(targetEntity="TypeConges",  cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $typeConges;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="objetrefus", type="text",nullable=true)
+     */
+    private $objetRefus;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="conge_objet", type="string", length=255, nullable=true)
+     */
+    private $conge_objet;
+
+    /**
+     * @Vich\UploadableField(mapping="conge_objet", fileNameProperty="objetName")
+     *
+     * @var file $cvFile
+     */
+    private $objetFile;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @var string
+     */
+    private $objetName;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     *
+     * @var \DateTime
+     */
+    private $updatedObjetAt;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="externe", type="integer")
+     */
+    private $externe;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Numerisation", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $numCessation;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Numerisation", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $numReprise;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="Agent\AgentBundle\Entity\Avis", mappedBy="conges")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $avis;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="etatImpression", type="integer",options={"default":0})
+     */
+    private $etatImpression = 0;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateAutoValidReprise", type="datetime", nullable=true)
+     */
+    private $dateAutoValidReprise;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Agent")
+     * @ORM\JoinColumn(name="matAjoutEnreg", referencedColumnName="id", nullable=true)
+     */
+    private $matValidReprise;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Agent\AgentBundle\Entity\Agent",  cascade={"persist"})
+     * @ORM\JoinColumn(name="saafactor", referencedColumnName="id")
+     */
+    private $saafactor;  ///////.
+
+    public function getTypeCongesID()
+    {
+        return $this->typeConges->getId();
+    }
+
+    /**
+     * @ORM\OneToMany(targetEntity="Agent\AgentBundle\Entity\Validation", mappedBy="conges",  cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $validation;
+
+    public function isValideDate()
+    {
+        $value = false;
+
+        if ((in_array($this->getEtat(), [3, 1]) == true && $this->getNiveau() == 0) || ($this->getAgent()->getFonction()->getPriorite() > 7)) {
+            $value = true;
+        } else {
+            $dateTime = new \DateTime();
+            $dateTime->modify('+ ' . $this->typeConges->getMinimum() . 'day');
+            if ($this->getDatedebut() >= $dateTime || ($this->getAgent() && $this->getAgent()->getFonction()->getId() > 2)) {
+                $value = true;
+                $weekDay = date('w', strtotime($this->getDatedebut()->format('Y-m-d')));
+                if ($weekDay == 0 || $weekDay == 6) {
+                    $value = false;
+                };
+            }
+        }
+        return $value;
+    }
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->datecreation = new \DateTime();
+        $this->etat = 0; //Congé 0= Interne, 1=Externe
+    }
+
+    public function setObjetFile(File $objet = null)
+    {
+        $this->objetFile = $objet;
+
+        if ($objet) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->setUpdatedObjetAt = new \DateTime('now');
+            //$this->setUpdatedObjetAt = new \DateTime();
+        }
+
+        return $this;
+    }
+
+    /**
+     *
+     * @param type $agent
+     * Positionnement du cong� par rapport � l'agent
+     */
+    public function wherisConge($user = null)
+    {
+        $service = null;
+        $serviceAgent = null;
+        if ($this->getAgent()) {
+            $serviceAgent = $this->getAgent()->getServiceActuel();
+            $agent = $this->getAgent();
+        }
+
+        $service = $serviceAgentConge = $this->getAgent()->getServiceActuel();
+
+
+        $fonctionid = ($agent->getFonction()->getId());
+
+
+
+        if ($serviceAgentConge instanceof ServiceDirection) {
+            $service = $serviceAgentConge->getCodeSousDir();
+        } elseif (($serviceAgentConge instanceof SousDirection)) {
+
+            if (($fonctionid == 6 || $fonctionid == 3)) {
+                $service = $serviceAgentConge->getCodeDc();
+            }
+        } elseif (($serviceAgentConge instanceof Direction)) {
+            if (($fonctionid == 5 || $fonctionid == 7)) {
+                $service = $serviceAgentConge->getDirectionGle();
+            }
+        } else {
+            $service = $serviceAgentConge;
+        }
+        return $service;
+    }
+
+    /**
+     * Compte le nombre de Validation Effectu�e
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function countValidation()
+    {
+        return count($this->validation);
+    }
+
+    public function getValidateur($msg = 1)
+    {
+
+        $service = null;
+        $validations = $this->getValidation();
+
+
+        //die;
+        foreach ($validations as $validation) {
+
+            $agent = $validation->getAgent();
+
+
+            if ($agent->getServiceActuel() instanceof DirectionGenerale && $agent->getUsers()->hasRole("ROLE_DGE")) {
+                $service = $agent->getServiceActuel();
+            } elseif ($agent->getServiceActuel() instanceof Direction && $agent->getUsers()->hasRole("ROLE_RESPO")) {
+                //return $agent->getServiceActuel()->getDirection();
+                $service = "RH"; //Transmis au Ressources Humaines
+            } elseif ($agent->getServiceActuel() instanceof SousDirection && $agent->getUsers()->hasRole("ROLE_RESPO")) {
+                $service = $agent->getServiceActuel()->getCodeDc();
+            }
+        }
+
+
+        if ($this->countValidation() == 0) {
+
+            $service = $this->wherisConge();
+        }
+        if ($msg == 0) {
+            $service = "Transmis " . $service;
+
+
+            $service = str_replace("Section", " à la Section ", $service);
+            $service = str_replace("Direction", " au Directeur ", $service);
+            $service = str_replace("Service", " au chef du Service ", $service);
+            if ($this->typeConges && $this->typeConges->getId() > 1) {
+                $service = " au RH";
+            }
+        }
+        if ($this->etat == 1) {
+            $service = "Cessation générée";
+        } elseif ($this->etat == 2) {
+            $service = "Congé Refusé";
+        } elseif ($this->etat == 3) {
+            $service = "Reprise générée";
+        }
+        return $service;
+    }
+
+    public function checkValidateur($user)
+    {
+        $agentV = $user->getAgent();
+        $validations = $this->getValidation();
+        $service = true;
+        foreach ($validations as $validation) {
+            $agent = $validation->getAgent();
+            if ($agent->getServiceActuel() instanceof DirectionGenerale && $agent->getUsers()->hasRole("ROLE_DGE")) {
+                $service = false;
+            } elseif ($agent->getServiceActuel() instanceof Direction && $agent->getUsers()->hasRole("ROLE_RESPO") && count($validations) >= 1) {
+                //return $agent->getServiceActuel()->getDirection();
+                $service = false;
+            } elseif ($agent->getServiceActuel() instanceof SousDirection && $agent->getUsers()->hasRole("ROLE_RESPO") && count($validations) <= 1) {
+                $service = false;
+                if ($agentV->getServiceActuel() instanceof Direction && $agent->getUsers()->hasRole("ROLE_RESPO") && count($validations) >= 1) {
+                    $service = true;
+                }
+            }
+        }
+        return $service;
+    }
+
+    /**
+     * @return File
+     */
+    public function getObjetFile()
+    {
+        return $this->objetFile;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set datecreation
+     *
+     * @param \DateTime $datecreation
+     *
+     * @return Conges
+     */
+    public function setDatecreation($datecreation)
+    {
+        $this->datecreation = $datecreation;
+
+        return $this;
+    }
+
+    /**
+     * Get datecreation
+     *
+     * @return \DateTime
+     */
+    public function getDatecreation()
+    {
+        return $this->datecreation;
+    }
+
+    /**
+     * Set datedebut
+     *
+     * @param \DateTime $datedebut
+     *
+     * @return Conges
+     */
+    public function setDatedebut($datedebut)
+    {
+        $this->datedebut = $datedebut;
+
+        return $this;
+    }
+
+    /**
+     * Get datedebut
+     *
+     * @return \DateTime
+     */
+    public function getDatedebut()
+    {
+        return $this->datedebut;
+    }
+
+    /**
+     * Set datefin
+     *
+     * @param \DateTime $datefin
+     *
+     * @return Conges
+     */
+    public function setDatefin($datefin)
+    {
+        $this->datefin = $datefin;
+
+        return $this;
+    }
+
+    /**
+     * Get datefin
+     *
+     * @return \DateTime
+     */
+    public function getDatefin()
+    {
+        return $this->datefin;
+    }
+
+    /**
+     * Set etat
+     *
+     * @param integer $etat
+     *
+     * @return Conges
+     */
+    public function setEtat($etat)
+    {
+        $this->etat = $etat;
+
+        return $this;
+    }
+
+    /**
+     * Get etat
+     *
+     * @return integer
+     */
+    public function getEtat()
+    {
+        return $this->etat;
+    }
+
+    /**
+     * Set datereprise
+     *
+     * @param \DateTime $datereprise
+     *
+     * @return Conges
+     */
+    public function setDatereprise($datereprise)
+    {
+        $this->datereprise = $datereprise;
+
+        return $this;
+    }
+
+    /**
+     * Get datereprise
+     *
+     * @return \DateTime
+     */
+    public function getDatereprise()
+    {
+        return $this->datereprise;
+    }
+
+    /**
+     * Set nbrejours
+     *
+     * @param integer $nbrejours
+     *
+     * @return Conges
+     */
+    public function setNbrejours($nbrejours)
+    {
+        $this->nbrejours = $nbrejours;
+
+        return $this;
+    }
+
+    /**
+     * Get nbrejours
+     *
+     * @return integer
+     */
+    public function getNbrejours()
+    {
+        return $this->nbrejours;
+    }
+
+    /**
+     * Set niveau
+     *
+     * @param integer $niveau
+     *
+     * @return Conges
+     */
+    public function setNiveau($niveau)
+    {
+        $this->niveau = $niveau;
+
+        return $this;
+    }
+
+    /**
+     * Get niveau
+     *
+     * @return integer
+     */
+    public function getNiveau()
+    {
+        return $this->niveau;
+    }
+
+    /**
+     * Set objetRefus
+     *
+     * @param string $objetRefus
+     *
+     * @return Conges
+     */
+    public function setObjetRefus($objetRefus)
+    {
+        $this->objetRefus = $objetRefus;
+
+        return $this;
+    }
+
+    /**
+     * Get objetRefus
+     *
+     * @return string
+     */
+    public function getObjetRefus()
+    {
+        return $this->objetRefus;
+    }
+
+    /**
+     * Set congeObjet
+     *
+     * @param string $congeObjet
+     *
+     * @return Conges
+     */
+    public function setCongeObjet($congeObjet)
+    {
+        $this->conge_objet = $congeObjet;
+
+        return $this;
+    }
+
+    /**
+     * Get congeObjet
+     *
+     * @return string
+     */
+    public function getCongeObjet()
+    {
+        return $this->conge_objet;
+    }
+
+    /**
+     * Set objetName
+     *
+     * @param string $objetName
+     *
+     * @return Conges
+     */
+    public function setObjetName($objetName)
+    {
+        $this->objetName = $objetName;
+
+        return $this;
+    }
+
+    /**
+     * Get objetName
+     *
+     * @return string
+     */
+    public function getObjetName()
+    {
+        return $this->objetName;
+    }
+
+    /**
+     * Set updatedObjetAt
+     *
+     * @param \DateTime $updatedObjetAt
+     *
+     * @return Conges
+     */
+    public function setUpdatedObjetAt($updatedObjetAt)
+    {
+        $this->updatedObjetAt = $updatedObjetAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedObjetAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedObjetAt()
+    {
+        return $this->updatedObjetAt;
+    }
+
+    /**
+     * Set externe
+     *
+     * @param integer $externe
+     *
+     * @return Conges
+     */
+    public function setExterne($externe)
+    {
+        $this->externe = $externe;
+
+        return $this;
+    }
+
+    /**
+     * Get externe
+     *
+     * @return integer
+     */
+    public function getExterne()
+    {
+        return $this->externe;
+    }
+
+    /**
+     * Set exercice
+     *
+     * @param \Agent\AgentBundle\Entity\Exercice $exercice
+     *
+     * @return Conges
+     */
+    public function setExercice(\Agent\AgentBundle\Entity\Exercice $exercice = null)
+    {
+        $this->exercice = $exercice;
+
+        return $this;
+    }
+
+    /**
+     * Get exercice
+     *
+     * @return \Agent\AgentBundle\Entity\Exercice
+     */
+    public function getExercice()
+    {
+        return $this->exercice;
+    }
+
+    /**
+     * Set agent
+     *
+     * @param \Agent\AgentBundle\Entity\Agent $agent
+     *
+     * @return Conges
+     */
+    public function setAgent(\Agent\AgentBundle\Entity\Agent $agent = null)
+    {
+        $this->agent = $agent;
+
+        return $this;
+    }
+
+    /**
+     * Get agent
+     *
+     * @return \Agent\AgentBundle\Entity\Agent
+     */
+    public function getAgent()
+    {
+        return $this->agent;
+    }
+
+    /**
+     * Set typeConges
+     *
+     * @param \Agent\AgentBundle\Entity\TypeConges $typeConges
+     *
+     * @return Conges
+     */
+    public function setTypeConges(\Agent\AgentBundle\Entity\TypeConges $typeConges = null)
+    {
+        $this->typeConges = $typeConges;
+
+        return $this;
+    }
+
+    /**
+     * Get typeConges
+     *
+     * @return \Agent\AgentBundle\Entity\TypeConges
+     */
+    public function getTypeConges()
+    {
+        return $this->typeConges;
+    }
+
+    /**
+     * Set numCessation
+     *
+     * @param \Agent\AgentBundle\Entity\Numerisation $numCessation
+     *
+     * @return Conges
+     */
+    public function setNumCessation(\Agent\AgentBundle\Entity\Numerisation $numCessation = null)
+    {
+        $this->numCessation = $numCessation;
+
+        return $this;
+    }
+
+    /**
+     * Get numCessation
+     *
+     * @return \Agent\AgentBundle\Entity\Numerisation
+     */
+    public function getNumCessation()
+    {
+        return $this->numCessation;
+    }
+
+    /**
+     * Set numReprise
+     *
+     * @param \Agent\AgentBundle\Entity\Numerisation $numReprise
+     *
+     * @return Conges
+     */
+    public function setNumReprise(\Agent\AgentBundle\Entity\Numerisation $numReprise = null)
+    {
+        $this->numReprise = $numReprise;
+
+        return $this;
+    }
+
+    /**
+     * Get numReprise
+     *
+     * @return \Agent\AgentBundle\Entity\Numerisation
+     */
+    public function getNumReprise()
+    {
+        return $this->numReprise;
+    }
+
+    /**
+     * Add validation
+     *
+     * @param \Agent\AgentBundle\Entity\Validation $validation
+     *
+     * @return Conges
+     */
+    public function addValidation(\Agent\AgentBundle\Entity\Validation $validation)
+    {
+        $this->validation[] = $validation;
+
+        return $this;
+    }
+
+    /**
+     * Remove validation
+     *
+     * @param \Agent\AgentBundle\Entity\Validation $validation
+     */
+    public function removeValidation(\Agent\AgentBundle\Entity\Validation $validation)
+    {
+        $this->validation->removeElement($validation);
+    }
+
+    /**
+     * Get validation
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getValidation()
+    {
+        return $this->validation;
+    }
+
+    /**
+     * Set avis
+     *
+     * @param \Agent\AgentBundle\Entity\Avis $avis
+     *
+     * @return Conges
+     */
+    public function setAvis(\Agent\AgentBundle\Entity\Avis $avis = null)
+    {
+        $this->avis = $avis;
+
+        return $this;
+    }
+
+    /**
+     * Get avis
+     *
+     * @return \Agent\AgentBundle\Entity\Avis
+     */
+    public function getAvis()
+    {
+        return $this->avis;
+    }
+
+    /**
+     * Set etatImpression
+     *
+     * @param integer $etatImpression
+     *
+     * @return Demande
+     */
+    public function setEtatImpression($etatImpression)
+    {
+        $this->etatImpression = $etatImpression;
+
+        return $this;
+    }
+
+    /**
+     * Get etatImpression
+     *
+     * @return integer
+     */
+    public function getEtatImpression()
+    {
+        return $this->etatImpression;
+    }
+
+    /**
+     * Set dateAutoValidReprise
+     *
+     * @param \DateTime $dateAutoValidReprise
+     *
+     * @return Conges
+     */
+    public function setDateAutoValidReprise($dateAutoValidReprise)
+    {
+        $this->dateAutoValidReprise = $dateAutoValidReprise;
+
+        return $this;
+    }
+
+    /**
+     * Get dateAutoValidReprise
+     *
+     * @return \DateTime
+     */
+    public function getDateAutoValidReprise()
+    {
+        return $this->dateAutoValidReprise;
+    }
+
+    /**
+     * Set matValidReprise
+     *
+     * @param \Agent\AgentBundle\Entity\Agent $matValidReprise
+     *
+     * @return Conges
+     */
+    public function setMatValidReprise(\Agent\AgentBundle\Entity\Agent $matValidReprise = null)
+    {
+        $this->matValidReprise = $matValidReprise;
+
+        return $this;
+    }
+
+    /**
+     * Get matValidReprise
+     *
+     * @return \Agent\AgentBundle\Entity\Agent
+     */
+    public function getMatValidReprise()
+    {
+        return $this->matValidReprise;
+    }
+
+    /**
+     * Set saafactor
+     *
+     * @param \Agent\AgentBundle\Entity\Agent $saafactor
+     *
+     * @return Conges
+     */
+    public function setSaafactor(\Agent\AgentBundle\Entity\Agent $saafactor = null)
+    {
+        $this->saafactor = $saafactor;
+
+        return $this;
+    }
+
+    /**
+     * Get saafactor
+     *
+     * @return \Agent\AgentBundle\Entity\Agent
+     */
+    public function getSaafactor()
+    {
+        return $this->saafactor;
+    }
+}

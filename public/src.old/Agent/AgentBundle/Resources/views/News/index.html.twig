@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block mapjs %}
+
+    <script src="{{asset('global/vendor/datatables/jquery.dataTables.js') }}"></script>
+    <script src="{{asset('global/vendor/datatables-bootstrap/dataTables.bootstrap.js') }}"></script>
+    <script src="{{asset('global/vendor/datatables-responsive/dataTables.responsive.js') }}"></script>
+    <script src="{{asset('global/vendor/datatables-tabletools/dataTables.tableTools.js') }}"></script>
+
+    <script src="{{asset('global/js/components/datatables.js') }}"></script>
+    <script src="{{asset('assets/examples/js/tables/datatable.js') }}"></script>
+
+
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+
+        #map {
+            height: 660px;
+        }
+    </style>
+    <link rel="stylesheet" href="{{asset('assets/examples/css/tables/datatable.css') }}">
+    <link rel="stylesheet" href="{{asset('global/vendor/datatables-bootstrap/dataTables.bootstrap.css') }}">
+    <link rel="stylesheet" href="{{asset('global/vendor/datatables-responsive/dataTables.responsive.css') }}">
+
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-9 col-sm-offset-1">
+        <div class="page animsition">
+            <div class="page-header">
+                <ol class="breadcrumb">
+                    <li><a href="#">Admin </a></li>
+                    <li><a href="javascript:void(0)">News</a></li>
+
+
+                    <li class="active">Liste</li>
+                </ol>
+            </div>
+            <div class="panel">
+                <div class="panel-body container">
+
+                    <ul>
+                        <li>
+                            <a href="{{ path('news_new') }}">Ajouter une News</a>
+                        </li>
+
+                    </ul>
+                    <table class="table table-hover dataTable table-striped width-full" id="exampleTableSearch" border="1">
+                        <thead>
+                            <tr>
+                                <th>Date Enreg.</th>
+                                <th>Debut</th>
+                                <th>Fin</th>
+                                <th>Nature</th>
+                                <th>Msg</th>
+                                <th>Etat</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for news in news %}
+                                <tr>
+                                    <td>{{ news.datecreation|date('d-m-Y h:i:s') }}</td>
+                                    <td>{{ news.debut|date('d-m-Y') }}</td>
+                                    <td>{{ news.fin|date('d-m-Y')  }}</td>
+                                    <td>{{ news.nature }}</td>
+                                    <td>{{ news.msg }}</td>
+                                    <td>{% if (news.debut <= date()) and (news.fin >= date()) %}
+                                        <label class="label label-success">Actif</label>
+                                    {% else %}
+                                        <label class="label label-danger">Expiré</label>
+                                        {% endif %}
+
+                                        </td>
+                                        <td>
+                                            <ul>
+
+                                                <li>
+                                                    <a href="{{ path('news_edit', { 'id': news.id }) }}">Modifier</a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              
+                {% endblock %}

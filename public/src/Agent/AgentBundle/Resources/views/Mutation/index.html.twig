@@ -1,0 +1,144 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    
+
+    <div role="tabpanel" class="tab-pane active" id="home">
+        {% if app.user.agent.fonction.id == 10  or is_granted('ROLE_RESPO_SRHMG') %}
+            <h1>Liste des agents mutés</h1>
+            <table id="datatable" class="table table-striped table-bordered jambo_table">
+        <thead>
+            <tr>
+                <th>Matricule</th>
+                <th>Agent</th>
+                <th>Service Précédent</th>
+                <th>Service de mutation</th>       
+                <th>Date de la mutation</th>
+                <th>Note de Mutation</th>
+            </tr>
+            
+
+        </thead>
+        <tbody>
+            {% for entity in entities %}
+                <tr>
+                    <td>{{entity.emmeteur.matricule}}</td>
+                    <td>{{entity.emmeteur.nom}} {{entity.emmeteur.prenoms}}</td>
+                    <td>{{entity.origine}}</td>
+                    <td>{{entity.destination}}</td>
+                    <td>{% if entity.datecreation %}{{ entity.datecreation|date('d-m-Y H:i:s') }}{% endif %}</td>
+                    <td><a class="btn btn-success" href="{{ path('mutation_view', { 'id': entity.id }) }}">Imprimer</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+        {% else %}
+            <h1>Demande de mutation</h1>
+    <table id="datatable" class="table table-striped table-bordered jambo_table">
+        <thead>
+            <tr>
+                <th rowspan="2">Date Demande</th>
+                
+                <th rowspan="2">Motif</th>
+                <th rowspan="2">Service Souhaité</th>
+                <th rowspan="2">Etat de la demande</th>
+                
+                <th colspan="2">Service d'origine</th>
+                <th colspan="2">Service Souhaité</th>
+                <th colspan="2">Ressources Humaines</th>
+                <th rowspan="2">action</th>
+
+            </tr>
+            <tr>
+                <th>Date Réponse</th>
+                <th>Etat Réponse</th>
+                <th>Date Réponse</th>
+                <th>Etat Réponse</th>
+                <th>Date Réponse</th>
+                <th>Etat Réponse</th>
+                
+            </tr>
+
+        </thead>
+        <tbody>
+            {% for entity in entities %}
+                <tr>
+                    <td>{% if entity.datecreation %}{{ entity.datecreation|date('d-m-Y H:i:s') }}{% endif %}</td>
+                    
+                    <td>{{ entity.Observ}}</td>
+                    <td>{{ entity.destination}}</td>
+                    <td align="center">
+                                    {% if (entity.etatRepSupDir == 1) and (entity.etatRepDest == 1) and (entity.etatRepGrh == 1) %}Accepté
+                                        <span class="label label-success"></span>
+                                    {% elseif (entity.etatRepSupDir == 2) or (entity.etatRepDest == 2) or (entity.etatRepGrh == 2) %}Refusé
+                                      <span class="label label-danger"></span>
+                                        
+                                    {% elseif (entity.etatRepSupDir == 2) or (entity.etatRepGrh == 2) %}Refusé
+                                        <span class="label label-danger"></span>
+                                    {% elseif (entity.etatRepSupDir == 0) or (entity.etatRepDest == 0) or (entity.etatRepGrh == 0) %}En Traitement
+                                            <span class="label label-warning"></span>
+                                    {% endif %}
+                      </td>
+                                
+                                            <td>{% if entity.dateRepSupDir %}
+                                                    {{ entity.dateRepSupDir|date('d-m-Y H:i:s') }}
+                                                {% endif %}
+                                            </td>
+                                        <td align="center">
+                                          {% if (entity.etatRepSupDir == 0) %}{# Etat 0  En attente#}En Attente
+                                            <span class="label label-warning"></span>
+                                            {% elseif (entity.etatRepSupDir == 1) %}Validé
+                                                <span class="label label-info"></span>
+                                                {% elseif (entity.etatRepSupDir == 2) %}Refusé
+                                                    <span class="label label-danger"></span>
+                                                    <br>
+                                                   {#} {{entity.motifRejet}}#}
+                                                    {% endif %}
+                                        </td>
+                                            <td>
+                                            {% if entity.dateRepDest %}
+                                              {{ entity.dateRepDest|date('d-m-Y H:i:s') }}
+                                            {% endif %}
+                                            </td>
+                                            <td align="center">
+                                            {% if (entity.etatRepDest == 2) %}Refusé
+                                                  <span class="label label-danger"></span>
+                                                  <br>
+                                                 {# {{entity.motifRejet}}#}
+                                            {% elseif (entity.etatRepDest == 0 and  entity.etatRepSupDir == 1) %}En Attente{# Etat 0  En attente#}
+                                                <span class="label label-warning"></span>
+                                            {% elseif (entity.etatRepDest == 1) %}Validé
+                                                    <span class="label label-info"></span>
+                                            {% endif %}
+                                            </td>
+                                            
+                                            <td>
+                                            {% if entity.dateRepGrh %}
+                                              {{ entity.dateRepGrh|date('d-m-Y H:i:s') }}
+                                            {% endif %}
+                                            </td>
+                                            <td align="center">
+                                            {% if (entity.etatRepGrh == 2) %}Refusé
+                                                  <span class="label label-danger"></span>
+                                                  <br>
+                                                 {#} {{entity.motifRejet}}#}
+                                            {% elseif (entity.etatRepGrh == 0) and (entity.etatRepDest == 1) %}{# Etat 0  En attente#}En Attente
+                                                <span class="label label-warning"></span>
+                                            {% elseif (entity.etatRepGrh == 1) %}Validé
+                                                    <span class="label label-info"></span>
+                                            {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if(entity.signeNote == 1) %}
+                                                    
+                                                    <button value="{{ vich_uploader_asset( entity.mutationNote, 'docFile')}}" class="btn btn-success btnShow">Télécharger l'acte</button>
+                                                    {% endif %}
+                                            </td>
+                                             
+                                                    </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+{% endif %}
+</div>
+    {% endblock %}

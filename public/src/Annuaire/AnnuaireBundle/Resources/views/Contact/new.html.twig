@@ -1,0 +1,88 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1 xmlns="http://www.w3.org/1999/html">Contact creation</h1>
+<div id="wizard" class="form_wizard wizard_horizontal">
+
+        <div class="x_panel">
+           <h2> Agent</h2>
+            <hr>
+            <div class="col-md-5">
+
+            <div class="col-md-5 col-lg-offset-2">
+                 
+
+                 <div class="form-group row">
+                        {{ form_label(form.telBur, 'Telephone Bureau', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.telBur) }}
+                        {{ form_widget(form.telBur) }}
+                </div>
+                 <div class="form-group row">
+                       {{ form_label(form.telBur, 'Telephone Bureau', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                       {{ form_errors(form.telBur) }}
+                       {{ form_widget(form.telBur) }}
+                </div>
+                   <div class="form-group row">
+                        {{ form_label(form.telDom, 'Telephone Domicile', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.telDom) }}
+                        {{ form_widget(form.telDom) }}
+                </div>
+                 <div class="form-group row">
+                        {{ form_label(form.telPort, 'Telephone Portable', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.telPort) }}
+                        {{ form_widget(form.telPort) }}
+                </div>
+                 <div class="form-group row">
+                        {{ form_label(form.telUrgent1, 'Telephone Urgence', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.telUrgent1) }}
+                        {{ form_widget(form.telUrgent1) }}
+                 </div>
+			</div>
+
+                  {{ form_row(form._token) }}
+          <input type="submit" class="btn btn-success btn-lg col-md-offset-4 col-md-4" value="Enregistrer" />
+         </div>
+        </div>
+        
+        
+    
+</div>      
+
+
+
+    {{ form(form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('contact') }}">
+            Retour à la liste
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
+
+{% block javascript %} 
+<script type="text/javascript" src="{{ asset('design/js/wizard/jquery.smartWizard.js') }}"></script>
+<script src="{{ asset('design/js/nicescroll/jquery.nicescroll.min.js') }}"></script>
+<script src="{{ asset('design/js/style.js') }}"></script>
+ <script type="text/javascript">
+        $(document).ready(function () {
+            // Smart Wizard 	
+            $('#wizard').smartWizard();
+
+            function onFinishCallback() {
+                $('#wizard').smartWizard('showMessage', 'Finish Clicked');
+                //alert('Finish Clicked');
+            }
+        });
+
+        $(document).ready(function () {
+            // Smart Wizard	
+            $('#wizard_verticle').smartWizard({
+                transitionEffect: 'slide'
+            });
+
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,54 @@
+ecompetence_typelangue:
+    resource: "@EcompetenceBundle/Resources/config/routing/typelangue.yml"
+    prefix:   /typelangue
+
+ecompetence_domaine:
+    resource: "@EcompetenceBundle/Resources/config/routing/domaine.yml"
+    prefix:   /domaine
+
+ecompetence_y:
+    resource: "@EcompetenceBundle/Resources/config/routing/agentcompetence.yml"
+    prefix:   /y
+
+ecompetence_experience:
+    resource: "@EcompetenceBundle/Resources/config/routing/experience.yml"
+    prefix:   /experience
+    
+ecompetence_formation:
+    resource: "@EcompetenceBundle/Resources/config/routing/formation.yml"
+    prefix:   /formation
+
+ecompetence_competence:
+    resource: "@EcompetenceBundle/Resources/config/routing/competence.yml"
+    prefix:   /competence
+    
+ecompetence_langue:
+    resource: "@EcompetenceBundle/Resources/config/routing/langue.yml"
+    prefix:   /langue
+    
+liste_agent:
+    resource: "@EcompetenceBundle/Resources/config/routing/agent.yml"
+    prefix:   /agent
+
+ecompetence_responsabilite:
+    resource: "@EcompetenceBundle/Resources/config/routing/responsabilite.yml"
+    prefix:   /responsabilite
+
+ecompetence_divers:
+    resource: "@EcompetenceBundle/Resources/config/routing/divers.yml"
+    prefix:   /divers
+
+listeemploi:
+    path: /{id}/searchEmploi
+    defaults:
+        _controller: "EcompetenceBundle:Profile:searchEmploi"
+    options:
+        expose: true
+
+
+listesecteur:
+    path: /{id}/searchSecteur
+    defaults:
+        _controller: "EcompetenceBundle:Profile:searchSecteur"
+    options:
+        expose: true

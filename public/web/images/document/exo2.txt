@@ -1,0 +1,18 @@
+
+(define l '(2 5 3 5 4 3) )
+
+
+(define (moins-occurence liste elt) 
+    ( cond
+    ((null? liste) '())
+    
+    ((equal? (car liste) elt) (moins-occurence (cdr liste) elt)) 
+    (else (cons (car liste) (moins-occurence (cdr liste) elt)))
+))
+;-------------------------------------
+(define (plus-grand l elt)
+  (cond 
+    ((null? l) "La liste est vide")
+    ((< (car l) elt) (plus-grand (cdr l) elt))
+    (else (cons(car l) (plus-grand (cdr l) elt)))
+  ))

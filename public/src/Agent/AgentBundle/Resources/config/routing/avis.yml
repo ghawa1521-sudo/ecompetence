@@ -1,0 +1,34 @@
+avis:
+    path:     /
+    defaults: { _controller: "AgentBundle:Avis:index" }
+
+avis_show:
+    path:     /{id}/show
+    defaults: { _controller: "AgentBundle:Avis:show" }
+
+avis_aviser:
+    path:     /{id}/{objet}/{action}/aviser
+    defaults: { _controller: "AgentBundle:Avis:aviser",objet:0,id:0,action:0 }
+
+avis_new:
+    path:     /new
+    defaults: { _controller: "AgentBundle:Avis:new" }
+
+avis_create:
+    path:     /create
+    defaults: { _controller: "AgentBundle:Avis:create" }
+    methods:  POST
+
+avis_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AgentBundle:Avis:edit" }
+
+avis_update:
+    path:     /{id}/update
+    defaults: { _controller: "AgentBundle:Avis:update" }
+    methods:  [POST, PUT]
+
+avis_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AgentBundle:Avis:delete" }
+    methods:  [POST, DELETE]

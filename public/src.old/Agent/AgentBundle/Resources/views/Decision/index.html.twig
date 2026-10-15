@@ -1,0 +1,83 @@
+{% extends '::base.html.twig' %}
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+     <style>
+        .dataTables_filter{
+            width: auto !important;
+        }
+    </style>
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+{% block body -%}
+    <div class="row">
+        <div class="x_title">
+            <h2>Liste des décisions de Congé| 
+            {% if todo =='ajouter'%}
+                                   Ajouter agent
+                                    {% elseif todo =='retirer'%}
+                                  Retirer agent
+                                    {% elseif todo == 'consulter'%}
+                                    Consultation
+                                    {% endif %}</h2><small></small>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="col-md-12">
+            <table class="records_list table table-striped responsive-utilities jambo_table bulk_action">
+                <thead>
+                    <tr>
+                        <th>Exercice</th>
+                        <th>Service/ Direction</th>
+                        <th>Numero</th>
+                        <th>Date signature</th>
+                        <th>Télécharger</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entity in entities %}
+                        <tr>
+                            <td>{{ entity.exercice  }}</td>
+                            <td>{{ entity.Direction }}</td>
+                            <td>{{ entity.numero }}</td>
+                            <td>{{ entity.date|date('d-m-Y')  }}</td>
+
+                            <td>
+                            {% if (entity.pj) %}<a href="{{ vich_uploader_asset(entity.pj, 'imageFile')}}">Télécharger</a>
+                            {% endif %}</td>
+                            <td>
+                                <ul>
+                                    {% if todo =='ajouter'%}
+                                    <li>
+                                        <a href="{{ path('decision_edit', { 'id': entity.id }) }}">Ajouter agent</a>
+                                    </li>
+                                    {% elseif todo =='retirer'%}
+                                    <li>
+                                        <a href="{{ path('decision_deletelist', { 'id': entity.id }) }}">Retirer agent</a>
+                                    </li>
+                                    {% elseif todo == 'consulter'%}
+                                    <li>
+                                        <a href="{{ path('decision_show', { 'id': entity.id }) }}">Consulter</a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+    <ul>
+        <li>
+            <a href="{{ path('decision_new') }}">
+                Nouvelle Décision
+            </a>
+        </li>
+    </ul>
+{% endblock %}

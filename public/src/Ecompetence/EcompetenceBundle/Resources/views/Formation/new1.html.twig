@@ -1,0 +1,228 @@
+{% extends '::base.html.twig' %}
+{%from "EcompetenceBundle:macro:macro.html.twig" import recursiveDomaine,recursiveDomaineAff%}
+
+
+{% block body %}
+   
+
+       {# {{ form_start(form) }}
+        {{ form_errors(form) }}#}
+       
+       
+        <div class="x_panel">
+        <h2> CV de...........</h2>
+        <hr>
+          
+                        
+          <div class="row"> 
+          <div class=""> </div>
+          <div class="col-md-12"> 
+          <div class="panel panel-success">
+          <div class="panel-heading"> <h2> Nouvelle formation</h2></div>
+          <div class="panel-body">
+         
+         
+            
+                 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                 {{ form_errors(form) }}
+                <div class="col-md-3">
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        {{ form_label(form.typeformation, 'Type de formation', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form.typeformation) }}
+                        {{ form_widget(form.typeformation, {'attr':{'class': 'form-control col-md-7 col-xs-12'}}) }}
+                    </div>
+                     <div class="form-group row">
+                        {{ form_label(form.libFormation, 'Titre de la formation', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.libFormation) }}
+                        {{ form_widget(form.libFormation, {'attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                    </div>
+                    <div class="form-group row">
+                        {{ form_label(form.niveauFormation, 'Niveau étude', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.niveauFormation) }}
+                        {{ form_widget(form.niveauFormation, {'attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                    </div>
+                    <div class="form-group row">
+                        {{ form_label(form.diplome, 'Diplôme', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form.diplome) }}
+                        {{ form_widget(form.diplome, {'attr':{'class': 'form-control col-md-7 col-xs-12'}}) }}
+                    </div>
+                     <div class="form-group row">
+                        {{ form_label(form.autrediplome, 'Autrediplôme', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form.autrediplome) }}
+                        {{ form_widget(form.autrediplome, {'attr':{'class': 'form-control col-md-7 col-xs-12'}}) }}
+                    </div>
+                     <div class="form-group row">
+                        {{ form_label(form.OptionDiplome, 'Option du diplôme', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form.OptionDiplome) }}
+                        {{ form_widget(form.OptionDiplome, {'attr':{'class': 'form-control col-md-7 col-xs-12'}}) }}
+                    </div>
+                    
+                    <div class="form-group row">
+                        {{ form_label(form.dateDebFormation, 'Date de début', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form.dateDebFormation) }}
+                        {{ form_widget(form.dateDebFormation) }}
+                    </div>
+                    <div class="form-group row">
+                        {{ form_label(form.dateObtentiondiplo, 'Date du diplôme', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form.dateObtentiondiplo) }}
+                        {{ form_widget(form.dateObtentiondiplo) }}
+                    </div>
+    
+                    
+                    <div class="form-group row">
+                        {{ form_label(form.etablissement ,'Nom institut', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form.etablissement) }}
+                        {{ form_widget(form.etablissement, {'attr':{'class': 'form-control col-md-7 col-xs-12'}}) }}
+                    </div>
+                     <div class="form-group row">
+                        {{ form_label(form.autreetablissement , NULL,{'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form.autreetablissement) }}
+                        {{ form_widget(form.autreetablissement, {'attr':{'class': 'form-control col-md-7 col-xs-12'}}) }}
+                    </div>
+                   <div class="form-group row">
+                        {{ form_row(form._token) }}
+                        {{ form_widget(form.enregistrer, {'attr':{'class': 'btn btn-primary'}}) }}
+                        <input type="hidden" name="bouton" value="2">
+                    </div> 
+                    
+                    </div>
+                    
+                     </div>
+                    {{ form_end(form,{render_rest:false}) }}
+                </div>
+                </div>
+                </div>
+
+           </div>            
+                
+                
+<style>
+.help-block{
+color:red;
+font-weight:bold;
+}
+</style>
+{% endblock %}
+
+{% block javascript %}
+
+<script type="text/javascript" src="{{ asset('design/js/wizard/jquery.smartWizard.js') }}"></script>
+<script src="{{ asset('design/js/nicescroll/jquery.nicescroll.min.js') }}"></script>
+
+<script type="text/javascript">
+        $(document).ready(function () {
+            // Smart Wizard
+            $('#wizard').smartWizard();
+
+            function onFinishCallback() {
+                $('#wizard').smartWizard('showMessage', 'Finish Clicked');
+                //alert('Finish Clicked');
+            }
+        });
+
+        $(document).ready(function () {
+            // Smart Wizard
+            $('#wizard_verticle').smartWizard({
+                transitionEffect: 'slide'
+            });
+
+        });
+        
+      
+                
+</script>
+
+ <script type="text/javascript">
+            $(document).ready(function () {
+                var tree = $('#tree').tree({
+                    primaryKey: 'id',
+                    uiLibrary: 'bootstrap',
+                    dataSource: Routing.generate('agent_cv_api'),
+                    checkboxes: true
+                });
+
+                $.ajax({
+                    type: "GET",
+                    url: Routing.generate('agent_cv_api'),
+                    dataType: "json",
+                    success: function(data) { 
+                        console.log(data);
+                    }   
+                });
+            });
+    </script>
+
+<script type="text/javascript">
+function searchList($sourceval, $route, $destval, $div)
+{
+    $source = $($sourceval).val();
+  
+    if($sourceval=='#sec')
+    { 
+        if($source==1)
+      {   
+        $('#viewtxtpo').hide();
+        $('#viewoptpo').show();
+      }
+      else
+      {
+       $('#viewtxtpo').show(); 
+       $('#viewoptpo').hide();
+      }
+    }
+    //alert($source);
+    if ($source.length > 0 ){
+
+        $source=$source;
+        //showloader('#cacher');
+    }else{
+            $source=0;
+        }
+    
+    $paramroute = {'id': $source};
+   
+    //alert(Routing.generate($route, $paramroute));
+    //alert($div); exit;
+    //console.log($div);
+
+    $.ajax({
+       type: 'GET',
+       url: Routing.generate($route, $paramroute),
+       dataType: 'json',
+       success: function(data) {
+        //console.log(data);
+          // alert(jQuery.isEmptyObject(data));
+           
+
+           if (jQuery.isEmptyObject(data) == false){
+            //  alert("ok");
+               $($destval).children('option:not(:first)').remove();
+               //$($destval).append('<option>---- Choisir un Service-----</option>');
+               $.each(data, function(key, value) {
+                
+                    //console.log(value);
+                 $($destval).append('<option value= "' + key + '">' + value[0] + '</option>');
+
+                // $($destval).html("ggggg");
+               
+               });
+               
+                 
+               
+            
+           }
+           else{
+               //console.log($sourceval);
+              //  alert("no");
+               $($destval).children('option:not(:first)').remove();
+              
+           }
+       }
+       });
+   
+}
+
+             </script>    
+{% endblock %}

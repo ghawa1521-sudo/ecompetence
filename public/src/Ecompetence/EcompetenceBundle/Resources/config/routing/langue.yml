@@ -1,0 +1,28 @@
+langue:
+    path:     /
+    defaults: { _controller: "EcompetenceBundle:Langue:index" }
+
+langue_new:
+    path:      /{id}/new
+    defaults: { _controller: "EcompetenceBundle:Langue:new" }
+
+langue_supp:
+    path:      /{id}/{ag}/edit
+    defaults: { _controller: "EcompetenceBundle:Langue:supp" }
+
+langue_newcreate:
+    path:     /newcreate
+    defaults: { _controller: "EcompetenceBundle:Langue:newcreate" }
+
+langue_editlang:
+    path:     /{id}/editlang
+    defaults: { _controller: "EcompetenceBundle:Langue:editlang" }
+
+langue_update:
+    path:     /{id}/update
+    defaults: { _controller: "EcompetenceBundle:Langue:update" }
+
+langue_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "EcompetenceBundle:Langue:delete" }
+    

@@ -1,0 +1,42 @@
+<?php
+
+namespace Ecompetence\EcompetenceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Optiondiplome
+ *
+ * @ORM\Table()
+ * @ORM\Entity
+ */
+class Optiondiplome
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="libOption", type="string", length=255)
+     */
+    private $libOption;
+    
+      /**
+     * @ORM\ManyToOne(targetEntity="Specialite")
+     * @ORM\JoinColumn(name="specialite_id", referencedColumnName="id", nullable=true)
+     */
+     private $specialite;
+    
+    public function __toString() {
+        return $this->getLibOption();
+    }
+    
+
+}

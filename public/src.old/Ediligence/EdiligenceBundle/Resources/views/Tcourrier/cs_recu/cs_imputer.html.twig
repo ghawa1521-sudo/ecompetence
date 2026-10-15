@@ -1,0 +1,127 @@
+{% extends '::ediligence/base.html.twig' %}
+
+{% block javascripts %}
+<script>
+function libDest(val, val_id)
+    {
+    //vall=parseInt(val);
+    valeur = val_id + val;
+            switch (valeur)
+    {
+     {% set p=1 %}
+      {% for linedg in agent_srv %}
+    case 'A{{linedg.matricule}}': return "{{linedg.nom}}&nbsp;{{linedg.prenoms}}"; break;
+      {% endfor %}
+
+      {% for linedc in agent_srv %}
+    case 'B{{linedc.matricule}}': return "{{linedc.nom}}&nbsp;{{linedc.prenoms}}"; break;
+      {% endfor %}
+
+      {% for linert in agent_srv %}
+    case 'D{{linert.matricule}}': return "{{linert.nom}}&nbsp;{{linert.prenoms}}"; break;
+      {% endfor %}
+
+    default:return "Non&nbsp;Défini";
+    }
+    }
+</script>
+{% endblock %}
+
+
+{% block body %} 
+    <div class="content-header">
+        <div class="header-section">
+            <h1>
+                <i class="gi gi-notes_2"></i>Transmettre courrier<br><small>Veuillez remplir les champs ci-dessous</small>
+            </h1>
+        </div>
+    </div>
+    <ul class="breadcrumb breadcrumb-top">
+        <li>Transmettre</li>
+        <li><a href="">Nouveau</a></li>
+    </ul>
+    <div class="row">
+        <div class="col-md-offset-1 col-md-10">
+
+            <form method="post" class="form-vertical col-md-12" style="color:#006;" name="frm_imputer" enctype="multipart/form-data" id="form_Imputation" action=" {{ path('courrier_csimput', {'id': id}) }}">
+                <div class="block">
+                    <!-- Basic Form Elements Title -->
+                    <div class="block-title" >
+
+                        <h2><strong>FICHE DE TRANSMISSION</strong></h2>
+
+
+                    </div>
+                    <!-- END Form Elements Title -->
+                    <div class="row" >
+                        <div class="col-md-12">
+                            <div class="bien">
+                                <table>
+                                    <tr >
+                                        <td align="right" width="25%"><b>COURRIER N°&nbsp;&nbsp;&nbsp;{{entities[0].courrier.id}}</b></td>
+                                        <td><b>{#{ entity.id}#}</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" width="25%" style="vertical-align: middle;"><br><b>OBJET:&nbsp;&nbsp;&nbsp;</b></td>
+                                        <td><b>{{entities[0].courrier.objet|raw|striptags|slice(0, 150) }}</b></td>
+                                    </tr>
+                                    <tr style="vertical-align: central;">
+                                        <td align="right" width="25%"><b>DE:&nbsp;&nbsp;&nbsp;</b></td>
+                                        <td>
+                                            <input id="De1" name="De" value="{{imputdir[0].matriculeimpute.matricule}}" checked="" disabled="" type="checkbox">
+                                            <label for="De1">{{imputdir[0].matriculeimpute.nom}}&nbsp;{{imputdir[0].matriculeimpute.prenoms}}</label>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" >
+                        <div class="col-md-6" id="GDestt">
+                      {{ macro.entete_imput1(app.user.agent.fonction.id, agent_srv) }}
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group bien">
+                                    <font size="+1"><b>INSTRUCTIONS</b></font>
+                                      {% for line in all_inst %}
+                                    <br>
+                                    <input id="In{{line.id}}" name="In[]" value="{{line.id}}" onclick="return popupchk('In{{line.id}}');" type="checkbox">
+                                    <label for="In{{line.id}}" id="lIn{{line.id}}">{{line.libIbstruction|raw}} </label><div id="dIn{{line.id}}" style="float:right; width:100%; display:block;"></div>
+                                      {% endfor %}
+
+                                    <br><br><br>
+                                    <label for="InP" id="lInP">INSTRUCTIONS&nbsp;PARTICULIERES:</label><div id="dIn00" style="float:right;"></div>
+                                    <textarea id="InP" class="form-control" name="txtInstr" value="15"></textarea>
+                                </div>
+                                <button id="btnp" type="button" value="eff_imputation" class="btn btn-primary pull-right form-control" name="a_eff_imputatio" onclick="prioritedefine()"><span class="glyphicon glyphicon-ok-sign"> EFFECTUER L'IMPUTATION</span>
+                                </button>
+                                <input type="hidden" name="ok" value="ok">
+                            </div>
+
+                            <div style="display:none">
+                                <div id="val_check"></div>
+                                <div id="div_delais"></div>
+                                <div id="div_select"></div>
+                            </div>
+
+                            <div id="titlediv">
+                                <a id="alg1" href="#lg1" title=""></a>
+                            </div>
+                            <div id="lg1" style="display:none" >
+
+                            </div> 
+
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        <ul>
+            <li>
+                <a href="{{ path('courrier') }}">Retour</a>
+            </li>
+        </ul>
+    {% endblock %}

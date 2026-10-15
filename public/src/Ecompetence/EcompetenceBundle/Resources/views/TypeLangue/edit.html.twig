@@ -1,0 +1,21 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <div class="panel panel-success" >
+        <div class="panel-heading" ><h1>Modifier TypeLangue</h1></div>
+    </div>
+    {{ form(edit_form) }}
+
+       
+             <button type="button" class="btn btn-warning" onclick="window.history.back();">
+                        <i class="fa fa-arrow-left"></i> Retour
+                        </button> 
+   {#      <ul class="record_actions">
+    <li>
+        <a href="{{ path('typelangue') }}">
+            Retour à la liste
+        </a>
+    </li> 
+    <li>{{ form(delete_form) }}</li>
+</ul>#}
+{% endblock %}

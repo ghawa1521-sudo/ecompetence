@@ -1,0 +1,101 @@
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "8888:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./public:/var/www/html:ro
+    depends_on:
+      - apache
+    networks:
+      - web
+    restart: unless-stopped
+
+  apache:
+    build:
+      context: ./apache
+    container_name: apache_php73
+    volumes:
+      - ./public:/var/www/html
+    expose:
+      - "9000"
+    depends_on:
+      - mariadb
+      - redis
+    networks:
+      - web
+      - db
+    restart: unless-stopped
+    environment:
+      APP_HOST_USER: ${APP_HOST_USER:-silayeur}
+      APP_HOST_UID: ${APP_HOST_UID:-1000}
+      APP_HOST_GID: ${APP_HOST_GID:-1000}
+
+  mariadb:
+    image: mariadb:10.8.8-jammy
+    container_name: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./db:/docker-entrypoint-initdb.d:ro
+    expose:
+      - "3306"
+    networks:
+      - db
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: always
+    expose:
+      - "6379"
+    networks:
+      - db
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    restart: always
+    ports:
+      - '1025:1025' # SMTP
+      - '8025' # Interface Web
+    networks:
+      - db
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+      UPLOAD_LIMIT: 256M
+    depends_on:
+      - mariadb
+    networks:
+      - db
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - "8082:8080"
+    depends_on:
+      - mariadb
+    networks:
+      - db
+
+volumes:
+  mariadb_data:
+
+networks:
+  web:
+  db:

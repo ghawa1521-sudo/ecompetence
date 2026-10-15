@@ -1,0 +1,75 @@
+{% extends '::base.html.twig' %}
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+{% block title %}
+    Affecter Agent
+{% endblock %}
+{% block titre_page %}
+    <div>Etat Global des Affectations</div>
+{% endblock %}
+{% block body -%}
+
+    <br>
+
+
+    <table class="records_list table table-striped responsive-utilities jambo_table bulk_action">
+        <thead>
+
+        <tr>
+
+            <td><b>Matricule </b></td>
+            <td><b>Nom et Prénom(s)</b></td>
+
+            <td><b>Direction</b></td>
+            <td><b>Date prise de Service</b></td>
+            <td><b>Etat affectation</b></td>
+            <td><b>Acte Administratif</b></td>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for entity in attente %}
+            {% if entity.agent.matricule is defined %}
+                <tr>
+                    {#<td><a href="{{ path('affecter_edit', { 'id': entity.id }) }}">{{ entity.id }}</a></td>#}
+
+                    <td>{{ entity.agent.matricule }}</td>
+                    <td>
+                        {% if entity.agent.sexe.id == 1 %}
+                            Monsieur <span class="gras">{{entity.agent.nom}} {{entity.agent.prenoms}}</span>
+                        {% elseif entity.agent.sexe.id == 2 %}
+                            {% if  entity.agent.situationMatri.id == 1  %}Mademoiselle <span class="gras">{{entity.agent.nom}} {{entity.agent.prenoms}}</span> {% endif %}
+                            {% if  entity.agent.situationMatri.id == 2  %}Madame <span class="gras">{{entity.agent.nom}}</span> née <span class="gras">{{entity.agent.nomJeuneFille}}</span>{% endif %}
+                        {% endif %}
+                    </td>
+
+                    <td>{{ entity.agent.direction }}</td>
+                    <td>{% if entity.agent.datePriseServiceDge %}{{ entity.agent.datePriseServiceDge|date('d-m-Y') }}{% endif %}</td>
+                    <td>
+                        {% if entity.etatAffectation==0 %}
+                            <label class="label label-info">En Attente d'Affectation</label>
+                        {% elseif entity.etatAffectation==1 %}
+                            <label class="label label-success">Affecté(e) dans un Service</label>
+                        {% elseif entity.etatAffectation==2 %}
+                            <label class="label label-success">Prise de Service Validée </label>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if entity.etatAffectation==1 and entity.signeNote==0 %} <label class="label label-warning">Note d'Affectation / non encore Signé</label> {% endif %}
+                        {% if entity.etatAffectation==1 and entity.signeNote==1 %} <label class="label label-success">Note d'Affectation /  Signé</label> {% endif %}
+                        {% if entity.etatAffectation==2 and entity.signeCertificat==0 %} <label class="label label-warning">Certificat de Prise de Service / non encore Signé</label> {% endif %}
+                        {% if entity.etatAffectation==2 and entity.signeCertificat==1 %} <label class="label label-success">Certificat de Prise de Service / Signé</label> {% endif %}
+                    </td>
+
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}

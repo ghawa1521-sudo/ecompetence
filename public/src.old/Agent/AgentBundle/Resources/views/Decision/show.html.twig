@@ -1,0 +1,102 @@
+{% extends '::base.html.twig' %}
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+{% block body -%}
+    <div class="row">
+        <div class="x_title">
+            <h2>Détail de la décision<small> </small></h2>
+            <div class="clearfix"></div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <table class="table table-striped responsive-utilities jambo_table bulk_action">
+                <tbody>
+                    <tr>
+                        <td colspan="2">
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Exercice</th>
+                        <td>{{ entity.exercice}}</td>
+                    </tr>
+                    <tr>
+                        <th>Service/Direction</th>
+                        <td>{{ entity.direction}}</td>
+                    </tr>
+                    <tr>
+                        <th>Numero</th>
+                        <td>{{ entity.numero }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date</th>
+                        <td>{{ entity.date|date('d-m-Y') }}</td>
+                    </tr>
+                    
+                    <tr>
+                        <td colspan="2">
+
+                        </td>
+                    </tr>{% if (entity.pj is defined) and (entity.pj is not null)%}
+                    <tr>
+                        <th>Télécharger la décision</th>
+                        <td>
+                            <label class="label label-success">En ligne</label>
+                            <i>depuis le {{entity.pj.updatedAt|date('d-m-Y')}}</i>
+                            <a href="{{ vich_uploader_asset(entity.pj, 'imageFile')}}">Télécharger</a>
+
+
+                        </td>
+                    </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+                <a class="btn btn-success col-md-12" href="{{ path('decision_edit', { 'id': entity.id }) }}">
+                    Ajouter un agent à la liste
+                </a>
+            
+                <a class="btn btn-danger col-md-12" href="{{ path('decision_deletelist', { 'id': entity.id }) }}">
+                    Retirer un  agent de la liste
+                </a>
+            
+                <a class="btn btn-info col-md-12" href="{{ path('decision') }}">
+                    Liste des Décisions
+                </a>
+            </div>
+            <div class="col-md-9" >
+
+                <table class="records_list table table-striped responsive-utilities jambo_table bulk_action" id="datatable">
+                    <thead>
+                        <tr>
+                            <th>Matricule</th>
+                            <th>Nom</th>
+                            <th>Prénoms</th>
+                            <th>Service/Direction</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for DecisionAgent in DecisionAgents %}
+                            <tr>
+                                <td>{{DecisionAgent.agent.matricule}}</td>
+                                <td>{{DecisionAgent.agent.nom}}</td>
+                                <td>{{DecisionAgent.agent.prenoms}}</td>
+                                <td>{{DecisionAgent.agent.Direction}}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+
+            </div>
+
+
+        </div>
+        
+
+        {% endblock %}

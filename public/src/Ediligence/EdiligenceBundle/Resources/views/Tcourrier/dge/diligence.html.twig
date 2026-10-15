@@ -1,0 +1,108 @@
+{% extends '::ediligence/base.html.twig' %}
+
+{% block body %}
+    
+<script type="text/javascript">
+        function pop_apercu(txt){
+            var chkbox=document.getElementById("lg1234");
+            var chks="<iframe style='height: 100% !important; width: 100% !important' class='iframepop' src='"+txt+"'></iframe>";
+            chkbox.innerHTML=chks;
+            $("a#alg123").fancybox({"hideOnContentClick":false}).trigger("click");
+        }
+ </script>
+ 
+ <div class="content-header">
+    <div class="header-section">
+        <h1><i class="gi gi-envelope"></i> Dossiers<br><small>Traités reçus</small></h1>
+    </div>
+</div>
+<ul class="breadcrumb breadcrumb-top">
+    <li>Actions</li>
+    <li><a href="">Mes Dossiers</a></li>
+</ul>
+<div class="block full">
+    <div class="block-title">
+        <h2><strong>Liste</strong> dossiers</h2>
+    </div>{#
+        <p><a href="https://dge.ci" target="_blank">DataTables</a> is a plug-in for the Jquery Javascript library. It is a highly flexible tool, based upon the foundations of progressive enhancement, which will add advanced interaction controls to any HTML table. It is integrated with template's design and it offers many features such as on-the-fly filtering and variable length pagination.</p>
+#}
+
+    <div class="table-responsive">
+        <table id="example-datatable" class="table table-vcenter table-condensed table-bordered">
+            <thead>
+                <tr>
+                    <th>Num</th>
+                    <th>Emetteur</th>
+                    <th>Contenu</th>
+                    <th>Date Traitement</th>
+                    <th>Destinataire</th>
+                    <th>Télécharger</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+             {% set i = 1 %}
+             {% for entity in entities %} 
+             <tr>
+                <td>{{ i }}</td>
+                <td>{{ entity.nom }}&nbsp;{{ entity.prenoms }}&nbsp;{{ entity.nomJeuneFille }}</td>
+                <td>{{ entity.objet|raw|striptags|slice(0, 50) }} </td>
+                <td>{{ entity.datetraitement|date('d-m-Y') }}</td>
+                <td>{{ entity.nom_dest }}&nbsp;{{ entity.pren_dest }}&nbsp;{{ entity.jfil_dest }}</td>
+                <td>
+                    {{ macro.apercu(entity.pj) }}
+                </td>
+                <td>
+                     {%if(is_granted('ROLE_CHARGE_ETUDES')==false)%}
+                      <div class="btn-group btn-group-xs">
+                         <a href="{{ path('etude_trt', { 'id': entity.id }) }}" data-toggle="tooltip" title="Traiter" class="btn btn-success"><i class="fa fa-archive" style=" width:15px;"></i></a
+                      </div>   
+                     {% endif %}
+                </td>
+             </tr>
+             {% set i = i + 1 %}
+             {% endfor%}  
+                {#
+            {% if piecejointee %}
+                {% set i = 1 %}
+                {% set service = '' %}{% set y = 0 %} 
+                {% for piecejointes in piecejointee %}
+                {% set coordinateur = agent[y].coordinateur %}
+                {% set contenu = agent[y].contenu %}
+                {% set datetraitement = agent[y].datetraitement %}
+                {% set idtraitement = agent[y].idtraitement %}
+                    
+                {% set piecejointe = piecejointes.telecharger %}
+                {% for direction in imputdir %}
+                    {% if piecejointes.imputation==direction[0].imputation.id %}
+                       {% set service = service ~ direction.service ~ ' - ' %}
+                    {% endif%} 
+                {% endfor%} 
+                <tr>
+                    <td>{{ i }}</td>
+                    <td>{{coordinateur}}</td>
+                    <td>{{contenu|raw|striptags|slice(0, 50)}}</td>
+                    <td>{{datetraitement|date('d-m-Y')}}</td>
+                    <td>{{ service|trim(' - ', 'right') }}</td>
+                    <td><a class="red" href="{{vich_uploader_asset(piecejointe, 'imageFile')}}" title="Télécharger"  class="tooltip-info" data-rel="tooltip" data-original-title="Télécharger"><i class="ace-icon fa fa-download bigger-130"></i></a></td>
+                    <td>
+                        <div class="btn-group btn-group-xs">
+                         <a href="{{ path('courrier_archive', { 'id': idtraitement }) }}" data-toggle="tooltip" title="Archiver" class="btn btn-success"><i class="fa fa-archive" style=" width:15px;"></i></a
+                        </div>
+                    </td>
+                </tr> 
+                {% set i = i + 1 %}{% set y = y + 1 %} 
+                {% endfor%} 
+              {% endif%} 
+              #}
+           </tbody>
+                </table>
+            </div>
+            <ul>
+                <li>
+                    <a href="{{ path('courrier_new') }}">Transmettre diligence</a>
+                </li>
+            </ul>
+        </div>
+{{macro.div_apercu() }}
+{% endblock %}

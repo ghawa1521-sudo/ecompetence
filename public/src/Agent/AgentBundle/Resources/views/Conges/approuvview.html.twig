@@ -1,0 +1,97 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h2>
+        Etes vous sûr  
+        {% if choice == 1 %}
+            d'approuver
+            {% elseif choice == 2 %}
+            de refuser
+            {% elseif choice == 22 %}
+            de Confirmer les congés
+        {% endif %}
+        ?
+    </h2>
+    
+    <div class="col-md-5">
+        <table class="table table-striped responsive-utilities jambo_table bulk_action">
+            <tbody>
+                <tr>
+                    <th>Datecreation</th>
+                    <td>{{ entity.datecreation|date('H:i:s d-m-Y ') }}</td>
+                </tr>
+                <tr>
+                    <th>Matricule</th>
+                    <td>{{ entity.agent.matricule }}</td>
+                </tr>
+                <tr>
+                    <th>Nom & Prénoms</th>
+                    <td>{{ entity.agent.nom}} {{ entity.agent.prenoms}}</td>
+                </tr>
+                <tr>
+                    <th>Datedebut</th>
+                    <td>{{ entity.datedebut|date('d-m-Y') }}</td>
+                </tr>
+                <tr>
+                    <th>Datefin</th>
+                    <td>{{ entity.datefin|date('d-m-Y') }}</td>
+                </tr>
+                <tr>
+                    <th>Etat</th>
+                    <td>
+                        {% if entity.etat == 0%}
+                        <label class="label label-warning">En attente</label>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Datereprise</th>
+                <td>{{ entity.datereprise|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Exercice</th>
+                <td>{{ entity.exercice }}</td>
+            </tr>
+            <tr>
+                <th></th>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                
+                {% if entity.etat == 0 %}
+                    {% if choice == 1 %}
+                        <a href="{{ path('conges_approuv', { 'id': entity.id,'choice': choice }) }}" class="btn btn-success">
+                        Approuver
+                    </a>
+                        {% elseif choice == 2 %}
+                        <a href="{{ path('conges_approuv', { 'id': entity.id,'choice': choice }) }}" class="btn btn-danger">
+                        Refuser
+                    </a>
+                    {% endif %}
+                {% endif %}
+                {% if entity.etat == 22 %}
+                {% if is_granted('ROLE_RESPO') %}
+                    <a href="{{ path('conges_approuv', { 'id': entity.id,'choice': 3 }) }}" class="btn btn-danger">
+                        Confirmer et Transmettre
+                    </a>
+                 {% endif %}   
+                {% endif %}
+
+
+                    <a href="{{ path('conges_show', { 'id': entity.id }) }}" class="btn btn-warning">
+                        Retour
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div>
+
+
+
+
+
+</div>
+{% endblock %}

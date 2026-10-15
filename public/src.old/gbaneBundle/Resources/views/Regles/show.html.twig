@@ -1,0 +1,41 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Nouvelle regle</h1>
+
+    <table id="example" class="records_list table table-striped table-bordered " >
+        <thead>
+            
+        <tr>
+            <th>N°</th>
+            <th>Anciennete Grade</th>
+            <th>Anciennete Dge</th>
+            <th>Fonction assimilée</th>
+            <th>Pièce justificative</th>
+        </tr>
+        
+        </thead>
+        <tbody>
+            
+            <tr>
+                <td>{{ entity.id }}</td>
+                <td>{{ entity.ancienneteGrade }}</td>
+                <td>{{ entity.ancienneteDge }}</td>
+                <td>{{ entity.FonctionAssimilees }}</td>
+                <td>{{ entity.pieces }}</td>
+            </tr>
+
+        </tbody>
+    </table>
+    <a href="{{ path('regles') }}">
+            <button type="button" class="btn btn-primary"> Retour à la liste </button>
+    </a><br>
+    <a href="{{ path('regles_edit', { 'id': entity.id }) }}">
+           <button type="button" class="btn btn-primary"> Modifier </button>
+        </a>   
+    {#{{ form(delete_form) }}#}
+        
+   
+        
+   
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends '::base.html.twig' %}
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+    <style>
+        th{
+            text-align: left !important;
+        }
+        .dataTables_filter{
+            width: auto !important;
+        }
+    </style>
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+{% block body -%}
+    <div class="row">
+        <div class="x_title">
+            <h2>Ajout d'agents à la Décision:<small>{{ entity.numero }} </small></h2>
+            <div class="clearfix"></div>
+        </div>
+
+    </div>
+    {{ form_start(edit_form,{'attr':{'id':'form_chk'}}) }}
+    <div class="row">
+        <div class="col-md-4">
+            <table class="table table-striped responsive-utilities jambo_table">
+                <tbody>
+                    <tr>
+                        <td colspan="2">
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Exercice</th>
+                        <td>{{ entity.exercice}}</td>
+                    </tr>
+                    <tr>
+                        <th>Service/<br>Direction</th>
+                        <td>{{ entity.direction}}</td>
+                    </tr>
+                    <tr>
+                        <th>Numero</th>
+                        <td>{{ entity.numero }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date</th>
+                        <td>{{ entity.date|date('d-m-Y') }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+
+                        </td>
+                    </tr>{% if (entity.pj is defined) and (entity.pj is not null)%}
+                    <tr>
+                        <th>Télécharger la décision</th>
+                        <td>
+                            <label class="label label-success">En ligne</label>
+                            <i>depuis le {{entity.pj.updatedAt|date('d-m-Y')}}</i>
+                            <a href="{{ vich_uploader_asset(entity.pj, 'imageFile')}}">Télécharger</a>
+
+
+                        </td>
+                    </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+                <input type="submit" class="btn btn-success" value="Enregistrer" />
+
+            </div>
+            <div class="col-md-8" >
+                <table class="records_chk table table-striped responsive-utilities jambo_table" id="datatable">
+                    <thead>
+
+                        <tr class="headings">
+                            <th>
+                            </th>
+                            <th>Matricule</th>
+                            <th>Nom</th>
+                            <th>Prénoms</th>
+                            <th>Service/Direction</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for agent in agents %}
+                            <tr>
+                                <td>{{agent.id}}</td>
+                                <td>{{agent.matricule}}</td>
+                                <td>{{agent.nom}}</td>
+                                <td>{{agent.prenoms}}</td>
+                                <td>{{agent.Direction}}</td>
+
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+
+            </div>
+
+
+        </div>
+
+
+        {{ form_widget(edit_form._token) }}
+        {{ form_end(edit_form, {'render_rest': false}) }}
+        <ul class="record_actions">
+            <li>
+                <a href="{{ path('decision_show', { 'id': entity.id }) }}">Consulter la liste</a>
+            </li>
+            <li>
+                <a href="{{ path('decision') }}">
+                    Liste des Décisions
+                </a>
+            </li>
+        </ul>
+        {% endblock %}
+

@@ -1,0 +1,85 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div align="center">
+        <a class="btn btn-warning" href="{{path('demande_receive', {'action': 'print'})}}"><span class="fa fa-arrow-circle-o-left"></span>  RETOUR </a> <a class="btn btn-primary" href="#" target="blank" onClick="printElem('toprint');">
+            <span class="fa fa-print">IMPRIMER</span>
+        </a>
+    </div>
+{% if entity.typeDemande.id == 5 %}
+{% if autres== 0%}
+<div class="form-group row col-md-push-4 col-md-4" align="left">
+<center>
+<a class="btn btn-success" href="{{ path('demande_view', { 'id': entity.id, 'autres':1 }) }}">Courrier Aut.</a>
+</center>
+<br>
+
+    <label for="dircab">Signataire:</label>
+    <select class="form-control " id="dircab">
+        {% for dir in dircab %}
+            <option value="<span class='gras'>{{dir.civilite}} {{dir.nom}}</span>, {{dir.qualite}}">
+                {{dir.civilite}}
+                {{dir.nom}},{{dir.qualite}}
+            </option>
+       
+    {% endfor %}
+</select>
+
+
+</div>
+{% elseif autres== 1 %}<center>
+<a class="btn btn-success" href="{{ path('demande_view', { 'id': entity.id, 'autres':0 }) }}">Demande Aut.</a></center>
+{% endif %}
+{% endif %}
+
+        {#<a class="btn btn-success" href="{{ path('demande_print', { 'id': entity.id }) }}">
+                            <i class="fa fa-download">Télécharger</i>
+                          </a>#}
+    <div id="toprint" style="width:210mm !important; height:297mm !important; color:black !important;">
+
+        <div class="col-md-push-2 col-md-10" style="width:210mm !important; height:297mm !important; color:black !important; margin:auto; overflow:hidden;">
+
+            {% if  entity.typeDemande.id == 1 %}
+                {% include 'DemandesBundle::Demande/demande_absence_pdf.html.twig'%}
+            {% elseif entity.typeDemande.id == 5 %}
+                {% if autres == 0 %}
+                    {% include 'DemandesBundle::Demande/demande_hors_pdf.html.twig'%}
+                {% else %}
+                    {% include 'DemandesBundle::Demande/demande_hors2_pdf.html.twig'%}
+                {% endif %}
+                
+
+            {% else %}
+                {% include 'DemandesBundle::Demande/demande_autres_pdf.html.twig'%}
+            {% endif %}
+        </div>
+    </div>
+
+    {% block javascript %}
+        <script>
+            $url = Routing.generate("demande_print_etat", {id:{{entity.id}} });
+
+            function printElem(divId) {
+                var nomPdf = 'ok';
+                var content = document.getElementById(divId).innerHTML;
+                var mywindow = window.open();
+
+                mywindow.document.write(content);
+
+
+                mywindow.document.close();
+                mywindow.focus()
+                mywindow.print();
+                mywindow.close();
+                $.get($url, function (data, status) {
+
+                });
+                return true;
+            }
+
+        </script>
+    {% endblock %}
+{% endblock %}
+
+
+

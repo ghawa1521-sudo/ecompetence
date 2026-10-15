@@ -1,0 +1,77 @@
+conges:
+    path:     /{action}/list
+    defaults: { _controller: "AgentBundle:Conges:index",action:default}
+
+conges_print:
+    path:     /{id}/{conge}/print
+    defaults: { _controller: "AgentBundle:Conges:print" }
+
+conge_print_status:
+    path:     /{id}/{status}/printstatus
+    defaults: { _controller: "AgentBundle:Conges:printstatus" }
+    options:
+      expose: true
+
+conges_generate:
+    path:     /{id}/{choice}/generate
+    defaults: { _controller: "AgentBundle:Conges:generate" }
+
+conges_active:
+    path:     /active
+    defaults: { _controller: "AgentBundle:Conges:active" }
+
+conges_show:
+    path:     /{id}/show
+    defaults: { _controller: "AgentBundle:Conges:show" }
+
+conges_approuvview:
+    path:     /{id}/{choice}/approuvview
+    defaults: { _controller: "AgentBundle:Conges:approuvview" }
+
+conges_approuv:
+    path:     /{id}/{choice}/approuv
+    defaults: { _controller: "AgentBundle:Conges:approuv" }
+
+conges_regul:
+    path:     /{id}/regul
+    defaults: { _controller: "AgentBundle:Conges:regul" }
+
+conges_new:
+    path:     /new
+    defaults: { _controller: "AgentBundle:Conges:new" }
+
+conges_create:
+    path:     /create
+    defaults: { _controller: "AgentBundle:Conges:create" }
+    methods:  POST
+
+conges_edit:
+    path:     /{id}/{todo}/treat
+    defaults: { _controller: "AgentBundle:Conges:edit" }
+
+conges_numerisation:
+    path:     /{id}/{todo}/numerisation
+    defaults: { _controller: "AgentBundle:Conges:edit" }
+
+conges_update:
+    path:     /{id}/{todo}/update
+    defaults: { _controller: "AgentBundle:Conges:update" }
+    methods:  [POST, PUT]
+
+conges_research:
+    path:     /research
+    defaults: { _controller: "AgentBundle:Conges:research" }
+    methods:  [POST, GET]
+
+conges_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AgentBundle:Conges:delete" }
+    methods:  [POST, DELETE]
+
+conges_view:
+    path:     /{id}/view
+    defaults: { _controller: "AgentBundle:Conges:view" }
+
+conges_suivi:
+    path:     /{action}/suivi
+    defaults: { _controller: "AgentBundle:Conges:suivi",action:default }

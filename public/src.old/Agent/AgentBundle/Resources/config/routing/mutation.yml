@@ -1,0 +1,99 @@
+mutation:
+    path:     /
+    defaults: { _controller: "AgentBundle:Mutation:index" }
+
+mutation_show:
+    path:     /{id}/show
+    defaults: { _controller: "AgentBundle:Mutation:show" }
+
+mutation_new:
+    path:     /new
+    defaults: { _controller: "AgentBundle:Mutation:new" }
+
+mutation_create:
+    path:     /create
+    defaults: { _controller: "AgentBundle:Mutation:create" }
+    methods:  POST
+
+mutation_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AgentBundle:Mutation:edit" }
+
+mutation_update:
+    path:     /{id}/update
+    defaults: { _controller: "AgentBundle:Mutation:update" }
+    methods:  [POST, PUT]
+
+mutation_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AgentBundle:Mutation:delete" }
+    methods:  [POST, DELETE]
+
+mutation_receive:
+    path:     /receive/{action}
+    defaults: { _controller: "AgentBundle:Mutation:receive", action:default }
+
+mutation_send:
+    path:     /send
+    defaults: { _controller: "AgentBundle:Mutation:send" }
+
+mutation_reject:
+    path:     /{id}/reject
+    defaults: { _controller: "AgentBundle:Mutation:reject" }
+
+mutation_valid:
+    path:     /{id}/valid
+    defaults: { _controller: "AgentBundle:Mutation:valid" }
+
+mutation_print:
+    path:     /{id}/print
+    defaults: { _controller: "AgentBundle:Mutation:print" }
+
+mutation_view:
+    path:     /{id}/view
+    defaults: { _controller: "AgentBundle:Mutation:view" }
+    
+mutation_scan:
+    path:     /{id}/numerise
+    defaults: { _controller: "AgentBundle:Mutation:numerise" }
+    
+mutation_changesrv:
+    path:     /changesrv
+    defaults: { _controller: "AgentBundle:Mutation:changesrv" }
+
+mutation_createchange:
+    path:     /createchange
+    defaults: { _controller: "AgentBundle:Mutation:createchange" }
+    methods:  POST
+    
+mutation_combo:
+    path:     /{id}/{toto}/Liste
+    defaults: { _controller: "AgentBundle:Mutation:mutation_combo" }
+    methods:  GET
+    options:
+      expose: true
+
+mutation_interim:
+    path:     /interim/{id}
+    defaults: { _controller: "AgentBundle:Mutation:interim", id:null }
+    methods:  [POST, GET]
+
+mutation_interim_view:
+    path:     /interim/{id}/view
+    defaults: { _controller: "AgentBundle:Mutation:interimview", id:null }
+    methods:  GET
+
+mutation_saaf:
+    path:     /saaf/{id}
+    defaults: { _controller: "AgentBundle:Mutation:saaf", id:null }
+    methods:  [POST, GET]
+
+mutation_interim_printe:
+    path:     /interime
+    defaults: { _controller: "AgentBundle:Mutation:interime" }
+    methods:  GET
+
+mutation_interim_edit:
+    path:     /interim/{id}/{modif}/p
+    defaults: { _controller: "AgentBundle:Mutation:interim", id:null,modif:'edit' }
+    methods:  [POST, GET]

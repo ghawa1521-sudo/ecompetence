@@ -1,0 +1,74 @@
+{% extends '::ediligence/base.html.twig' %}
+
+{% block body %}
+    <div class="content-header">
+        <div class="header-section">
+            <h1>
+                <i class="gi gi-notes_2"></i>Diligences reçues<br><small>&nbsp;</small>
+            </h1>
+        </div>
+    </div>
+    <ul class="breadcrumb breadcrumb-top">
+        <li>Traitement d'une diligence</li>
+        <!--<li><a href="">Nouveau</a></li>-->
+    </ul>
+    <div class="row">
+        <form method="POST">
+            <div class="col-md-offset-2 col-md-8">
+                <div class="block"> 
+                    <!-- Basic Form Elements Title -->
+                    <div class="block-title">
+                        <h2><strong>Traitement N° {{entities[0].numtraitement}}</strong></h2>
+                    </div>
+                    <div style="float:right;" class="bien2">
+                        <b>COURRIER: N° &nbsp; {{entities[0].codecourrier}}</b>
+                    </div>
+                    <div class="bien">
+                        <b>TRANSMIS PAR: <font color="#000000">&nbsp;{{entities[0].nom}}&nbsp;{{entities[0].prenoms}}&nbsp;{{entities[0].nomJeuneFille}}</font></b><br><br>
+                        <b>A: <font color="#000000">&nbsp;{{entities[0].nom_dest}}&nbsp;{{entities[0].pren_dest}}&nbsp;{{entities[0].jfil_dest}}</font></b><br><br>
+                        <b>OBJET:<font color="#000000">&nbsp;{{entities[0].objet|raw|striptags|slice(0, 150) }}</font></b><br><br>
+                        <b>NATURE DU COURRIER:<font color="#000000">&nbsp;{{entities[0].lib }}</font></b><br><br>
+                        <b>DATE IMPUTATION:<font color="#000000">&nbsp;{{entities[0].dateImput|date('d-m-Y') }}</font></b><br><br>
+                        <b>DATE TRAITEMENT:<font color="#000000">&nbsp;{{ entities[0].datetraitement|date('d-m-Y') }}</font></b>
+                    </div>
+                    <div class="form-group bien">
+                        <b>ANNOTATION DES OBSERVATIONS</b>:<br><br><font color="#000000">&nbsp;{{entities[0].libtraitement|raw|striptags|slice(0, 150) }}</font>
+                    </div>
+                    <label>
+                        <b>Télécharger la réponse du collaborateur:</b>&nbsp;&nbsp;<a class="red" href="{{vich_uploader_asset(entities[0].pj, 'imageFile')}}" title="Télécharger"  class="tooltip-info" data-rel="tooltip" data-original-title="Télécharger"><i class="ace-icon fa fa-download bigger-130"></i></a>
+                    </label>
+                   
+                    {% if(app.user.agent.Fonction.typeCompte.libRole == 'Niveau DGE')%}
+                        {#<button id="btnp" type="submit" value="dge" {# class="btn btn-primary pull-right form-control" name="traiter"><span class="glyphicon glyphicon-ok-sign"> Valider le traitement</span></button>#}
+                        <button id="btnp" type="submit" value="dgearchive" class="btn btn-primary pull-right form-control" name="traiter"><span class="glyphicon glyphicon-ok-sign"> Valider le traitement</span></button>
+                    {% else %}
+                        {% if entities[0].typecourrier == 2%} 
+                           {% if destfinal != null %}  
+                             <button id="btnp" type="submit" value="dgearchive" class="btn btn-primary pull-right form-control" name="traiter"><span class="glyphicon glyphicon-ok-sign"> Valider le traitement</span></button>
+                           {% else%}
+                             <button id="btnp" type="submit" value="traiter" class="btn btn-primary pull-right form-control" name="traiter"><span class="glyphicon glyphicon-ok-sign"> Valider le traitement</span></button> 
+                           {% endif %}
+                           
+                        {% else %}
+                            <button id="btnp" type="submit" value="traiter" class="btn btn-primary pull-right form-control" name="traiter"><span class="glyphicon glyphicon-ok-sign"> Soumettre le traitement</span></button>
+
+                        {% endif %}
+                    {% endif%}
+                    <button id="btnp" type="submit" value="rejeter" class="btn btn-primary pull-right form-control" name="traiter"><span class="glyphicon glyphicon-ok-sign"> Rejeter le traitement</span></button>
+                    <a class="btn btn-primary pull-right form-control" href="{{ path('courrier_diligtrt') }}">Retour</a>
+                    <input type="hidden" name="id_traitement" value="{{id}}">
+                    <input type="hidden" name="id_imput" value="{{entities[0].idImput}}">
+                    <input type="hidden" name="etatImput" value="{{entities[0].etatImput}}">
+                    <input type="hidden" name="typecourrier" value="{{entities[0].typecourrier}}">
+                    <input type="hidden" name="destfinal" value="{{destfinal}}">
+                
+                </div>
+        </form>
+    </div>
+</div>
+<ul>
+    <li>
+        <a href="{{ path('reception') }}">&nbsp;</a>
+    </li>
+</ul>
+{% endblock %}

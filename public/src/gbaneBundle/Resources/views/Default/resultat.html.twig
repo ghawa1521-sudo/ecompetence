@@ -1,0 +1,144 @@
+{# empty Twig template #}
+{% extends "::base.html.twig"%}
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+    <style>
+        td{
+            vertical-align: middle !important;
+        }
+    </style>
+{% endblock %}
+{% block datatableJs %}
+  <script>
+   $("#example").margetable({
+            type: 2,
+            colindex: [0,1,2,3,4,5,6]
+});
+
+</script>
+    {% include "::sections_app/datatableJs.html.twig" %}
+   
+{% endblock %}
+{% block body %}
+
+<div>
+    {% if agent %}
+    
+    <table border="1" style="text-align: center;" class="records_list table table-striped table-bordered ">
+        <tr>
+            <th>Matricule</th>
+            <th>Nom et prénoms</th>
+            <th>Fonction réelle</th>
+            <th>Fonction assimilée actuelle</th>
+            <th>Grade</th>
+            <th>Anciennete grade</th>
+            <th>Anciennete dge</th>
+            <th>Anciennete agent</th>
+        </tr>
+    
+        <tr>
+            <td>{{ agent.matricule }}</td>
+            <td>{{ agent.concatNom }}</td>
+            <td> {{agent.Fonction.libFonc }}</td>
+            <td> {{agent.FonctionAssimilees.libFonctAss }}</td> {#| {{ regles.Grade.libGrade }}<br>Anc. grade requise: {{ regles.ancienneteGrade }} | Anc. dge requise: {{ regles.ancienneteDge }}#}
+            <td>{{ agent.Emploi.Grade.libGrade }}</td>
+            <td>{{ agent.anciennete.anciennetegrade.years|number_format }} an(s)</td>
+            <td>{{ agent.anciennete.anciennetedge.years|number_format}} an(s)</td>
+            <td>{{ agent.anciennete.ancienneteagent.years|number_format}} an(s)</td>
+        </tr>
+        
+    </table>
+      {% endif %} 
+      
+      <br><h3 style="text-align: center;">FONCTIONS POTENTIELLES</h3><br>
+    <table id="example" style="text-align: left;" class="records_list table table-striped table-bordered " >
+      
+         
+        {% if agent %}
+            <thead>
+                    <tr>
+                        <th>Fonction </th>
+                        <th>Fonction Assimilée</th>
+                        <th>Grade</th>
+                        <th>Anciennete grade</th>
+                        <th>Anciennete dge</th>
+                        {#<th>Anciennete agent</th>#}
+                        <th>Actions</th>
+                        
+                    </tr>
+         </thead>
+            <tbody> 
+         {% for regle in regles %}
+         {% if agent.FonctionAssimilees.libFonctAss != regle.FonctionAssimilees.libFonctAss %}
+            <tr>
+            <td>{{ regle.FonctionAssimilees.idFonction.libFonc }}</td>
+            <td>{{ regle.FonctionAssimilees.libFonctAss }}</td>
+            <td>{{ regle.Grade.libGrade }}</td>
+            <td>{{ regle.ancienneteGrade }} an(s)</td>
+            <td>{{ regle.ancienneteDge }} an(s)</td>
+           {# <td>{{agent.anciennete.ancienneteagent.years|number_format }} an(s)</td>#}
+            <td ><a data-confirm="Etes-vous <strong>certain</strong> de vouloir effectuer cette promotion ?" href="{{ path('gbane_promo', {agt: agent.id, id: regle.FonctionAssimilees.id})}}"><button type="button" class="btn btn-primary">Promotion</button></a></td>
+         </tr> 
+             {% endif %}
+             {% endfor %}
+        </tbody> 
+        {% endif %}
+             
+         
+         {% if agents and agents is defined %}
+            <thead>
+                    <tr>
+                        <th>Matricule</th>
+                        <th>Nom et prénoms</th>
+                        <th>Fonction </th>
+                        <th>Fonction Assimilée Actuelle</th>{# fonction réel#}
+                        <th>Grade</th>
+                        <th>Anciennete grade</th>
+                        <th>Anciennete dge</th>
+                        <th>Anciennete agent</th>
+                        <th>Fonction Assimilée Potentielle</th>
+                        <th>Actions</th>
+                    </tr>
+         </thead>
+                
+                    
+                 <tbody>
+                   {#{% dump(agents) %}
+                    {% dump(regles) %}#}
+                    {% for agent in agents %} 
+
+                    {% if agent.agent.FonctionAssimilees != regles[agent.regle].FonctionAssimilees.libFonctAss %}   
+                     {% dump(agent.agent.anciennete) %}
+                    <tr>
+
+                        <td >{{ agent.agent.matricule }}</td>
+                        <td >{{ agent.agent.concatNom }}</td>
+                        <td >{% if agent.agent and agent.agent.FonctionAssimilees is defined and agent.agent.FonctionAssimilees != null %}{{agent.agent.Fonction.libFonc }}{% endif %}</td>
+                        <td >{% if agent.agent and agent.agent.FonctionAssimilees is defined and agent.agent.FonctionAssimilees != null %}{{agent.agent.FonctionAssimilees.libFonctAss }}{% endif %}</td>
+                        <td >{{ agent.agent.Emploi.Grade.libGrade }}</td>
+                        <td >{{ agent.agent.anciennete.anciennetegrade|number_format }} an(s)</td>
+                        <td >{{ agent.agent.anciennete.anciennetedge.years|number_format}} an(s)</td>
+                        <td >{% if agent.agent.anciennete.ancienneteagent.years is defined %} {{agent.agent.anciennete.ancienneteagent.years|number_format}} {% endif %} an(s)</td>
+                        <td >{{ regles[agent.regle].FonctionAssimilees.libFonctAss }} | Grade requit: {{ regles[agent.regle].Grade.libGrade }}<br>Anc. grade requise:{{ regles[agent.regle].ancienneteGrade }} | Anc. dge requise:{{ regles[agent.regle].ancienneteDge }}</td>
+                        
+                       <td>
+                       <!--  <a href="{{ path('gbane_decision', {'id': '${agent.id}'}) }}" class="btn btn-success">Consulter CV</a>-->
+                            <br>
+                       <a href="{{ path('gbane_decision', {'id': agent.agent.id}) }}" class="btn btn-success">Promouvoir</a>
+                       </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                 </tbody>
+                
+             
+         {% endif %}
+         
+         
+    </table>
+    
+         </br><a href="{{ path('gbane_homepage') }}"><button type="button" class="btn btn-primary">Retour au formulaire</button></a>
+    
+</div>
+
+{% endblock %} 

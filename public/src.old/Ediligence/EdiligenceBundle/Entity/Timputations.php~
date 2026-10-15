@@ -1,0 +1,122 @@
+<?php
+
+namespace Ediligence\EdiligenceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Timputations
+ *
+ * @ORM\Table(name="timputations")
+ * @ORM\Entity(repositoryClass="Ediligence\EdiligenceBundle\Repository\TimputationsRepository")
+ */
+#, indexes={@ORM\Index(name="Matricule_imput", columns={"Matricule_imput"}), @ORM\Index(name="Service_imput", columns={"Service_imput"}), @ORM\Index(name="Code_courrier", columns={"Code_courrier"}), @ORM\Index(name="Coordinateur", columns={"Coordinateur"})}
+class Timputations {
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="Date_imput", type="datetime", nullable=false)
+     */
+    private $dateImput;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Agent\AgentBundle\Entity\Agent",  cascade={"persist"})
+     * @ORM\JoinColumn(name="Imputmatricule", referencedColumnName="matricule", nullable=true)
+     */
+    private $matriculeImput;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Service_imput", type="string", length=20, nullable=false)
+     */
+    private $serviceImput;
+
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Priorite_imput", type="string", length=100, nullable=false)
+     */
+    private $prioriteImput;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="Delai_imput", type="datetime", nullable=false)
+     */
+    private $delaiImput;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Coordinateur", type="string", length=20, nullable=false)
+     */
+    private $coordinateur;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Inst_part", type="string", length=500, nullable=true)
+     */
+    private $instPart;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="Etat_imput", type="integer", nullable=false)
+     */
+    private $etatImput = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="Etat_trait", type="integer", nullable=false)
+     */
+    private $etatTrait = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="Nbre_pers", type="integer", nullable=false)
+     */
+    private $nbrePers = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Tcourrier", cascade="persist")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $courrier;
+
+     /**
+     * @ORM\OneToMany(targetEntity="TimputDir",mappedBy="imputation")
+     */
+    private $imputdir;
+    
+   /**
+     * @var integer
+     *
+     * @ORM\Column(name="desactive", type="integer", nullable=false)
+     */
+    private $desactive = '0';
+   
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->imputdir = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    
+}

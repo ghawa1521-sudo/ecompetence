@@ -1,0 +1,8 @@
+agent_identification_home:
+    path:     /
+    defaults: { _controller: AgentIdentificationBundle:Default:index }
+    #methods:  [POST, PUT]
+agent_identification_modif:
+    path:     /modif/{id}
+    defaults: { _controller: "AgentIdentificationBundle:Default:index",id:null }
+    #methods:  [POST, PUT]

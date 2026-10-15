@@ -1,0 +1,16 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+   <div class="col-md-push-4 col-md-4">
+    <h1>Modifier Affectation</h1>
+
+    {{ form(edit_form) }}
+
+
+{% endblock %}
+{% block javascript %}
+<script src="{{ asset('design/js/style.js') }}"></script>
+
+
+</script>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends '::ediligence/base.html.twig' %}
+
+{% block body %}
+
+     <div class="content-header">
+        <div class="header-section">
+            <h1><i class="gi gi-envelope"></i> Dossier<br><small>Mes diligences</small></h1>
+        </div>
+    </div>
+    <ul class="breadcrumb breadcrumb-top">
+        <li>Actions</li>
+        <li><a href="">Mes Dossiers</a></li>
+    </ul>
+    <div class="block full">
+        <div class="block-title">
+            <h2><strong>Renvoyer</strong> dossier</h2>
+        </div>
+        {{ form_start(form) }}
+        <div class="table-responsive">
+            <div class="form-group bien">
+                        <font size="+1"><b>VOULEZ VOUS RENVOYER LA REPONSE POUR CORRECTION</b></font><br><br> 
+                        <font color="#000000">
+                        <table width="100%" class="table table-bordered table-striped table-hover table-condensed">
+                            <tr>
+                                <td>Service</td><td>Etat</td><td>Télécharger</td><td>Date transmission</td>
+                            </tr>
+                            {% for direction in dirimput%}
+                                {% if direction.tr.pjtraitement.imageName is not defined %}
+                                    {% set etat = 'En cours' %}
+                                    {% set telecharger = 'Néant' %}
+                                {% else %}
+                                    {% set etat = 'Transmis' %}
+                                    {% set telecharger ='<a class="red" href="'~vich_uploader_asset(direction.tr.pjtraitement, 'imageFile')~'" title="Télécharger"  class="tooltip-info" data-rel="tooltip" data-original-title="Télécharger"><i class="ace-icon fa fa-download bigger-130"></i></a>'%}
+                                {% endif %}
+                                <tr>
+                                    <td>{{direction.service}} ({{direction.nom}}&nbsp;{{direction.prenoms}})</td>
+                                    <td>{{etat}}</td>
+                                    <td>{{telecharger|raw}}</td>
+                                    <td>
+                                        {% if direction.tr%}{{direction.tr.datetraitement|date('d-m-Y')}}{% else %}Néant{% endif %} 
+                                        {#{ form_row(form.imputdir, {'value':direction.id, 'label':' '}) }#}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                         </table>
+                        <table border="0" width="70%">
+                            <tr>
+                                <td colspan="4">
+                                        {{ form_row(form.librejet, {'label':'OBSERVATIONS'}) }} 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    <label>
+                                        {{form_widget(form.pjrejet.imageFile,{'attr':{'required':true}})}}
+                                        <i style="margin-bottom: 5px;">Format du Fichier (jpg, png, pdf, doc ou docx | max. 50 Mo)</i>
+                                    </label>
+                                </td>
+                            </tr>
+                        </table><br><br>
+                         <table border="0" width="50%">
+                            <tr>
+                                <td><button id="btnp" type="submit" value="traiter" class="btn btn-primary pull-left form-control"  name="traiter"><span class="gi gi-ok-sign"> Renvoyer </span></button></td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td><a class="btn btn-primary pull-right form-control"  href="{{ path('coordinateur_compile', { 'id': id }) }}">&nbsp; Retour &nbsp;   </a></td>
+                            </tr>
+                        </table>
+                       
+                    </div>
+        </div>
+        {{ form_end(form) }}
+        <ul>
+            <li>
+                <a href="{{ path('courrier_new') }}">Transmettre diligence</a>
+            </li>
+        </ul>
+    </div>
+    {% endblock %}

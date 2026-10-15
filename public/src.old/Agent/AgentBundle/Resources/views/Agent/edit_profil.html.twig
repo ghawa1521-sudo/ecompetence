@@ -1,0 +1,91 @@
+{% extends '::base.html.twig' %}
+{% block css %}
+   <link href="{{ asset('design/css/style.css') }}" rel="stylesheet"/>
+       <link rel="stylesheet" href="{{asset('ediligence/assets/css/bootstrap-select.min.css')}}">
+{% endblock %}
+
+{% block body -%}
+    <h1 align="center">MODIFICATION DES INFORMATIONS DU PROFIL </h1>
+    
+    <div style="background-color: #ededed;" class="col-md-push-2 col-md-8">
+        <div style="color:black; font-size: 1.5em;">{{entity.nom}} {{entity.prenoms}}, <span style="color: red;">{{entity.matricule}} - {{entity.emploi}}</span> 
+        <br><br>
+        </div> 
+        
+    
+    {{ form_start(edit_form) }}
+    {{ form_errors(edit_form) }}
+
+{{ form_errors(edit_form.Lieu_Naissance) }}
+{{ form_label(edit_form.Lieu_Naissance, 'Lieu de Naissance', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}        
+{{ form_widget(edit_form.Lieu_Naissance) }}
+
+{{ form_errors(edit_form.telPort) }}
+{{ form_label(edit_form.telPort, 'Téléphone Portable', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}        
+{{ form_widget(edit_form.telPort) }}
+
+{{ form_errors(edit_form.quartier) }}
+{{ form_label(edit_form.quartier, 'Lieu d\'Habitation', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}        
+{{ form_widget(edit_form.quartier) }}
+{#
+{{ form_errors(edit_form.emailPerso) }}
+{{ form_label(edit_form.emailPerso, 'E-mail Personnelle', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}        
+{{ form_widget(edit_form.emailPerso) }}#}
+<div>
+<label class="control-label col-md-12 col-sm-12 col-xs-12 control-label">E-mail Personnel</label>
+<ul class="tags" data-prototype="{{'<div class="col-md-11">'|e}}{{ form_widget(edit_form.adresse.vars.prototype.email)|e('html_attr') }}{{'</div>'|e}}">
+
+        {# iterate over each existing tag and render its only field: name #}
+        
+        {% for adr in edit_form.adresse %}
+            <li><div class="col-md-11">{{ form_widget(adr.email) }}</div></li>
+        {% endfor %}
+</ul>
+</div>
+<div class="row">
+<div class="col-md-6">
+{{ form_errors(edit_form.persUrgent1) }}
+{{ form_label(edit_form.persUrgent1, 'Personne 1 à Contacter en cas d\'urgence') }}        
+{{ form_widget(edit_form.persUrgent1) }}
+</div>
+<div class="col-md-6">
+{{ form_errors(edit_form.telUrgent1) }}
+{{ form_label(edit_form.telUrgent1, 'N° Téléphone Urgent 1') }}        
+{{ form_widget(edit_form.telUrgent1) }}
+</div>
+</div>
+<div class="row">
+<div class="col-md-6">
+{{ form_errors(edit_form.persUrgent2) }}
+{{ form_label(edit_form.persUrgent2, 'Personne 2 à Contacter en cas d\'urgence') }}        
+{{ form_widget(edit_form.persUrgent2) }}
+</div>
+<div class="col-md-6">
+{{ form_errors(edit_form.telUrgent2) }}
+{{ form_label(edit_form.telUrgent2, 'Téléphone Urgent 2') }}        
+{{ form_widget(edit_form.telUrgent2) }}
+</div>
+<div class="col-md-6">
+{{ form_errors(edit_form.imageFile) }}
+{{ form_label(edit_form.imageFile, ' ', {'label_attr': {'class': ''}} ) }}
+{{ form_widget(edit_form.imageFile) }}
+</div>
+<div class="col-md-6">
+{{ form_errors(edit_form.cvFile) }}
+{{ form_label(edit_form.cvFile, ' ', {'label_attr': {'class': ''}} ) }}
+{{ form_widget(edit_form.cvFile) }}
+</div>
+</div>
+
+
+{{ form_row(edit_form._token) }}
+{{ form_row(edit_form.submit) }}
+                
+    </div>
+   
+</ul>
+{% endblock %}
+{% block javascript %}
+    <script src="{{ asset('ediligence/assets/js/bootstrap-select.min.js') }}"></script>
+
+{% endblock %}

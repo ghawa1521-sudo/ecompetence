@@ -1,0 +1,381 @@
+{% extends '::gabarit_cv_preview.html.twig' %}
+{%from "EcompetenceBundle:macro:macro.html.twig" import recursiveDomaine,recursiveDomaineAff%}
+
+{% block body %}
+    <style>
+      .avatar-view {
+      
+        box-shadow: 0px 0px 0px !important;
+        width:150px !important;
+        height:150px  !important;
+    }
+
+    img{
+        width:150px !important;
+        height:150px  !important;  
+    }
+     
+    </style>
+     
+                <div class="x_panel" style="background-color:white;border:0px !important;">
+                    <div class="x_content col-md-12">
+
+                         <div class="col-md-7 col-sm-3 col-xs-12 profile_left">
+                     
+                            <table>                 
+                         
+                               <tr>  
+                         
+                                    <td style="font-weight: bold;font-size:20px; border:0px"> <b>
+                                        {% if (agent.nom) %}
+                                        {{ agent.nom }}<br>
+                                        {% endif %}
+                                        {% if (agent.prenoms) %}
+                                        {{ agent.prenoms }}<br>
+                                        {% endif %}</b>
+                                        {#{% if (agent.emploi) %}
+                                        {{ agent.emploi.libEmpl }}<br>
+                                        {% endif %}#}
+                                        {% if (agent.matricule) %}
+                                        <b  style="color: red;" >{{ agent.matricule }} </b><br>
+                                        {% endif %}
+                                        {% if (agent.type) %}
+                                        {{ agent.type }}<br>
+                                        {% endif %}
+                                        {% if (agent.situationMatri) %}
+                                        {{ agent.situationMatri }}<br>
+                                        {#{% if (agent.nbEnf) %}/ {{ agent.nbEnf }} enfant(s){% endif %}#}
+                                        {% endif %}
+                                        {% if (agent.fonction) %}
+                                        {{ agent.fonction }}<br>
+                                        {% endif %}
+                                        
+                                    </td>
+                                </tr>
+                                
+                            
+                                 {#<tr>
+                                   <td style="font-size:16px; border:0px;font-weight:normal;">
+                                        {% if (agent.dateNaiss) %}
+                                        Né le {{ agent.dateNaiss|date('d-m-Y') }} 
+                                        {% endif %}
+                                        {% if (agent.LieuNaissance) %}
+                                         à {{agent.LieuNaissance.lieuNaiss}} 
+                                        {% endif %}</td>
+                                </tr>#}
+                                 <tr>
+                                   
+                                    <td style="font-size:16px; border:0px;font-weight:normal;">
+                                        {% if (agent.telPort) %}
+                                         CEL: {{agent.telPort}}<br>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    
+                                    <td style="font-size:16px; border:0px;font-weight:normal;">
+                                        {% if (agent.email) %} 
+                                         E-MAIL : 
+                                                  {%for adr in agent.adresse%}
+                                                  {{adr.email}} /
+                                                  {% endfor %}
+                                                  {{agent.email}} 
+                                        {% endif %}</td>
+                                </tr>
+                                {#<tr>
+                                  
+                                    <td style="font-size:16px; border:0px;font-weight:normal;">{% if (agent.emailPerso) %}{{agent.emailPerso}}{% endif %}
+                                    {%for adr in agent.adresse%}
+                                        {{adr.email}}  
+                                    {% endfor %}
+                                    </td>
+                                    
+                                </tr>#}
+                                <tr>
+                                  
+                                    {#<td style="font-size:16px; border:0px;font-weight:normal;"> 
+                                        {% if (agent.nbEnf) %}/ {{ agent.nbEnf }} enfant(s){% endif %} </td>#}
+                                </tr>
+                          </table> 
+                           
+                      </div>  
+            
+             <div class=" col-md-5">
+                     <div class=" col-md-1"></div>  
+                     <div class=" col-md-7">             
+                       <div  title="Change the avatar">                                      
+                         {% if (agent.imageName) %}
+                            <img src="{{ vich_uploader_asset(agent, 'imageFile') }}" alt="{{ agent.imageName }} Avatar">
+                         {% elseif (agent.sexe.id == 1 ) %}
+                           <img src="{{ asset('images/img_test_agent.png')}}" Avatar>
+                            {% elseif (agent.sexe.id == 2 ) %}
+                              <img src="{{ asset('images/woman.png')}}" Avatar>
+                         {% endif %}
+                         </div>
+                     </div>
+                     <div>
+                    <div class=" col-md-4"></div>                                         
+             
+             </div>
+             </div>
+            <div class="row" style="text-align:center;font-size:30px;color:#19166E;"> <br/>
+              <b> {% if (agent.emploi) %}
+                  {{ agent.emploi.libEmpl }}
+                  {% endif %}</b>
+            </div>
+           
+       
+       
+      </div>
+
+    
+    
+    
+    
+    
+    <style type="text/css">
+        td{
+            color:black;
+        }
+        th{
+            text-align: left;
+        }
+        p{color:black;}
+        h2{
+            margin-top:0px;
+            margin-bottom:1px;
+            color:#19166E;
+
+        }
+         hr{
+            border-top: 1px solid #19166E;
+            margin-top:0px;
+            margin-bottom:1px;
+        }
+         #bas{
+            border-top: 2px solid #19166E;
+            margin-top:0px;
+            margin-bottom:1px;
+        }
+        .panel{
+            margin-top:0px !important ;
+            margin-bottom:0px !important ;
+            
+        }
+        .panel-body
+        {   margin-top:0px !important ;
+            margin-bottom:0px !important ;
+            
+        }
+
+    </style>
+    
+     
+      <div class="col-lg-12"> 
+       {% if competences %}   
+               <div class="row">
+        <div class="panel">
+            <div class="panel-heading"><h2><b>Domaines de compétences</b></h2><hr><hr id='bas'></div>
+            <div class="panel-body"style="color:black;">
+             
+                                <div id="">
+                                    <ul> 
+                                      
+                                        {% for pere in  peres %}
+                                           {{recursiveDomaineAff(pere.competence,cp)}}
+                                        {#{% for listedomaine in listedomaines %}
+                                           {% if (listedomaine.parent==null)%}
+                                            
+                                            {{recursiveDomaine(listedomaine)}}
+                                          {% endif %}#}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+              
+            </div>
+           </div>
+     {% endif %}
+    </div>
+    
+         {%if(formation)%} 
+         <div class="row">
+           <div class="panel">
+            <div class="panel-heading"><h2><b>Parcours académiques et professionnels </b></h2><hr><hr id='bas'></div>
+            <div class="panel-body">
+ 
+       <table style='width:100%;margin-left:2px; margin-top:5px;'>
+       <tbody >
+         
+           {% for format in formation%}
+            <tr role='row' heigth="20px">
+              <td td width="15%" style="color:black;padding:4px;">
+               <b>{%if(format.dateObtentiondiplo)%}{{format.dateObtentiondiplo|date('d-m-Y') }} :{%endif%}</b>
+           </td>
+                <td width="85%">
+                            {% if format.typeFormation %}
+                            <strong>({{ format.typeFormation.libTypeFormation }})</strong>
+                    {% endif %}
+                     
+                     {%if(format.libFormation)%}{{format.libFormation}} {%elseif(format.diplome) %}{{format.diplome.libDiplome}} {%if(format.specialite)%}{{format.specialite.libspecialite}} {%if(format.option)%} Option{{format.option.libOption}} {%endif%}  {%endif%}{%endif%} -
+                     {%if(format.etablissement)%}{{format.etablissement.nometablissement}}{%elseif(format.autreetablissement)%}{{format.autreetablissement}} {%endif%} <br>
+                     {#  {%if(expr.cvdirectiongle)%}{{expr.cvdirectiongle.libdirectiongle}} {%endif%}#}
+                </td>
+               
+            </tr>
+            <tr></tr>
+        
+            
+             {% endfor%}
+          
+         </tbody>     
+</table>
+
+   
+</div>
+        
+</div>
+</div>
+ {% endif%}
+    
+ {%if(exprs)%}  
+  <div class="row">
+           <div class="panel">
+            <div class="panel-heading"><h2><b>Expériences professionnelles</b></h2><hr><hr id='bas'></div>
+            <div class="panel-body"> 
+           <table style='width:100%;margin-left:2px;'>
+        <tbody>
+         
+           {% for expr in exprs%}
+            <tr role='row'>
+             
+                <td colspan="2" style="color:black;">
+                      <b>{%if(expr.dateDebExp)%} Du {{expr.dateDebExp|date('d-m-Y')}} {%endif%}
+                      {%if(expr.dateFinExp)%} au {{expr.dateFinExp|date('d-m-Y')}} :{%else%} à Aujourd'hui : {%endif%}</b>
+                      {%if(expr.fonction)%}{{expr.fonction.libFonc}}  {%elseif(expr.libExp) %}{{expr.libExp}}   {%endif%}
+                      {% if(expr.secteur.id==1) %}
+                        
+                         {% if(expr.directionGenerale)%}- {{expr.directionGenerale}}-{{expr.nomEmployeur}} {%else%} - {{expr.nomEmployeur}} {%endif%}
+                            
+                        {%else%}
+                         {%if(expr.nomEmployeur)%}- {{expr.nomEmployeur}} {%endif%}
+                      {%endif%}
+                </td>
+            </tr>
+             <tr>
+               <td colspan="2" > 
+                
+                {%if(expr.mission)%}
+                  <i> <u> Missions </u></i><br>
+                  <p> 
+                    {{expr.mission|raw}}   
+                   {%endif%}
+                  </p>
+                   <br>
+               </td>
+             
+            </tr>
+            
+           {% endfor%}
+          
+         </tbody>
+       
+</table>  
+</div>
+<div class="col-lg-1"> 
+</div>        
+</div>
+</div>
+
+  {% endif%} 
+
+
+    {%if (niveaulangue)%}               
+     <div class="row">
+      <div class="panel">
+         <div class="panel-heading"><h2><b>Langues pratiquées</b></h2><hr><hr id='bas'></div>
+            <div class="panel-body">
+              
+                 {%for nivlang in niveaulangue%}
+                  <div class="row "style="margin-left:5px;color:black;">
+                       <ul type='square'>
+                         <li>
+                        <label><b >{{nivlang.langue.liblangue}}</b> :  <i>Lire : {%if (nivlang.lire)%} {{nivlang.lire}}{%endif%} , Ecrire : {%if (nivlang.ecrire)%}{{nivlang.ecrire}}{%endif%}, Parler: {%if (nivlang.parler)%}{{nivlang.parler}}{%endif%}</i></label>
+                        </li>
+                       </ul>
+                  </div>
+                 {%endfor%}         
+            </div>
+        </div>
+       </div>
+        {%endif%} 
+        {#{%if (niveaulangue)%} 
+         <div class="row">
+          <div class="panel">
+            <div class="panel-heading"><h2><b>Informations supplémentaires</b></h2><hr><hr id='bas'></div>
+            <div class="panel-body"> 
+            {%for nivlang in niveaulangue%}
+                <div class="row "style="margin-left:5px;color:black;">
+                       <ul type='square'>
+                         <li>
+                        <label><b >{{nivlang.langue.liblangue}}</b> :  <i>Lire : {%if (nivlang.lire)%} {{nivlang.lire}}{%endif%} , Ecrire : {%if (nivlang.ecrire)%}{{nivlang.ecrire}}{%endif%}, Parler: {%if (nivlang.parler)%}{{nivlang.parler}}{%endif%}</i></label>
+                        </li>
+                       </ul>
+                </div>
+          {%endfor%}         
+          
+            </div>
+        </div>
+         {%endif%}#}
+        </div>
+          {# ===================== DIVERS ===================== #}
+
+{% if connaissances or decorations %}
+<div class="row">
+    <div class="panel">
+        <div class="panel-heading">
+            <h2><b>Informations supplémentaires</b></h2>
+            <hr><hr id='bas'>
+        </div>
+
+        <div class="panel-body" style="color:black;">
+
+            {# ---- CONNAISSANCES INFORMATIQUES ---- #}
+            {% if connaissances %}
+                <div class="row" style="margin-left:5px;">
+                    <ul type="square">
+                        {% for connaissance in connaissances %}
+                            <li>
+                                <label>
+                                    <b>{{ connaissance.libelle }}</b> :
+                                    <i>{{ connaissance.niveau }}</i>
+                                </label>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <br>
+            {% endif %}
+
+            {# ---- DECORATIONS ---- #}
+            {% if decorations %}
+                <div class="row" style="margin-left:5px;">
+                    <ul type="square">
+                        {% for decoration in decorations %}
+                            <li>
+                                <label>
+                                    <b>{{ decoration.libelle }}</b>
+                                    ({{ decoration.annee }})
+                                </label>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endif %}
+
+  {% endblock %}

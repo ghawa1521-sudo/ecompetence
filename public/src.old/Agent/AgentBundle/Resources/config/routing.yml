@@ -1,0 +1,116 @@
+agent_regularisation:
+    resource: "@AgentBundle/Resources/config/routing/regularisation.yml"
+    prefix:   /regularisation
+
+agent_deleguer:
+    resource: "@AgentBundle/Resources/config/routing/deleguer.yml"
+    prefix:   /deleguer
+
+agent_avis:
+    resource: "@AgentBundle/Resources/config/routing/avis.yml"
+    prefix:   /avis
+
+agent_deleguation:
+    resource: "@AgentBundle/Resources/config/routing/deleguation.yml"
+    prefix:   /deleguation
+
+agent_adresse:
+    resource: "@AgentBundle/Resources/config/routing/adresse.yml"
+    prefix:   /adresse
+
+agent_mutation:
+    resource: "@AgentBundle/Resources/config/routing/mutation.yml"
+    prefix:   /mutation
+
+agent_imputation:
+    resource: "@AgentBundle/Resources/config/routing/imputation.yml"
+    prefix:   /imputation
+
+agent_decision:
+    resource: "@AgentBundle/Resources/config/routing/decision.yml"
+    prefix:   /decision
+
+agent_pj:
+    resource: "@AgentBundle/Resources/config/routing/pj.yml"
+    prefix:   /pj
+
+agent_affecter:
+    resource: "@AgentBundle/Resources/config/routing/affecter.yml"
+    prefix:   /affecter
+
+agent_document:
+    resource: "@AgentBundle/Resources/config/routing/document.yml"
+    prefix:   /document
+
+agent_conges:
+    resource: "@AgentBundle/Resources/config/routing/conges.yml"
+    prefix:   /conges
+
+agent_direction:
+    resource: "@AgentBundle/Resources/config/routing/direction.yml"
+    prefix:   /direction
+
+agent_grade:
+    resource: "@AgentBundle/Resources/config/routing/grade.yml"
+    prefix:   /grade
+
+agent_fonction:
+    resource: "@AgentBundle/Resources/config/routing/fonction.yml"
+    prefix:   /fonction
+
+agent_emploi:
+    resource: "@AgentBundle/Resources/config/routing/emploi.yml"
+    prefix:   /emploi
+
+agent_echelon:
+    resource: "@AgentBundle/Resources/config/routing/echelon.yml"
+    prefix:   /echelon
+
+agent_classe:
+    resource: "@AgentBundle/Resources/config/routing/classe.yml"
+    prefix:   /classe
+
+agent_syndicat:
+    resource: "@AgentBundle/Resources/config/routing/syndicat.yml"
+    prefix:   /syndicat
+
+agent_type:
+    resource: "@AgentBundle/Resources/config/routing/type.yml"
+    prefix:   /type
+
+agent_agent:
+    resource: "@AgentBundle/Resources/config/routing/agent.yml"
+    prefix:   /agent
+
+agent_news:
+    resource: "@AgentBundle/Resources/config/routing/news.yml"
+    prefix:   /news
+
+agent_tableau:
+    path:     /{id}/tableau
+    defaults: { _controller: AgentBundle:Default:tableau}
+
+stat_details:
+    path:     /{id}/stat/details/{names}/{cat}/{lbl}
+    defaults: { _controller: AgentBundle:Default:detailsTab, id:0, names:null, cat:null, lbl:null}
+
+stat_listes:
+    path:     /statlistes/{id}/{names}/{cat}
+    defaults: { _controller: AgentBundle:Default:listestats,id:0, names:null, cat:null}
+
+tracking_audit:
+    path:     /audit
+    defaults: { _controller: UsersBundle:Audit:index }
+    methods:  GET
+    
+tracking_diff:
+    path:     /audit/diff/{id}
+    defaults: { _controller: UsersBundle:Audit:diff }
+    methods:  GET
+
+index:
+    path:     /index
+    defaults: { _controller: AgentBundle:Imputation:index }
+#soutrat:
+#    path:     /soutra
+#    defaults: { _controller: AgentBundle:Agent:soutra }

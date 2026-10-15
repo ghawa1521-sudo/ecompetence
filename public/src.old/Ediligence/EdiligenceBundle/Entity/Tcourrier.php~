@@ -1,0 +1,211 @@
+<?php
+
+namespace Ediligence\EdiligenceBundle\Entity;
+
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Tcourrier
+ *
+ * @ORM\Table(name="tcourrier")
+ * @ORM\Entity(repositoryClass="Ediligence\EdiligenceBundle\Repository\TcourrierRepository")
+ * @UniqueEntity(fields={"exercice","numenregistrement"},
+ *                       errorPath="numenregistrement",
+ *                       message="Ce numéro est déjà utilisé pour cette année",)
+ */
+class Tcourrier {
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="refOrigine", type="string", length=30, nullable=true)
+     */
+    private $reforigine;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="DateOrigine", type="date", nullable=false,nullable=true)
+     */
+    private $dateorigine;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="NumEnregistrement", type="integer", nullable=false,unique=true)
+     * 
+     */
+    private $numenregistrement;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Objet",  type="text", nullable=false, length=65535)
+     */
+    private $objet;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ObservationScecour", type="text", length=50, nullable=false)
+     */
+    private $observationscecour;
+
+   /**
+     * @ORM\ManyToOne(targetEntity="Texpediteur", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $adresseenreg ;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="CodeTypeCour", type="integer", nullable=false)
+     */
+    private $codetypecour = '1';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="etatCourrier", type="integer", nullable=false)
+     */
+    private $etatcourrier = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="codNatCour", type="integer", nullable=false)
+     */
+    private $codnatcour = '1';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="exercice", type="integer", nullable=false)
+     */
+    private $exercice = '2017';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="etataff", type="integer", nullable=false)
+     */
+    private $etataff = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id_cord", type="integer", nullable=true)
+     */
+    private $idCord;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="id_invits", type="string", length=25, nullable=true)
+     */
+    private $idInvits=null;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Id_identifiant", type="string", length=25, nullable=false)
+     */
+    private $idIdentifiant = null;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="NumEnregistrements", type="string", length=150, nullable=true)
+     */
+    private $numenregistrements;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Tprovenance", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    
+    private $sourceCour;
+
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Dest_cour", type="string", length=20, nullable=true)
+     */
+    private $destCour;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="DATE_CREAT", type="datetime", nullable=true)
+     */
+    private $dateCreat;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="DATE_MODIF", type="datetime", nullable=true)
+     */
+    private $dateModif;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="Etat_reception", type="integer", nullable=false)
+     */
+    private $etatReception = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="etat_alert", type="integer", nullable=false)
+     */
+    private $etatAlert = '0';
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Ttypecourrier", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $typecourrier;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Agent\AgentBundle\Entity\Pj", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $piecejointe;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Texterieur", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $texterieur;
+    
+
+    public function __construct()
+    {
+        $this->dateCreat = new \DateTime();
+    }
+    
+    public function __toString()
+    {
+        return $this->getsourceCour();
+    }
+    
+    
+
+
+    
+}

@@ -1,0 +1,56 @@
+{% extends '::ediligence/base.html.twig' %}
+
+{% block body %}
+<div class="content-header">
+    <div class="header-section">
+        <h1>
+            <i class="gi gi-notes_2"></i>Diligences reçues<br><small>&nbsp;</small>
+        </h1>
+    </div>
+</div>
+<ul class="breadcrumb breadcrumb-top">
+    <li>Traitement d'une diligence</li>
+    <!--<li><a href="">Nouveau</a></li>-->
+</ul>
+<div class="row">
+ {{ form_start(form) }}
+    <div class="col-md-offset-2 col-md-8">
+        <div class="block"> 
+            <!-- Basic Form Elements Title -->
+            <div class="block-title">
+
+                <h2><strong>Traitement N° {{traitement}}</strong></h2>
+            </div>
+
+            <div style="float:right;" class="bien2">
+                <b>COURRIER: N° &nbsp; {{entities[0].courrier.id}}</b>
+            </div>
+            <div class="bien">
+                <b>DESTINATAIRE: <font color="#000000">&nbsp;{{entities[0].matriculeImput.nom}}&nbsp;{{entities[0].matriculeImput.prenoms}}</font></b><br>
+                <b>OBJET:<font color="#000000">&nbsp;{{entities[0].courrier.objet|raw|striptags|slice(0, 150) }}</font></b>
+            </div>
+            <div class="form-group bien">
+              {{ form_row(form.libtraitement, {'label':'OBSERVATIONS'}) }} 
+            </div>
+           <label>
+              {{form_widget(form.pjtraitement.imageFile,{'attr':{'required':true}})}}
+            <i style="margin-bottom: 5px;">Format du Fichier (jpg, png, pdf, doc ou docx | max. 50 Mo)</i>
+          </label>
+          <button id="btnp" type="submit" value="traiter" class="btn btn-primary pull-right form-control" name="traiter"><span class="glyphicon glyphicon-ok-sign"> Soumettre le traitement au DG</span></button>
+          {{ form_row(form.idImput, {'value':id}) }} 
+          {{ form_row(form.imputdir, {'label':' '}) }}  
+          {#<input type="hidden" name="imput" value="{{id}}">
+         <input type="hidden" name="id_courrier" value="{{entities[0].courrier.id}}">
+          <input type="hidden" name="nbrePers" value="{{entities[0].nbrePers}}">
+          <input type="hidden" name="cledirimput" value="">
+          <input type="hidden" name="trt" value="{{traitement}}">#}
+        </div>
+{{ form_end(form) }}
+    </div>
+</div>
+<ul>
+    <li>
+        <a href="{{ path('reception') }}">&nbsp;</a>
+    </li>
+</ul>
+{% endblock %}

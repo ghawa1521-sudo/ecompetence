@@ -1,0 +1,225 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+
+{# <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header panel-primary">
+                <h5 class="modal-title" id="exampleModalLabel">Ajouter un nouvel employeur</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {{ form_start(form1,{'id':'#form_body'})}}
+                {{ form_errors(form1) }}
+                <div class="form-group row">
+                    {{ form_label(form1.secteur, 'Secteur', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                    {{ form_errors(form1.secteur) }}
+                    {{ form_widget(form1.secteur, {'id':'sect','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                </div>
+                <div class="form-group row">
+                    {{ form_label(form1.libStructure, 'Nom Employeur', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                    {{ form_errors(form1.libStructure) }}
+                    {{ form_widget(form1.libStructure, {'id':'str1','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <input type="button" id="btn_valid" data-dismiss="modal" class="btn btn-primary" value="Enregistrer"/>
+            </div>
+            {{ form_row(form1._token) }}
+            {{ form_end(form1,{render_rest:false}) }}
+        </div>
+    </div>
+</div> #}
+
+<div class="x_panel">
+    <hr>
+    <div class="row">
+        <div class=""></div>
+        <div class="col-md-12">
+            <div class="panel panel-success">
+                {% if(modif==false) %}
+                    <div class="panel-heading"><h2>Nouvelle expérience professionnelle</h2></div>
+                {% else %}
+                    <div class="panel-heading"><h2>Modification d'expérience professionnelle</h2></div>
+                {% endif %}
+                <div class="panel-body">
+
+                    {{ form_start(form,{'attr': {'novalidate': 'novalidate','id':'form_experience'}}) }}
+                    {{ form_errors(form) }}
+
+                    <div class="col-md-5">
+                        <div class="form-group row">
+                            {{ form_label(form.dateDebExp, 'Date début', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                            {{ form_errors(form.dateDebExp) }}
+                            {{ form_widget(form.dateDebExp) }}
+                        </div>
+                        <div class="form-group row">
+                            {{ form_label(form.dateFinExp, 'Date fin', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                            {{ form_errors(form.dateFinExp) }}
+                            {{ form_widget(form.dateFinExp) }}
+                        </div>
+
+                        <!-- Secteur -->
+                        <div id="viewsct" class="form-group row">
+                            {{ form_label(form.secteur, 'Secteur', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                            {{ form_errors(form.secteur) }}
+                            {{ form_widget(form.secteur, {'id':'sec','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                        </div>
+
+                        <!-- Nom employeur -->
+                        <div id="viewstr_select" class="form-group row">
+                            {{ form_label(form.nomEmployeur, 'Nom de l\'employeur', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                            {{ form_errors(form.nomEmployeur) }}
+                            {{ form_widget(form.nomEmployeur, {'id':'str','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                        </div>
+                        {# <div id="viewstr_text" class="form-group row" style="display:none;">
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">Nom de l'employeur</label>
+                            <input type="text" id="str_text_input" class="form-control col-md-7 col-xs-12" name="{{ form.autrestructure.vars.full_name }}">
+                        </div> #}
+
+                    </div>
+
+                    <div class="col-lg-offset-2 col-md-5">
+
+                        <!-- Direction générale -->
+                        <div id="viewcvdg_select" class="form-group row">
+                            {{ form_label(form.directionGenerale, 'Direction générale', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                            {{ form_errors(form.directionGenerale) }}
+                            {{ form_widget(form.directionGenerale, {'id':'cvdg','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                        </div>
+                        {# <div id="viewcvdg_text" class="form-group row" style="display:none;">
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">Direction générale</label>
+                            <input type="text" id="cvdg_input" class="form-control col-md-7 col-xs-12">
+                        </div> #}
+
+                        <!-- Direction -->
+                        <div id="viewcvdc_select" class="form-group row">
+                            {{ form_label(form.directionLibre, 'Direction', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                            {{ form_errors(form.directionLibre) }}
+                            {{ form_widget(form.directionLibre, {'id':'cvdc','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                        </div>
+                        {# <div id="viewcvdc_text" class="form-group row" style="display:none;">
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">Direction</label>
+                            <input type="text" id="cvdc_input" class="form-control col-md-7 col-xs-12">
+                        </div> #}
+
+                        <!-- Poste occupé -->
+                        {# <div id="_viewtxtpo" class="form-group row" style="display:block;">
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">Poste occupé</label>
+                            <input type="text" id="txtpo_input" class="form-control col-md-7 col-xs-12" name="{{ form.libExp.vars.full_name }}">
+                        </div> #}
+                         <div id="viewoptpo" class="form-group row">
+                            {{ form_label(form.posteOccupe, 'Poste occupé', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                            {{ form_errors(form.posteOccupe) }}
+                            {{ form_widget(form.posteOccupe, {'id':'optpo','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                        </div> 
+
+                    </div>
+
+                    <div class="col-md-12">
+                        <br>
+                        <div class='row'>
+                            <label class='col-md-6 col-sm-6 col-xs-12'>Saisir les missions</label>
+                        </div>
+                        <div id="viewmission" class="form-group row">
+                            {{ form_errors(form.mission) }}
+                            {{ form_widget(form.mission, {'id':'optmis','attr':{'class': 'control-label col-md-6 col-sm-6 col-xs-12 ckeditor'}})}}
+                        </div>
+
+                        <div class="form-group row">
+                        
+                            {{ form_widget(form.enregistrer, {'attr':{'class':'btn btn-primary'}}) }}
+                            <input type="hidden" name="bouton" value="1">
+                            <input type="hidden" id="modif" value="{{modif}}">
+                         
+
+                        </div>
+                    </div>
+                    {{ form_row(form._token) }}
+                    {{ form_end(form,{render_rest:false}) }}
+
+                    {# <div class="form-group row">
+                        <button style="position: absolute;top: 305px; left: 435px;" type="button" class="btn btn-primary glyphicon glyphicon-plus" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Autre</button>
+                    </div> #}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.help-block{
+    color:red;
+    font-weight:bold;
+}
+</style>
+
+{% endblock %}
+
+{% block javascript %}
+
+<script type="text/javascript">
+function toggleFieldsBySecteur() {
+    var secteur = $('#sec').val();
+
+    if (secteur == 2) { // Privé
+     $('#cvdg').val('');   
+     $('#cvdc').val(''); 
+    $('#viewtxtpo').show(); 
+       // $('#viewoptpo').hide();           // poste libre
+       // $('#viewstr_text').show(); 
+        $('#viewstr_select').show();   // nom employeur libre
+        $('#viewcvdg_select').hide(); 
+        //$('#cvdg').val()=null;
+       // $('#cvdc').val()=null;
+       // $('#viewcvdg_text').hide(); // directions masquées
+        $('#viewcvdc_select').hide();
+       //  $('#viewcvdc_text').hide();
+    } else if(secteur==1) { // Public
+        $('#viewtxtpo').show();
+        // $('#viewoptpo').hide();           // poste libre
+        //$('#viewstr_text').show();
+         $('#viewstr_select').show();   // nom employeur libre
+       // $('#viewcvdg_text').show(); 
+        $('#viewcvdg_select').show(); // directions libres
+       // $('#viewcvdc_text').show();
+         $('#viewcvdc_select').show();
+    }
+}
+
+ $(document).ready(function () {
+    toggleFieldsBySecteur();
+    $('#sec').change(toggleFieldsBySecteur);
+/*
+    // Copier les valeurs des champs libres dans les champs Symfony avant submit
+    $('#form_experience').submit(function() {
+        if ($('#viewstr_text').is(':visible')) {
+            $('#str').val($('#str_text_input').val());
+        }
+        if ($('#viewcvdg_text').is(':visible')) {
+            $('#cvdg').val($('#cvdg_input').val());
+        }
+        if ($('#viewcvdc_text').is(':visible')) {
+            $('#cvdc').val($('#cvdc_input').val());
+        }
+
+         // Nom employeur libre
+    if ($('#viewstr_text').is(':visible')) {
+        $('#autrestructure_hidden').val($('#str_text_input').val());
+    }
+
+    // Poste occupé libre
+    if ($('#viewtxtpo').is(':visible')) {
+        $('#libExp_hidden').val($('#txtpo_input').val());
+    }
+        
+
+    }); */
+});
+</script>
+
+{% endblock %}

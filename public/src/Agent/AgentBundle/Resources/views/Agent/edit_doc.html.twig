@@ -1,0 +1,58 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1 xmlns="http://www.w3.org/1999/html">Modification des Informations l'Agent <font color='red'>{{entity.nom}} {{entity.prenoms}}</font></h1>
+<div id="wizard" class="form_wizard wizard_horizontal">
+    
+        
+        
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+        
+        {{ form_label(form.matricule, 'Matricule', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+        {{ form_errors(form.matricule) }}
+        {{ form_widget(form.matricule, {'attr':{'class': 'form-control col-md-7 col-xs-12'}}) }}
+        
+        {{ form_row(form._token) }}
+        <input type="submit" class="btn btn-success btn-lg col-md-offset-4 col-md-4" value="Mettre à Jour" />
+         </div>
+        </div>
+        
+        
+    
+</div>      
+
+         
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('agent') }}">
+            Retour à la Liste
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block javascript %} 
+<script type="text/javascript" src="{{ asset('design/js/wizard/jquery.smartWizard.js') }}"></script>
+<script src="{{ asset('design/js/nicescroll/jquery.nicescroll.min.js') }}"></script>
+<script src="{{ asset('design/js/style.js') }}"></script>
+ <script type="text/javascript">
+        $(document).ready(function () {
+            // Smart Wizard 	
+            $('#wizard').smartWizard();
+
+            function onFinishCallback() {
+                $('#wizard').smartWizard('showMessage', 'Finish Clicked');
+                //alert('Finish Clicked');
+            }
+        });
+
+        $(document).ready(function () {
+            // Smart Wizard	
+            $('#wizard_verticle').smartWizard({
+                transitionEffect: 'slide'
+            });
+
+        });
+    </script>
+{% endblock %}

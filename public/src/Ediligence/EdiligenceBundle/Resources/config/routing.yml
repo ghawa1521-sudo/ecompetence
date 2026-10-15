@@ -1,0 +1,34 @@
+ediligence_charge:
+    resource: "@EdiligenceBundle/Resources/config/routing/etude.yml"
+    prefix:   /etude
+    
+ediligence_coord:
+    resource: "@EdiligenceBundle/Resources/config/routing/coordinateur.yml"
+    prefix:   /coordinateur
+    
+ediligence_reception:
+    resource: "@EdiligenceBundle/Resources/config/routing/treception.yml"
+    prefix:   /reception
+
+ediligence_courrier:
+    resource: "@EdiligenceBundle/Resources/config/routing/tcourrier.yml"
+    prefix:   /courrier
+
+ediligence_homepage:
+    path:     /
+    defaults: { _controller: EdiligenceBundle:Default:index }
+    methods:  [POST,GET]
+    
+ediligence_menu:
+    path:     /menu
+    defaults: { _controller: EdiligenceBundle:Default:menu }
+    
+ediligence_interne:
+    resource: "@EdiligenceBundle/Resources/config/routing/interne.yml"
+    prefix:   /interne    
+
+ediligence_stats:
+    path:     /stats
+    defaults: { _controller: EdiligenceBundle:Default:stats }
+    methods:  [POST,GET]
+#{name}

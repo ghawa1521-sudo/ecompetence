@@ -1,0 +1,114 @@
+courrier_csimput:
+    path:     /{id}/csimput
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:csimput" }
+    methods:  [POST, GET]
+    
+courrier_reg:
+    path:     /reg
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:reg" }
+    
+courrier_diligtrt:
+    path:     /diligtrt
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:diligtrt" }
+
+courrier_cstraiter:
+    path:     /{id}/cstraiter
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:cstraiter" }
+    methods:  [POST, GET]
+    
+courrier_csrecu:
+    path:     /csrecu
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:csrecu" }
+    
+courrier_int:
+    path:     /int
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:int" }
+    
+courrier_dgedel:
+    path:     /{id}/dgedel
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:dgedel" }
+    
+courrier_suivi:
+    path:     /suivi
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:suivi" }
+    
+courrier_imput:
+    path:     /{id}/imput
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:imput" }
+    methods:  [POST, GET]
+    
+courrier_dge:
+    path:     /dge/{todo}
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:dge",todo:1 }
+    
+courrier_emis:
+    path:     /emis/{todo}
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:emis",todo:1 }
+    
+courrier:
+    path:     /
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:index" }
+
+courrier_archive:
+    path:     /{id}/archive
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:archive" }
+    methods:  [POST, GET]
+    
+courrier_show:
+    path:     /{id}/show
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:show" }
+
+courrier_new:
+    path:     /new/{todo}
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:new",todo:1 }
+
+courrier_create:
+    path:     /create/{todo}
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:create",todo:1 }
+    methods:  POST
+
+courrier_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:edit" }
+
+courrier_update:
+    path:     /{id}/update
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:update" }
+    methods:  [POST, PUT]
+
+courrier_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:delete" }
+    methods:  [POST, DELETE]
+    
+courrier_interne_imput:
+    path:     /interne_imput/{id}
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:interne_imput"}
+    methods:  [POST,GET]
+    
+courrier_imput_del:
+    path:     /{id}/imput_del
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:imput_del" }
+    
+courrier_depart_imput:
+    path:     /depart_imput/{id}
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:depart_imput"}
+    methods:  [POST,GET]
+    
+courrier_depart_del:
+    path:     /{id}/depart_del
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:depart_del" }
+
+courrier_recu_depart:
+    path:     /recu_depart
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:recu_depart" }
+    
+courrier_recap_trait:
+    path:     /{id}/recap_trait
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:recap_trait" } 
+    methods:  GET
+    
+courrier_dgedel1:
+    path:     /{id}/dgedel1
+    defaults: { _controller: "EdiligenceBundle:Tcourrier:dgedel1" }
+   

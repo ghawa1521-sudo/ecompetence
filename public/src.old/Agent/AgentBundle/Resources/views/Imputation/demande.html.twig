@@ -1,0 +1,125 @@
+    {% extends '::base.html.twig' %}
+
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+{% endblock %}
+
+{% block titre_page %}
+    <div><h1>Demandes Reçues</h1></div>
+{% endblock %}
+{% block body %}
+
+
+
+  <!-- Nav tabs -->
+  {#
+  <ul class="nav nav-tabs bar_tabs" role="tablist">
+
+    {% if is_granted('ROLE_RESPO_SRHMG') %}
+    <li role="presentation" class="active"><a href="#serv1" aria-controls="profile" role="tab" data-toggle="tab">Demandes d'absences Autres Services</a></li>
+    <li role="presentation"><a href="#serv2" aria-controls="messages" role="tab" data-toggle="tab">Autres type de Demandes</a></li>
+    <li role="presentation"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Mon service</a></li>
+    <li role="presentation"><a href="#serv3" aria-controls="message" role="tab" data-toggle="tab">Archives des Demandes</a></li>
+    {% else %}
+    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Mon service</a></li>
+    <li role="presentation"><a href="#serv3" aria-controls="message" role="tab" data-toggle="tab">Archives des Demandes</a></li>
+    {% endif %}
+
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+
+
+    {% if is_granted('ROLE_RESPO_SRHMG') %}
+    <div role="tabpanel" class="tab-pane active" id="serv1">
+#}
+    <table class="records_list table table-striped responsive-utilities jambo_table bulk_action">
+        <thead>
+            <tr>
+                <th rowspan="2">Date Demande</th>
+                <th rowspan="2">Matricule</th>
+                <th rowspan="2">Nom et Prénoms</th>
+                <th rowspan="2">Type Demande</th>
+                <th rowspan="2">Objet</th>
+                
+                <th colspan="3">ETAT VALIDATION</th>
+                <th rowspan="2">Actions</th>
+            </tr>
+            <tr>
+              <th>Chef de Section / Chef de Service</th>
+              <th>Directeur / Chef de Service Rattaché</th>
+              <th>Service Ressources Humaines</th>
+            </tr>
+        </thead>
+    {% for entity in entities %}
+        <tr>
+            <td>{% if entity.datecreation %}{{ entity.datecreation|date('d-m-Y H:i:s') }}{% endif %}</td>
+            <td>{{ entity.emmeteur.matricule }}</td>
+            <td>{{ entity.emmeteur.nom }} {{ entity.emmeteur.prenoms }}</td>
+            <td>{{ entity.typeDemande }}</td>
+            <td>{{ entity.objet }}</td>
+
+            
+            <td align="center">{% if (entity.Etatrepsupdir == 0) %}{# Etat 0  En attente#}
+                <span class="label label-warning">En Attente</span>
+                {% elseif (entity.Etatrepsupdir == 1) %}
+                <span class="label label-success">Validé</span>
+                {% elseif (entity.Etatrepsupdir == 2) %}
+                <span class="label label-danger">Refusé</span>
+                <br>
+                {{entity.motifRejet}}
+            {% endif %}
+                {% if entity.dateRepSupDir %}<br>{{ entity.dateRepSupDir|date('d-m-Y H:i:s') }}{% endif %}
+            </td>
+            
+            <td align="center">
+                {% if (entity.Etatrepsupdir2 == 0) and (entity.Etatrepsupdir == 1) %}{# Etat 0  En attente#}
+                <span class="label label-warning">Nouveau</span>
+                {% elseif (entity.Etatrepsupdir2 == 1) %}
+                <span class="label label-success">Validé</span>
+                {% elseif (entity.Etatrepsupdir2 == 2) %}
+                <span class="label label-danger">Refusé</span>
+                <br>
+                {{entity.motifRejet}}
+                {% endif %}
+                {% if entity.dateRepSupDir2 %}<br>{{ entity.dateRepSupDir2|date('d-m-Y H:i:s') }}{% endif %}
+
+        </td>
+        <td align="center">{% if(entity.Etatrepgrh == 0 and entity.etatRepSupDir2 == 1 ) %}{# Etat 0  En attente#}
+            <span class="label label-warning">Nouveau</span>
+            {% elseif (entity.Etatrepgrh == 1) %}
+            <span class="label label-success">Validé</span>
+            {% elseif (entity.Etatrepgrh == 2) %}
+            <span class="label label-danger">Refusé</span>
+            <br>
+            {{entity.motifRejet}}
+            {% endif %}
+            {% if entity.dateRepGrh %}<br>{{ entity.dateRepGrh|date('d-m-Y H:i:s') }}{% endif %}
+
+    </td>
+    <td>
+    {% if 
+    (((entity.Etatrepsupdir == 0) and (entity.SupDir == app.user.agent)) or 
+    ((entity.Etatrepsupdir2 == 0) and (entity.SupDir2 == app.user.agent)) or
+    ((entity.Etatrepgrh == 0) and (entity.Grh == app.user.agent)))
+    %}
+
+        <a href="{{ path('demande_show', { 'id': entity.id }) }}" class="btn btn-info btn-xs">Autoriser / Refuser</a>
+    {% endif %}
+
+                    <!--
+                    <li>
+                        <a href="{{ path('demande_valid', { 'id': entity.id }) }}">Valider</a>
+                    </li>
+                -->
+
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
+
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}

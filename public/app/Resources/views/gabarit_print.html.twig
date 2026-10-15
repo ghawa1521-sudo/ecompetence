@@ -1,0 +1,296 @@
+{#<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block bootstrap %}{% endblock %}
+    <style>
+    @font-face {
+     font-family: 'CenturyFont';
+        src:  url("{{app.request.getSchemeAndHttpHost() ~ asset('design/fonts/CenturyGothicRegular.ttf') }}") format('truetype');
+   }
+    @font-face {
+        font-family: 'CenturyFontBold';
+        src:  url("{{app.request.getSchemeAndHttpHost() ~ asset('design/fonts/Century-gothic-bold.ttf') }}") format('truetype');
+    }
+    .gras{
+        font-family: CenturyFontBold !important;
+        font-weight: bold;
+    }
+/*
+   @page{
+     margin-top: 2px;
+     margin-bottom: 2px !important;
+   }
+       #entete{
+         position: relative;
+         margin-left: -50px;
+         margin-right: 10px;
+       }
+      #footer {
+        position: fixed;
+        margin-left: 0px;
+        margin-right: 0px;
+        color: #fff;
+        background-color: green;
+        bottom: 0px;
+        height: 40px;
+      }
+
+*/
+
+    </style>
+</head>
+<body>
+  <div style="font-family: CenturyFont; height:297mm;">
+  <table border="0" height="297mm" width="100%">
+    <tr>
+      <td height="1%">
+        {{app.user.agent.nom|slice(0,1)~app.user.agent.prenoms|slice(0,1)}}
+      </td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr style="font-size:1.2em; line-height: 1.3em;">
+      <td width="42%" height="25%" valign="top">
+          <div align="center">
+          <div style="text-align:left;">MINISTERE DE L'ECONOMIE ET DES FINANCES
+          </div>
+          <div>-----------------------</div> <br>
+          <div>
+          <img src="{{app.request.getSchemeAndHttpHost() ~ asset('images/logoDGE.png') }}" width="220px" />
+          </div>
+          <br>
+          <div style="text-align:left;">DIRECTION GENERALE DE L'ECONOMIE</div>
+
+          -----------------------
+          <br />
+          <div style="text-align:center;">
+            <div style="font-size: 1.5em;;">
+              {% block service %}{% endblock %}
+            </div>
+          <div style="text-align:left; margin-top:100px;">
+              {% block ref %} {% endblock %}
+          </div>
+
+        </div>
+      </td>
+      <td width="25%"></td>
+      <td valign="top">
+        <table border="0" height="100%" style="line-height:1.4em;">
+          <tr>
+            <td valign="top">
+           REPUBLIQUE DE COTE D'IVOIRE
+
+          <br>
+          <div style="text-align:center;">
+          Union - Discipline - Travail
+          <br>-----------------------
+        </div>
+          </td>
+          </tr>
+          <tr><td>
+          <div style="text-align:left;" valign="bottom">
+                Abidjan, le {% block datePdf %}{% endblock %}
+          </div>
+          </td></tr>
+          </table>
+        </td>
+    </tr>
+    <tr>
+      <td colspan="3" height="15%">
+        <div class="row" align="center">
+
+          <h3> {% block titre %} {% endblock %}</h3>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3" height="30%" valign="top">
+        <div style="font-size:1.7em; text-align: justify; margin-top:5px;">
+      {% block contenuPdf %} {% endblock %}
+      </div>
+      </td>
+    </tr>
+    <tr>
+      <td height="25%" valign="top">
+        {% block ampliationPdf %}{% endblock %}
+      </td>
+      <td colspan="2"></td>
+    </tr>
+
+
+
+  </table>
+
+  }
+  <div id="footer" align="center" style="font-family: Century Gothic;">
+          Direction Générale de l'Economie (DGE), sise au 6éme étage, Imm. SCIAM Plateau .
+          <br/>Tél : (225) 20 20 09 09 / 20 20 09 03 / Fax: (225) 20 22 54 36
+        </div>
+  </div>
+
+
+
+
+{#
+<div id="footer" align="center" style="font-family: Century Gothic;">
+  Service des Ressources Humaines et des Moyens Généraux (SRHMG), sis au 4èm étage, Imm. ALLIANCE, plateau.
+  <br/>Tél : (225) 20 21 54 32
+</div>
+
+</body>
+
+</html>
+#}
+<!DOCTYPE html>
+<html lang="fr">
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block bootstrap %}{% endblock %}
+    <style>
+        @font-face {
+            font-family: 'CenturyFont';
+            src:  url("{{app.request.getSchemeAndHttpHost() ~ asset('design/fonts/CenturyGothicRegular.ttf') }}") format('truetype');
+        }
+        @font-face {
+            font-family: 'CenturyFontBold';
+            src:  url("{{app.request.getSchemeAndHttpHost() ~ asset('design/fonts/Century-gothic-bold.ttf') }}") format('truetype');
+        }
+        .gras{
+            font-family: CenturyFontBold !important;
+            font-weight: bold;
+        }
+
+        @page{
+            margin-top: 2px;
+            margin-bottom: 2px !important;
+        }
+        #entete{
+            position: relative;
+            margin-left: -50px;
+            margin-right: 10px;
+        }
+        #footer {
+            position: fixed;
+            margin-left: 0px;
+            margin-right: 0px;
+            margin-bottom: 2px !important;
+            color: #fff;
+            background-color: green;
+            bottom: 0px;
+            height: 40px;
+        }
+
+
+        table{
+        }
+
+    </style>
+</head>
+<body>
+    <div style="font-family: CenturyFont;">
+        <table border="0" width="100%">
+            <tr>
+                <td style="height:20pt;">
+                    {{app.user.agent.nom|slice(0,1)~app.user.agent.prenoms|slice(0,1)~app.user.agent.nomJeuneFille|slice(0,1)}}
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr style="font-size:1.2em; line-height: 1.3em;">
+                <td width="42%" style="height:300pt;" valign="top">
+                    <div align="center">
+                        <div style="text-align:left;">MINISTERE DE L'ECONOMIE ET DES FINANCES
+                        </div>
+                        <div>-----------------------</div> <br>
+                        <div>
+                            <img src="{{app.request.getSchemeAndHttpHost() ~ asset('images/logoDGE.png') }}" width="220px" />
+                        </div>
+                        <br>
+                        <div style="text-align:left;">DIRECTION GENERALE DE L'ECONOMIE</div>
+
+                        -----------------------
+                        <br />
+                        <div style="text-align:center;">
+                            <div style="font-size: 1.5em;;">
+                            {% block service %}{% endblock %}
+                        </div>
+                        <div style="text-align:left; margin-top:100px;">
+                            {% block ref %} {% endblock %}
+                        </div>
+
+                    </div>
+            </td>
+            <td width="25%"></td>
+            <td valign="top">
+                <table border="0" height="100%" style="line-height:1.4em;">
+                    <tr>
+                        <td valign="top">
+                            REPUBLIQUE DE COTE D'IVOIRE
+
+                            <br>
+                            <div style="text-align:center;">
+                                Union - Discipline - Travail
+                                <br>-----------------------
+                            </div>
+                        </td>
+                    </tr>
+                    <tr><td style="text-align:left; height:200pt;" valign="bottom">
+                            <div style="text-align:left;" >
+                                Abidjan, le {% block datePdf %}{% endblock %}
+                            </div>
+                        </td></tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" style="height:100pt;">
+                <div class="row" align="center">
+
+                    <h3> {% block titre %} {% endblock %}</h3>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" style="height:350pt; margin-top:5px;" valign="top">
+                <div style="font-size:16pt; text-align: justify; ">
+                    {% block contenuPdf %} {% endblock %}
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="height:200pt; font-size:12pt;" valign="top">
+            {% block ampliationPdf %}{% endblock %}
+        </td>
+        <td colspan="2"></td>
+    </tr>
+
+
+
+</table>
+
+
+
+
+
+
+
+{#
+<div id="footer" align="center" style="font-family: Century Gothic;">
+  Service des Ressources Humaines et des Moyens Généraux (SRHMG), sis au 4èm étage, Imm. ALLIANCE, plateau.
+  <br/>Tél : (225) 20 21 54 32
+</div>#}
+
+</body>
+
+</html>

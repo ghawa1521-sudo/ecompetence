@@ -1,0 +1,30 @@
+adresse:
+    path:     /
+    defaults: { _controller: "AgentBundle:Adresse:index" }
+
+adresse_show:
+    path:     /{id}/show
+    defaults: { _controller: "AgentBundle:Adresse:show" }
+
+adresse_new:
+    path:     /new
+    defaults: { _controller: "AgentBundle:Adresse:new" }
+
+adresse_create:
+    path:     /create
+    defaults: { _controller: "AgentBundle:Adresse:create" }
+    methods:  POST
+
+adresse_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AgentBundle:Adresse:edit" }
+
+adresse_update:
+    path:     /{id}/update
+    defaults: { _controller: "AgentBundle:Adresse:update" }
+    methods:  [POST, PUT]
+
+adresse_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AgentBundle:Adresse:delete" }
+    methods:  [POST, DELETE]

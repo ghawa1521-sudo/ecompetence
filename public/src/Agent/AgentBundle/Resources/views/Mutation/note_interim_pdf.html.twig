@@ -1,0 +1,125 @@
+{% extends app.request.attributes.get('_route')=='mutation_print' 
+? '::gabarit_print.html.twig' 
+: '::gabarit_preview.html.twig' %}
+{% block service %}
+<span class="gras">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Le Directeur Général</span>
+<br>
+{% endblock %}
+
+{% block ref %}N°:................../MEF/DGE/SRHMG{% endblock %}
+
+{% block titre %}
+    <div align="center" style="font-size:30px; font-family:CenturyFontBold !important; border: solid; border-radius: 15px; width: 60%; margin: auto;">
+       <span class="gras">NOTE D'INTERIM</span> 
+    </div>
+{% endblock %}
+    {% block datePdf %}
+
+    {% endblock %}
+    {% block contenuPdf -%}
+
+        <div style="background-color: white; color:black; line-height: 2em;">
+            {% if entity.interime.Direction %}En l'absence de {{entity.interime.getCivilite.libsitf}} {{entity.interime.concatNom}},{% if entity.interime.Direction.etatDirection == 0 %} {{entity.interime.Direction|replace({'Service': 'Chef du Service'})}} {% else %} {{entity.interime.Direction|replace({'Direction': 'Directeur'})}}{% endif %} ({{entity.interime.Direction.Sigle}}), du {{entity.datedebut|localizeddate('none', 'none', app.request.locale, "Europe/Paris", "cccc d MMMM Y")}} au {{entity.datefin|localizeddate('none', 'none', app.request.locale, "Europe/Paris", "cccc d MMMM Y")}} inclus,
+            l'intérim sera assuré par
+            {{entity.interimaire.getCivilite.libsitf}} {{entity.interimaire.concatNom}},
+            {% if entity.interimaire.Direction.etatDirection == 0 %} {{entity.interimaire.Direction|replace({'Service': 'Chef du Service'})}} {% else %}{{entity.interimaire.Direction|replace({'Direction': 'Directeur'})}}{% endif %} ({{entity.interimaire.Direction.Sigle}}).{% else %}
+            En l'absence de {{entity.interime.getCivilite.libsitf}} {{entity.interime.concatNom}} {{entity.interime.Fonction}} de l'Economie (DGE) du {{entity.datedebut|localizeddate('none', 'none', app.request.locale, "Europe/Paris", "cccc d MMMM Y")}} au {{entity.datefin|localizeddate('none', 'none', app.request.locale, "Europe/Paris", "cccc d MMMM Y")}} inclus,
+            l'intérim sera assuré par 
+            {{entity.interimaire.getCivilite.libsitf}} {{entity.interimaire.concatNom}}, {{entity.interimaire.Fonction}} de l'Economie (DGE){% endif %}{% if entity.coordonnateur %} La Coordination Technique sera assurée par {{entity.coordonnateur.getCivilite.libsitf}} {{entity.coordonnateur.concatNom}}{% if(entity.coordonnateur.codeSd) %}{% if entity.interime.Direction.etatDirection == 0 %}, {{entity.coordonnateur.codeSd|replace({'Section': 'Chef de Section'})}}{% else %}, {{entity.coordonnateur.codeSd|replace({'Sous-Direction': 'Sous-Directeur'})}}{% endif %}{% endif %}{% endif %}.
+            {#{% if entity.emmeteur.sexe.id == 1 %}
+            |replace({'this': 'foo'})
+                Monsieur {{entity.emmeteur.nom}} {{entity.emmeteur.prenoms}}
+            {% elseif entity.emmeteur.sexe.id == 2 %}
+                {% if  entity.emmeteur.situationMatri.id == 1  %}Mademoiselle {{entity.emmeteur.nom}} {{entity.emmeteur.prenoms}} {% endif %}
+                {% if  entity.emmeteur.situationMatri.id == 2  %}Madame {{entity.emmeteur.nom}} née {{entity.emmeteur.nomJeuneFille}}{% endif %}
+
+            {% endif %}{{entity.interime.getCivilite.libsitf}} {{entity.interime.concatNom}}, matricule {{entity.interime.matricule}}, {{entity.emmeteur.Emploi}}, est muté{% if entity.emmeteur.sexe.id == 2 %}e{% endif %}
+            {% if  entity.destination.etatDirection == 0 %} au {% else %}à la {% endif %}{{entity.destination}} de la Direction Générale de l'Economie (DGE),
+            à compter de la date de signature de la présente note.#}
+
+
+            
+
+        </div>
+
+<br><br><br>
+        <div style="font-size: 0.9em;">
+    <div class="col-md-7">
+        <table cellsapcing="5">
+            <tr><td>
+            <span class="gras">AMPLIATIONS :</span>
+                </td>
+                <td></td>
+            </tr>
+            <!--
+            <tr>
+            <td>MEF/DGE</td><td>1</td>
+            </tr>
+        --> <tr>
+            <td>MEF/CAB</td><td>1</td>
+            </tr>
+           
+            <tr>
+            <td>DGE</td><td>1</td>
+            
+            </tr>
+            <tr>
+            <td>DGA</td><td>2</td>
+            </tr>
+            
+
+            <tr>
+            <td>DIRECTIONS CENTRALES</td><td>4</td>
+            </tr>
+            <tr>
+            <td>SERVICES RATTACHES</td><td>6</td>
+            </tr>
+            <tr>
+            <td>SRHMG</td><td>1</td>
+            </tr>
+            <tr>
+            <td>INTERESSE(E)</td><td>2</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<!--{% if is_granted('ROLE_RESPO') %}
+        <div class="row" id="verif">
+            <br/><br/>
+            <div align="center">
+                <label>Veuillez entrer votre mot de passe afin d\'éffectuer la validation de la demande</label><br/>
+                <div class="col-md-offset-4 col-sm-3 col-xs-3 col-lg-3 col-md-3">
+                    <form action="{{ path('demande_valid', { 'id': entity.id }) }}" method ="POST">
+                        <input id="mdp" name="mdp" type="password" class="form-control" placeholder="Votre Mot de Passe" />
+                        <input type="submit" class="btn btn-success btn-sm col-md-offset-5 col-md-2" value="valider">
+                    </form>
+                </div>
+            </div>
+        </form>
+
+        </div>
+        <div id="boutton">
+        <button id="btn-js" class="btn btn-success btn-sm col-md-offset-5 col-md-2" onclick="VerifPassword() ;"> Valider</button>
+        </div>
+        <br/>
+        <div>
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('demande_receive') }}">
+            Retour Demandes Reçues
+        </a>
+    </li>
+
+</ul>
+</div>
+{% endif %}
+
+-->
+<script src="{{ asset('design/js/style.js') }}"></script>
+
+    {% endblock %}
+
+    {% block ampliationPdf %}
+    
+
+        {% endblock %}

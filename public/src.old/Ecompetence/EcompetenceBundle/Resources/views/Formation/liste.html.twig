@@ -1,0 +1,259 @@
+{% extends '::base.html.twig' %}
+{%from "EcompetenceBundle:macro:macro.html.twig" import recursiveDomaine,recursiveDomaineAff%}
+
+
+{% block body %}
+   
+ <style>
+        .info{
+              color:black;
+        }
+        .ok th{
+        color:white; 
+        border:1px solid white;
+        font-weight:bold;
+        }
+        .ok td{
+         text-align:left; 
+         color:black;
+         font-weight:bold; 
+         border:1px solid lightgray
+        }
+        .ok thead{border:1px solid white;background-color: #008080;
+        }
+       
+         </style>
+
+                         <div style="padding-left:4px;padding-right:4px;">
+                            <div class="x_panel" style="background-color:white;border-radius: 4px;">
+                             
+                                <div class="x_content">
+
+                                    <div class="col-md-7 col-sm-3 col-xs-12 profile_left">
+
+                     
+                          <table class='info'  border=0>                 
+                         
+                          <tr>  
+                         
+                                    <td style="font-weight: bold;font-size:20px;"> <b>
+                                        {% if (entit.nom) %}
+                                        {{ entit.nom }}
+                                        {% endif %}
+                                        {% if (entit.prenoms) %}
+                                        {{ entit.prenoms }}
+                                        {% endif %}</b>
+                                        {% if (entit.matricule) %}
+                                            <b  style="color: red;" >{{ ' ('~entit.matricule~')' }} </b>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>                                      
+                                      <td style="font-size:16px;">{% if (entit.emploi) %}
+                                        {{ entit.emploi.libEmpl }}
+                                        {% endif %}
+                                    </td>
+                            
+                                 <tr>
+                                   <td style="font-size:16px;">
+                                        {% if (entit.dateNaiss) %}
+                                        Né le {{ entit.dateNaiss|date('d-m-Y') }} 
+                                        {% endif %}
+                                        {% if (entit.LieuNaissance) %}
+                                         à {{entit.LieuNaissance.lieuNaiss}} 
+                                        {% endif %}</td>
+                                </tr>
+                                 <tr>
+                                   
+                                    <td style="font-size:16px;">
+                                        {% if (entit.telPort) %}
+                                        Tèl:{{entit.telPort}}</td>
+                                        {% endif %}
+                                </tr>
+
+                                <tr>
+                                    
+                                    <td style="font-size:16px;">Email :
+                                        {% if (entit.email) %}{{entit.email}}{% endif %}</td>
+                                </tr>
+                                <tr>
+                                  
+                                    <td style="font-size:16px;">{% if (entit.emailPerso) %}{{entit.emailPerso}}{% endif %}
+                                    {%for adr in entit.adresse%}
+                                        {{adr.email}} / 
+                                    {% endfor %}
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                  
+                                    <td style="font-size:16px;">{% if (entit.situationMatri) %}{{ entit.situationMatri }}{% endif %} 
+                                        {% if (entit.nbEnf) %}/ {{ entit.nbEnf }} enfant(s){% endif %} </td>
+                                </tr>
+                          </table>  
+          {#     {% if (entity.imageName) %}
+             <img src="{{ vich_uploader_asset(entity, 'imageFile') }}" alt="{{ entity.imageName }} Avatar">
+             
+          {% elseif (entity.sexe.id == 1 ) %}
+                <img src="{{ asset('images/img_test_agent.png')}}" Avatar>
+            {% elseif (entity.sexe.id == 2 ) %}
+                <img src="{{ asset('images/woman.png')}}" Avatar>
+            {% endif %}
+             #}                                     
+                                                    
+       
+                                           <!-- end of image cropping -->
+       </div>  
+            
+             <div class="col-lg-offset-2 col-md-3  profile_left">
+
+                                        <div class="profile_img">
+
+                                            
+           <div id="cropE-avatar">
+                                            
+          <div class="avatar-view" title="Change the avatar">                                      
+           {% if (entit.imageName) %}
+             <img src="{{ vich_uploader_asset(entit, 'imageFile') }}" alt="{{ entit.imageName }} Avatar">
+             
+          {% elseif (entit.sexe.id == 1 ) %}
+                <img src="{{ asset('images/img_test_agent.png')}}" Avatar>
+            {% elseif (entit.sexe.id == 2 ) %}
+                <img src="{{ asset('images/woman.png')}}" Avatar>
+            {% endif %}
+                                                
+                                                    
+             </div>                                          
+      </div>
+          </div>
+        </div>
+       </div>
+      </div>
+ </div>
+       
+        <div class="x_panel">
+        <hr>
+            <div class="row">
+            <div class="panel panel-success">
+            <div class="panel-heading"><h2  style="color:orangered;">Formations</h2></div>
+            <div class="panel-body">
+                            
+             <table class="table dataTable ok" style="text-align:center"> 
+             <thead>
+               <tr>  
+                 <th> Date du diplôme</th>
+                 <th> Diplôme</th>
+                 <th> Type de formation</th>
+                 <th> Niveau</th>
+                 <th> Institut</th>
+                 <th> Durée formation</th>
+                {#<th> Action</th>#}
+                </tr>         
+             </thead>
+             <tbody>
+                 
+                 {% for format in formation%}
+               <tr>
+                 <td>
+                       {%if(format.dateObtentiondiplo)%} {{format.dateObtentiondiplo|date('d-m-Y')}}{%endif%} 
+                 </td>
+                 <td>
+                       {%if(format.libFormation)%}{{format.libFormation}} {%elseif(format.diplome) %}{{format.diplome.libDiplome}} {%if(format.specialite)%}{{format.specialite.libspecialite}} {%if(format.option)%} Option{{format.option.libOption}} {%endif%}  {%endif%}{%endif%}
+                 </td>
+                
+                 <td>
+                       {%if(format.typeformation)%}{{format.typeFormation.libTypeFormation}}{%endif%}
+                 </td>
+
+                 <td>
+                      {%if(format.niveauFormation)%}{{format.niveauFormation}} {% else %}
+                Non spécifié {%endif%}
+                 </td>
+                   
+                 <td>
+                 {%if(format.etablissement)%}{{format.etablissement.nometablissement}}{%elseif(format.autreetablissement)%}{{format.autreetablissement}}{%endif%}
+                 </td>
+                 
+                <td>
+                 {% if format.dateDebut and format.dateFin %}
+                        {% set debut = format.dateDebut|date('U') %}
+                        {% set fin = format.dateFin|date('U') %}
+                        {% set duree = ((fin - debut) / 86400) %}
+    
+                            {% if duree < 30 %}
+                            {{ duree|round }} jour(s)
+                            {% elseif duree < 365 %}
+                            {{ (duree/30)|round }} mois
+                            {% else %}
+                            {{ (duree/365)|round }} an(s)
+                            {% endif %}
+                 {% else %}
+                  Non renseignée
+                 {% endif %}
+                </td>
+                 {#<td width="200px">
+                    
+                 <a class="btn btn-success" style='width:75px;'href="{{ path('formation_edit', { 'id': format.id,'ag':format.agent.id }) }}">Modifier</a>
+                 <a class="btn btn-success" style='width:75px;' href="{{ path('formation_show', { 'id': format.id}) }}">Détail</a>
+                 <a href="{{ vich_uploader_asset(format.pj, 'imageFile')}}">Télécharger</a>
+                 </td>#}
+               </tr>  
+    
+                
+               {%endfor%}
+             </tbody>
+
+          </table>  
+          </div>
+          </div>
+          </div> 
+        </div>
+               
+<style>
+.help-block{
+color:red;
+font-weight:bold;
+}
+</style>
+
+ <div class="row">
+ <div class="col-md-2"> </div>
+ <div class="col-md-4" style="margin-right:10px;">
+ <a class="btn btn-primary btn-block col-lg-4" href="{{ path('formation_new', { 'id':id }) }}">Ajouter une nouvelle formation</a>
+ </div>
+ <div class="col-md-4">
+ <a class="btn btn-info btn-block col-lg-4" style="background-color:#20B2AA; color:white;font-weight:bold; font-size:16px;" href="{{ path('experience_new', { 'id':id }) }}">
+  ➕ Ajouter une experience</a>
+ </div>
+ <div class="col-md-2"> </div>
+ </div>
+ <div class="row">
+ <div class="col-md-2"> </div>
+ <div class="col-md-4" style="margin-right:10px;">
+ <a class="btn btn-success btn-block col-lg-4" href="{{ path('formation_detail', { 'id':id }) }}">Affichage du details des formations de l'agent</a>
+ </div>
+ <div class="col-md-4">
+  <a class="btn btn-info btn-block col-lg-4" style="background-color:#20B2AA; color:white;font-weight:bold; font-size:16px;" href="{{ path('competence_new', { 'id':id }) }}"> ➕ Ajouter une compétence</a>
+ </div>
+ <div class="col-md-2"> </div>
+ </div>
+ <div class="row">
+ <div class="col-md-2"> </div>
+ <div class="col-md-4" style="margin-right:10px;">
+ <a class="btn btn-primary btn-block col-lg-4" href="{{ path('agent_cv1', { 'id': entit.id }) }}">Visualiser le CV</a>
+ </div>
+  <div class="col-md-4">
+  <a class="btn btn-info btn-block col-lg-4" style="background-color:#20B2AA; color:white;font-weight:bold; font-size:16px;" href="{{ path('langue_new', { 'id':id}) }}"> ➕ Ajouter le niveau de langue </a>
+  </div> 
+ <div class="col-md-2"> </div>
+ </div>
+ <div class="row">
+ <div class="col-md-2"> </div>
+ <div class="col-md-8">
+ <a class="btn btn-warning btn-block col-lg-4" href="{{ path('agent_cv', { 'id':id }) }}">Retour</a>
+ </div>
+ <div class="col-md-2"> </div>
+ </div>
+ {% endblock %}
+
+

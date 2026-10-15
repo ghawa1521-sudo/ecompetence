@@ -1,0 +1,33 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <base href="" />
+    <title>Confirmation</title>
+</head>
+<body>
+<p>
+	Bonjour <strong> {% if (user.sexe=='1') %} M.  {% else  %} Mme. {% endif %}  {{user.nom}} {{user.prenoms}}, </strong> <br/> 
+	Votre Compte a été réinitialisé suite à une modification. <br/> <br/>
+	Vos Identifiants sont: <br/>
+	Nom d'Utilsateur: <i>user.matricule</i> <br/>
+	Mot de Passe : <font color="red"> {{password}} </font> <br/><br/>
+    Vous pouvez dès maintenant vous connecter <a href="{{ absolute_url(path('fos_user_security_login')) }}">ICI</a> <br/>
+    
+    avec vos identifiants <br/><br/><br/>
+    
+ 
+  
+ 
+</p>
+ 
+<p>
+<div>
+ 
+</div>
+	Bien à vous !
+	DGE-SRHMG <br/>
+    
+    </p>
+</body>
+</html>
+

@@ -1,0 +1,101 @@
+{% extends '::biblio/base.html.twig' %}
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+    <script>
+        $('.records').DataTable({
+            "ordering": true,
+            "order": [],
+            "language": {
+                "url": "http://cdn.datatables.net/plug-ins/1.10.11/i18n/French.json"
+            },
+            dom: 'Bfrtip',
+            colReorder: false,
+            buttons: [
+            ]
+        });
+    </script>
+{% endblock %}
+
+{% block title %}
+    {{macro.vueTitle('bouquin_all','Tous les bouquins')}}
+    {{macro.vueTitle('bouquin_madir','Tous les bouquins de ma direction')}}
+    {{macro.vueTitle('bouquin','Tous les bouquins existant')}}
+{% endblock %}
+{% block fil %}
+    {{macro.vueTitle('bouquin_all','Tous les bouquins')}}
+    {{macro.vueTitle('bouquin_madir','Tous les bouquins de ma direction')}}
+    {{macro.vueTitle('bouquin','Tous les bouquins existant')}}
+{% endblock %}
+{% block body -%}
+    <h3 class="header smaller lighter blue">
+        {{macro.vueTitle('bouquin_all','Tous les bouquins')}}
+        {{macro.vueTitle('bouquin_madir','Tous les bouquins de ma direction')}}
+        {{macro.vueTitle('bouquin','Tous les bouquins existant')}}
+    </h3>
+
+    <table class="records table table-striped table-bordered table-hover dataTable no-footer DTTT_selectable">
+        <thead>
+            <tr>
+                <th class="hidden-480">Depuis le</th>
+                <th class="hidden-480">Direction / Service</th>
+                <th>Catégorie</th>
+                <th>Libelle</th>
+                    {#<th>Details</th>#}
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entity in entities %}
+                <tr>
+                    <td class="hidden-480">{% if entity.datecreation %}{{ entity.datecreation|date('d-m-Y H:i:s') }}{% endif %}</td>
+                    <td class="hidden-480">{{ entity.direction.sigle }}</td>
+                    <td>{{ entity.categorie }}</td>
+                    <td>{{ entity.libelle }}</td>
+                    <td>
+                        <div class="hidden-sm hidden-xs action-buttons">
+                            <a class="blue" href=" {{ path('bouquin_show', { 'id': entity.id }) }}" title="Consulter">
+                                <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                            </a>
+                            {% if (todo is defined) and todo =='edit'%}
+                                <a class="green" href="{{ path('bouquin_edit', { 'id': entity.id }) }}" title="Modifier">
+                                    <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                </a>
+                            {% endif %}
+                            <a class="red" href="{{ vich_uploader_asset(entity.pj, 'imageFile') }}" title="Télécharger">
+                                <i class="ace-icon fa fa-download bigger-130"></i>
+                            </a>
+                        </div>
+                        <div class="hidden-md hidden-lg">
+                            <div class="inline pos-rel dropup">
+                                <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto" aria-expanded="false">
+                                    <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                </button>
+
+                                <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close" style="">
+                                   
+                                    
+                                    <a class="blue" href=" {{ path('bouquin_show', { 'id': entity.id }) }}" title="Consulter" class="tooltip-info" data-rel="tooltip" data-original-title="Consulter">
+                                        <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                                    </a>
+                                    {% if (todo is defined) and todo =='edit'%}
+                                        <a class="green" href="{{ path('bouquin_edit', { 'id': entity.id }) }}" title="Modifier"  class="tooltip-info" data-rel="tooltip" data-original-title="Modifier">
+                                            <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                        </a>
+                                    {% endif %}
+                                    <a class="red" href="{{ vich_uploader_asset(entity.pj, 'imageFile') }}" title="Télécharger"  class="tooltip-info" data-rel="tooltip" data-original-title="Télécharger">
+                                        <i class="ace-icon fa fa-download bigger-130"></i>
+                                    </a>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

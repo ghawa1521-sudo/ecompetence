@@ -1,0 +1,44 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h2>Valider Mutation</h2>
+<div class="col-md-push-2 col-md-8" align="left">
+
+    <table class="record_properties table table-striped" align="left">
+        <tbody>
+            
+            <tr>
+                <td left="left">Date de la Demande</th>
+                <td>{{ entity.dateCreation|date('Y-m-d') }}</td>
+            </tr>
+            
+            <tr>
+                <td left="left">Direction Souhaité</th>
+                <td>{{ entity.destination }}</td>
+            </tr>
+             <tr>
+                <td left="left">Direction d'origine</th>
+                <td>{{ entity.emmeteur.direction }}</td>
+            </tr>
+            <tr>
+                <td left="left">Motif </th>
+                <td>{{ entity.Observ }}</td>
+            </tr>
+        </tbody>
+    </table>
+    {% if 
+    (((entity.Etatrepsupdir == 0) and (entity.SupDir == app.user.agent)) or   
+    ((entity.Etatrepgrh == 0) and (entity.Grh == app.user.agent)))
+    %}
+    <div class="row">
+            <div class="col-md-6">
+                <a href="{{ path('mutation_valid', { 'id': entity.id }) }}" class="btn btn-large btn-primary col-push-md-1 col-md-10" data-confirm="Etes-vous <strong>certain</strong> de vouloir Valider cette demande ?">Valider la Demande</a>
+            </div>
+            <div class="col-md-6" >
+                <a href="{{ path('mutation_reject', { 'id': entity.id }) }}" class="btn btn-large btn-danger col-push-md-1 col-md-10" data-confirm="Etes-vous <strong>certain</strong> de vouloir Rejeter cette demande ?">Rejeter la Demande</a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+        
+{% endblock %}

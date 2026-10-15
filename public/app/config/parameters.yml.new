@@ -1,0 +1,15 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: bd_grh
+    database_user: root
+    database_password: sim@dmin44444
+    mailer_transport: gmail
+    mailer_host: 127.0.0.1
+    mailer_user: personnel.dge
+    mailer_password: sim@dmin55555
+    secret: 15c4f827b94a07ea00af1d231989d5d9ba88f993
+    gos_server_host: 127.0.0.1
+    gos_server_port: 8026
+    gos_client_session_handler: null

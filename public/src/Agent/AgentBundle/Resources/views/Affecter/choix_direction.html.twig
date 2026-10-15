@@ -1,0 +1,80 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+<div align="center"><h3>Choisir la Direction d'Affectation</h3></div>
+    <br>
+   <div class="col-md-push-3 col-md-6">
+       <h2>Information de l'Agent</h2>
+       <br>
+       <table class="record_properties table table-striped">
+           <tbody>
+
+           <tr>
+               <td><b>Matricule</b></td>
+               <td>{{ agent.matricule }}</td>
+           </tr>
+           <tr>
+               <td><b>Nom</b></td>
+               <td>{{ agent.nom }}</td>
+           </tr>
+           {% if (agent.prenoms)%}
+           <tr>
+               <td><b>Prénoms</b></td>
+               <td>{{ agent.prenoms }}</td>
+           </tr>
+           {% endif %}
+           {% if (agent.nomJeuneFille)%}
+               <tr>
+                   <td><b>Nom de Jeune Fille</b></td>
+                   <td>{{ agent.nomJeuneFille }}</td>
+               </tr>
+           {% endif %}
+
+           <tr>
+               <td><b>Emploi</b></td>
+               <td>{{ agent.emploi }}</td>
+           </tr>
+           </tbody>
+       </table>
+       <h2></h2>
+    <br>
+    <div>
+        {{ form_start(edit_form) }}
+        {{ form_errors(edit_form) }}
+        {#<div id="viewdg">
+        
+        {{ form_row(edit_form.agent.code_dg, {'id':'dg', 'attr':{'required':'required'}}) }}
+        </div>#}
+        
+        <div>
+          {{ form_row(edit_form.agent.Direction, {'id':'dc', 'attr':{'required':'required'}}) }}
+
+        </div>
+        {#}
+        <div id="viewsd" style="display:none;" class="marche">
+            {{ form_label(edit_form.agent.code_sd, null ,{
+                'label_attr':{'id':'label_sd'}
+            }) }}
+            {{ form_widget(edit_form.agent.code_sd, {'id':'sd'}) }}
+
+        </div>
+        <div id="viewsc" style="display:none;" class="marche">
+          {{ form_row(edit_form.agent.code_sc, {'id':'sc'}) }}
+        </div>#}
+      </div>
+      <div align="center">
+          <input type="submit" class="btn btn-success col-md-push-3 col-md-6" value="AFFECTER">
+          {{ form_row(edit_form._token) }}
+          {{ form_end(edit_form, {render_rest:false}) }}
+
+      </div>
+   </div>
+
+
+{% endblock %}
+{% block javascript %}
+<script src="{{ asset('design/js/style.js') }}"></script>
+
+
+
+{% endblock %}

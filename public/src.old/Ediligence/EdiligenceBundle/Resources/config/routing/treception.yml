@@ -1,0 +1,30 @@
+reception:
+    path:     /
+    defaults: { _controller: "EdiligenceBundle:Treception:index" }
+
+reception_show:
+    path:     /{id}/show
+    defaults: { _controller: "EdiligenceBundle:Treception:show" }
+
+reception_new:
+    path:     /{id}/new
+    defaults: { _controller: "EdiligenceBundle:Treception:new" }
+
+reception_create:
+    path:     /create
+    defaults: { _controller: "EdiligenceBundle:Treception:create" }
+    methods:  POST
+
+reception_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "EdiligenceBundle:Treception:edit" }
+
+reception_update:
+    path:     /{id}/update
+    defaults: { _controller: "EdiligenceBundle:Treception:update" }
+    methods:  [POST, PUT]
+
+reception_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "EdiligenceBundle:Treception:delete" }
+    methods:  [POST, DELETE]

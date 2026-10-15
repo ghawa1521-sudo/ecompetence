@@ -1,0 +1,107 @@
+{% extends '::base.html.twig' %}
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+     <style>
+        .dataTables_filter{
+            width: auto !important;
+        }
+       
+        div > i{
+            color:orange;{#1abc9c;#}
+        }
+        .details{
+            color:red; font-weight: bold;
+        }
+     </style>
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+{% block body -%} 
+    <div style="padding-left:0px;padding-right:0px;">
+      <div class="x_panel" style="background-color:1A82C3;border-radius: 4px; font-weight:bold;font-size:16px;">
+       <div class="x_content">
+        <div class='row'>
+           Agent : {{entit.concatNom}}<b  style="color: red;" >{{ ' ('~entit.matricule~')' }} </b>
+        </div>
+      </div> 
+     </div>
+  </div>   
+    <div class='row'>
+        <br>  
+             
+              <a href="{{ path('experience_liste', {'id':id }) }}">
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="tile-stats">
+                  <div class=" text-center">
+                  <span class="border border-primary" style="width: 15px; opacity: 1px;">  <img class="rounded" src={{  asset('ecompetence/assets/img/exp1.jpg') }} ></span>            
+                  </div>
+                 <a class="btn btn-primary btn-large btn-block" href="{{ path('experience_liste', { 'id':id }) }}">Ajouter une nouvelle experience</a>
+                </div>               
+              </div>
+              </a>                 
+              <a href="{{ path('formation_liste', { 'id':id }) }}">
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="tile-stats">
+                  <div class=" text-center">
+                   <span class="border border-primary" style="width: 15px; opacity: 1px;">  <img class="rounded" src={{  asset('ecompetence/assets/img/fomation2.jpg') }} ></span>            
+                  </div> 
+                 <a class="btn btn-primary btn-large btn-block" href="{{ path('formation_liste', { 'id':id }) }}">Ajouter une nouvelle formation</a>
+                </div>
+                               
+              </div> 
+              </a>                        
+             <a href="{{ path('competence_new', {'id':id}) }}">
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="tile-stats">
+                  <div class=" text-center">
+                   <span class="border border-primary" style="width: 15px; opacity: 1px;">  <img class="rounded" src={{  asset('ecompetence/assets/img/comp2.jpg') }} ></span>              
+                  </div>
+                 <a class="btn btn-primary btn-large btn-block" href="{{ path('competence_new', { 'id':id }) }}">Sélectionner les compétences</a>
+                </div>                
+              </div>
+              </a>            
+               <a href="{{ path('langue_new', { 'id':id }) }}">
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="tile-stats">
+                  <div class=" text-center">
+                  <span class="border border-primary" style="width: 15px; opacity: 1px;">  <img class="rounded" src={{  asset('ecompetence/assets/img/langue.png') }} ></span>            
+                  </div> 
+                 <a class="btn btn-primary btn-large btn-block" href="{{ path('langue_new', { 'id':id}) }}">Ajouter le niveau de langue </a>
+                </div>
+                               
+              </div>
+              </a> 
+{# 
+               <a href="#">
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="tile-stats">
+                  <div class=" text-center">
+                  <span class="border border-primary" style="width: 15px; opacity: 1px;">  <img class="rounded" src={{  asset('ecompetence/assets/img/connaissance.jpg') }} ></span>            
+                  </div> 
+                 <a class="btn btn-primary btn-large btn-block" href="#"> Connaissance Informatique </a>
+                </div>
+                               
+              </div>
+              </a>  #}
+
+                <a href="#">
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="tile-stats">
+                  <div class=" text-center">
+                  <span class="border border-primary" style="width: 15px; opacity: 1px;">  <img class="rounded" src={{  asset('ecompetence/assets/img/certificat.jpg') }} ></span>            
+                  </div> 
+                 <a class="btn btn-primary btn-large btn-block" href="#">Divers  </a>
+                </div>
+                               
+              </div>
+              </a> 
+
+               
+              
+            
+      </div>   
+              
+              
+{% endblock %}
+

@@ -1,0 +1,112 @@
+0demande_initier_liste:
+    path:     /initier/index
+    defaults: { _controller: "DemandesBundle:Demande:init" }
+    
+demande:
+    path:     /
+    defaults: { _controller: "DemandesBundle:Demande:index" }
+
+demande_list_print:
+    path:     /list/print
+    defaults: { _controller: "DemandesBundle:Demande:ListPrint" }
+
+demande_show:
+    path:     /{id}/show
+    defaults: { _controller: "DemandesBundle:Demande:show" }
+
+demande_send:
+    path:     /send
+    defaults: { _controller: "DemandesBundle:Demande:send" }
+
+demande_receive:
+    path:     /receive/{action}
+    defaults: { _controller: "DemandesBundle:Demande:receive", action:default }
+
+demande_print:
+    path:     /{id}/print
+    defaults: { _controller: "DemandesBundle:Demande:print" }
+
+demande_new:
+    path:     /new
+    defaults: { _controller: "DemandesBundle:Demande:new" }
+demande_saaf_new:
+    path:     /saafnew
+    defaults: { _controller: "DemandesBundle:Demande:saafnew" }
+
+demande_create:
+    path:     /create
+    defaults: { _controller: "DemandesBundle:Demande:create" }
+    methods:  POST
+
+demande_research:
+    path:     /research
+    defaults: { _controller: "DemandesBundle:Demande:research" }
+    methods:  [POST,GET]
+
+demande_doCreate:
+    path:     /doCreate
+    defaults: { _controller: "DemandesBundle:Demande:doCreate" }
+    methods:  POST
+
+demande_do:
+    path:     /do
+    defaults: { _controller: "DemandesBundle:Demande:do" }
+
+demande_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "DemandesBundle:Demande:edit" }
+
+demande_update:
+    path:     /{id}/update
+    defaults: { _controller: "DemandesBundle:Demande:update" }
+    methods:  [POST, PUT]
+
+demande_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "DemandesBundle:Demande:delete" }
+    methods:  [POST, DELETE]
+
+demande_valid:
+    path:     /{id}/valid
+    defaults: { _controller: "DemandesBundle:Demande:valid" }
+
+demande_test:
+    path:     /test
+    defaults: {_controller: "DemandesBundle:Demande:test"}
+
+demande_reject:
+    path:    /{id}/reject
+    defaults: { _controller: "DemandesBundle:Demande:reject"}
+    methods:  POST
+
+demande_do_reject:
+    path:    /{id}/doReject
+    defaults: { _controller: "DemandesBundle:Demande:doReject"}
+
+demande_view:
+    path:     /{id}/view/{autres}
+    defaults: { _controller: "DemandesBundle:Demande:view", autres:0 }
+
+demande_numerise:
+    path:     /{id}/numerise
+    defaults: { _controller: "DemandesBundle:Demande:numerise" }
+
+demande_print_etat:
+    path:     /{id}/etat
+    defaults: { _controller: "DemandesBundle:Demande:printEtat" }
+    methods:  GET
+    options:
+      expose: true
+
+demande_reply:
+    path:     /{r}/reply
+    defaults: { _controller: "DemandesBundle:Demande:reply", r:1 }
+
+demande_abscence:
+    path:     /{id}/abscence
+    defaults: { _controller: "DemandesBundle:Demande:abscence", id:0}
+    methods:  [GET,POST]
+
+demande_receives:
+    path:     /receives/{action}
+    defaults: { _controller: "DemandesBundle:Demande:receives", action:default }

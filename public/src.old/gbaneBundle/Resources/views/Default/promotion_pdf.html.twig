@@ -1,0 +1,53 @@
+{# templates/gbaneBundle/Agent/promotion_pdf.html.twig #}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Acte de Promotion</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Acte de Promotion</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Matricule</th>
+                <th>Nom et prénoms</th>
+                <th>Fonction</th>
+                <th>Fonction Assimilée Actuelle</th>
+                <th>Grade</th>
+                <th>Anciennete grade</th>
+                <th>Anciennete dge</th>
+                <th>Anciennete agent</th>
+                <th>Fonction Assimilée Potentielle</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for agent in agents %}
+                <tr>
+                    <td>{{ agent.matricule }}</td>
+                    <td>{{ agent.concatNom }}</td>
+                    <td>{{ agent.fonction }}</td>
+                    <td>{{ agent.fonctionAssimileActuelle }}</td>
+                    <td>{{ agent.grade }}</td>
+                    <td>{{ agent.ancienneteGrade }}</td>
+                    <td>{{ agent.ancienneteDge }}</td>
+                    <td>{{ agent.ancienneteAgent }}</td>
+                    <td>{{ agent.fonctionAssimilePotentielle }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

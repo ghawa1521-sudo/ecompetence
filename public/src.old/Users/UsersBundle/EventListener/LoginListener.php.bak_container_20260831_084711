@@ -1,0 +1,193 @@
+<?php
+
+namespace Users\UsersBundle\EventListener;
+
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Security\Core\Event\AuthenticationFailureEvent;
+use Symfony\Component\Security\Core\Event\AuthenticationSuccess;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
+class LoginListener extends Controller
+{
+
+    private $securityContext;
+    private $router;
+    private $dispatcher;
+    private $loginServ;
+    protected $container;
+
+    public function __construct(SecurityContext $securityContext, Router $router, EventDispatcherInterface $dispatcher, $loginServ = null, $container = null)
+    {
+        $this->securityContext = $securityContext;
+        $this->router = $router;
+        $this->dispatcher = $dispatcher;
+        $this->loginServ = $loginServ;
+        $this->container = $container;
+    }
+
+    public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
+    {
+        if ($this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
+
+            $user = $event->getAuthenticationToken()->getUser();
+
+            if ($user->getLastLogin() === null or $user->getEtatConnexion() == 0) {
+                $this->dispatcher->addListener(KernelEvents::RESPONSE, array(
+                    $this,
+                    'onKernelResponse'
+                ));
+            }
+            $em = $this->loginServ->getEm();
+            $interimaire = $em->getRepository('AgentBundle:Interimaire')->controle_etatinterim($user->getAgent(), null, null);
+            if ($interimaire && !$user->hasRole('ROLE_ALLOWED_TO_SWITCH')) {
+                //attribue role
+                $user->addRole("ROLE_ALLOWED_TO_SWITCH");
+                $em->persist($user);
+                $em->flush();
+            } elseif (!$interimaire && $user->hasRole('ROLE_ALLOWED_TO_SWITCH')) {
+                //retire role
+                $user->removeRole("ROLE_ALLOWED_TO_SWITCH");
+                $em->persist($user);
+                $em->flush();
+            }
+        }
+    }
+
+    public function onKernelResponse(FilterResponseEvent $event)
+    {
+        $response = new RedirectResponse($this->router->generate('fos_user_change_password'));
+        $event->setResponse($response);
+    }
+
+    public function onKernelController(FilterControllerEvent $event)
+    {
+
+        $this->delegationCheck();
+
+        /**/
+        //user annonyme et n'ayant pas de role
+        /*
+          if($this->securityContext->getToken() && $this->securityContext->getToken()->getUser()=='anon.' && count($this->securityContext->getToken()->getRoles())==0){
+          $day = date('d-m-Y h');
+          $token='#'.sha1($day).'#';
+          $linktoken = $this->loginServ->getRequest()->getCurrentRequest()->getSession()->get('_security.main.target_path');
+          //si le token ne se retrouve pas dans le lien
+
+
+
+          if(!preg_match($token, $linktoken) ){
+
+
+
+          // header('Location: https://www.dge.gouv.ci');exit;
+          }
+
+          } */
+    }
+
+    public function onAuthenticationFailure(AuthenticationFailureEvent $event)
+    {
+        //$username = $event->getAuthenticationToken()->getUser();
+        //$this->connected->countTentative($username);
+    }
+
+    public function onAuthenticationSuccess(InteractiveLoginEvent $event)
+    {
+
+        //die;
+    }
+
+    public function delegationCheck()
+    {
+
+        if (($this->securityContext->getToken() && $this->securityContext->getToken()->getUser() != 'anon.' && $this->securityContext->getToken()->getUser() && !$this->securityContext->getToken()->getUser()->hasRole("ROLE_RESPO") && !$this->securityContext->getToken()->getUser()->hasRole("ROLE_SAAF") && $this->securityContext->getToken()->getUser()->getAgent()->getFonction() && $this->securityContext->getToken()->getUser()->getAgent()->getFonction()->getId() != 10) /*or ($this->securityContext->getToken() && $this->securityContext->getToken()->getUser() != 'anon.' && $this->securityContext->getToken()->getUser() && $this->securityContext->getToken()->getUser()->hasRole("ROLE_RESPO") && $this->securityContext->getToken()->getUser()->getAgent()->getDirection() && $this->securityContext->getToken()->getUser()->getAgent()->getDirection()->getId() == 3) or ($this->securityContext->getToken() && $this->securityContext->getToken()->getUser() != 'anon.' && $this->securityContext->getToken()->getUser() && !$this->securityContext->getToken()->getUser()->hasRole("ROLE_RESPO_SRHMG"))*/) {
+            $route = $routeName = null;
+            $request = $this->container->get('request');
+            $routeName = $request->get('_route'); //route courante sur laquelle nous sommes
+            $em = $this->loginServ->getEm();
+
+            //Check USer
+            $agent = null;
+            if ($this->securityContext->getToken()->getUser()) {
+                $agent = $this->securityContext->getToken()->getUser()->getAgent();
+            }
+            $rSecure = null;
+            $rSecure = $em->getRepository('AgentBundle:Rubriques')->findBy(['route' => $routeName]);
+
+            if ($rSecure and $rSecure != null) {
+                $search_array = $request->attributes->get('_route_params');
+
+
+                $routes = $em->getRepository('AgentBundle:Deleguation')->checkRoute($agent->getId(), $routeName);
+                $p = null;
+                //die;
+                $exist = false;
+                foreach ($routes as $key => $r) {
+                    $p = $r->getRubriques()->getTableau();
+                    // dump($p);
+                    $result_array = array_intersect_assoc($search_array, $p);
+
+                    if (count($result_array) == count($search_array)) {
+                        $exist = true;
+                    }
+                }
+                if (count($routes) > 0) {
+                    if ($exist == false) {
+                        throw new AccessDeniedException('cette page ne vous est pas autoris�e, veuillez contacter l\'administrateur');
+                    }
+                    //r�cup�ration des param�tre
+                    //Ecrire la Fonction de restiction/*
+                    /*
+                      if (count($p) > 0) {
+
+                      $tabs = $this->getTableau($p);
+                      dump($tabs);
+                      die;
+                      if (isset($tabs)) {
+
+
+
+                      foreach ($tabs as $key => $value) {
+
+                      if (isset($search_array[$key])) {
+                      if ($search_array[$key] && $search_array[$key] == $value) {
+
+                      }
+                      } else {
+                      throw new NotFoundHttpException("Pas d'acc�s");
+                      }
+                      }
+                      }
+                      } */
+                } else {
+                    if ($request->get('_route') == null) { } else {
+                        throw new AccessDeniedException("PAS DE DROIT POUR CETTE PAGE");
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public function getTableau($p)
+    {
+        $tabs = null;
+        $tabss = explode(',', $p);
+        foreach ($tabss as $t) {
+
+            if (isset($tt) && count($tt) > 2) {
+                $tabs[explode(':', $t)[0]] = explode(':', $t)[1];
+            }
+        }
+        return $tabs;
+    }
+}

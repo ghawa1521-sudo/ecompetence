@@ -1,0 +1,72 @@
+<?php
+
+namespace Ecompetence\EcompetenceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Responsabilite_extra
+ *
+ * @ORM\Table()
+ * @ORM\Entity
+ */
+class Responsabilite_extra
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="librespo", type="string", length=255)
+     */
+    private $librespo;
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Agent\AgentBundle\Entity\Agent", inversedBy="adresse",cascade={"persist"})
+     * @ORM\JoinColumn(name="agent", referencedColumnName="id", nullable=true)
+     */
+    protected $agent;
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set librespo
+     *
+     * @param string $librespo
+     *
+     * @return Responsabilite_extra
+     */
+    public function setLibrespo($librespo)
+    {
+        $this->librespo = $librespo;
+
+        return $this;
+    }
+
+    /**
+     * Get librespo
+     *
+     * @return string
+     */
+    public function getLibrespo()
+    {
+        return $this->librespo;
+    }
+}
+

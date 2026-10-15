@@ -1,0 +1,13 @@
+services:
+#    gbane.example:
+#        class: gbaneBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+# src/gbaneBundle/Resources/config/services.yml
+
+   # src/gbaneBundle/Resources/config/services.yml
+
+
+services:
+    gbane.file_attachment_controller:
+        class: gbaneBundle\Controller\FileAttachmentController
+        arguments: ['@doctrine.orm.entity_manager']

@@ -1,0 +1,204 @@
+{% block main_sidebar %}
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- Sidebar user panel -->
+            <div class="user-panel">
+                <div class="pull-left image">
+                    <img src="{{asset('design/dist/img/user.png')}}" class="img-circle" alt="User Image">
+                </div>
+                <div class="pull-left info">
+                    <p>{{app.user.username}}</p>
+                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                </div>
+            </div>
+            <!-- search form -->
+            <form action="#" method="get" class="sidebar-form">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="Search...">
+                    <span class="input-group-btn">
+                        <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </form>
+            <!-- /.search form -->
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            <ul class="sidebar-menu">
+                <li class="header text-aqua"> MENU PRINCIPAL </li>
+                <li class="active">                       
+                    {{ include('StationsBundle:section:flashMessages.html.twig') }}   
+
+                </li>
+                <li class="active">
+                    <a href="{{path('homepage')}}">
+                        <i class="fa fa-dashboard"></i> <span>TABLEAU DE BORD </span>
+                    </a>         
+                </li>
+
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-files-o"></i>
+                            <span>Marqueteurs</span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="{{path('marqueteur')}}"><i class="fa fa-circle-o"></i>Liste Marqueteurs</a></li>
+                            <li><a href="{{path('marqueteur_new')}}"><i class="fa fa-circle-o"></i> Ajouter un Marqueteur</a></li>
+                        </ul>
+                    </li>        
+                {% endif  %}
+                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MARQUETEUR')%}
+                    <li>
+                        <a href="{{path('station')}}">
+                            <i class="fa fa-book"></i> <span>Stations</span>
+                        </a>
+                    </li>
+                {%endif%}
+                {% if is_granted('ROLE_MARQUETEUR') or is_granted('ROLE_RESPONSABLE') %}
+
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-files-o"></i>
+                            <span>Produits</span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a href="{{path('produitsmarqueteur')}}">
+                                    <i class="fa fa-calendar"></i> <span>Mes Produits</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{path('typeproduit')}}">
+                                    <i class="fa fa-calendar"></i> <span>Catégories des Produits</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{path('prixvente')}}">
+                                    <i class="fa fa-calendar"></i> <span>Prix des Produits</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-files-o"></i>
+                            <span>Commandes</span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a href="{{path('commandemarqueteur')}}">
+                                    <i class="glyphicon glyphicon-shopping-cart"></i> <span>Mes propres Commandes</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{path('commandestation')}}">
+                                    <i class="glyphicon glyphicon-shopping-cart"></i> <span>Commandes des Clients</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>        
+
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-files-o"></i>
+                            <span>Approvisionnements</span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a href="{{path('appromarqueteur')}}">
+                                    <i class="fa fa-shopping-cart"></i> <span>Mes Approvisionnements</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{path('approstation')}}">
+                                    <i class="fa fa-shopping-cart"></i> <span>Approvisionnement Clients</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                {% endif  %}
+                {% if is_granted('ROLE_GERANT_STATION')%}
+                    <li>
+                        <a href="{{path('produitstation')}}">
+                            <i class="fa fa-calendar"></i> <span>Produits</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{path('commandestation')}}">
+                            <i class="glyphicon glyphicon-shopping-cart"></i> <span>Commandes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{path('approstation')}}">
+                            <i class="fa fa-shopping-cart"></i> <span>Approvisionnement</span>
+                        </a>
+                    </li>         
+                    <li>
+                        <a href="{{path('compteclient')}}">
+                            <i class="fa fa-calendar"></i> <span>Mes Clients</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{path('vente')}}">
+                            <i class="fa fa-calendar"></i> <span>Mes Ventes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{path('validationprix')}}">
+                            <i class="fa fa-calendar"></i> <span>Les Prix</span>
+                        </a>
+                    </li>
+                {% endif  %}
+
+                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MARQUETEUR')%}
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-key"></i> <span>Licences</span>
+                        </a>
+                    </li>
+                {%endif%}
+
+                <li class="header text-aqua">PARAMETRES</li>
+                    {% if is_granted('ROLE_MARQUETEUR') or is_granted('ROLE_RESPONSABLE')%}
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-circle-o text-red"></i>
+                            <span>Mes Utilisateurs</span>
+                        </a>
+                        <ul class="treeview-menu">
+                            {% if is_granted('ROLE_MARQUETEUR') %}
+                                <li>
+                                    <a href="{{path('accountmember', { 'status': 'responsable'})}}"><i class="fa fa-users"></i> <span>Mes Responsables</span></a>
+                                </li>
+                            {% endif%}
+                            <li>
+                                <a href="{{path('accountmember', { 'status': 'superviseur' })}}">
+                                    <i class="fa fa-users"></i> <span>Mes superviseurs</span>
+                                </a>
+                            </li>
+                            {% if is_granted('ROLE_MARQUETEUR') %}
+                                <li>
+                                    <a href="{{path('accountmember', { 'status': 'gerant' })}}">
+                                        <i class="fa fa-users"></i> <span>Mes gérants de stations</span>
+                                    </a>
+                                </li>
+                            {% endif%}
+                            <li>
+                                <a href="{{path('compteclient')}}"><i class="fa fa fa-users"></i> <span>Mes Clients Abonnés</span></a>
+                            </li>
+
+                        </ul>
+                    </li>    
+                    <li><a href="{{path('transporteur')}}"><i class="fa fa-circle-o text-red"></i> <span>Mes transporteurs</span></a></li>
+
+                {% endif%}
+                <li><a href="#"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
+
+            </ul>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+{% endblock main_sidebar %}

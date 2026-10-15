@@ -1,0 +1,36 @@
+{#
+{% if is_granted('ROLE_DISTRI') %}
+    #}
+{% if news|length>0 %}
+    <div class="" id="tiv">
+        <div id="flash_info" style="width:100%; padding:0px; margin:0px">
+            <table cellspacing="0" cellpadding="0" border="0">
+                <tbody>
+                    <tr>  
+                        <td class="cad_inf">NEWS</td>                                               
+                        <td>                                                   
+                <marquee direction="left" scrollamount="3.5" onmouseover="this.stop()" onmouseout="this.start()" style="font-size:15px; padding:3px;" width="100%"> 
+
+                    {% for new in news %}
+                        &nbsp;
+                        <span style="background-color:#C00; color:#FFF; font-weight:bold;font-family: sans-serif !important; padding:4px 4px 5px 4px">{{new.nature}}</span>  
+                        <span style="color:#FFF; font-family: sans-serif;  !important; ">
+                            {{new.msg}} &nbsp;
+                        </span>
+                    {% endfor %}
+
+
+
+                </marquee> 
+
+                </td>            
+
+                </tr>
+                </tbody>
+            </table>
+        </div> 
+    </div>
+{% endif %}
+{#
+{% endif %}
+#}

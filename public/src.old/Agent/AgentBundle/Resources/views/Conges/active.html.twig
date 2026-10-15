@@ -1,0 +1,192 @@
+{% extends '::base.html.twig' %}
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+    <style>
+        .dataTables_filter {
+            width: auto !important;
+        }
+        .records_list {
+            width: 100% !important;
+        }
+    </style>
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+{% block title %}
+    congés actifs
+{% endblock %}
+{% block body -%}
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs bar_tabs" role="tablist">
+        <li class="active" role="presentation">
+            <a aria-controls="home" data-toggle="tab" href="#home" role="tab">Congés Actifs</a>
+        </li>
+        <li role="presentation">
+            <a aria-controls="archive" data-toggle="tab" href="#archive" role="tab">Archive</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="home" role="tabpanel">
+
+            <div class="x_title">
+                <h2>Congés Actifs
+                    <small></small>
+                </h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="table-responsive">
+                <table class="records_list table table-striped responsive-utilities jambo_table bulk_action" id="datatable">
+                    <thead>
+                        <tr>
+                            <th>Date de soumission</th>
+                            <th>Type de Congés</th>
+                            <th>Date de départ</th>
+                            <th>Date de fin</th>
+                            <th>Nombre de jours</th>
+                            <th>Etat</th>
+                            <th>Date reprise</th>
+                            <th>Année</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entity in entities %}
+                            <tr>
+                                <td>
+                                    {% if entity.datecreation %}
+                                        {{ entity.datecreation|date('d-m-Y') }}
+                                    {% endif %}
+                                </td>
+                                <td>{{entity.typeConges.libelle}}</td>
+                                <td>
+                                    {% if entity.datedebut %}
+                                        {{ entity.datedebut|date('d-m-Y') }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if entity.datefin %}
+                                        {{ entity.datefin|date('d-m-Y') }}
+                                    {% endif %}
+                                </td>
+                                <td>{{entity.nbrejours}}</td>
+                                <td>
+
+                                    {% if (entity.agent.Fonction.id in [5,7]) %}
+                                        {{macro.EtatCongeResponsable(entity.etat,entity.niveau,entity.agent.retour_service.tab_lib[entity.niveau])}}
+                                    {% elseif entity.niveau == 0 %}
+                                        {{macro.EtatConge(entity.etat,entity.niveau,entity.agent.retour_service.tab_lib[entity.niveau])}}
+                                    {% else %}
+                                        {{entity.getValidateur(0)}}
+                                    {% endif %}
+
+
+                                </td>
+                                <td>
+                                    {% if entity.datereprise %}
+                                        {{ entity.datereprise|date('d-m-Y') }}
+                                    {% endif %}
+                                </td>
+                                <td>{{ entity.exercice }}</td>
+                                <td>
+                                    <a href="{{ path('conges_show', { 'id': entity.id }) }}">Consulter</a>&nbsp;|&nbsp;
+{% if entity.objetName %}
+
+
+    <button value="{{ vich_uploader_asset(entity, 'objetFile')}}" class="btn btn-success btnShow">
+
+        Justificatif</button>
+
+{% endif %}
+
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div class="tab-pane" id="archive" role="tabpanel">
+            <div class="x_title">
+                <h2>Liste des anciens congé<small></small>
+                </h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="table-responsive">
+                <table class="records_list table table-striped responsive-utilities jambo_table bulk_action" id="datatable">
+                    <thead>
+                        <tr>
+                            <th>Date de soumission</th>
+                            <th>Type de Congés</th>
+                            <th>Date de départ</th>
+                            <th>Date de fin</th>
+                            <th>Nombre de jours</th>
+                            <th>Etat</th>
+                            <th>Date reprise</th>
+                            <th>Année</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entity in archives %}
+                            <tr>
+                                <td>
+                                    {% if entity.datecreation %}
+                                        {{ entity.datecreation|date('d-m-Y') }}
+                                    {% endif %}
+                                </td>
+                                <td>{{entity.typeConges.libelle}}</td>
+                                <td>
+                                    {% if entity.datedebut %}
+                                        {{ entity.datedebut|date('d-m-Y') }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if entity.datefin %}
+                                        {{ entity.datefin|date('d-m-Y') }}
+                                    {% endif %}
+                                </td>
+                                <td>{{entity.nbrejours}}</td>
+                                <td>
+                                    {{macro.EtatConge(entity.etat,entity.niveau,entity.agent.retour_service.tab_lib[entity.niveau])}}
+                                    {#
+                                                                         {% elseif entity.etat == 3%}
+                                                                             <label class="label label-success">Cessation généré</label>
+                                                                         {% elseif entity.etat == 4%}
+                                                                             <label class="label label-success">Reprise généré</label>
+                                                                         {% endif %}
+                                                                         #}
+
+                                </td>
+                                <td>
+                                    {% if entity.datereprise %}
+                                        {{ entity.datereprise|date('d-m-Y') }}
+                                    {% endif %}
+                                </td>
+                                <td>{{ entity.exercice }}</td>
+                                <td>
+                                    <a href="{{ path('conges_show', { 'id': entity.id }) }}">Consulter</a>&nbsp;|&nbsp;
+
+{% if entity.objetName %}
+
+
+    <button value="{{ vich_uploader_asset(entity, 'objetFile')}}" class="btn btn-success btnShow">
+
+        Justificatif</button>
+
+{% endif %}
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

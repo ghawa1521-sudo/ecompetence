@@ -1,0 +1,106 @@
+{% extends '::base.html.twig' %}
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+    <style>
+        .dataTables_filter{
+            width: auto !important;
+        }
+        .records_list{
+            width:100% !important;
+        }
+    </style>
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+{% block body -%}
+
+    {#
+    <div class="row">
+        {% for flashMessage in app.session.flashbag.get('success') %}
+            <div class="alert alert-danger"> {{flashMessage}} </div>
+        {% endfor %}
+    </div>
+    #}
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs bar_tabs" role="tablist">
+        <li role="presentation"  class="active"><a href="#reprise" aria-controls="reprise" role="tab" data-toggle="tab">Actes à numériser&nbsp;&nbsp;<span class="label label-danger">{{actes|length}}</span></a></li>
+    </ul>
+
+    <div class="tab-content">
+
+        <div role="tabpanel" class="tab-pane  active" id="reprise">
+            <div class="x_title">
+                <h2>Numériser les actes de congés<small> </small></h2>
+                <div class="clearfix"></div>
+            </div>
+
+            <table class="records_list table table-striped responsive-utilities jambo_table bulk_action">
+                <thead>
+                    <tr>
+                        <th>Date soumission</th>
+                        <th>Type de Congés</th>
+                        <th>Nom & prénoms</th>
+                        <th>Date de départ</th>
+                        <th>Date de fin</th>
+                        <th>Nombre de jours</th>
+
+                        <th>Date de reprise</th>
+                        <th>Etat</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entity in actes %}
+                        <tr>
+
+                            <td>{% if entity.datecreation %}{{ entity.datecreation|date('H:i:s d-m-Y') }}{% endif %}</td>
+                            <td>{{entity.typeConges.libelle}}</td>
+                            <td>{% if entity.agent %}{{entity.agent.nom}} {{entity.agent.prenoms}}{% endif %}</td>
+                            <td>{% if entity.datedebut %}{{ entity.datedebut|date('d-m-Y') }}{% endif %}</td>
+                            <td>{% if entity.datefin %}{{ entity.datefin|date('d-m-Y') }}{% endif %}</td>
+                            <td>{{entity.nbrejours}}</td>
+
+                            <td>{% if entity.datereprise %}{{ entity.datereprise|date('d-m-Y') }}{% endif %}</td>
+                            <td>
+                                {% if  entity.niveau == 0 and entity.etat == 1 and (entity.numCessation is not defined or entity.numCessation is  null ) %}
+
+                                    cessation généré
+
+                                {% endif %}
+                                {% if  entity.niveau == 0 and entity.etat == 3 and (entity.numCessation is defined and entity.numCessation is not null ) and (entity.numReprise is not defined or entity.numReprise is  null )  %}
+
+                                    reprise généré
+                                {% endif %}
+                            </td>
+                            <td>
+
+                                {% if  entity.niveau == 0 and entity.etat == 1 and (entity.numCessation is not defined or entity.numCessation is  null ) %}
+
+
+                                    <a href="{{ path('conges_numerisation', { 'id': entity.id,'todo': 3 }) }}" class="btn  btn-primary col-md-12"
+                                       data-confirm="Etes-vous <strong>certain</strong> de vouloir Valider cette demande ?">
+                                        Numériser Certificat Cessation
+                                    </a>
+
+                                {% endif %}
+                                {% if entity.niveau == 0 and entity.etat == 3 and (entity.numCessation is defined and entity.numCessation is not null ) and (entity.numReprise is not defined or entity.numReprise is  null )  %}
+
+                                    <a href="{{ path('conges_numerisation', { 'id': entity.id,'todo': 4 }) }}" class="btn btn-warning col-md-12"
+                                       data-confirm="Etes-vous <strong>certain</strong> de vouloir Valider cette demande ?">
+                                        Numériser Certificat Reprise
+                                    </a>
+                                {% endif %}
+
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+
+
+    </div>
+
+{% endblock %}

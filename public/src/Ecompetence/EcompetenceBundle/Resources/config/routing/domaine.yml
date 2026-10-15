@@ -1,0 +1,36 @@
+domaine:
+    path:     /
+    defaults: { _controller: "EcompetenceBundle:Domaine:index" }
+
+domaine_show:
+    path:     /{id}/show
+    defaults: { _controller: "EcompetenceBundle:Domaine:show" }
+
+domaine_new:
+    path:     /new
+    defaults: { _controller: "EcompetenceBundle:Domaine:new" }
+
+domaine_create:
+    path:     /create
+    defaults: { _controller: "EcompetenceBundle:Domaine:create" }
+    methods:  POST
+
+domaine_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "EcompetenceBundle:Domaine:edit" }
+
+domaine_fils:
+    path:     /{id}/editsousdomaine
+    defaults: { _controller: "EcompetenceBundle:Domaine:editsousdomaine"}
+   
+
+
+domaine_update:
+    path:     /{id}/update
+    defaults: { _controller: "EcompetenceBundle:Domaine:update" }
+    methods:  [POST, PUT]
+
+domaine_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "EcompetenceBundle:Domaine:delete" }
+    methods:  [POST, DELETE]

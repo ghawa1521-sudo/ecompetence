@@ -1,0 +1,67 @@
+{% extends '::base.html.twig' %}
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+
+{% block titre_page %}
+    <div> <h1>Demandes initiées</h1></div>
+{% endblock %}
+{% block body %}
+	<table class="records_list table table-striped table-bordered jambo_table">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th rowspan="2">Date Demande</th>
+                <th rowspan="2">Agent</th>
+                <th rowspan="2">Objet</th>
+                <th rowspan="2">Destination</th>
+                <th rowspan="2">Periode</th>
+                <th rowspan="2">Etat de la demande</th>                
+                <th rowspan="2">Actions</th>
+            </tr>
+           
+        </thead>
+        <tbody>
+            {% for entity in liste %}
+                <tr>
+                    <td>{{entity.id}}</td>
+                    <td>{% if entity.datecreation %}{{ entity.datecreation|date('d-m-Y H:i:s') }}{% endif %}</td>
+                    <td>{{ entity.emmeteur.concatNom }}</td>
+                    <td>{{ entity.objet }}</td>
+                    <td>{{ entity.Destination }}</td>
+                    <td>{% if entity.dateDeb %}{{ entity.dateDeb|date('d-m-Y') }} {% endif %}{% if entity.dateFin %}au {{ entity.dateFin|date('d-m-Y ') }}{% endif %}</td>  
+                    <td align="center">
+                        {% if (entity.etatRepGrh == 2) %}Refusé
+                              <span class="label label-danger"></span>
+                              <br>
+                              {{entity.motifRejet}}
+                        {% elseif (entity.etatRepGrh == 0) and (entity.etatRepSupDir2 == 1) %}{# Etat 0  En attente#}En Attente
+                            <span class="label label-warning"></span>
+                        {% elseif (entity.etatRepGrh == 1) %}Validé
+                                <span class="label label-info"></span>
+                        {% endif %}
+                    </td>
+                                     
+                    <td>                                        
+                            {% if (entity.etatEmmission == 0) %}
+                                
+                                    <a class="btn btn-success" href="{{ path('demande_edit', { 'id': entity.id }) }}">Modifier</a>
+                               
+                            {% endif %}
+                            {% if(entity.signeActe == 1) %}
+                                
+                                <button value="{{ vich_uploader_asset( entity.demandeActe, 'docFile')}}" class="btn btn-success btnShow">Télécharger l'acte</button>
+                               
+                            {% endif %}
+                                                                
+                                                           
+                    </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+
+{% endblock %}

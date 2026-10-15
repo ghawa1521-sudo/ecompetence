@@ -1,0 +1,30 @@
+competence:
+    path:     /
+    defaults: { _controller: "EcompetenceBundle:competence:index" }
+
+competence_show:
+    path:     /{id}/show
+    defaults: { _controller: "EcompetenceBundle:competence:show" }
+
+competence_new:
+    path:     /new
+    defaults: { _controller: "EcompetenceBundle:competence:new" }
+
+competence_create:
+    path:     /create
+    defaults: { _controller: "EcompetenceBundle:competence:create" }
+    methods:  POST
+
+competence_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "EcompetenceBundle:competence:edit" }
+
+competence_update:
+    path:     /{id}/update
+    defaults: { _controller: "EcompetenceBundle:competence:update" }
+    methods:  [POST, PUT]
+
+competence_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "EcompetenceBundle:competence:delete" }
+    methods:  [POST, DELETE]

@@ -1,0 +1,165 @@
+<?php
+
+namespace Agent\AgentBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Rubriques
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Agent\AgentBundle\Repository\RubriquesRepository")
+ */
+class Rubriques {
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="libelle", type="string", length=255)
+     */
+    private $libelle;
+
+    /**
+     * @var Fonctionalite|null
+     *
+     * @ORM\ManyToOne(targetEntity="Fonctionalite", inversedBy="rubriques",cascade={"persist"})
+     * @ORM\JoinColumn( nullable=false)
+     */
+    private $fonctionalite;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="etat", type="integer")
+     */
+    private $etat = 0;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="route", type="string", length=25, nullable=true)
+     */
+    private $route;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="param", type="string", length=25, nullable=true)
+     */
+    private $param;
+
+    function __toString() {
+        return $this->getLibelle();
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+    /**
+     * Set libelle
+     *
+     * @param string $libelle
+     *
+     * @return Rubriques
+     */
+    public function setLibelle($libelle) {
+        $this->libelle = $libelle;
+
+        return $this;
+    }
+
+    /**
+     * Get libelle
+     *
+     * @return string
+     */
+    public function getLibelle() {
+        return $this->libelle;
+    }
+
+    /**
+     * Set fonctionalite
+     *
+     * @param \Agent\AgentBundle\Entity\Fonctionalite $fonctionalite
+     *
+     * @return Rubriques
+     */
+    public function setFonctionalite(\Agent\AgentBundle\Entity\Fonctionalite $fonctionalite) {
+        $this->fonctionalite = $fonctionalite;
+
+        return $this;
+    }
+
+    /**
+     * Get fonctionalite
+     *
+     * @return \Agent\AgentBundle\Entity\Fonctionalite
+     */
+    public function getFonctionalite() {
+        return $this->fonctionalite;
+    }
+
+
+    /**
+     * Set etat
+     *
+     * @param integer $etat
+     *
+     * @return Rubriques
+     */
+    public function setEtat($etat)
+    {
+        $this->etat = $etat;
+
+        return $this;
+    }
+
+    /**
+     * Get etat
+     *
+     * @return integer
+     */
+    public function getEtat()
+    {
+        return $this->etat;
+    }
+
+    /**
+     * Set route
+     *
+     * @param string $route
+     *
+     * @return Rubriques
+     */
+    public function setRoute($route)
+    {
+        $this->route = $route;
+
+        return $this;
+    }
+
+    /**
+     * Get route
+     *
+     * @return string
+     */
+    public function getRoute()
+    {
+        return $this->route;
+    }
+}

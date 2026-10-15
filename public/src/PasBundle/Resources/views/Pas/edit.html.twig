@@ -1,0 +1,19 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Pas edit</h1>
+    {{dump(edit_form.axes.vars)}}
+    {#
+    {{dump(edit_form.axes.vars.prototype.objectifs)}}
+    {{dump(edit_form.axes.vars.prototype.objectifs.actions.prototype)}}
+    #}
+    {{ form(edit_form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('pasc') }}">
+            Retour
+        </a>
+    </li>
+</ul>
+{% endblock %}

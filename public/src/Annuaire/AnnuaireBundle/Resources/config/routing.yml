@@ -1,0 +1,7 @@
+annuaire_personne:
+    resource: "@AnnuaireBundle/Resources/config/routing/personne.yml"
+    prefix:   /personne
+
+annuaire_contact:
+    resource: "@AnnuaireBundle/Resources/config/routing/contact.yml"
+    prefix:   /contact

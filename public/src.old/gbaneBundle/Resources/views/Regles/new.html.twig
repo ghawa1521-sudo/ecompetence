@@ -1,0 +1,13 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Creation nouvelle règle</h1>
+
+    {{ form(form) }}
+
+    
+        <a href="{{ path('regles') }}">
+           <button type="button" class="btn btn-primary"> Retour à la liste</button>
+        </a>
+    
+{% endblock %}

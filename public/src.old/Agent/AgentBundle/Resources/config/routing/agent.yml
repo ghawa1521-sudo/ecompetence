@@ -1,0 +1,94 @@
+agent:
+    path:     /
+    defaults: { _controller: "AgentBundle:Agent:index" }
+
+agent_show:
+    path:     /{id}/show/{val}
+    defaults: { _controller: "AgentBundle:Agent:show",val:0 }
+    options:
+        expose: true
+
+agent_new:
+    path:     /new
+    defaults: { _controller: "AgentBundle:Agent:new" }
+
+agent_pdf:
+    path:     /pdf
+    defaults: { _controller: "AgentBundle:Agent:pdf" }
+
+agent_create:
+    path:     /create
+    defaults: { _controller: "AgentBundle:Agent:create" }
+    methods:  POST
+
+agent_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AgentBundle:Agent:edit" }
+    options:
+        expose: true
+
+agent_update:
+    path:     /{id}/update
+    defaults: { _controller: "AgentBundle:Agent:update" }
+    methods:  [POST, PUT]
+
+agent_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AgentBundle:Agent:delete" }
+    methods:  [POST, DELETE]
+
+agent_print:
+    path:     /{id}/print
+    defaults: { _controller: "AgentBundle:Agent:print" }
+
+agent_list_modif:
+    path:     /listModif
+    defaults: { _controller: "AgentBundle:Agent:listModif" }
+
+agent_list_doc:
+    path:     /listDoc
+    defaults: { _controller: "AgentBundle:Agent:listDoc" }
+
+agent_edit_profil:
+    path:     /edit/{id}/profil/
+    defaults: { _controller: "AgentBundle:Agent:editProfil" }
+agent_soutra:
+    path:     /soutra
+    defaults: { _controller: "AgentBundle:Agent:soutra" }
+agent_me:
+    path:     /list-for-me
+    defaults: { _controller: "AgentBundle:Agent:formMe" }
+
+agent_classe_listetype:
+    path:     /{id}/listeClasse
+    defaults: { _controller: "AgentBundle:Agent:listeClasse" }
+    methods:  GET
+    options:
+      expose: true
+
+agent_echelon_listetype:
+    path:     /{id}/listeEchelon
+    defaults: { _controller: "AgentBundle:Agent:listeEchelon" }
+    methods:  GET
+    options:
+      expose: true
+
+agent_indice_listetype:
+    path:     /{id}/listeIndice
+    defaults: { _controller: "AgentBundle:Agent:listeIndice" }
+    methods:  GET
+    options:
+      expose: true
+      
+agent_menu:
+    path:     /{id}/menu
+    defaults: { _controller: "AgentBundle:Agent:menu" }
+    
+agent_reinitialise:
+    path:     /reinitialise
+    defaults: { _controller: "AgentBundle:Agent:reinitialise" }
+
+agent_designer:
+    path:     /designer
+    defaults: { _controller: "AgentBundle:Agent:designer" }
+    methods:  [POST,GET]

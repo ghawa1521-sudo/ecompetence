@@ -1,0 +1,90 @@
+{% extends '::gabarit_print.html.twig' %}
+{% block titre %}
+    <div align="center" style="font-size:30px; text-decoration: underline;">
+        <h3><b>ATTESTATION DE PRISE DE SERVICE</b></h3>
+    </div>
+{% endblock %}
+    {% block datePdf %}{% endblock %}
+    {% block contenuPdf -%}
+
+        <div style="background-color: white; color:black;">
+            <p>
+        Je soussigné {{dgName}}, Directeur Général de l'Economie (DGE), atteste que
+            {% if entity.agent.sexe.id == 1 %}
+
+                Monsieur <strong>{{entity.agent.nom}} {{entity.agent.prenoms}}</strong>
+                {% elseif entity.agent.sexe.id == 2 %}
+                        {% if  entity.agent.situationMatri.id == 1  %}Mademoiselle <strong>{{entity.agent.nom}} {{entity.agent.prenoms}}</strong> {% endif %}
+                    {% if  entity.agent.situationMatri.id == 2  %}Madame <strong>{{entity.agent.nom}}</strong> née <strong>{{entity.agent.nomJeuneFille}}</strong>{% endif %}
+
+            {% endif %}
+
+
+            , {{entity.agent.Emploi}},
+            matricule {{entity.agent.matricule}} , a effectivement pris service à la Direction Générale de l'Economie,
+            depuis le <strong>{{entity.agent.datePriseServiceDge|localizeddate('none', 'none', app.request.locale, "Europe/Paris", "cccc d MMMM Y") }}.</strong>
+        </p>
+        <p>
+            En foi de quoi, je délivre la présente attestaion pour servir et valoir ce que de droit.
+        </p>
+
+            <br/><br/><br/>
+
+        </div>
+            <table cellsapcing="5">
+                <tr><td>
+                <strong>Ampliation :</strong>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                <td>MEF/DRH</td><td>1</td>
+                </tr>
+                <tr>
+                <td>MEF/DGE</td><td>1</td>
+                </tr>
+                <tr>
+                <td>SRHMG</td><td>1</td>
+                </tr>
+                <tr>
+                <td>INTERESSE(E)</td><td>1</td>
+                </tr>
+
+            </table>
+
+
+<!--{% if is_granted('ROLE_RESPO') %}
+        <div class="row" id="verif">
+            <br/><br/>
+            <div align="center">
+                <label>Veuillez entrer votre mot de passe afin d\'éffectuer la validation de la demande</label><br/>
+                <div class="col-md-offset-4 col-sm-3 col-xs-3 col-lg-3 col-md-3">
+                    <form action="{{ path('demande_valid', { 'id': entity.id }) }}" method ="POST">
+                        <input id="mdp" name="mdp" type="password" class="form-control" placeholder="Votre Mot de Passe" />
+                        <input type="submit" class="btn btn-success btn-sm col-md-offset-5 col-md-2" value="valider">
+                    </form>
+                </div>
+            </div>
+        </form>
+
+        </div>
+        <div id="boutton">
+        <button id="btn-js" class="btn btn-success btn-sm col-md-offset-5 col-md-2" onclick="VerifPassword() ;"> Valider</button>
+        </div>
+        <br/>
+        <div>
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('demande_receive') }}">
+            Retour Demandes Reçues
+        </a>
+    </li>
+
+</ul>
+</div>
+{% endif %}
+
+-->
+<script src="{{ asset('design/js/style.js') }}"></script>
+
+    {% endblock %}

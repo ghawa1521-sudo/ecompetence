@@ -1,0 +1,85 @@
+{% extends '::base.html.twig' %}
+{% block datatableCss %}
+    <style>
+        th{
+            text-align: left !important;
+        }
+    </style>
+{% endblock %}
+{% block body -%}
+    <div class="row">
+        <div>
+            <div class="x_title">Justifier le Refus
+                <small> </small>
+                <div class="clearfix"></div>
+            </div>
+            {#{dump(form.vars)}#}
+            <div class="col-md-push-3 col-md-6">
+                {{ form_start(edit_form) }}
+                {{ form_errors(edit_form) }}
+                <table class="table table-striped responsive-utilities jambo_table bulk_action">
+                    <tbody>
+                        <tr>
+                            <th>Date de soumission</th>
+                            <td>{{ entity.datecreation|date('d-m-Y H:i:s ') }}</td>
+                        </tr>
+                        <tr>
+                            <th>Matricule</th>
+                            <td>{{ entity.agent.matricule }}</td>
+                        </tr>
+                        <tr>
+                            <th>Nom & Prénoms</th>
+                            <td>{{ entity.agent.nom}} {{ entity.agent.prenoms}}</td>
+                        </tr>
+                        <tr>
+                            <th>Date de début</th>
+                            <td>{{ entity.datedebut|date('d-m-Y') }}</td>
+                        </tr>
+                        <tr>
+                            <th>Nombre de Jours</th>
+                            <td>{{ entity.nbrejours }}</td>
+                        </tr>
+                        <tr>
+                            <th>Date de fin</th>
+                            <td>{{ entity.datefin|date('d-m-Y') }}</td>
+                        </tr>
+                        <tr>
+                            <th>Etat</th>
+                            <td>
+                                {% if entity.niveau == 0 %}
+                                    {{macro.EtatConge(entity.etat,entity.niveau,entity.agent.retour_service.tab_lib[entity.niveau])}}
+                                {% elseif( entity.niveau > 0) %}
+                                    {{macro.EtatConge(entity.etat,entity.niveau,entity.agent.retour_service.tab_lib[entity.niveau-1])}}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Date reprise</th>
+                            <td>{% if entity.datereprise %}{{ entity.datereprise|date('Y-m-d H:i:s') }}{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <th>Exercice</th>
+                            <td>{{ entity.exercice }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                {{form_row(edit_form.objetRefus)}}
+                {{ form_widget(edit_form._token) }}
+                <input type="submit" class="btn btn-success" value="Enregistrer" />
+            </div>
+
+
+            {{ form_end(edit_form, {'render_rest': false}) }}
+
+        </div>
+    </div>
+{#
+    <div class="row">
+        {% for flashMessage in app.session.flashbag.get('success') %}
+            <div class="alert alert-danger"> {{flashMessage}} </div>
+        {% endfor %}
+    </div>
+    #}
+
+{% endblock %}
+

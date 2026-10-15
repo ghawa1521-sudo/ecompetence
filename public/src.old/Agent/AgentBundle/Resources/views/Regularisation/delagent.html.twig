@@ -1,0 +1,144 @@
+{% extends '::base.html.twig' %}
+
+{% block css %}
+    <link href="{{ asset('design/css/style.css') }}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{{asset('ediligence/assets/css/bootstrap-select.min.css')}}">
+{% endblock %}
+
+
+
+{% block titre_page %}   
+
+{% endblock %}
+
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+    <style>
+        th{
+            text-align: left !important;
+        }
+        .dataTables_filter{
+            width: auto !important;
+        }
+    </style>
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+
+{% block body -%}
+    <div class="row">
+        <div class="">
+            {% if app.request.hasPreviousSession %}
+                {% for type, messages in app.session.flashbag.all() %}
+                    <div class="alert alert-{{ type }}">
+                        <ul>
+                            {% for message in messages %}
+                                <li>
+                                    {{ message }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+{% set count = agents|length %}
+    <div class="row">
+
+        <div class="col-md-12 table-responsive"> 
+            <table class="records_list table table-striped responsive-utilities jambo_table table-responsive">
+                <thead>
+                    <tr>
+                        <th colspan="5">LISTE DES AGENTS DE LA DGE ({{agents|length}})</th>
+                    </tr>
+                    <tr class="headings">
+                        <th>Agents</th>
+                        <th>Fonction</th>
+                        <th>Service</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        {% for agent in agents %}
+                    <tr>
+                        <td>{% if agent and agent.concatNommatricule is defined %}{{agent.concatNommatricule}}{% endif %}</td>
+                        <td>{% if agent and agent.Fonction is defined %}{{agent.Fonction.libFonc}}{% endif %}</td>
+                        <td>{% if agent and agent.getServiceActuel is defined %}{{agent.getServiceActuel}}{% endif %}</td>
+                        <td>{% if count > 1 %}<a href="{{ path('regularisation_del', {'id': agent.id}) }}" class="btn btn-danger btn-sm col-md-12 " data-confirm="Etes-vous <strong>certain</strong> de vouloir supprimer cet <strong><i>agent:{{agent.concatNommatricule}} </strong>?<h1></h1><br><center><strong><font color=red>Il sera définitivement supprimé de la base des agents DGE<br>*** Cette action est irréversible***</font></i></strong></center>">Supprimer</a>{% else %}<a href="{{ path('regularisation_del') }}" class="btn btn-warning btn-sm col-md-12">Retour</a>{% endif %}</td>
+                    </tr>
+                        {% endfor %}
+                </tbody>
+             </table>
+
+        </div>
+        
+{% if (  ( (demandes is defined and demandes != null) or (conges is defined and conges != null)) and todo == 0) %}
+        <div class="col-md-12 table-responsive"> 
+            <table class="table table-striped responsive-utilities jambo_table table-responsive">
+                <thead>
+                    <tr>
+                        <th colspan="3">LISTE DES DEMANDES DE CONGES OU ABSENCES EN COURS</th>
+                    </tr>
+                    <tr class="headings">
+                        <th>Demandes actes</th>
+                        <th>Conges</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{demandes|length}}</td>
+                        <td>{{conges|length}}</td>
+                        <td><a href="{{ path('regularisation_del', {'id': agents[0].id, 'todo': agents[0].id}) }}" class="btn btn-success btn-sm col-md-12" data-confirm="Etes-vous <strong>certain</strong> de vouloir supprimer cet <strong><i>agent:{{agents[0].concatNommatricule}} </strong>?<h1></h1><br><center><strong><font color=red>Il sera définitivement supprimé de la base des agents DGE<br>*** Cette action est irréversible***</font></i></strong></center>">Confirmer la suppression</a><a href="{{ path('regularisation_del') }}" class="btn btn-warning btn-sm col-md-12">Retour</a></td>
+                    </tr>
+                </tbody>
+             </table>
+
+        </div>
+{% else %}
+    {% if app.user.hasRole('ROLE_ADMIN') %}
+        <div class="col-md-12 table-responsive"> 
+            <table class="records_list table table-striped responsive-utilities jambo_table table-responsive">
+                <thead>
+                    <tr>
+                        <th colspan="5">LISTE DES AGENTS SUPPRIMES DIFINITIVEMENT ({{agentdel|length}})</th>
+                    </tr>
+                    <tr class="headings">
+                        <th>Agent</th>
+                        <th>Fonction</th>
+                        <th>Service</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                        {% if agentdel %}
+                        {% for agentdels in agentdel %}
+                            {% if agentdels.objet.agent is defined %}
+                    <tr>
+                        <td>{{agentdels.objet.agent.concatNommatricule}}</td>
+                        <td>{{fonctionbase.getLibelleObjet(agentdels.objet.agent.Fonction,'AgentBundle:Fonction')}}</td>
+                        <td>{{fonctionbase.getLibelleObjet(agentdels.objet.agent.direction,'AgentBundle:Direction')}}</td>
+                        <td>{% if app.user.hasRole('ROLE_ADMIN') %}<a href="{{ path('regularisation_del', {'id': agentdels.id, 'todo': agentdels.id, 'res': agentdels.id}) }}" class="btn btn-success btn-sm col-md-12">Restaurer</a>{% endif %}</td>
+                    </tr>{% endif %}
+                        {% endfor %}
+                       {% endif %}
+                </tbody>
+             </table>
+
+        </div>
+        {% endif %}
+{% endif %}
+
+    </div>
+
+
+
+{% endblock %}
+
+{% block javascript %}
+
+    <script src="{{ asset('design/js/style.js') }}"></script>
+    <script src="{{ asset('ediligence/assets/js/bootstrap-select.min.js') }}"></script>
+{% endblock %}

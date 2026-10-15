@@ -1,0 +1,381 @@
+{% extends '::base.html.twig' %}
+{% block css %}
+    {{ parent() }}
+    <link href="{{ asset('design/css/select/select2.min.css') }}" rel="stylesheet" />
+{% endblock %}
+{% block body %}
+   
+
+       {# {{ form_start(form) }}
+        {{ form_errors(form) }}#}
+
+           <div class= "modal fade" id= "exampleModal" tabindex= "-1" role= "dialog" aria-labelledby= "exampleModalLabel" aria-hidden= "true" >
+                            <div class= "modal-dialog" role= "document" > 
+                                <div class= "modal-content" > 
+                                    <div class= "modal-header panel-primary" > <h5 class= "modal-title" id= "exampleModalLabel" >Ajouter un nouvel employeur</h5>
+                                        <button type= "button" class= "close" data-dismiss= "modal" aria-label= "Close" > 
+                                            <span aria-hidden= "true" > &times; </span>
+                                        </button> </div> 
+                                             <div class= "modal-body" >
+                                             {{ form_start(form1,{'id':'#form_body'})}}
+                                              {{ form_errors(form1) }} 
+                                               <div class= "form-group row" >
+                                                    {{ form_label(form1.secteur, 'Secteur', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                                                    {{ form_errors(form1.secteur) }}
+                                                    {{ form_widget(form1.secteur, {'id':'sect','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                                                </div> 
+                                                <div class= "form-group row" > 
+                                                   {{ form_label(form1.libStructure, 'Nom Employeur', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                                                    {{ form_errors(form1.libStructure) }}
+                                                    {{ form_widget(form1.libStructure, {'id':'str1','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                                                </div> 
+                                                
+                                       
+                                        </div>
+                                    <div class= "modal-footer" > 
+                                        <button type= "button" class= "btn btn-secondary" data-dismiss= "modal" > Fermer 
+                                        </button> 
+                                        <input type= "button" id="btn_valid"  data-dismiss= "modal" class= "btn btn-primary" value="Enregistrer"/>
+                                    </div> 
+                                    {{ form_row(form1._token) }}
+                                    {{ form_end(form1,{render_rest:false}) }}
+                                </div> 
+                            </div> 
+                        </div>
+       
+        <div class="x_panel">
+       
+        <hr>
+          
+          <div class="row"> 
+          <div class=""> </div>
+          <div class="col-md-12"> 
+          <div class="panel panel-success">
+          {%if(modif==false)%}   
+          <div class="panel-heading"> <h2> Nouvelle expérience professionnelle</h2></div>
+          {%else%}
+          <div class="panel-heading"> <h2> Modification d'expérience professionnelle</h2></div>
+          {%endif%} 
+          <div class="panel-body">
+         
+             
+             {{ form_start(form,{'attr': {'novalidate': 'novalidate'}}) }}
+             {{ form_errors(form) }}
+               
+                  <div class="col-md-5" >
+                    <div class="form-group row">
+                        {{ form_label(form.dateDebExp, 'Date début', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form.dateDebExp) }}
+                        {{ form_widget(form.dateDebExp) }}
+                    </div>
+                    <div class="form-group row" >                
+                        {{ form_label(form.dateFinExp, 'Date fin', {'label_attr': {'class': 'control-label col-md-3 col-sm-3 col-xs-12'}} ) }}
+                        {{ form_errors(form.dateFinExp) }}
+                        {{ form_widget(form.dateFinExp) }}
+                     </div>
+
+                     <div  id="viewsct" class="form-group row">
+                        {{ form_label(form.secteur, 'Secteur', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.secteur) }}
+                        {{ form_widget(form.secteur, {'id':'sec','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                    </div>
+                    
+                     <div  id="viewstr" class="form-group row">
+                        {{ form_label(form.structure, 'Nom de l\'employeur', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.structure) }}
+                        {{ form_widget(form.structure, {'id':'str','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                      </div>
+                      </div>
+                
+                    <div class="col-lg-offset-2 col-md-5">
+                    <div id="viewcvdg" class="form-group row">
+                        {{ form_label(form.cvdirectiongle, 'Direction générale', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.cvdirectiongle) }}
+                        {{ form_widget(form.cvdirectiongle, {'id':'cvdg','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                       </div>
+                       <div  id="viewcvdc" class="form-group row">
+                        {{ form_label(form.cvdirection, 'Direction', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.cvdirection) }}
+                        {{ form_widget(form.cvdirection, {'id':'cvdc','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                       </div>
+
+                    <div id="viewtxtpo" class="form-group row">
+                        {{ form_label(form.libExp, 'Poste occupé', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.libExp) }}
+                        {{ form_widget(form.libExp, {'id':'txtpo','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                    </div>
+                    <div id="viewoptpo" class="form-group row">
+                        {{ form_label(form.fonction, 'Poste occupé', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}
+                        {{ form_errors(form.fonction) }}
+                        {{ form_widget(form.fonction, {'id':'optpo','attr':{'class': 'form-control col-md-7 col-xs-12'}})}}
+                    </div>
+                    </div>
+
+                    
+                   
+                    <div class="col-md-12">
+                         <br>
+                      <div class='row'> <label class='col-md-6 col-sm-6 col-xs-12'>Saisir les missions</label></div>
+                      <div id="viewmission" class="form-group row">
+                       {# {{ form_label(form.mission, 'Missions', {'label_attr': {'class': 'control-label col-md-6 col-sm-6 col-xs-12'}} ) }}#}
+                       
+                       {{ form_errors(form.mission) }}
+                        {{ form_widget(form.mission, {'id':'optmis','attr':{'class': 'control-label col-md-6 col-sm-6 col-xs-12 ckeditor'}})}}
+                     </div>
+                    </div>
+
+                   <div class="col-md-8">
+                    <div id="viewimg" class="form-group row">                
+                        {#{{ form_label(form.pj.imageFile, 'Fichier PDF', {'label_attr': {'class': 'control-label col-md-6 col-sm-4 col-xs-12'}} ) }}#}
+                        {#{{ form_errors(form.pj.imageFile) }}
+                        {{ form_widget(form.pj.imageFile, {'attr': {'accept': '.pdf', 'required': true}}) }}#}
+                      </div>
+                   <div class="form-group row">
+                        {{ form_row(form._token) }}
+                        {{ form_widget(form.enregistrer, {'attr':{'class': 'btn btn-primary'}}) }}
+
+                        <input type="hidden" name="bouton" value="1">
+                        <input  type="hidden" id="modif" value="{{modif}}"> 
+
+                        <button type="button" class="btn btn-warning" onclick="window.history.back();">
+                        <i class="fa fa-arrow-left"></i> Retour
+                        </button>  
+                    </div> 
+                    </div>     
+                           {{ form_end(form,{render_rest:false}) }}
+                   <div class="form-group row">
+                       <button style="position: absolute;top: 305px; left: 435px;" type= "button" class= "btn btn-primary glyphicon glyphicon-plus" data-toggle= "modal" data-target= "#exampleModal" data-whatever= "@mdo" ></button>
+                    
+                   </div>
+                    </div>
+                     </div>
+                     </div>
+                   </div>
+                   </div>
+                   
+<style>
+.help-block{
+color:red;
+font-weight:bold;
+}
+</style>
+{% endblock %}
+
+{% block javascript %}
+
+<script src="{{ asset('design/js/select/select2.full.js') }}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#str').select2({
+            width: '100%',
+            language: {
+                noResults: function () { return 'Aucun résultat trouvé'; },
+                searching: function () { return 'Recherche…'; }
+            }
+        });
+    });
+</script>
+
+<script type="text/javascript" src="{{ asset('design/js/wizard/jquery.smartWizard.js') }}"></script>
+<script src="{{ asset('design/js/nicescroll/jquery.nicescroll.min.js') }}"></script>
+
+<script type="text/javascript">
+        $(document).ready(function () {
+        	 $('#viewtxtpo').hide();
+            // Smart Wizard
+            $('#wizard').smartWizard();
+
+            function onFinishCallback() {
+                $('#wizard').smartWizard('showMessage', 'Finish Clicked');
+                //alert('Finish Clicked');
+            }
+        });
+
+        $(document).ready(function () {
+            // Smart Wizard
+            $('#wizard_verticle').smartWizard({
+                transitionEffect: 'slide'
+            });
+            
+          //  $('#str').children('option:not(:first)').remove();
+
+        });
+                       
+</script>
+<script type="text/javascript">
+        $(document).ready(function () {
+        var modif=$('#modif').val();
+        var secteur=$('#sec').val();
+
+        if (modif==false) 
+        {      
+        $('#viewtxtpo').hide();
+        $('#viewoptpo').show();
+        $('#viewcvdg').show();
+        $('#viewcvdc').show();
+
+       // $('#diplome').children('option:not(:first)').remove();
+        //$('#specialite').children('option:not(:first)').remove();
+       // $('#option').children('option:not(:first)').remove();
+      }
+        else if (secteur==1)
+       {
+        $('#viewtxtpo').hide();
+        $('#viewoptpo').show();
+        $('#viewcvdg').show();
+        $('#viewcvdc').show();
+
+       }
+       else
+       {
+          $('#viewtxtpo').show(); 
+          $('#viewoptpo').hide();
+          $('#viewcvdg').hide();
+          $('#viewcvdc').hide();
+       }
+    
+         
+        });
+        
+       $('#sec').change(function(){
+          var type=$(this).val();
+          if (type==1)
+          {  
+            $('#viewtxtpo').hide();
+            $('#viewoptpo').show();
+            $('#viewcvdg').show();
+            $('#viewcvdc').show();
+          }
+          else
+          { 
+             $('#viewtxtpo').show(); 
+             $('#viewoptpo').hide();
+             $('#viewcvdg').hide();
+             $('#viewcvdc').hide();          
+          }
+              
+           
+        });
+         
+</script>
+
+
+
+
+<script type="text/javascript">
+   $('#btn_valid').on('click', function (e) {
+ 
+        e.preventDefault();
+ 
+        $.ajax({
+            type: $('#form_body').attr('method'),
+            url: $('#form_body').attr('action'),
+            data: $('#form_body').serialize()
+        })
+        .done(function (data) {
+           // alert(1);
+            if (typeof data.message !== 'undefined') {                //alert(data.message);
+                var monObjet = JSON.parse(data.value);
+                console.log(monObjet);
+                  // Selectionner une option d'un selection à l'aide de son value
+                 $('#sec option[value='+monObjet.secteur.id+']')
+                 .attr("selected", "seleted");
+                 $('#str')
+                 .append($("<option></option>")
+                 .attr("value", monObjet.id)
+                 .text(monObjet.libStructure)
+                 .attr("selected", "seleted"));
+                $('#str').trigger('change');
+
+                // $('#id_deplacement_designation').val("");
+                 $('.form_error').empty();
+            }
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            if (typeof jqXHR.responseJSON !== 'undefined') {
+                if (jqXHR.responseJSON.hasOwnProperty('form')) {
+                    $('#form_body').html(jqXHR.responseJSON.form);
+                }
+ 
+                $('.form_error').html(jqXHR.responseJSON.message);
+ 
+            } else {
+              //alert(3);
+                alert(errorThrown);
+            }
+ 
+        });
+    });                   
+</script>
+
+
+<script type="text/javascript">
+function searchList($sourceval, $route, $destval, $div)
+{
+    $source = $($sourceval).val();
+ 
+    if($sourceval=='#sec')
+    { 
+        if($source==1)
+      {   
+        $('#viewtxtpo').hide();
+        $('#viewoptpo').show();
+        $('#viewcvdg').show();
+        $('#viewcvdc').show();
+      }
+      else
+      {
+       $('#viewtxtpo').show(); 
+       $('#viewoptpo').hide();
+       $('#viewcvdg').hide();
+       $('#viewcvdc').hide();
+      }
+    }
+    if ($source.length > 0 ){
+
+        $source=$source;
+    }else{
+            $source=0;
+        }
+    
+    $paramroute = {'id': $source};
+    $.ajax({
+       type: 'GET',
+       url: Routing.generate($route, $paramroute),
+       dataType: 'json',
+       success: function(data) {
+       
+          // alert(jQuery.isEmptyObject(data));
+           
+
+           if (jQuery.isEmptyObject(data) == false){
+             
+               $($destval).children('option:not(:first)').remove();
+               //$($destval).append('<option>---- Choisir un Service-----</option>');
+               $.each(data, function(key, value) {
+                    //console.log(value);
+                 $($destval).append('<option value= "' + value[0] + '">' + value[1] + '</option>');
+
+                // $($destval).html("ggggg");
+               
+               });
+               
+                 
+               
+            
+           }
+           else{
+               //console.log($sourceval);
+              //  alert("no");
+               $($destval).children('option:not(:first)').remove();
+              
+           }
+       }
+       });
+   
+}
+
+             </script>
+
+
+{% endblock %}

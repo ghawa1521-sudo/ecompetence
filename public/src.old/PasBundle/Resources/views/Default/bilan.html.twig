@@ -1,0 +1,81 @@
+{% extends '::ediligence/base.html.twig' %}
+
+{% block stylesheets %}
+
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+{% endblock%}
+
+{% block body %}
+
+</script>
+
+<div class="content-header">
+    <div class="header-section">
+        <h1><i class="gi gi-envelope"></i> Plan d'Actions Stratégiques<br><small>Liste</small></h1>
+    </div>
+</div>
+<ul class="breadcrumb breadcrumb-top">
+    <li>Actions</li>
+    <li><a href="">Bilan P.A.S</a></li>
+</ul>
+<div class="block full">
+    <div class="block-title">
+        <h2><strong>Liste</strong> PAS</h2>
+    </div>{#
+    <p><a href="https://dge.ci" target="_blank">DataTables</a> is a plug-in for the Jquery Javascript library. It is a highly flexible tool, based upon the foundations of progressive enhancement, which will add advanced interaction controls to any HTML table. It is integrated with template's design and it offers many features such as on-the-fly filtering and variable length pagination.</p>
+#}
+
+    <div class="table-responsive">
+        <table id="dtable" class="table table-vcenter table-condensed table-bordered">
+            <thead>
+                <tr>
+                    <th>Num</th>
+                    <th>libellé</th>
+                    <th>Année</th>
+                    <th>Note Obtenue</th>
+                    <th>Rang Obtenu</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set rang = 0 %}
+                {% for entity in entities %}
+                    {% set rang = rang +1 %}
+                    <tr>
+                        <td><a href="#">{{ entity[0].id }}</a></td>
+                        <td>PAS {{ entity[0].direction.sigle }}</td>
+                        <td>{{entity[0].exercice.annee}}</td>
+
+                        </td>
+                        <td class="text-center">
+                            {{entity.note}}/{{entity.surnote}}
+                        </td>
+                        <td class="text-center">
+                           <b> {{rang}} <sup>{% if rang == 1%}er{% else %} ieme {% endif %}</sup></b>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <ul>
+    </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

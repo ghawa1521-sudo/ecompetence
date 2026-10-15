@@ -1,0 +1,100 @@
+formtype 
+
+->add('directiongenerale',NULL,['attr'=>array('class'=>'dgclassid', 'onchange'=>'gouniv("#dg","directiongenerale_listtypeservice","#dc", "#viewdc")')])
+                ->add('directioncentrale',NULL,['attr'=>array('class'=>'dcclass','onchange'=>'gouniv("#dc","directioncentrale_listetype","#sd", "#viewsd")')])
+
+
+vue
+
+<div id="viewdc" style="display:none;">
+           {{ form_row(form.directioncentrale, {'label':'Direction Centrale', 'id':'dc'}) }}
+</div>
+<div id="viewsd" style="display:none;">
+           {{ form_row(form.sousdirection, {'label':'Sous Direction', 'id':'sd'}) }}
+</div>
+
+js
+
+function gouniv($sourceval, $route, $destval, $div)
+{
+    $source = $($sourceval).val();
+    if ($source.length > 0 ){
+        $source=$source;
+    }else{
+            $source=0;
+        }
+    
+    $paramroute = {'id': $source};
+    //alert(Routing.generate($route, $paramroute));
+   
+    $.ajax({
+       type: 'GET',
+       url: Routing.generate($route, $paramroute),
+       dataType: 'json',
+       success: function(data) {
+          // alert(jQuery.isEmptyObject(data)); 
+           
+           if (jQuery.isEmptyObject(data) == false){
+             //  $('#dc').html("ddddd");
+               $($destval).empty();
+               $($destval).append('<option>---- Choisir un Service-----</option>');
+               $.each(data, function(key, value) {
+                   // alert(key+ ""+value);
+                 $($destval).append('<option value= "' + key + '">' + value + '</option>');
+                });
+                // $($destval).html("ggggg");
+                $($div).show();
+           }
+           else{
+               
+               $($div).hide();
+           }
+       }
+   });
+   
+}
+
+
+controlleur
+
+namespace UsersBundle\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+class DirectioncentraleController extends Controller
+{
+    public function ListetypeAction($id)
+    {
+       $response = new JsonResponse();
+       $em = $this->getDoctrine()->getManager();
+       $sousdirection=$em->getRepository('UsersBundle:Sousdirection')->findBy(array('directioncentrale'=>$id));
+      
+       $tab=array();
+      if(!empty($sousdirection))
+       {
+          foreach ($sousdirection as $dc) {
+                $id = $dc->getId();
+                $lib = $dc->getLIBSD();
+                $tab[$id] = utf8_encode($lib);
+            }
+       $response->setData($tab);
+      }
+       else
+       {
+          $response->setData($tab);
+       } 
+        return $response;
+        
+    }
+
+}
+
+route
+
+directioncentrale_listetype:
+    path:     /{id}/Listetype
+    defaults: { _controller: "UsersBundle:Directioncentrale:Listetype" }
+    methods:  GET
+    options:
+      expose: true

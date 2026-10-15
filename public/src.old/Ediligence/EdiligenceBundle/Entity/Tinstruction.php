@@ -1,0 +1,65 @@
+<?php
+
+namespace Ediligence\EdiligenceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Tinstruction
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Ediligence\EdiligenceBundle\Repository\TinstructionRepository")
+ */
+class Tinstruction
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="libIbstruction", type="string", length=200)
+     */
+    private $libIbstruction;
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set libIbstruction
+     *
+     * @param string $libIbstruction
+     *
+     * @return Tinstruction
+     */
+    public function setLibIbstruction($libIbstruction)
+    {
+        $this->libIbstruction = $libIbstruction;
+
+        return $this;
+    }
+
+    /**
+     * Get libIbstruction
+     *
+     * @return string
+     */
+    public function getLibIbstruction()
+    {
+        return $this->libIbstruction;
+    }
+}

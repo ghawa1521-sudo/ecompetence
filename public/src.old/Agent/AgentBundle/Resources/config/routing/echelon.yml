@@ -1,0 +1,30 @@
+echelon:
+    path:     /
+    defaults: { _controller: "AgentBundle:Echelon:index" }
+
+echelon_show:
+    path:     /{id}/show
+    defaults: { _controller: "AgentBundle:Echelon:show" }
+
+echelon_new:
+    path:     /new
+    defaults: { _controller: "AgentBundle:Echelon:new" }
+
+echelon_create:
+    path:     /create
+    defaults: { _controller: "AgentBundle:Echelon:create" }
+    methods:  POST
+
+echelon_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AgentBundle:Echelon:edit" }
+
+echelon_update:
+    path:     /{id}/update
+    defaults: { _controller: "AgentBundle:Echelon:update" }
+    methods:  [POST, PUT]
+
+echelon_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AgentBundle:Echelon:delete" }
+    methods:  [POST, DELETE]

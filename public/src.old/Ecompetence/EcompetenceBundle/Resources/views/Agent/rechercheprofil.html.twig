@@ -1,0 +1,248 @@
+   
+    {% extends '::base.html.twig' %}
+{%from "EcompetenceBundle:macro:macro.html.twig" import recursiveDomaine,recursiveDomaineAff%}
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+
+{% block titre_page %}
+    <div>Liste des agents correspondant au profil recherché (<span style="color: red;">{{entities|length}}</span>)</div>
+{% endblock %}
+{% block body -%}
+      <style>
+        th{
+        color:white;
+        border:1px solid white;
+        font-weight:bold;
+        }
+        td{
+         color:black;
+         font-weight:bold; 
+         border:1px solid lightgray
+        }
+        thead{border:1px solid white;background-color: #008080;
+        }
+        a{
+          font-weight:bold; 
+        }
+        
+        html, body {
+    width: 100%;
+    overflow-x: auto;   /* active la barre de défilement horizontale */
+    overflow-y: auto;   /* conserve le scroll vertical */
+  }
+
+  /* Optionnel : forcer une largeur minimale pour déclencher le scroll */
+  .page-container {
+    min-width: 100px;  /* ajuste selon ton contenu */
+  }
+
+         </style>
+    <div class="page-container">
+            {#<a href="{{ path('agent_new') }}" class="btn btn-info">
+                Enregistrer un nouvel Agent
+            </a>#}
+            <h4>Critère de Recherche</h4>
+            <div class="row" style="background-color: #f7f7f7;">
+                <form method="post">
+                  <div class="col-md-3">
+                 
+                    {{ form_row(form.poste,{'id':'poste'}) }}
+                    {{ form_row(form.diplome,{'id':'diplome'})}}
+                    {{ form_row(form.option,{'id':'option'})}}
+                    {{ form_row(form.anneetotexp) }}
+                
+                </div>
+                <div class="col-md-3">
+                    {{ form_row(form.emploi) }}
+                    {{ form_row(form.specialite,{'id':'specialite'}) }}
+                    {{ form_row(form.anneeexpdge)}}
+                    {{ form_row(form._token) }}
+                    <div>
+                     <input type="submit" style="position: absolute;top: 228px; left:13px;width:242px;" value="RECHERCHER" class="btn btn-success"/> 
+                    </div>
+                </div>
+                <div class="col-md-1">
+                </div>
+              
+                <div class="col-md-5" style="padding:5px 5px 5px 5px;">
+                 <h5 style="color:orange;"><b>&nbsp;&nbsp;Cochez les compétences recherchées</b></h5>
+                 <div class="panel panel-default" style="height:250px;overflow-y:scroll;">
+                 <div class="panel-body">
+                    <div class="container">
+                    <div id="flex-tree-check"></div>
+
+                    </div
+                     {# {% if competences%}
+                                <div id="treeview-checkbox-demo" style="font-size:12pt">
+                                    <ul>
+                                        {% for competence in competences %}
+                                            {{recursiveDomaine(competence)}}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                {% endif %} #}
+                 </div>    
+                 </div>
+                
+            
+                  
+                   
+                  
+               
+             
+                </div>   
+        </div>
+            </form>
+    </div>
+   <div class="table-responsive">
+    <table class="records_list table responsive-utilities  bulk_action">
+        <thead>
+            <tr>
+                <th>Matricule</th>
+                <th>Nom</th>
+                <th>Pr&eacute;noms</th>
+                {# <th>Age</th> #}
+                <th>Emploi</th>
+                {#  <th>Employeur</th>#}
+                <th>Direction</th>
+                <th>Sous-Direction</th>
+                <th>Service</th>
+                <th>Fonction occupée</th>
+                <th>Année Exp Total.</th>
+                <th>Année Exp. DGE</th>
+                <th>Année Exp Hors DGE</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+     
+       {% for  agent in agents  %}
+            <tr>
+                  
+                <td>{{ agent.matricule }}</td>{#<a href="{{ path('agent_show', { 'id': entity.id }) }}">{{ entity.matricule }}</a></td>#}
+                <td> {%if (agent.situationMatri =='Marie')%}
+                            {{ agent.nom }} {{ 'nee' }} {{ agent.nomJeuneFille }}
+                        {% else %}
+                            {{ agent.nom }}
+                    {% endif %}
+                </td>
+                <td>{{agent.prenoms }}</td>
+                {# <td>{% if (agent.age) %} {{ agent.age}} {% endif %}</td> #}
+                <td>{% if (agent.emploi)%} {{ agent.emploi}} {% endif %}</td>
+                <td>{% if (agent.employeur) %} {{ agent.employeur}} {% endif %}</td>
+                <td>{% if (agent.sousdirection) %} {{ agent.sousdirection}} {% endif %}</td>  
+                <td>{% if (agent.service) %} {{ agent.service}} {% endif %}</td>      
+              
+                <td>{% if (agent.poste)%} {{ agent.poste}} {% endif %}</td>
+                <td>{% if (agent.anexp) %} {{ agent.anexp}} {% endif %}</td>
+                <td>{% if (agent.anexpdge) %} {{ agent.anexpdge}} {% endif %}</td>
+                <td>{% if (agent.anexpHorsDge) %} {{ agent.anexpHorsDge}} {% endif %}</td>
+                <td> <a class="btn btn-primary" style="color: blue" href="{{ path('agent_cv1', { 'id': agent.id }) }}">Visualiser le CV</a></td>
+
+           
+
+                   
+                   
+                      
+
+                        
+              
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+        </div>
+    {% endblock %}
+    {% block javascript %} 
+
+ <script type="text/javascript">
+                    var donnee; var name=Array({{name|join(',')}});
+                    $(document).ready(function () {
+                      $('#specialite').children('option:not(:first)').remove();
+                      $('#option').children('option:not(:first)').remove();
+                
+                        $.ajax({
+                            type: "POST",
+                            url: Routing.generate('competence_api'),
+                            data:{champ:name},
+                            dataType: "json",
+                            success: function (data) {
+                                $('#flex-tree-check').flexTree({
+                                    //console.log(donnee);
+                                    type: 'checkbox',
+                                    name: 'competences[]',
+                                    collapsed: false,
+                                    items: jQuery.parseJSON(data)});
+                            }
+                        });
+
+
+
+                    });
+</script>
+
+<script type="text/javascript">
+function searchList1($sourceval, $route, $destval)
+{   //alert($sourceval);
+    //alert($destval);
+    $source = $($sourceval).val();
+    
+
+    if ($source.length > 0 ){
+
+        $source=$source;
+        //showloader('#cacher');
+    }else{
+            $source=0;
+        }
+    
+    $paramroute = {'id': $source};
+   
+    //alert(Routing.generate($route, $paramroute));
+    //alert($div); exit;
+    //console.log($div);
+
+    $.ajax({
+       type: 'GET',
+       url: Routing.generate($route, $paramroute),
+       dataType: 'json',
+       success: function(data) {
+        //console.log(data);
+          // alert(jQuery.isEmptyObject(data));
+           
+
+           if (jQuery.isEmptyObject(data) == false){
+           
+               $($destval).children('option:not(:first)').remove();
+               //$($destval).append('<option>---- Choisir un Service-----</option>');
+               $.each(data, function(key, value) {
+   
+                 $($destval).append('<option value= "' + value[0] + '">' + value[1] + '</option>');
+
+                // $($destval).html("ggggg");
+               
+               });
+               
+                 
+               
+            
+           }
+           else{
+               //console.log($sourceval);
+              //  alert("no");
+               $($destval).children('option:not(:first)').remove();
+              
+           }
+       }
+       });
+   
+    }
+
+
+    </script>      
+    
+    {% endblock %}

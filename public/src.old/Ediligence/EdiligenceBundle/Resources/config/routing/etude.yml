@@ -1,0 +1,20 @@
+etude_archive:
+    path:     /archive
+    defaults: { _controller: "EdiligenceBundle:Etude:archive" }
+    methods:  [POST]
+
+etude_rejet:
+    path:     /rejet
+    defaults: { _controller: "EdiligenceBundle:Etude:rejet" }
+    methods:  [POST]
+    
+etude_trait:
+    path:     /trait
+    defaults: { _controller: "EdiligenceBundle:Etude:trait" }
+    methods:  [POST, GET]
+    
+etude_trt:
+    path:    /{id}/trt
+    defaults: { _controller: "EdiligenceBundle:Etude:trt" }
+    methods:  [POST, GET]
+

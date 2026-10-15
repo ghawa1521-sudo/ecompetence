@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="{{ asset('images/logoDGE.png') }}" type="image/png">
+    	<link rel="icon" href="{{ asset('images/logoDGE.png') }}" type="image/png">
+        <title>E-Rh! | Bienvenue </title>
+
+        <!-- Bootstrap core CSS -->
+        <script type="text/javascript" src="{{ asset('design/js/style.js') }}"></script>
+        <link href="{{ asset('design/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('design/fonts/css/font-awesome.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('design/css/animate.min.css') }}" rel="stylesheet">
+
+        <!-- Custom styling plus plugins -->
+        <link href="{{ asset('design/css/custom.css') }}" rel="stylesheet">
+        <link href="{{ asset('design/css/login.css') }}" rel="stylesheet">
+        <link href="{{ asset('design/css/icheck/flat/green.css') }}" rel="stylesheet">
+
+
+        <script src="{{ asset('design/js/jquery.min.js') }}"></script>
+
+    </head>
+
+    <body>
+        <div class="">
+            {% if app.request.hasPreviousSession %}
+                {% for type, messages in app.session.flashbag.all() %}
+                    <div class="alert alert-{{ type }}">
+                        <ul>
+                            {% for message in messages %}
+                                <li>
+                                    {{ message }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <a class="hiddenanchor" id="tologin"></a>
+
+        <div id="wrapper">
+            <div id="login" class="animate form">
+                <section class="login_content">
+                    {% block fos_user_content %}
+                    {% endblock fos_user_content %}
+                </section>
+                
+                <div align="center">
+                    <p>©2017 All Rights Reserved. <br> Direction Générale de l'Economie | Service Informatique et Maintenance. Privacy and Terms</p>
+                </div>
+            </div>
+        </div>
+
+		
+
+    </body>
+
+</html>

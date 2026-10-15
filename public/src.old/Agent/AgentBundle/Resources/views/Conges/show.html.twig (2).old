@@ -1,0 +1,211 @@
+{% extends '::base.html.twig' %}
+{% block datatableCss %}
+    <style>
+        th{
+            text-align: left !important;
+        }
+    </style>
+{% endblock %}
+
+{% block body -%}
+    <div class="x_title">
+        <h2>Détail<small> </small></h2>
+        <div class="clearfix"></div>
+    </div>
+    <div class="col-md-push-3 col-md-6">
+        <table class="table table-striped responsive-utilities jambo_table bulk_action">
+            <tbody>
+
+                <tr>
+                    <th>Matricule</th>
+                    <td>{{ entity.agent.matricule }}</td>
+                </tr>
+                <tr>
+                    <th>Nom & Prénoms</th>
+                    <td>{{ entity.agent.nom}} {{ entity.agent.prenoms}}</td>
+                </tr>
+                <tr>
+                    <th>Date de départ</th>
+                    <td>{{ entity.datedebut|date('d-m-Y') }}</td>
+                </tr>{#
+                <tr>
+                    <th>Date du dernier jour de congé</th>
+                    <td>{{ entity.datefin|date('d-m-Y') }}</td>
+                </tr>#}
+                <tr>
+                    <th>Nombre de Jours</th>
+                    <td>{{ entity.nbrejours }}</td>
+                </tr>
+
+                <tr>
+                    <th>Date de reprise</th>
+                    <td>{{ entity.datefin|date_modify('+0 day')|date('d-m-Y') }}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Date de reprise effective</th>
+                    <td>{% if entity.datereprise %}{{ entity.datereprise|date('d-m-Y') }}{% endif %}</td>
+                </tr>
+                {% if entity.externe==1 %}
+                    <tr>
+                        <th>Destination</th>
+                        <td>Hors Côte d'Ivoire</td>
+                    </tr>
+                {% endif %}
+                {% if entity.etat==2 %}
+                    <tr>
+                        <th>Raison refus</th>
+                        <td>{{entity.objetRefus}}</td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <th>Exercice</th>
+                    <td>{{ entity.exercice }}</td>
+                </tr>
+                <tr>
+                    <th>Etat</th>
+                    <td>
+                        {{macro.EtatConge(entity.etat,entity.niveau,entity.agent.retour_service.tab_lib[entity.niveau])}}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Date de soumission</th>
+                    <td>{{ entity.datecreation|date('d-m-Y H:i:s ') }}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+                {% if (entity.numCessation is defined) and (entity.numCessation is not null)%}
+                    <tr>
+                        <th>Certificat Cessation</th>
+                        <td>
+                            <label class="label label-success">Signé & en ligne</label>
+                            <i>depuis le {{entity.numCessation.date|date('d-m-Y')}}</i>
+                            {#
+                            {{ vich_uploader_asset(entity.numCessation.pj, 'imageFile')}}
+                            #}
+
+                        </td>
+                    </tr>
+                {% else %}
+                    {% if is_granted('ROLE_RESPO_SRHMG') and (entity.niveau == 0 and (entity.etat == 1 or entity.etat == 3)) %}
+                        <tr>
+                            <th>Certificat Cessation</th>
+                            <td>
+                                <a href="{{ path('conges_numerisation', { 'id': entity.id,'todo': 3 }) }}" class="btn  btn-primary"
+                                   data-confirm="Etes-vous <strong>certain</strong> de vouloir Valider cette demande ?">
+                                    Numériser Certificat Cessation
+                                </a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endif %}
+                {% if (entity.numReprise is defined) and (entity.numReprise is not null) %}
+                    <tr>
+                        <th>Certificat reprise</th>
+                        <td>
+                            <label class="label label-success">Signé & en ligne</label>
+                            <i>depuis le {{entity.numReprise.date|date('d-m-Y')}}</i>
+                            {#
+                            {{ vich_uploader_asset(entity.numReprise.pj, 'imageFile')}}
+    
+                            #}
+                        </td>
+                    </tr>
+                {% else %}
+                    {% if is_granted('ROLE_RESPO_SRHMG') and entity.niveau == 0 and entity.etat == 3 %}
+                        <tr>
+                            <th>Certificat reprise</th>
+                            <td>
+                                <a href="{{ path('conges_numerisation', { 'id': entity.id,'todo': 4 }) }}" class="btn btn-primary"
+                                   data-confirm="Etes-vous <strong>certain</strong> de vouloir Valider cette demande ?">
+                                    Numériser Certificat Reprise
+                                </a></td></tr>
+                            {% endif %}
+                        {% endif %}
+                <tr>
+                    <th></th>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td colspan="2">
+                        {% if is_granted('ROLE_RESPO_SRHMG') %}
+                            {% if (entity.niveau == 0 and entity.etat == 0) or (entity.niveau >= 1 and entity.agent.direction.codeDc==app.user.agent.direction.codeDc) %} {# or (entity.niveau=1 and entity.agent.) #} 
+                                <a href="{{ path('conges_generate', { 'id': entity.id,'choice': 0 }) }}" class="btn btn-large btn-primary"
+                                   data-confirm="Etes-vous <strong>certain</strong> de vouloir Valider cette demande ?">
+                                    Valider et Générer la Cessation
+                                </a>
+                                <a href="{{ path('conges_edit', { 'id': entity.id,'todo':1 }) }}"class="btn btn-danger"
+                                   data-confirm="Etes-vous <strong>certain</strong> de vouloir Refuser cette demande ?">
+                                    Refuser
+                                </a>
+                            {% endif %}
+                            {% if entity.niveau == 0 and entity.etat == 1 %}
+                                <a href="{{ path('conges_view', { 'id': entity.id }) }}" class="btn btn-info">
+                                    Imprimer la cessation
+                                </a>
+                            {% endif %}
+                            {% if entity.niveau == 0 and entity.etat == 3 %}
+                                <a href="{{ path('conges_view', { 'id': entity.id }) }}" class="btn btn-info">
+                                    Imprimer le certificat de reprise
+                                </a>
+                            {% endif %}
+                            {% if entity.niveau == 0 and entity.etat == 1 and (entity.agent.direction.codeDc==app.user.agent.direction.codeDc)  %}
+                                <a href="{{ path('conges_edit', { 'id': entity.id,'todo': 2 }) }}" class="btn btn-info">
+                                    Générer le certificat de reprise
+                                </a>
+                            {% endif %}
+                        {% elseif is_granted('ROLE_RESPO') %}
+                            {% set niveau= app.user.agent.retour_service.tab_lib|length%}
+                            {% set niveau= niveau -1 %}
+                            {% if  entity.niveau >= niveau and entity.etat==0 %}
+                                <a href="{{ path('conges_approuv', { 'id': entity.id,'choice': 1 }) }}" class="btn btn-large btn-primary col-md-5"
+                                   data-confirm="Etes-vous <strong>certain</strong> de vouloir Valider cette demande ?">
+                                    Approuver
+                                </a>
+                                <a href="{{ path('conges_edit', { 'id': entity.id,'todo':1 }) }}"class="btn btn-danger"
+                                   data-confirm="Etes-vous <strong>certain</strong> de vouloir Refuser cette demande ?">
+                                    Refuser
+                                </a>
+                            {% endif %}
+                            {% if entity.niveau == 0 and entity.etat == 1  %}
+                                <a href="{{ path('conges_edit', { 'id': entity.id,'todo': 2 }) }}" class="btn btn-info">
+                                    Générer le certificat de reprise
+                                </a>
+                            {% endif %}
+
+
+                        {% endif %}
+                        {% if is_granted('ROLE_RESPO') or is_granted('ROLE_RESPO_SRHMG')%}
+                            {% set referer = app.request.server.get('http-referer') %}
+                            {% if (entity.agent.Direction.id is defined) and (entity.agent.Direction.id == app.user.agent.Direction.id) %}
+                                <a href="{{ path('conges',{'action':'default'}) }}" class="btn btn-warning">
+                                Retour
+                            </a>
+                                {% else %}
+                                    <a href="{{ path('conges',{'action':'other'}) }}" class="btn btn-warning">
+                                Retour
+                            </a>
+                            {% endif %}
+                            
+                        {% else %}
+                            <a href="{{ path('conges_active') }}" class="btn btn-warning">
+                                Retour
+                            </a>  
+                        {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

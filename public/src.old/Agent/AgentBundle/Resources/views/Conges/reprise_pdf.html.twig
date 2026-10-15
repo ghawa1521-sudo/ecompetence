@@ -1,0 +1,140 @@
+{% extends app.request.attributes.get('_route')=='conges_print'
+? '::gabarit_print.html.twig'
+: '::gabarit_preview.html.twig' %}
+{% block service %}
+    <span class="gras">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Le Directeur Général</span>
+
+
+{% endblock %}
+
+{% block ref %}
+    <br>
+    <br>N°____________MEF/DGE/SRHMG
+{% endblock %}
+{% block titre %}
+    <div align="center" style="font-size:25px; font-family:CenturyFontBold !important; border: solid; border-radius: 5px; width: 60%; margin: auto;">
+        CERTIFICAT DE REPRISE DE SERVICE
+    </div>
+{% endblock %}
+{% block datePdf %}{% endblock %}
+{% block contenuPdf -%}
+
+    <div style="background-color: white; color:black; line-height:35px;">
+        Je soussigné
+        {{dgName}}, Directeur Général de l'Economie, certifie que
+        {{entity.agent.getCivilite.libsitf}}
+        {{entity.agent.concatNom}}, matricule
+        {{entity.agent.matricule}},
+        {{entity.agent.emploi.libEmpl}},
+        {% if entity.agent.direction.id in [12,13,14,15,16,17,19] %}en service à
+        {% elseif entity.agent.direction.id in [18] %}
+            à
+            {#au {{entity.agent.direction}} de#}
+            {% elseif entity.agent.direction.id in [11] %}en service à la
+            {{entity.agent.direction}}
+            ({{entity.agent.direction.Sigle}}) de
+        {% else %}
+            {% if entity.agent.direction.etatDirection==0 %}au
+                {{entity.agent.direction}}
+                ({{entity.agent.direction.Sigle}}) de
+                {% elseif entity.agent.direction.etatDirection==1 %}en service à la
+                {{entity.agent.direction}}
+                ({{entity.agent.direction.Sigle}}) de
+            {% endif %}
+        {% endif %}
+        la Direction Générale de l'Economie (DGE), a effectivement repris le service le
+        {% if entity.datereprise %}
+            {{ fonctionbase.getWorkDays(entity.datereprise)|localizeddate('none', 'none', app.request.locale, "Europe/Paris", "cccc dd MMMM Y")}}
+        {% endif %}.
+        <br/>
+        <div align="center" class="gras" style="font-size:15px; text-decoration: underline;">
+            <h3>
+                <b style="font-family: 'CenturyFont';">MOTIF DE LA REPRISE</b>
+            </h3>
+        </div>
+        {% if entity.typeConges.id==1 or entity.typeConges.id==2 or entity.typeConges.id==3  %}
+            Retour de ({{ entity.nbrejours }}) jours de congé
+            {{ entity.typeConges.getRealLibelle(entity.nbrejours)|lower }}
+            {% if entity.typeConges.id==1 %}
+                au titre de l'année
+                {{ entity.exercice}}
+            {% endif %}.
+        {% else %}
+            Retour
+            {{ entity.typeConges.getRealLibelle(entity.nbrejours)|lower }}.
+
+        {% endif %}
+    </div>
+</div>
+<br/><br/><br/></div><div style="font-size:1em;">
+
+
+
+<table border="0" width="100%">
+    <tr>
+        <td>
+            <table cellsapcing="5">
+                <tr>
+                    <td>
+                        <strong>Ampliations :</strong>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>MEF/DRH</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>MEF/DGE</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>SRHMG</td>
+                    <td>1</td>
+                </tr>
+                {% if entity.agent.direction.sigle != 'SRHMG' and entity.agent.direction.id in [1,2,3,4,5,6,7,8,9,10] %}
+                    <tr>
+                        <td>{{entity.agent.direction.sigle}}</td>
+                        <td>1</td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <td>INTERESSE(E)</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>DOSSIER</td>
+                    <td>1</td>
+                </tr>
+
+            </table>
+        </td>
+        <td width="50%" valign="top">
+
+            <div class="gras" style="font-size:12pt; float:right;" >
+            	
+
+
+                {% if fonctionbase.getSignataireDg() and fonctionbase.getSignataireDg()==1 %}
+
+                    {% else %}
+
+                        {#
+                                                        {{fonctionbase.getSignataireDg(date())['entete'] | raw}}
+                                                        <br>  <br><br><br><br><br>
+                                                        {{fonctionbase.getSignataireDg(date())['signataire'] | raw}}
+                                                        #}
+                        <u>{{fonctionbase.getSignataireDg(date())['entete'] | raw}}</u>
+                        <br><br>
+                        P.I Le
+                        {{fonctionbase.getSignataireDg(date())['directeur'] | raw}}
+
+                {% endif %}
+
+            </div>
+        </td>
+    </tr>
+</table>
+
+
+{#<div style="font-size:1.9em;">VISA SRHMG</div>#}</div></div><script src="{{ asset('design/js/style.js') }}"></script>{% endblock %}

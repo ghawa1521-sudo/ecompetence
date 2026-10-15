@@ -1,0 +1,168 @@
+{% extends '::ediligence/base.html.twig' %}
+
+{% block stylesheets %}
+
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        var rr = 1;
+        function addAxe() {
+            rr++;
+            var objTo = document.getElementById('axe_fields')
+            var divtest = document.createElement("div");
+            divtest.setAttribute("class", "form-group removeclass" + rr);
+            var rdiv = 'removeclass' + rr;
+            divtest.innerHTML = '<div class="row"> <div class="col-xs-9"> <div class="form-group"> <div class="input-group"> <input type="text" class="form-control" id="axe' + (rr - 1) + '" name="Axe[' + rr + ']" value="" placeholder="SAISIR L\'AXE STRATEGIQUE"> <div class="input-group-btn"> <button class="btn btn-danger" type="button" onclick="remove_axe_fields(' + rr + ');"> <span class="glyphicon glyphicon-minus" aria-hidden="true"><small><em>Supprimer Axe</small></em></span> </button> <button class="btn btn-info" type="button"  onclick=addObj("obj_axe' + (rr) + '");> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <small><em>Ajouter Objectif</small></em></button></div></div></div></div></div><div id="obj_axe' + (rr) + '" >{#<small><em><a onclick=addObj("obj_axe'+(rr)+'");>Ajouter objectif</a></em></small>#}</div>';
+
+            objTo.appendChild(divtest)
+        }
+        function remove_axe_fields(rid) {
+            $('.removeclass' + rid).remove();
+        }
+
+        function addObj(divid) {
+            var objTo = document.getElementById(divid);
+            //console.log($("#"+divid));
+            var divinput = $("#" + divid + " .form-control");
+            //console.log((divinput.length+1));
+            rrr = (divinput.length + 1);
+            var divtest = document.createElement("div");
+            divtest.setAttribute("class", "form-group removeclass" + divid + rrr);
+            var rdiv = 'removeclass' + rrr;
+            //divtest.innerHTML = '<div class="row"> <div class="col-xs-6"> <div class="form-group"> <div class="input-group"> <input type="text" class="form-control" id="axe" name="Axe[]" value="" placeholder="Degree"> <div class="input-group-btn"> <button class="btn btn-danger" type="button" onclick="remove_axe_fields(' + rr + ');"> <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> </button> </div></div></div></div></div><div id="obj_axe'+(rrr-1)+'" ><small><em><a href="#">Ajouter objectif</a></em></small></div>';
+            divtest.innerHTML = '<div class="row"> <div class="col-xs-offset-1 col-xs-8"> <div class="form-group"> <div class="input-group"> <input type="text" class="form-control" id="' + divid + 'objectif' + (rrr) + '" name="' + divid + '[' + rrr + ']" value="" placeholder="SAISIR L\'OBJECTIF"> <div class="input-group-btn"> <button class="btn btn-danger" type="button" onclick=remove_obj_fields("' + divid + rrr + '")> <span class="glyphicon glyphicon-minus" aria-hidden="true"></span><small><em>Supprimer Objectif </em></small></button> <button class="btn btn-warning" type="button"  onclick=addAction("act_' + divid + 'objectif' + (rrr) + '");> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <small><em>Ajouter Action</small></em></button></div></div></div></div></div><div id="act_' + divid + 'objectif' + (rrr) + '" ></div>';
+
+            objTo.appendChild(divtest)
+        }
+        function remove_obj_fields(rid) {
+            $('.removeclass' + rid).remove();
+        }
+        function addAction(divid) {
+
+            var objTo = document.getElementById(divid);
+            //console.log($("#"+divid));
+            var divinput = $("#" + divid + " .form-control");
+            //console.log((divinput.length+1));
+            rrr = (divinput.length + 1);
+            var divtest = document.createElement("div");
+            divtest.setAttribute("class", "form-group removeclass" + divid + rrr);
+            var rdiv = 'removeclass' + rrr;
+            //divtest.innerHTML = '<div class="row"> <div class="col-xs-offset-1 col-xs-5"> <div class="form-group"> <div class="input-group"> <input type="text" class="form-control" id="'+divid+'objectif'+(rrr)+'" name="Objectif[]" value="" placeholder="Degree"> <div class="input-group-btn"> <button class="btn btn-danger" type="button" onclick=remove_obj_fields("'+divid+rrr+'")> <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> </button> </div></div></div></div></div><small><em><a href="#">Ajouter action</a></em></small><div id="act_obj_axe'+(rrr)+'" ></div>';
+            divtest.innerHTML = '<div class="row"> <div class="col-xs-offset-2 col-xs-7"> <div class="form-group"> <div class="input-group"> <input type="text" class="form-control" id="action" name="' + divid + '[' + rrr + ']" value="" placeholder="SAISIR L\'ACTION"> <div class="input-group-btn"> <button class="btn btn-danger" type="button" onclick=remove_act_fields("' + divid + rrr + '")> <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> <small><em>Supprimer Action</em></small></button> </div></div></div></div></div>';
+
+            objTo.appendChild(divtest)
+        }
+        function remove_act_fields(rid) {
+            $('.removeclass' + rid).remove();
+        }
+
+        addAxe();
+
+    </script>
+
+{% endblock%}
+
+{% block body %}
+
+</script>
+
+<div class="content-header">
+    <div class="header-section">
+        <h1><i class="gi gi-envelope"></i> Plan d'Actions Stratégiques<br><small>Enregistrer</small></h1>
+    </div>
+</div>
+<ul class="breadcrumb breadcrumb-top">
+    <li>Actions</li>
+    <li><a href="">Enregistrer PAS</a></li>
+</ul>
+<div class="block full">
+    <div class="block-title">
+        <h2><strong>Ajout</strong> PAS</h2>
+    </div>
+
+    <div class="col-xs-offset-1">
+        <form method="post" action="{{path('pas_ajout')}}">
+            <div class="row">
+                <div class="col-xs-9">
+                    <label class="control-label">Année
+                    </label>
+                    <select name="exercice" class="form-control">
+                        <option value="">Choisir l'année</option>
+                        {% for exercice in exercices %}
+                            <option value="{{exercice.id}}">{{exercice.annee}}</option>
+                        {% endfor %}
+                    </select>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-9">
+                    <label class="control-label">Nature
+                    </label>
+                    <select name="nature" class="form-control">
+                        <option value="">Choisir la nature</option>
+                        {% for nature in natures %}
+                            <option value="{{nature.id}}">{{nature.libelle}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-9">
+                    <label class="control-label">Direction / Service.
+                    </label>
+                    <select name="direction" class="form-control">
+                        <option value="">Choisir la Direction / Service</option>
+                        <optgroup label="DIRECTION CENTRALE">
+                            {% for direction in directions  if  direction.etatDirection == 1%}
+                                <option value="{{direction.id}}">{{direction.sigle}}</option>
+                            {% endfor %}
+                        </optgroup>
+                        <optgroup label="SERVICE RATTACHE">
+                            {% for direction in directions  if  direction.etatDirection == 0 %}
+                                <option value="{{direction.id}}">{{direction.sigle}}</option>
+                            {% endfor %}
+                        </optgroup>
+
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-9">
+                    <br>
+                    <button class="btn btn-success" type="button"  onclick="addAxe();"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <small><em>Ajouter un  Axe</small></em></button>
+                </div>
+            </div>
+            <div id="obj_axe0"></div>
+            <div id="axe_fields">
+            </div>
+            <div class="row">
+                <div class="col-xs-9">
+                    <button class="btn btn-success pull-right" type="submit">Enregistrer</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+
+
+</div>
+{#{dump(request)}#}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

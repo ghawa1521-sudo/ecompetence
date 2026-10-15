@@ -1,0 +1,76 @@
+<?php
+
+namespace BiblioBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Bouquin
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="BiblioBundle\Repository\BouquinRepository")
+ */
+class Bouquin
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="libelle", type="string", length=255)
+     */
+    private $libelle;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="details", type="text")
+     */
+    private $details;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datecreation", type="datetime")
+     */
+    private $datecreation;
+    
+     /**
+     * @ORM\ManyToOne(targetEntity="Agent\AgentBundle\Entity\Direction")
+     */
+    private $direction;
+   
+    
+    /**
+    * @ORM\ManyToOne(targetEntity="Users\UsersBundle\Entity\Users")
+    */
+    private $createur;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Agent\AgentBundle\Entity\Pj", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $pj;
+    
+    /**
+    * @ORM\OneToOne(targetEntity="Droit", mappedBy="bouquin")
+    */
+    private $droit;
+    
+    
+      /**
+     * @ORM\ManyToOne(targetEntity="Categorie")
+     */
+    private $categorie;
+    
+    public function __toString() {
+        return $this->getLibelle();
+    }
+}

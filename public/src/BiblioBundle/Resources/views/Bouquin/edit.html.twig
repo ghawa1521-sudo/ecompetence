@@ -1,0 +1,89 @@
+{% extends '::biblio/base.html.twig' %}
+{% block datatableCss %}
+
+
+{% endblock %}
+{% block datatableJs %}
+    <script src="{{ asset('biblio/assets/vendor/ckeditor/ckeditor.js') }}"></script>
+    <script>
+        CKEDITOR.replace('bibliobundle_bouquin_details', {
+            toolbar: [
+                ['Bold', 'Italic', 'Underline', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink'],
+                ['FontSize', 'TextColor', 'BGColor']
+            ]
+        });
+
+    </script>
+
+{% endblock %}
+{% block title %}Modifier le livre{% endblock %}
+{% block fil %}Modifier le livre{% endblock %}
+
+{% block body -%}
+    {{ form_start(edit_form) }}
+    {{ form_errors(edit_form) }}
+    <div class="col-sm-6">
+        <div class="widget-box">
+            <div class="widget-header">
+                <h4 class="widget-title">Modifier le livre</h4>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    {{form_row(edit_form.direction)}}
+                    {{form_row(edit_form.categorie)}}
+                    {{form_row(edit_form.libelle)}}
+                    {{form_row(edit_form.details,{'attr':{'class':'ckeditor','contenteditable':"true"}})}}
+
+
+                    {{form_widget(edit_form.pj.imageFile,{'attr':{'required':true}})}}
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="widget-box">
+            <div class="widget-header">
+                <h4 class="widget-title">Droits de lecture</h4>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    {#
+                    {{form_row(edit_form.datecreation)}}
+                    {{form_row(edit_form.droit)}}
+                    #}
+                    <div class="control-group">
+                        <label class="control-label bolder blue">Directions</label>
+                        <div class="checkbox">
+                            <label>
+                                <input name="directions[]" class="ace" type="checkbox">
+                                <span class="lbl"> Tous</span>
+                            </label>
+                        </div>
+                        {% for direction in directions %}
+                            {# Add in array to check if value is correct#}
+                            <div class="checkbox">
+                                <label>
+                                    <input name="directions[]" class="ace" type="checkbox" value="{{direction.id}}"
+                                           {% if direction.id in entity.droit.directions %}
+                                               checked="checked"
+                                           {% endif %}
+                                           >
+                                    <span class="lbl"> {{direction.sigle}}</span>
+                                </label>
+                            </div>
+                        {% endfor %}
+          
+                    </div>
+
+                    <input type="submit" class="btn btn-sm btn-success" value="Mettre à jour"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_widget(edit_form._token) }}
+
+    {{ form_end(edit_form, {'render_rest': false}) }}
+
+{% endblock %}

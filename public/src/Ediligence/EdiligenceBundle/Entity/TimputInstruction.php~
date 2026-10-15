@@ -1,0 +1,66 @@
+<?php
+
+namespace Ediligence\EdiligenceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * TimputInstruction
+ *
+ * @ORM\Table(name="timput_instruction", indexes={@ORM\Index(name="Id_imput_dir", columns={"Id_imput_dir"}), @ORM\Index(name="Inst_imput", columns={"Inst_imput"})})
+ * @ORM\Entity(repositoryClass="Ediligence\EdiligenceBundle\Repository\TimputInstructionRepository")
+ */
+class TimputInstruction {
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    
+    
+    
+    /**
+     * @var string
+     * @ORM\ManyToOne(targetEntity="TimputDir", cascade="persist")
+     * @ORM\Column(name="Id_imput_dir", type="string", length=20, nullable=false)
+     */
+    private $idImputDir;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Timputations", cascade="persist")
+     * @ORM\JoinColumn(nullable=false)
+     */
+
+    private $imputation;
+   
+    /**
+     * @ORM\ManyToOne(targetEntity="Tinstruction", cascade="persist")
+     * @ORM\JoinColumn(name="Inst_imput",nullable=false)
+     */
+    private $instImput;
+
+   
+    /**
+     * @ORM\ManyToOne(targetEntity="Agent\AgentBundle\Entity\Agent",  cascade={"persist"})
+     * @ORM\JoinColumn(name="Imputmatricule", referencedColumnName="matricule", nullable=true)
+     */
+    private $imputMatricule;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="Etat_inst", type="integer", nullable=false)
+     */
+    private $etatInst = '0';
+
+    
+
+    
+
+   
+}

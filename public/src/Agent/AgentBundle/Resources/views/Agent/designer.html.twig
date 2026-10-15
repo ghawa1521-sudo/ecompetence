@@ -1,0 +1,113 @@
+{% extends '::base.html.twig' %}
+
+{% block css %}
+    <link href="{{ asset('design/css/style.css') }}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{{asset('ediligence/assets/css/bootstrap-select.min.css')}}">
+{% endblock %}
+
+
+
+{% block titre_page %}   
+
+{% endblock %}
+
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+    <style>
+        th{
+            text-align: left !important;
+        }
+        .dataTables_filter{
+            width: auto !important;
+        }
+    </style>
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+
+{% block body -%}
+<div class="page-title">
+  <div class="title_left">
+      <h3><div>Liste des reponsables</div>
+</h3>
+  </div>
+</div>
+ {{ form_start(form) }}
+ {{ form_errors(form) }}
+<div class="row">
+<table class="table table-striped records_list responsive-utilities jambo_table table-responsive">
+  <thead>
+    <tr class="headings">
+      <th scope="col"> </th>
+      <th scope="col"> </th>
+      <th scope="col"> </th>
+      <th scope="col"> </th>
+      <th scope="col"> </th>
+      <th scope="col">ACTUEL</th>
+      <th scope="col">NOUVEAU</th>
+      <th scope="col">ACTION</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% set count = 0 %}{% set decallage = 1 %}
+    {% for key,value in form.children %}
+    {% if key !="_token" and key !="submit"%}
+
+      {% set count = count + 1 %}
+
+      {% if count == 1 %}
+      {% if 'SC' in key %}{% set decallage = 4 %}
+     
+      {% elseif 'SD' in key %}{% set decallage = 3 %}
+       
+             {% elseif 'DC' in key %}{% set decallage = 2 %}
+       
+        {% elseif 'DG' in key %}{% set decallage = 1 %}
+       
+      {% endif %}
+
+      {% if decallage==2 %}
+    
+    <tr>
+      <td scope="col" colspan="8" bgcolor="green" style="color:white; text-transform:uppercase; font-weight:bolder !important;"> {{form_label(value) }}</td>
+    </tr>
+
+      {% endif %}
+
+     <tr>
+      {% for i in 1..decallage %}
+      <td></td>
+      {% endfor %}
+      {% set col=5-decallage %}
+      <td scope="row" {% if col > 1 %}colspan="{{col}}" {% endif %} >{{form_label(value) }}</td>
+      {% endif %}
+      {% if count == 2 %}
+      <td>{{form_label(value) }}</td>
+      {% endif %}
+      {% if count == 3 %}
+      <td>{{form_widget(value) }}</td>
+      {% endif %}
+      {% if count == 4 %}
+      <td>{{form_widget(value) }}</td>
+    </tr>
+    {% set count = 0 %}
+    {% endif %}
+   {% endif %}
+
+    {% endfor %}
+
+   <tr><td colspan="8" align="center">{{form_row(form.submit) }}</td></tr>
+  </tbody>
+</table>
+</div>
+ {{ form_widget(form._token) }}
+ {{ form_end(form, {'render_rest': false}) }}
+
+{% endblock %}
+
+{% block javascript %}
+
+    <script src="{{ asset('design/js/style.js') }}"></script>
+    <script src="{{ asset('ediligence/assets/js/bootstrap-select.min.js') }}"></script>
+{% endblock %}

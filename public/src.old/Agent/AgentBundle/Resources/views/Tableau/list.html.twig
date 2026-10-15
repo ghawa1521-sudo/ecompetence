@@ -1,0 +1,34 @@
+
+<div class="col-md-12 table-responsive">
+    <table class="records_list table table-striped responsive-utilities jambo_table bulk_action" >
+        <thead>
+            <tr class="headings">
+                <th colspan="6">
+                    {{libelle}}
+                </th>
+            </tr>
+            <tr class="headings">
+                <th>Matricule</th>
+                <th>Nom</th>
+                <th>Prénoms</th>
+                <th>Emploi</th>
+                <th>Grade</th>
+                <th>Service/Direction</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for Agent in req %}
+                <tr>
+
+                    <td>{{Agent.matricule}}</td>
+                    <td>{{Agent.nom}}</td>
+                    <td>{{Agent.prenoms}}</td>
+                    <td>{{Agent.Emploi.libEmpl}}</td>
+                    <td>{{Agent.Emploi.Grade.libGrade}}</td>
+                    <td>{{Agent.retour_service.tab_lib|join('/')}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+

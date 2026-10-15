@@ -1,0 +1,51 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Regularisation list</h1>
+
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nature</th> 
+                <th>Matricule</th>
+                <th>Nom et prénoms</th>
+                <th>Ancienne valeur </th>
+                <th>Nouvelle valeur</th>      
+                <th>Date d'effet</th>
+                
+                
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+          
+            <tr>
+                <td><a href="{{ path('regularisation_show', { 'id': entity['regularisation'].id }) }}">{{ entity['regularisation'].id }}</a></td>
+                <td>{{ entity['regularisation'].retourNature }}</td>
+           
+                <td>{{ entity['regularisation'].agent.matricule }}</td>
+                <td>{{ entity['regularisation'].agent.concatNom }}</td>
+                <td>{% if entity.emploi is defined and entity.emploi != null %}{{ entity.emploi }} {% elseif  entity.fonction is defined and entity.fonction != null %} {{entity.fonction}} {% endif %}</td>
+                 <td>{% if entity.newemploi is defined and entity.newemploi != null %}{{ entity.newemploi }} {% elseif  entity.newfonction is defined and entity.newfonction != null %} {{entity.newfonction}} {% endif %}</td>
+
+                <td>{{ entity['regularisation'].dateNew|date('d-m-Y')}}</td>
+                <td>
+            
+                        <a class="btn btn-success " href="{{ path('regularisation_print', { 'id': entity['regularisation'].id }) }}">Imprimer</a>
+
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('regularisation_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

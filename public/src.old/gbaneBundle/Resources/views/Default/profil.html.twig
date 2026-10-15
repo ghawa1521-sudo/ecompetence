@@ -1,0 +1,337 @@
+{% extends '::base.html.twig' %}
+
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+    <style>
+        td {
+            vertical-align: middle !important;
+        }
+        .modal-dialog {
+            max-width: 100%;
+            margin: 1.75rem auto;
+        }
+        .modal-header {
+            background-color: #ff9800;
+            color: #fff;
+        }
+        .modal-title {
+            font-weight: bold;
+        }
+        .modal-footer {
+            justify-content: center;
+        }
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+        .modal-body {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .loading-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1050;
+        }
+        .loading-backdrop img {
+            width: 100px;
+        }
+        table {
+            table-layout: fixed;
+            width: 100%;
+            overflow-wrap: break-word;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div>
+    {% if agents and agents is defined %}
+        <br>
+        <h3 style="text-align: center;">TOUS LES PROFILS</h3><br>
+        <form id="select-all-form" action="{{ path('process_selected_agents') }}" method="POST">
+            <table id="example" class="records_list table table-striped table-bordered" border="2">
+                <thead>
+                    <tr>
+                        <th>
+                            <label>
+                                <input type="checkbox" id="select-all-checkbox">
+                                Tout sélectionner
+                            </label>
+                        </th>
+                        <th>Matricule</th>
+                        <th>Nom et prénoms</th>
+                        <th>Fonction</th>
+                        <th>Fonction Assimilée Actuelle</th>
+                        <th>Grade</th>
+                        <th>Anciennete grade</th>
+                        <th>Anciennete dge</th>
+                        <th>Anciennete agent</th>
+                        <th>Fonction Assimilée Potentielle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for agent in agents %}
+                        {% if agent.agent.FonctionAssimilees != regles[agent.regle].FonctionAssimilees.libFonctAss %}
+                            <tr>
+                                <td><input type="checkbox" class="agent-checkbox" name="selected_agents[]" value="{{ agent.agent.id }}"></td>
+                                <td>{{ agent.agent.matricule }}</td>
+                                <td>{{ agent.agent.concatNom }}</td>
+                                <td>{{ agent.agent.Fonction.libFonc }}</td>
+                                <td>{% if agent.agent.FonctionAssimilees is defined and agent.agent.FonctionAssimilees != null %}{{ agent.agent.FonctionAssimilees.libFonctAss }}{% endif %}</td>
+                                <td>{{ agent.agent.Emploi.Grade.libGrade }}</td>
+                                <td>{{ agent.agent.anciennete.anciennetegrade|number_format }} an(s)</td>
+                                <td>{{ agent.agent.anciennete.anciennetedge.years|number_format }} an(s)</td>
+                                <td>{% if agent.agent.anciennete.ancienneteagent.years is defined %}{{ agent.agent.anciennete.ancienneteagent.years|number_format }}{% endif %} an(s)</td>
+                                <td>{{ regles[agent.regle].FonctionAssimilees.libFonctAss }} | Grade requis: {{ regles[agent.regle].Grade.libGrade }}<br>Anc. grade requis: {{ regles[agent.regle].ancienneteGrade }} | Anc. dge requis: {{ regles[agent.regle].ancienneteDge }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="button" id="open-modal-btn" class="btn btn-success">Traiter la sélection</button>
+            <a href="{{ path('gbane_homepage') }}"><button type="button" class="btn btn-secondary">Retour au formulaire</button></a>
+        </form>
+    {% endif %}
+</div>
+
+<!-- Modal d'alerte -->
+<div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="alertModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-weight-bold" id="alertModalLabel">Alerte</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <strong>Veuillez sélectionner au moins un profil avant de continuer.</strong>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Bootstrap pour afficher les profils sélectionnés -->
+<div id="agent-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Profils sélectionnés</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Matricule</th>
+                            <th>Nom et prénoms</th>
+                            <th>Fonction</th>
+                            <th>Fonction Assimilée Actuelle</th>
+                            <th>Fonction Assimilée Potentielle</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="selected-agents-list">
+                        <!-- La liste des agents sélectionnés sera affichée ici -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="generate-pdf-btn" class="btn btn-success">Imprimer la sélection</button> 
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Bootstrap pour la boite de confirmation -->
+<div id="confirmation-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-weight-bold">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Êtes-vous sûr de vouloir continuer avec cette sélection d'agents ?</strong></p>
+                <p><strong>Cliquez sur "Continuer" pour procéder ou sur "Annuler" pour revenir en arrière.</strong></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="confirm-continue" class="btn btn-success">Continuer</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Indicateur de chargement -->
+<div id="loading-indicator" class="loading-backdrop" style="display: none;">
+<strong><img src="{{ asset('web/loading.gif') }}" alt="Chargement en cours des profils sélectionnés..."></strong>
+</div>
+{% endblock %}
+
+{% block datatableJs %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const selectAllCheckbox = document.getElementById('select-all-checkbox');
+            const openModalBtn = document.getElementById('open-modal-btn');
+            const generatePdfBtn = document.getElementById('generate-pdf-btn');
+            const selectedAgentsList = document.getElementById('selected-agents-list');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const agentModal = document.getElementById('agent-modal');
+
+            // Fonction pour tout sélectionner ou tout désélectionner
+            selectAllCheckbox.addEventListener('change', function () {
+                const checkboxes = document.querySelectorAll('.agent-checkbox');
+                checkboxes.forEach(function (checkbox) {
+                    checkbox.checked = selectAllCheckbox.checked;
+                });
+            });
+
+            // Fonction pour afficher le modal d'alerte
+            function showAlertModal() {
+                $('#alertModal').modal('show');
+            }
+
+            // Fonction pour afficher la confirmation et le modal
+            openModalBtn.addEventListener('click', function () {
+                const selectedCheckboxes = document.querySelectorAll('.agent-checkbox:checked');
+                if (selectedCheckboxes.length === 0) {
+                    // Afficher le modal d'alerte si aucun profil n'est sélectionné
+                    showAlertModal();
+                } else {
+                    // Afficher le modal de confirmation si des profils sont sélectionnés
+                    $('#confirmation-modal').modal('show');
+                }
+            });
+
+            // Fonction pour continuer après confirmation
+            document.getElementById('confirm-continue').addEventListener('click', function () {
+                loadingIndicator.style.display = 'flex';
+                setTimeout(() => {
+                    displaySelectedAgents();
+                    $('#confirmation-modal').modal('hide');
+                    loadingIndicator.style.display = 'none';
+                    $('#agent-modal').modal('show'); // Afficher le modal avec jQuery
+                }, 5000); // Simule un délai de chargement de 5 secondes
+            });
+
+            // Fonction pour afficher les agents sélectionnés dans le modal
+            function displaySelectedAgents() {
+                const selectedAgents = [];
+                const selectedCheckboxes = document.querySelectorAll('.agent-checkbox:checked');
+                selectedCheckboxes.forEach(function (checkbox) {
+                    const agentRow = checkbox.closest('tr');
+                    const agent = {
+                        matricule: agentRow.cells[1].textContent,
+                        nom: agentRow.cells[2].textContent,
+                        fonction: agentRow.cells[3].textContent,
+                        fonctionAssimileActuelle: agentRow.cells[4].textContent.trim(),
+                        fonctionAssimilePotentielle: agentRow.cells[9].textContent.trim(),
+                        id: checkbox.value
+                    };
+                    selectedAgents.push(agent);
+                });
+
+                selectedAgentsList.innerHTML = '';
+                selectedAgents.forEach(function (agent) {
+                    const row = `
+                        <tr>
+                            <td>${agent.matricule}</td>
+                            <td>${agent.nom}</td>
+                            <td>${agent.fonction}</td>
+                            <td>${agent.fonctionAssimileActuelle}</td>
+                            <td>${agent.fonctionAssimilePotentielle}</td>
+                            <td>
+                              <!--  <a href="{{ path('gbane_decision', {'id': '${agent.id}'}) }}" class="btn btn-success">Consulter CV</a>-->
+                                <br>
+                                <a href="{{ path('gbane_decision', {'id': '${agent.id}'}) }}" class="btn btn-success">Promouvoir</a>
+                            </td>
+                        </tr>`;
+                    selectedAgentsList.insertAdjacentHTML('beforeend', row);
+                });
+            }
+
+            // Fonction pour générer le PDF
+            generatePdfBtn.addEventListener('click', function () {
+                generatePDF(); 
+            });
+
+            function generatePDF() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                // Ajouter les en-têtes
+                doc.setFontSize(10);
+                doc.text("MINISTERE DE L'ECONOMIE ET DES FINANCES", 10, 10);
+                doc.text("REPUBLIQUE DE CÔTE D'IVOIRE", 150, 10);
+                doc.text("Union - Discipline - Travail", 150, 15);
+                doc.text("DIRECTION GENERALE DE L'ECONOMIE", 10, 20);
+                doc.text("Abidjan, le", 150, 20);
+                doc.text("SERVICE DES RESSOURCES HUMAINES", 10, 25);
+                doc.text("ET DES MOYENS GÉNÉRAUX", 10, 30);
+                doc.text("N°:................../DGE/SRHMG", 10, 35);
+
+                // Ajouter le titre en gras
+                doc.setFontSize(14);
+                doc.setFont("helvetica", "bold");
+                doc.text("LISTE DES AGENTS EN ATTENTE DE PROMOTION", 105, 85, null, null, "center");
+
+                // Ajouter un espace avant le tableau
+                doc.text(" ", 10, 45);
+
+                let startY = 100; // Position de départ pour le tableau
+
+                let rows = [];
+                const headers = [["Matricule", "Nom et prénoms", "Fonction", "Fonction Assimilée Actuelle", "Fonction Assimilée Potentielle"]];
+                const selectedAgentsList = document.querySelectorAll("#selected-agents-list tr");
+                selectedAgentsList.forEach((row) => {
+                    const rowData = [];
+                    row.querySelectorAll("td").forEach((cell, index) => {
+                        if (index < 5) { // Ignorer le bouton de promotion
+                            rowData.push(cell.textContent.trim());
+                        }
+                    });
+                    rows.push(rowData);
+                });
+
+                // Vérifier si le tableau chevauche la fin de page
+                const pageHeight = doc.internal.pageSize.height;
+                const yMargin = 10;
+                const tableHeight = rows.length * 10; // Hauteur estimée du tableau
+
+                if (startY + tableHeight > pageHeight - yMargin) {
+                    // Si le tableau dépasse la limite de la page, ajouter une nouvelle page
+                    doc.addPage();
+                    startY = 10; // Réinitialiser la position de départ sur la nouvelle page
+                }
+
+                doc.autoTable({
+                    startY: startY,
+                    head: headers,
+                    body: rows
+                });
+
+                doc.save('Profils_Selectionnes.pdf');
+            }
+        });
+    </script>
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}

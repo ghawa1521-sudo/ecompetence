@@ -1,0 +1,356 @@
+{% import "::ediligence/macro/macro.html.twig" as macro %}
+{% set profil = '' %}{% set compte = '' %} {% set titre = '' %}
+{% for menu in menus %}
+
+    {% if menu.typecompte in ['ROLE_Service_Courrier'] %}
+        {% set profil = 'Courrier DGE' %}
+        {% set compte = ['ROLE_Service_Courrier'] %}
+        {% set titre = ['DILIGENCES'] %} 
+
+    {% elseif menu.typecompte in ['ROLE_DGE,ROLE_Sous_Dir_Chef_Sec,ROLE_Directeur,ROLE_DGA']  %}
+        {% if app.user.agent.fonction.id == 10 %}
+            {% set profil = 'DGE' %}
+            {% set compte = ['ROLE_dge'] %}
+            {% set titre = ['DILIGENCES'] %} 
+        {% elseif app.user.agent.fonction.id == 9 %}
+            {% set profil = 'DGA' %}
+            {% set compte = ['ROLE_dga', 'ROLE_Directeur'] %}
+            {% set titre = ['DILIGENCES'] %} 
+        {% elseif app.user.agent.fonction.id == 7 %}
+            {% set profil = 'Directeur' %}
+            {% set compte = ['ROLE_Directeur'] %}
+            {% set titre = ['DILIGENCES'] %}  
+        {% else %}
+            {% set profil = 'Chef de Service' %}
+            {% set compte = ['ROLE_Sous_Dir_Chef_Sec'] %}
+            {% set titre = ['DILIGENCES'] %}
+        {% endif %}
+
+    {% elseif menu.typecompte in ['ROLE_Courrier_Interne']  %}
+        {% set profil = 'Courrier Interne' %}
+        {% set compte = ['ROLE_Courrier_Interne'] %}
+        {% set titre = ['DILIGENCES'] %} 
+
+    {% elseif menu.typecompte in ['ROLE_Charge_etudes']  %}
+        {% set profil = 'Charge etude' %}
+        {% set compte = ['ROLE_Charge_etudes'] %}
+        {% set titre = ['DILIGENCES'] %} 
+
+    {% elseif menu.typecompte in ['ROLE_Conseillers']  %}
+        {% set profil = 'Conseillers' %}
+        {% set compte = ['ROLE_Conseillers'] %}
+        {% set titre = ['DILIGENCES'] %}   #}
+
+
+    {% endif %}
+
+{% endfor %}
+
+
+
+
+<div id="sidebar-alt">
+    <div class="sidebar-scroll">
+
+    </div>
+
+</div>
+
+<div id="sidebar">
+    <div class="sidebar-scroll">
+        <div class="sidebar-content">
+            <a href="index.html" class="sidebar-brand">
+                <i class="gi gi-lightbulb"></i><strong>E</strong>Diligence
+            </a>
+
+            <div class="sidebar-section sidebar-user clearfix">
+                <div class="sidebar-user-avatar">
+                    <a href="page_ready_user_profile.html">
+                        <img src="{{ vich_uploader_asset(app.user.agent, 'imageFile') }}" alt="{{ app.user.agent.imageName }}">
+                    </a>
+                </div>
+                <div class="sidebar-user-name">profil {% if profil is defined %}{{profil}} {% endif %}</div>
+            </div>
+            <!-- Sidebar Navigation -->
+            <ul class="sidebar-nav">
+                {% if compte is defined and compte != null %}
+
+                    {% for comptes in compte  %}    
+
+                        {% if (comptes in ["ROLE_Service_Courrier"])%} 
+                            <li>
+                                <a href="{{ path('ediligence_homepage') }}" class=" active"><i class="gi gi-stopwatch sidebar-nav-icon"></i>{{titre[0]}}</a>
+                            </li>
+                            {% for line in menus %}
+                                {% if (line.catMenu == 1)%}
+
+                                    {% if (line.param > 0) %}
+                                        <li>
+                                            <a href="{{ path(line.lienMenu,{'todo': line.param}) }}"><i class="{{ line.classLien }}"></i>&nbsp;&nbsp;{{line.lblMenu}}</a>
+                                        </li> 
+                                    {% else %} 
+                                        <li>
+                                            <a href="{{ path(line.lienMenu) }}"><i class="{{ line.classLien }}"></i>&nbsp;&nbsp;{{line.lblMenu}}</a>
+                                        </li>
+                                    {% endif %}    
+
+                                {% endif %}  
+                                {% if (line.catMenu == 9)%}
+                                    <li>
+                                        <a href="{{ path(line.lienMenu) }}"><i class="{{ line.classLien }}"></i>&nbsp;&nbsp;{{line.lblMenu}}</a>
+                                    </li>
+                                {% endif %}  
+                            {% endfor %} 
+                        {% endif %}  
+
+                        {% if (comptes in ["ROLE_Courrier_Interne"])%} 
+                            <li>
+                                <a href="{{ path('ediligence_homepage') }}" class=" active"><i class="gi gi-stopwatch sidebar-nav-icon"></i>{{titre[0]}}</a>
+                            </li>
+                            {% for line in menus %}
+                                {% if (line.catMenu == 5)%}
+                                    <li>
+                                        <a href="{{ path(line.lienMenu) }}"><i class="{{ line.classLien }}"></i>&nbsp;&nbsp;{{line.lblMenu}}
+                                            {{ macro.notif_menu_gauche(line.countval,tab) }}
+                                        </a>
+
+                                    </li>
+                                {% endif %}  
+                                {% if (line.catMenu == 9)%}
+                                    <li>
+                                        <a href="{{ path(line.lienMenu) }}"><i class="{{ line.classLien }}"></i>&nbsp;&nbsp;{{line.lblMenu}}</a>
+                                    </li>
+                                {% endif %}  
+                            {% endfor %} 
+                        {% endif %}  
+
+
+                        {% if (comptes in ["ROLE_dge", "ROLE_dga"]) %} 
+
+                            {% if (comptes == 'ROLE_dge')%}
+                                <li>
+                                    <a href="{{ path('ediligence_homepage') }}" class=" active"><i class="gi gi-stopwatch sidebar-nav-icon"></i>{{titre[0]}}</a>
+                                </li> 
+                                {% for line in menus %}
+                                    {% if (line.catMenu == 2)%}
+                                        {% if (line.param > 0) %}
+                                            <li>
+                                                <a href="{{ path(line.lienMenu,{'todo': line.param}) }}"><i class="{{ line.classLien }}"></i>&nbsp;&nbsp;{{line.lblMenu}}
+                                                    {{ macro.notif_menu_gauche(line.countval,tab) }}
+                                                </a>
+
+                                            </li> 
+                                        {% else %} 
+                                            <li>
+                                                <a href="{{ path(line.lienMenu) }}"><i class="{{ line.classLien }}"></i>&nbsp;&nbsp;{{line.lblMenu}}
+                                                    {{ macro.notif_menu_gauche(line.countval,tab) }}
+                                                </a>
+
+                                            </li>
+                                        {% endif %}  
+
+                                    {% endif %} 
+                                    {% if (line.catMenu == 3)%}
+                                        <li>
+                                            <a href="{{ path(line.lienMenu) }}"><i class="{{ line.classLien }}"></i>&nbsp;&nbsp;{{line.lblMenu}}
+                                                {{ macro.notif_menu_gauche(line.countval,tab) }}
+                                            </a>
+
+                                        </li>
+                                    {% endif %}
+                                    {% if (line.catMenu == 9)%}
+                                        <li>
+                                            <a href="{{ path(line.lienMenu) }}"><i class="{{ line.classLien }}"></i>&nbsp;&nbsp;{{line.lblMenu}}</a>
+                                        </li>
+                                    {% endif %} 
+
+                                {% endfor %} 
+
+                            {% else%}
+                                <li>
+                                    <a href="{{ path('ediligence_homepage') }}" class=" active"><i class="gi gi-stopwatch sidebar-nav-icon"></i>{{titre[0]}}</a>
+                                </li>    
+                                {% for line in menus %}
+                                    {% if (line.catMenu == 4)%}
+                                        <li>
+                                            <a href="{{ path(line.lienMenu) }}"><i class="{{ line.classLien }}"></i>&nbsp;&nbsp;{{line.lblMenu}}</a>
+                                        </li>
+                                    {% endif %}  
+                                    {% if (line.catMenu == 3)%}
+                                        <li>
+                                            <a href="{{ path(line.lienMenu) }}"><i class="{{ line.classLien }}"></i>&nbsp;&nbsp;{{line.lblMenu}}</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if (line.catMenu == 9)%}
+                                        <li>
+                                            <a href="{{ path(line.lienMenu) }}"><i class="{{ line.classLien }}"></i>&nbsp;&nbsp;{{line.lblMenu}}</a>
+                                        </li>
+                                    {% endif %} 
+                                {% endfor %} 
+
+                                <li>
+                                    <a href="#" class="sidebar-nav-menu"><i class="fa fa-angle-left sidebar-nav-indicator sidebar-nav-mini-hide"></i><i class="gi gi-shopping_cart sidebar-nav-icon"></i><span class="sidebar-nav-mini-hide">DILIGENCE INTERNE</span></a>  
+                                    <ul>
+                                        {% for line in menus %}
+                                            {% if (line.catMenu == 8)%}
+                                                <li>
+                                                    <a href="{{ path(line.lienMenu) }}"><i class="gi gi-charts sidebar-nav-icon"></i>{{line.lblMenu}}</a>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+
+
+                                <li>
+                                    <a href="#" class="sidebar-nav-menu"><i class="fa fa-angle-left sidebar-nav-indicator sidebar-nav-mini-hide"></i><i class="gi gi-shopping_cart sidebar-nav-icon"></i><span class="sidebar-nav-mini-hide">DGE INTERIMAIRE</span></a>  
+                                    <ul>
+                                        {% for line in menus %}
+                                            {% if (line.catMenu == 2)%}
+                                                <li>
+                                                    <a href="{{ path(line.lienMenu) }}"><i class="{{ line.classLien }}"></i>&nbsp;&nbsp;{{line.lblMenu}}</a>
+                                                </li>
+                                            {% endif %} 
+                                            {% if (line.catMenu == 3)%}
+                                                <li>
+                                                    <a href="{{ path(line.lienMenu) }}"><i class="{{ line.classLien }}"></i>&nbsp;&nbsp;{{line.lblMenu}}</a>
+                                                </li>
+                                            {% endif %}
+
+                                        {% endfor %}   
+                                        <ul>
+                                            </li>
+
+                                        {% endif%} 
+
+                                    {% endif %}  
+
+                                    {% if (comptes in ["ROLE_Sous_Dir_Chef_Sec", "ROLE_Directeur"]) %} 
+
+                                        <li>
+                                            <a href="{{ path('ediligence_homepage') }}" class=" active"><i class="gi gi-stopwatch sidebar-nav-icon"></i>{{titre[0]}}</a>
+                                        </li>
+
+                                        {% for line in menus %}
+                                            {% if (line.catMenu == 2)%}
+                                                {% if (line.param > 0) %}
+                                                    <li>
+                                                        <a href="{{ path(line.lienMenu,{'todo': line.param}) }}"><i class="{{ line.classLien }}"></i>&nbsp;&nbsp;{{line.lblMenu}}
+                                                            {{ macro.notif_menu_gauche(line.countval,tab) }}
+                                                        </a>
+                                                    </li> 
+                                                {% else %} 
+                                                    <li>
+                                                        <a href="{{ path(line.lienMenu) }}"><i class="{{ line.classLien }}"></i>&nbsp;&nbsp;{{line.lblMenu}}
+                                                            {{ macro.notif_menu_gauche(line.countval,tab) }}
+                                                        </a>
+                                                    </li>
+                                                {% endif %}    
+                                            {% endif %}  
+                                            {% if (line.catMenu == 3)%}
+                                                <li>
+                                                    <a href="{{ path(line.lienMenu) }}"><i class="{{ line.classLien }}"></i>&nbsp;&nbsp;{{line.lblMenu}}
+                                                        {{ macro.notif_menu_gauche(line.countval,tab) }}
+                                                    </a>
+
+                                                </li>
+                                            {% endif %}
+                                            {% if (line.catMenu == 9)%}
+                                                <li>
+                                                    <a href="{{ path(line.lienMenu) }}"><i class="{{ line.classLien }}"></i>&nbsp;&nbsp;{{line.lblMenu}}</a>
+                                                </li>
+                                            {% endif %} 
+                                        {% endfor %}
+
+                                    {% endif %}      
+
+                                    {% if (comptes in ["ROLE_Charge_etudes"])%} 
+                                        <li>
+                                            <a href="{{ path('ediligence_homepage') }}" class=" active"><i class="gi gi-stopwatch sidebar-nav-icon"></i>{{titre[0]}}</a>
+                                        </li>
+                                        {% for line in menus %}
+                                            {% if (line.catMenu == 6)%}
+                                                <li>
+                                                    <a href="{{ path(line.lienMenu) }}"><i class="{{ line.classLien }}"></i>&nbsp;&nbsp;{{line.lblMenu}}
+                                                        {{ macro.notif_menu_gauche(line.countval,tab) }}
+                                                    </a>
+                                                </li>
+                                            {% endif %}  
+                                            {% if (line.catMenu == 3)%}
+                                                <li>
+                                                    <a href="{{ path(line.lienMenu) }}"><i class="gi gi-charts sidebar-nav-icon"></i>{{line.lblMenu}}</a>
+                                                </li>
+                                            {% endif %} 
+                                            {% if (line.catMenu == 9)%}
+                                                <li>
+                                                    <a href="{{ path(line.lienMenu) }}"><i class="{{ line.classLien }}"></i>&nbsp;&nbsp;{{line.lblMenu}}</a>
+                                                </li>
+                                            {% endif %} 
+                                        {% endfor %} 
+                                    {% endif %} 
+
+                                    {% if (comptes in ["ROLE_Conseillers"])%} 
+                                        <li>
+                                            <a href="{{ path('ediligence_homepage') }}" class=" active"><i class="gi gi-stopwatch sidebar-nav-icon"></i>{{titre[0]}}</a>
+                                        </li>
+                                        {% for line in menus %}
+                                            {% if (line.catMenu == 7)%}
+                                                <li>
+                                                    <a href="{{ path(line.lienMenu) }}"><i class="{{ line.classLien }}"></i>&nbsp;&nbsp;{{line.lblMenu}}
+                                                        {{ macro.notif_menu_gauche(line.countval,tab) }}
+                                                    </a>
+                                                </li>
+                                            {% endif %}  
+                                            {% if (line.catMenu == 3)%}
+                                                <li>
+                                                    <a href="{{ path(line.lienMenu) }}"><i class="gi gi-charts sidebar-nav-icon"></i>{{line.lblMenu}}</a>
+                                                </li>
+                                            {% endif %}
+                                            {% if (line.catMenu == 9)%}
+                                                <li>
+                                                    <a href="{{ path(line.lienMenu) }}"><i class="{{ line.classLien }}"></i>&nbsp;&nbsp;{{line.lblMenu}}</a>
+                                                </li>
+                                            {% endif %} 
+                                        {% endfor %} 
+                                        {#
+                                        <li>
+                                            <a href="#" class="sidebar-nav-menu"><i class="fa fa-angle-left sidebar-nav-indicator sidebar-nav-mini-hide"></i><i class="gi gi-shopping_cart sidebar-nav-icon"></i><span class="sidebar-nav-mini-hide">DILIGENCE INTERNE</span></a>
+
+                                            <ul>
+                                                {% for line in menus %}
+                                                    {% if (line.catMenu == 8)%}
+                                                        <li>
+                                                            <a href="{{ path(line.lienMenu) }}"><i class="gi gi-charts sidebar-nav-icon"></i>{{line.lblMenu}}</a>
+                                                        </li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </ul>
+                                        </li> #}
+
+                                    {% endif %} 
+
+
+
+                                {% endfor %}    
+                            {% endif%}
+
+                            <li>
+                                <a href="#" class="sidebar-nav-menu"><i class="fa fa-angle-left sidebar-nav-indicator sidebar-nav-mini-hide"></i><i class="gi gi-shopping_cart sidebar-nav-icon"></i><span class="sidebar-nav-mini-hide">SUIVI P.A.S</span></a>
+
+                                <ul>
+                                    <li>
+                                        <a href="{{path('pas_ajout')}}"><i class="gi gi-charts sidebar-nav-icon"></i>Enregistrer P.A.S</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{path('pas_homepage')}}"><i class="gi gi-charts sidebar-nav-icon"></i>Liste P.A.S</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{path('pas_bilan')}}"><i class="gi gi-charts sidebar-nav-icon"></i>Bilan P.A.S</a>
+                                    </li> 
+                                </ul>
+                            </li>
+                        </ul>
+
+                        </div>    
+                        </div>  
+                        </div>   

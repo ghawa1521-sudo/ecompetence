@@ -1,0 +1,89 @@
+{% extends '::base.html.twig' %}
+
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+
+{% block titre_page %}
+    <div>Liste des Agents (<span style="color: red;">{{entities|length}}</span>)</div>
+{% endblock %}
+{% block body -%}
+    <div>
+            {#<a href="{{ path('agent_new') }}" class="btn btn-info">
+                Enregistrer un nouvel Agent
+            </a>#}
+   <br>
+    <table class="records_list table table-striped responsive-utilities jambo_table bulk_action">
+        <thead>
+            <tr>
+                <th>Matricule</th>
+                <th>Nom</th>
+                <th>Pr&eacute;noms</th>
+                <th>Date de Naissance</th>
+
+                <th> Direction </th>
+               {# <th>Situation matrimoniale</th>#}
+
+                {#<th>Indice</th>
+                <th>Date premiere prise de service</th>#}
+                <td>Emploi</td>
+                <td>Grade</td>
+                <th>Date prise Service DGE</th>
+
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+             
+                <td><a href="{{ path('agent_show', { 'id': entity.id }) }}">{{ entity.matricule }}</a></td>
+               
+               <td> {% if entity.situationMatri == 'Marie' %}
+                            {{ entity.nom }} {{ 'nee' }} {{ entity.nomJeuneFille }}
+                        {% else %}
+                            {{ entity.nom }}
+                    {% endif %}
+                </td>
+                <td>{{ entity.prenoms }}</td>
+
+                <td>{% if entity.dateNaiss %}{{ entity.dateNaiss|date('d/m/Y') }}{% endif %}</td>
+                <td>{% if entity.direction %} {{ entity.direction.sigle }} {% endif %}</td>
+
+
+               {#} <td>{{ entity.situationMatri }} <br> {{ entity.nbEnf }} enfant(s)</td>
+
+                <td>{{ entity.indice }}</td>
+                <td>{% if entity.datePremierService %}{{ entity.datePremierService|date('d-m-Y') }}{% endif %}</td>#}
+                <td>{{entity.Emploi}}</td>
+                <td>{% if entity.Emploi%}{{entity.Emploi.Grade}}{% endif %}</td>
+                <td>{% if entity.datePriseServiceDge %}{{ entity.datePriseServiceDge|date('d-m-Y') }}{% endif %}</td>
+
+                <td>
+
+                     {#   <a class="btn btn-success" href="{{ path('agent_show', { 'id': entity.id }) }}">Voir la Fiche de l'agent</a> </br>#}
+                        <a class="btn btn-primary" style="color: blue" href="{{ path('agent_cv', { 'id': entity.id }) }}">Actualiser CV</a>
+                        <a class="btn btn-primary" style="color: blue" href="{{ path('agent_cv1', { 'id': entity.id }) }}">Visualiser le CV</a></br>
+                        {#<a style="color: blue" href="{{ path('formation_new') }}">Ajout d'expérience</a></br>#}
+                       {# <a style="color: blue"href="{{ path('agent_show') }}">Ajout de formation</a>#}
+
+
+                        
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+        <ul>
+        <li>
+
+        </li>
+    </ul>
+    {% endblock %}
+    {% block javascript %} 
+
+    {% endblock %}
+    

@@ -1,0 +1,40 @@
+{% extends '::base.html.twig' %}
+
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+{% block css %}
+   <link href="{{ asset('design/css/style.css') }}" rel="stylesheet"/>
+       <link rel="stylesheet" href="{{asset('ediligence/assets/css/bootstrap-select.min.css')}}">
+{% endblock %}
+{% block titre_page %}
+    <div>Administration </div>
+{% endblock %}
+{% block body -%}
+    <div>
+            {#<a href="{{ path('agent_new') }}" class="btn btn-info">
+                Enregistrer un nouvel Agent
+            </a>#}
+            <h4>Réinitialiser le mot de passe</h4>
+            <div class="row" style="background-color: #f7f7f7;">
+                <form method="post" {{ form_enctype(form) }}>
+                  <div class="col-md-4">
+                    
+                {{ form_row(form.users) }}
+                {{ form_row(form.mdp) }}
+                
+                
+                    {{ form_row(form._token) }}
+                    <input type="submit" value="REINITIALISER LE COMPTE" class="btn btn-success col-md-8"/>   
+                </div>
+            </form>
+    </div>
+        </ul>
+    {% endblock %}
+    {% block javascript %}
+    <script src="{{ asset('ediligence/assets/js/bootstrap-select.min.js') }}"></script>
+
+{% endblock %}

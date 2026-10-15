@@ -1,0 +1,157 @@
+{% extends '::base.html.twig' %}
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+{% block title %}
+    congés actifs
+{% endblock %}
+{% block body -%}
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs bar_tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Afficher en Liste</a></li>
+        <li role="presentation"><a href="#timeline" aria-controls="profile" role="tab" data-toggle="tab">Afficher sur TimeLine</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="home">
+            
+            <div class="x_title">
+                <h2>Congés Actifs <small> </small></h2>
+                <div class="clearfix"></div>
+            </div>
+
+            <table class="records_list table table-striped responsive-utilities jambo_table bulk_action" id="datatable">
+                <thead>
+                    <tr>
+                        <th>Date de soumission</th>
+                        <th>Type de Congés</th>
+                        <th>Date de départ</th>
+                        <th>Date de fin</th>
+                        <th>Nombre de jours</th>
+                        <th>Etat</th>
+                        <th>Date reprise</th>
+                        <th>Année</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entity in entities %}
+                        <tr>
+                            <td>{% if entity.datecreation %}{{ entity.datecreation|date('d-m-Y') }}{% endif %}</td>
+                            <td>{{entity.typeConges.libelle}}</td>
+                            <td>{% if entity.datedebut %}{{ entity.datedebut|date('d-m-Y') }}{% endif %}</td>
+                            <td>{% if entity.datefin %}{{ entity.datefin|date('d-m-Y') }}{% endif %}</td>
+                            <td>{{entity.nbrejours}}</td>
+                            <td>
+                                    {{macro.EtatConge(entity.etat,entity.niveau,entity.agent.retour_service.tab_lib[entity.niveau])}}
+                               {#
+                                {% elseif entity.etat == 3%}
+                                    <label class="label label-success">Cessation généré</label>
+                                {% elseif entity.etat == 4%}
+                                    <label class="label label-success">Reprise généré</label>
+                                {% endif %}
+                                #}
+                                
+                            </td>
+                            <td>{% if entity.datereprise %}{{ entity.datereprise|date('d-m-Y') }}{% endif %}</td>
+                            <td>{{ entity.exercice }}</td>
+                            <td>
+                                <a href="{{ path('conges_show', { 'id': entity.id }) }}">Consulter</a>&nbsp;|&nbsp;
+
+
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+
+        </div>
+        <div role="tabpanel" class="tab-pane" id="timeline">
+            <button id="wide">Réduire</button>
+            <button id="fit">Agrandir</button>
+            <div id="visualization"></div>
+        </div>
+
+
+    </div>
+{% endblock %}
+{% block css %}
+    <link href="{{ asset('design/css/vis.min.css') }}" rel="stylesheet"/>
+{% endblock %}
+
+{% block javascript %}
+
+    <script src="{{ asset('design/js/vis.min.js') }}"></script>
+
+    <script type="text/javascript">
+        // DOM element where the Timeline will be attached
+        var container = document.getElementById('visualization');
+
+        // Create a DataSet (allows two way data-binding)
+        var items = new vis.DataSet([
+        {% for entity in entities %}
+
+
+
+            {% if entity.etat == 0%}
+                {% set etat = "label-warning" %}
+                {% set etatValue = "En attente" %}
+                {% set bg = "yellow_light" %}
+            {% elseif entity.etat == 1 %}
+                {% set etat = "label-success" %}
+                {% set etatValue = "Approuvé" %}
+                {% set bg = "blue_light" %}
+            {% elseif entity.etat == 2 %}
+                {% set etat = "label-danger" %}
+                {% set etatValue = "Refusé" %}
+                {% set bg = "red_light" %}
+            {% elseif entity.etat == 3 %}
+                {% set etat = "label-success" %}
+                {% set etatValue = "Confirmé" %}
+                {% set bg = "green_light" %}
+            {% elseif entity.etat == 22 %}
+                {% set etat = "label-success" %}
+                {% set etatValue = "Attente de Finalisation" %}
+                {% set bg = "green_light" %}
+            {% elseif entity.etat == 4 %}
+                {% set etat = "label-success" %}
+                {% set etatValue = "Finalisé" %}
+                {% set bg = "green_light" %}
+            {% else %}
+                {% set etat = "label-success" %}
+                {% set etatValue = "Non défini" %}
+                {% set bg = "green_light" %}
+            {% endif %}
+
+
+
+                    {id:{{ entity.id }},
+                                content: '<strong>{{ entity.agent.nom}} {{ entity.agent.prenoms}}</strong><label class="label {{etat}}">{{etatValue}}</label><br/> <i>({{entity.agent.fonction}}, {{entity.agent.emploi}})<br/> Du {% if entity.datedebut %}  {{ entity.datedebut|date('d-m-Y') }} {% endif %} au {% if entity.datefin %}  {{ entity.datefin|date('d-m-Y') }} {% endif %} </i><br/><a class="label label-success" href="{{ path('conges_show', { 'id': entity.id }) }}">Consulter</a> <a href="#">Valider</a>',
+                        start: '{% if entity.datedebut %}{{ entity.datedebut|date('Y-m-d') }} {% endif%}',
+                        end: '{% if entity.datefin %}{{ entity.datefin|date('Y-m-d') }} {% endif %}',
+                        className: '{{bg}}',
+                    },{% endfor %}
+                ]);
+
+                // Configuration for the Timeline
+                var options = {
+                    zoomMin: 1000 * 60 * 60 * 24, // a day
+                    zoomMax: 1000 * 60 * 60 * 24 * 30 * 3  // three months
+                };
+
+                // Create a Timeline
+                var timeline = new vis.Timeline(container, items, options);
+
+                document.getElementById('wide').onclick = function () {
+                    timeline.setWindow('2015-01-01', '2016-12-31');
+                };
+
+                document.getElementById('fit').onclick = function () {
+                    timeline.fit();
+                };
+        </script>
+        {% endblock %}

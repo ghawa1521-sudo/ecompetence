@@ -1,0 +1,97 @@
+{% extends '::ediligence/base.html.twig' %}
+
+{% block body %}
+ 
+
+    <div class="content-header">
+        <div class="header-section">
+            <h1><i class="gi gi-envelope"></i> Dossier<br><small>Mes diligences</small></h1>
+        </div>
+    </div>
+    <ul class="breadcrumb breadcrumb-top">
+        <li>Actions</li>
+        <li><a href="">Mes Dossiers</a></li>
+    </ul>
+    <div class="block full">
+        <div class="block-title">
+            <h2><strong>Liste</strong> dossiers</h2>
+        </div>{#
+        <p><a href="https://dge.ci" target="_blank">DataTables</a> is a plug-in for the Jquery Javascript library. It is a highly flexible tool, based upon the foundations of progressive enhancement, which will add advanced interaction controls to any HTML table. It is integrated with template's design and it offers many features such as on-the-fly filtering and variable length pagination.</p>
+#}
+
+        <div class="table-responsive">
+            <table id="example-datatable" class="table table-vcenter table-condensed table-bordered">
+                <thead>
+                    <tr>
+                        <th>Num</th>
+                        <th>Date</th>
+                        <th>Expediteur</th>
+                        <th>Objet</th>
+                        <th>Observation</th>
+                        <th>Télécharger</th>
+                        
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entity in entities %}
+                        <tr>
+                            <td><a href="{{ path('courrier_show', { 'id': entity.id }) }}">{{ entity.numenregistrement }}</a></td>
+                            <td>{% if entity.dateCreat %}{{ entity.dateCreat|date('d-m-Y') }}{% endif %}</td>
+                            <td>{#
+                                {% if (is_granted('ROLE_Service_Courrier'))%}
+                                    {{entity.texterieur.lib}}
+                                {% elseif (entity.departdest != null and entity.departdest is defined) %}
+                                    {% set service = '' %}
+                                    {% for liste in entity.getDepartdestList  %}
+                                       {% set service = service ~ tservice[liste] ~ ' - ' %}
+                                    {% endfor %}
+                                    {{ service|trim(' - ', 'right') }}
+                                {% endif%}  
+                                #}
+                                {{tservice[entity.servicesaisi]}}
+                            </td>
+                            <td>{{ entity.objet|raw|striptags|slice(0, 150) }}</td>
+                            <td>{{ entity.observationscecour|raw|striptags|slice(0, 50) }}</td>
+                            <td>{{ macro.apercu(entity.piecejointe) }}
+                            </td>
+                            
+                            <td class="text-center">  
+                                <div class="btn-group btn-group-xs">
+                                    <span>
+                                        <a href="{{ path('courrier_show', { 'id': entity.id }) }}" data-toggle="tooltip" title="Consuter" class="btn btn-success"><i class="fa fa-download" style="font-size:16px;color:red"></i></a>
+                                    </span>
+                                    {#
+                                    {% if(entity.etatcourrier == 1)%}
+                                        <a href="{{ path('courrier_depart_del', { 'id': entity.id }) }}" data-toggle="tooltip" title="Supprimer" class="btn btn-danger"><i class="glyphicon glyphicon-trash" style="font-size:16px;color:white"></i></a>
+                                        {% else%}
+                                            {% if(entity.etatcourrier == 0)%}
+                                            <span>
+                                                <a href="{{ path('courrier_edit', { 'id': entity.id }) }}" data-toggle="tooltip" title="Modifier" class="btn btn-success"><i class="fa fa-edit" style="font-size:16px;color:red"></i></a>
+                                            </span>
+                                            <span>
+                                                <a href="{{ path('courrier_depart_imput', { 'id': entity.id }) }}" data-toggle="tooltip" title="Imputer" class="btn btn-info"><i class="glyphicon glyphicon-send" style="font-size:16px;color:blue"></i></a>
+                                            </span>
+                                        {% endif%}
+                                    {% endif%}
+                                    #}
+
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <ul>
+            <li>
+                <a href="{{ path('courrier_new') }}">Transmettre diligence</a>
+            </li>
+        </ul>
+    </div>
+            
+  
+            
+    {{macro.div_apercu() }}
+
+{% endblock %}

@@ -1,0 +1,96 @@
+<?php
+
+namespace Users\UsersBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Holidays
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Users\UsersBundle\Repository\HolidaysRepository")
+ */
+class Holidays
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="annee", type="integer")
+     */
+    private $annee;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="jours", type="string", length=500)
+     */
+    private $jours;
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set annee
+     *
+     * @param integer $annee
+     *
+     * @return Holidays
+     */
+    public function setAnnee($annee)
+    {
+        $this->annee = $annee;
+
+        return $this;
+    }
+
+    /**
+     * Get annee
+     *
+     * @return integer
+     */
+    public function getAnnee()
+    {
+        return $this->annee;
+    }
+
+    /**
+     * Set jours
+     *
+     * @param string $jours
+     *
+     * @return Holidays
+     */
+    public function setJours($jours)
+    {
+        $this->jours = $jours;
+
+        return $this;
+    }
+
+    /**
+     * Get jours
+     *
+     * @return string
+     */
+    public function getJours()
+    {
+        return $this->jours;
+    }
+}

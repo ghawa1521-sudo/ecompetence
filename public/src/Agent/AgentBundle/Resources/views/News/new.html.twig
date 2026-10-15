@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Nouvelle Alerte</h1>
+    <div class="col-sm-6 col-sm-offset-3">
+        <div class="page animsition">
+            <div class="page-header">
+                <ol class="breadcrumb">
+                    <li><a href="#">Admin </a></li>
+                    <li><a href="javascript:void(0)">News</a></li>
+
+
+                    <li class="active">Créer</li>
+                </ol>
+                <div class="page-header-actions">
+                    <a href="{{ path('news_new') }}" class="btn btn-sm btn-icon btn-primary btn-round" data-toggle="tooltip"
+                       data-original-title="Actualiser">
+                        <i class="icon md-refresh-alt" aria-hidden="true"></i>
+                    </a>
+                    <!---
+                 <a href="{{ path('news_index') }}" class="btn btn-sm btn-icon btn-danger btn-round" data-toggle="tooltip"
+                    data-original-title="Annuler">
+                     <i class="icon md-delete" aria-hidden="true"></i>
+                 </a>--->
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel-body container">
+
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    <button type="submit" class="btn btn-primary">Créer</button>
+                    <a href="{{ path('news_index') }}" class="btn btn-danger">Retour à la liste</a>
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

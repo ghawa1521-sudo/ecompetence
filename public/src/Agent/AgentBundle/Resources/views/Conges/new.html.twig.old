@@ -1,0 +1,70 @@
+{% extends '::base.html.twig' %}
+{% block title %}
+    Faire une proposition de congés
+{% endblock %}
+{% block body -%}
+    <div class="row">
+        <div>{#
+            <span class="section">
+                
+            </span>
+            #}
+            <div class="x_title">
+                <h2>Faire une proposition de congés<small> </small></h2>
+                <div class="clearfix"></div>
+            </div>
+            {#{dump(form.vars)}#}
+            <div class="col-md-push-3 col-md-6">
+                {{ form_start(form) }}
+                {{ form_errors(form) }}
+                {{form_row(form.typeConges)}}
+                {{form_row(form.externe)}}
+                {{form_row(form.datedebut)}}
+                {#{{form_row(form.objetFile)}}#}
+
+                {#{form_row(form.datefin)}#}
+
+                {% if (form.vars.value.nbrejours==0) and (form.vars.value.typeConges.id is defined) %}
+                    {% if (cperiodes is defined) %}
+                        {% if cperiodes==0 %}
+                        {{form_row(form.nbrejours)}}
+                        {% endif %}
+                    
+                    <label class="control-label" for="Tperiode">Nbre de jours</label>
+                    <select class="form-control" required name="Tperiode" id="Tperiode">
+                        <option></option>
+
+                        {% for item in periodes %}
+
+                            <option value="{{item.duree}}">{{item.duree}} {{item.libelle}}</option>
+
+                        {% endfor %}
+                    </select>
+                    {% endif %}
+                {% endif %}
+                
+                {{ form_label(form.objetFile, ' ') }}
+                {{ form_errors(form.objetFile) }}
+                {{ form_widget(form.objetFile) }}
+                
+               
+
+
+
+                <input type="submit" class="btn btn-success" value="Enregistrer" />
+            </div>
+
+            {{ form_widget(form._token) }}
+            {{ form_end(form, {'render_rest': false}) }}
+
+        </div>
+    </div>
+    <ul class="record_actions">
+
+        <li>
+            <a href="{{ path('conges_active') }}">
+                Retour à la liste
+            </a>
+        </li>
+    </ul>
+{% endblock %}

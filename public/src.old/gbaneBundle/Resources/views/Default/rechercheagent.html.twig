@@ -1,0 +1,48 @@
+{# empty Twig template #}
+{% extends '::base.html.twig' %}
+{% block css %}
+   <link href="{{ asset('design/css/style.css') }}" rel="stylesheet"/>
+       <link rel="stylesheet" href="{{asset('ediligence/assets/css/bootstrap-select.min.css')}}">
+{% endblock %}
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+    <style>
+        td{
+            vertical-align: middle !important;
+        }
+    </style>
+{% endblock %}
+{% block datatableJs %}
+  <script>
+   $("#example").margetable({
+            type: 2,
+            colindex: [0,1,2,3,4,5,6]
+});
+
+</script>
+    {% include "::sections_app/datatableJs.html.twig" %}
+   
+{% endblock %}
+{% block body %}
+
+<div class="well research_form" style="width:50%;margin:auto; ">
+
+<h3>Recherche agent</h3><br>
+
+<form method="post" {{ form_enctype(form) }}>
+
+{{ form_widget(form) }}
+
+{# <input type="submit" class="btn btn-primary" /> #}
+<button type="submit" class="btn btn-primary">Rechercher</button>
+</form>
+
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+         
+<script src="{{ asset('ediligence/assets/js/bootstrap-select.min.js') }}"></script>
+{% endblock %}
+        

@@ -1,0 +1,30 @@
+document:
+    path:     /{matricule}/list
+    defaults: { _controller: "AgentBundle:Document:index" }
+
+document_show:
+    path:     /{id}/show
+    defaults: { _controller: "AgentBundle:Document:show" }
+
+document_new:
+    path:     /{matricule}/new
+    defaults: { _controller: "AgentBundle:Document:new" }
+
+document_create:
+    path:     /create
+    defaults: { _controller: "AgentBundle:Document:create" }
+    methods:  POST
+
+document_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AgentBundle:Document:edit" }
+
+document_update:
+    path:     /{id}/update
+    defaults: { _controller: "AgentBundle:Document:update" }
+    methods:  [POST, PUT]
+
+document_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AgentBundle:Document:delete" }
+    methods:  [POST, DELETE]

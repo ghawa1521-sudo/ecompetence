@@ -1,0 +1,100 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Regularisation</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Nature</th>
+                <td>{{ entity.nature }}</td>
+            </tr>
+            <tr>
+                <th>Datecreation</th>
+                <td>{{ entity.dateCreation|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Matagent</th>
+                <td>{{ entity.matAgent }}</td>
+            </tr>
+            <tr>
+                <th>Old</th>
+                <td>{{ entity.old }}</td>
+            </tr>
+            <tr>
+                <th>New</th>
+                <td>{{ entity.new }}</td>
+            </tr>
+            <tr>
+                <th>Dateold</th>
+                <td>{{ entity.dateOld|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Datenew</th>
+                <td>{{ entity.dateNew|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Agent</th>
+                <td>{{ entity.agent }}</td>
+            </tr>
+            <tr>
+                <th>Numnote</th>
+                <td>{{ entity.numNote }}</td>
+            </tr>
+            <tr>
+                <th>Pj</th>
+                <td>{#{ entity.pj }#}</td>
+            </tr>
+            <tr>
+                <th>Datenumnote</th>
+                <td>{{ entity.dateNumNote|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Etatmodif</th>
+                <td>{{ entity.etatModif }}</td>
+            </tr>
+            <tr>
+                <th>Datemodif</th>
+                <td>{{ entity.dateModif|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Matagentmodif</th>
+                <td>{{ entity.matAgentModif }}</td>
+            </tr>
+            <tr>
+                <th>Pjnumerise</th>
+                <td>{#{ entity.pjNumerise }#}</td>
+            </tr>
+            <tr>
+                <th>Datesignenew</th>
+                <td>{{ entity.dateSigneNew|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Datenumeriseautonew</th>
+                <td>{{ entity.dateNumeriseAutoNew|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Matagentnumerise</th>
+                <td>{{ entity.matAgentNumerise }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('regularisation') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('regularisation_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

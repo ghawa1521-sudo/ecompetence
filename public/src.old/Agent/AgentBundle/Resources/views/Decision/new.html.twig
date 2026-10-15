@@ -1,0 +1,42 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <div class="row">
+        <div class="x_title">
+            <h2>Ajouter une décision<small> </small></h2>
+            <div class="clearfix"></div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            
+            {{form_row(form.exercice)}}
+            {{form_row(form.direction)}}
+            {{form_row(form.numero)}}
+            {{form_row(form.date)}}
+            {{form_widget(form.pj.imageFile,{'attr':{'required':true}})}}
+        </div>
+        <div class="col-md-6" >
+                {#{{form_row(form.agent)}}#}
+                {#
+                {{dump(form.agent.vars.choices)}}
+                #}
+        </div>
+
+
+    </div>
+    <input type="submit" class="btn btn-success" value="Enregistrer" />
+
+    {{ form_widget(form._token) }}
+    {{ form_end(form, {'render_rest': false}) }}
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('decision') }}">
+                Liste des Décisions
+            </a>
+        </li>
+    </ul>
+{% endblock %}

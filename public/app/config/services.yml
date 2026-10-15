@@ -1,0 +1,28 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/book/service_container.html
+parameters:
+#    parameter_name: value
+
+services:
+#    service_name:
+#        class: AppBundle\Directory\ClassName
+#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+#        services:
+
+    gbane.file_attachment_controller:
+        class: gbaneBundle\Controller\FileAttachmentController
+        arguments: ['@doctrine.orm.entity_manager']
+
+    annuaire.datatable.contact:
+        class: Agent\AgentBundle\Datatables\AgentDatatable
+        tags:
+            - { name: sg.datatable.view }
+    superieur_dge:
+         class: Demandes\DemandesBundle\Controller\DemandeController
+    app.topic_notification_service:
+        class: Users\UsersBundle\Topic\NotificationTopic
+        tags:
+            - { name: gos_web_socket.topic }
+    imputation_control:
+          class: Agent\AgentBundle\Controller\ImputationController
+          arguments: ["@service_container"]

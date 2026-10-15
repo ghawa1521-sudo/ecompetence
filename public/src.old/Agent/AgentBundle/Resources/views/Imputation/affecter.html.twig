@@ -1,0 +1,319 @@
+{% extends '::base.html.twig' %}
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+{% block titre_page %}
+  Affectations imputées
+{% endblock %}
+{% block body -%}
+{% set not1 = 0 %}
+{% set not2 = 0 %}
+{% set not3 = 0 %}
+
+  {% for entity in affecter %}
+  {% if  entity.action_affectation == "affecter_direction" or entity.action_affectation == "affecter_print"%}
+  {% set not1 = not1 + 1 %}
+  {% endif %}
+  {% if entity.action_affectation == "affecter_print"%}
+  {% set not2 = not2 + 1 %}
+  {% endif %}
+  {% if  entity.action_affectation == "affecter_valid" and entity.affecter_etat == 2 %}
+    {% set not3 = not3 + 1 %}
+  {% endif %}
+  {% endfor %}
+    <br>
+  
+<ul class="nav nav-tabs bar_tabs" role="tablist">
+
+      <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Affecter Agent {% if not1 is defined and not1 != 0 %}<span class="label label-danger"> {{not1}} </span>{% endif %}</a>
+      </li>
+      <li role="presentation"><a href="#serv1" aria-controls="message" role="tab" data-toggle="tab">Imprimer Note d'Affectation {% if not2 is defined and not2 != 0 %}<span class="label label-danger"> {{not2}} </span>{% endif %}</a></li>
+      <li role="presentation"><a href="#serv2" aria-controls="message" role="tab" data-toggle="tab">Numeriser Notes d'Affectations {% if not2 is defined and not2 != 0 %}<span class="label label-danger"> {{not2}} </span>{% endif %}</a></li>
+      <li role="presentation"><a href="#serv3" aria-controls="message" role="tab" data-toggle="tab">Imprimer Certificat de Prise de Service {% if not3 is defined and not3 != 0 %}<span class="label label-danger"> {{not3}} </span>{% endif %}</a></li>
+       <li role="presentation"><a href="#serv4" aria-controls="message" role="tab" data-toggle="tab">Numeriser Certificat de Prise de Service {% if not3 is defined and not3 != 0 %}<span class="label label-danger"> {{not3}} </span>{% endif %}</a></li>
+  </ul>
+  <div class="tab-content">
+         <div role="tabpanel" class="tab-pane active" id="home">
+  <table class="records_list table table-striped responsive-utilities jambo_table bulk_action" width="100%">
+      <thead>
+          <tr align="center">
+              <td><b>Matricule</b></td>
+              <td><b>Nom & Prénoms</b></td>
+              <td><b>Etat affectation</b></td>
+              <td><b>Direction</b></td>
+              <td><b>Actions</b></td>
+          </tr>
+      </thead>
+      <tbody>
+          
+      {% for entity in affecter %}
+
+     {% if  entity.action_affectation == "affecter_direction" or entity.action_affectation == "affecter_print"%}
+    
+          <tr valign="middle">
+              {#<td><a href="{{ path('affecter_edit', { 'id': entity.id }) }}">{{ entity.id }}</a></td>#}
+
+              <td>{{ entity.matAffecter }}</td>
+              <td>
+               {{entity.nomAffecter}} {{entity.prenomsAffecter}}
+              </td>
+ 
+              <td>
+                  {% if entity.affecter_etat==0 %}En Attente d'Affectation
+                          <label class="label label-info"></label>
+                      {% elseif entity.affecter_etat==1 %}Affecté(e) dans un Service
+                          <label class="label label-success"></label>
+                          {% elseif entity.affecter_etat==2 %}Prise de Service Validée
+                              <label class="label label-success"> </label>
+                  {% endif %}
+              </td>
+              <td>{{ entity.libDirect }}</td>
+             
+              <td align="center" width="15%">
+                   {# {% if entity.imputation_etat == 0 %}
+                     
+                    {% endif %}#} 
+                    
+
+                        {% if  entity.action_affectation == "affecter_direction" %}
+
+                            <a class="btn btn-success" href="{{ path(entity.action_affectation, { 'id': entity.objet_id }) }}">AFFECTER</a>
+
+                          {% elseif entity.action_affectation == "affecter_print" %}
+                           <a class="btn btn-success" href="{{ path(entity.action_affectation, { 'id': entity.objet_id }) }}">MODIFIER</a>
+                          {% endif %}
+                     
+                    
+                </td>
+          </tr>
+         {% endif %}
+         
+      {% endfor %}
+    
+      </tbody>
+  </table>
+ 
+
+</div>
+<div role="tabpanel" class="tab-pane" id="serv1">
+  <table class="records_list table table-striped responsive-utilities jambo_table bulk_action" width="100%">
+      <thead>
+          <tr align="center">
+              <td><b>Matricule</b></td>
+              <td><b>Nom & Prénoms</b></td>
+              <td><b>Etat affectation</b></td>
+              <td><b>Direction</b></td>
+              <td><b>Actions</b></td>
+          </tr>
+      </thead>
+      <tbody>
+
+      {% for entity in affecter %}
+
+     {% if  entity.action_affectation == "affecter_print" %}
+          <tr valign="middle">
+              {#<td><a href="{{ path('affecter_edit', { 'id': entity.id }) }}">{{ entity.id }}</a></td>#}
+
+              <td>{{ entity.matAffecter }}</td>
+              <td>
+               {{entity.nomAffecter}} {{entity.prenomsAffecter}}
+              </td>
+ 
+              <td>
+                  {% if entity.affecter_etat==0 %}En Attente d'Affectation
+                          <label class="label label-info"></label>
+                      {% elseif entity.affecter_etat==1 %}Affecté(e) dans un Service
+                          <label class="label label-success"></label>
+                          {% elseif entity.affecter_etat==2 %}Prise de Service Validée
+                              <label class="label label-success"> </label>
+                  {% endif %}
+              </td>
+              <td>{{ entity.libDirect }}</td>
+             
+              <td align="center" width="15%">
+                   {# {% if entity.imputation_etat == 0 %}
+                     
+                    {% endif %}#} 
+                    
+
+                        {% if entity.action_affectation == "affecter_print" %}
+                            <a class="btn btn-primary btn-sm col-md-12" href="{{ path('affecter_view', { 'id': entity.objet_id }) }}">IMPRIMER LA NOTE D'AFFECTATION</a>
+                            
+                          {% endif %}
+                     
+                    
+                </td>
+          </tr>
+         {% endif %}
+      {% endfor %}
+      </tbody>
+  </table>
+</div>
+<div role="tabpanel" class="tab-pane" id="serv2">
+  <table class="records_list table table-striped responsive-utilities jambo_table bulk_action" width="100%">
+      <thead>
+          <tr align="center">
+              <td><b>Matricule</b></td>
+              <td><b>Nom & Prénoms</b></td>
+              <td><b>Etat affectation</b></td>
+              <td><b>Direction</b></td>
+              <td><b>Actions</b></td>
+          </tr>
+      </thead>
+      <tbody>
+
+      {% for entity in affecter %}
+
+     {% if  entity.action_affectation == "affecter_print" %}
+          <tr valign="middle">
+              {#<td><a href="{{ path('affecter_edit', { 'id': entity.id }) }}">{{ entity.id }}</a></td>#}
+
+              <td>{{ entity.matAffecter }}</td>
+              <td>
+               {{entity.nomAffecter}} {{entity.prenomsAffecter}}
+              </td>
+ 
+              <td>
+                  {% if entity.affecter_etat==0 %}En Attente d'Affectation
+                          <label class="label label-info"></label>
+                      {% elseif entity.affecter_etat==1 %}Affecté(e) dans un Service
+                          <label class="label label-success"></label>
+                          {% elseif entity.affecter_etat==2 %}Prise de Service Validée
+                              <label class="label label-success"> </label>
+                  {% endif %}
+              </td>
+              <td>{{ entity.libDirect }}</td>
+             
+              <td align="center" width="15%">
+                   {# {% if entity.imputation_etat == 0 %}
+                     
+                    {% endif %}#} 
+                    
+
+                        {% if entity.action_affectation == "affecter_print" %}
+                            <a class="btn btn-primary btn-sm col-md-12" href="{{ path('affecter_numerise', { 'id': entity.objet_id }) }}">NUMERISER LA NOTE D'AFFECTATION</a>
+                            
+                          {% endif %}
+                     
+                    
+                </td>
+          </tr>
+         {% endif %}
+      {% endfor %}
+      </tbody>
+  </table>
+</div>
+<div role="tabpanel" class="tab-pane" id="serv3">
+    <table class="records_list table table-striped responsive-utilities jambo_table bulk_action" width="100%">
+      <thead>
+          <tr align="center">
+              <td><b>Matricule</b></td>
+              <td><b>Nom & Prénoms</b></td>
+              <td><b>Etat affectation</b></td>
+              <td><b>Direction</b></td>
+              <td><b>Actions</b></td>
+          </tr>
+      </thead>
+      <tbody>
+
+      {% for entity in affecter %}
+
+     {% if  entity.action_affectation == "affecter_valid" and entity.affecter_etat == 2 %}
+          <tr valign="middle">
+              {#<td><a href="{{ path('affecter_edit', { 'id': entity.id }) }}">{{ entity.id }}</a></td>#}
+
+              <td>{{ entity.matAffecter }}</td>
+              <td>
+               {{entity.nomAffecter}} {{entity.prenomsAffecter}}
+              </td>
+ 
+              <td>
+                  {% if entity.affecter_etat==0 %}En Attente d'Affectation
+                          <label class="label label-info"></label>
+                      {% elseif entity.affecter_etat==1 %}Affecté(e) dans un Service
+                          <label class="label label-success"></label>
+                          {% elseif entity.affecter_etat==2 %}Prise de Service Validée
+                              <label class="label label-success"></label>
+                  {% endif %}
+              </td>
+              <td>{{ entity.libDirect }}</td>
+             
+              <td align="center" width="15%">
+                   {# {% if entity.imputation_etat == 0 %}
+                     
+                    {% endif %}#} 
+                    
+
+                        {% if entity.action_affectation == "affecter_valid" %}
+                            <a class="btn btn-primary btn-sm col-md-12" href="{{ path('affecter_view', { 'id': entity.objet_id }) }}">IMPRIMER LE CERTIFICAT</a>
+                            
+                          {% endif %}
+                     
+                    
+                </td>
+          </tr>
+         {% endif %}
+      {% endfor %}
+      </tbody>
+  </table>
+</div>
+<div role="tabpanel" class="tab-pane" id="serv4">
+  <table class="records_list table table-striped responsive-utilities jambo_table bulk_action" width="100%">
+      <thead>
+          <tr align="center">
+              <td><b>Matricule</b></td>
+              <td><b>Nom & Prénoms</b></td>
+              <td><b>Etat affectation</b></td>
+              <td><b>Direction</b></td>
+              <td><b>Actions</b></td>
+          </tr>
+      </thead>
+      <tbody>
+
+      {% for entity in affecter %}
+
+     {% if  entity.action_affectation == "affecter_valid" and entity.affecter_etat == 2 %}
+          <tr valign="middle">
+              {#<td><a href="{{ path('affecter_edit', { 'id': entity.id }) }}">{{ entity.id }}</a></td>#}
+
+              <td>{{ entity.matAffecter }}</td>
+              <td>
+               {{entity.nomAffecter}} {{entity.prenomsAffecter}}
+              </td>
+ 
+              <td>
+                  {% if entity.affecter_etat==0 %}En Attente d'Affectation
+                          <label class="label label-info"></label>
+                      {% elseif entity.affecter_etat==1 %}Affecté(e) dans un Service
+                          <label class="label label-success"></label>
+                          {% elseif entity.affecter_etat==2 %}Prise de Service Validée
+                              <label class="label label-success"></label>
+                  {% endif %}
+              </td>
+              <td>{{ entity.libDirect }}</td>
+             
+              <td align="center" width="15%">
+                   {# {% if entity.imputation_etat == 0 %}
+                     
+                    {% endif %}#} 
+                    
+
+                        {% if entity.action_affectation == "affecter_valid"   %}
+                            <a class="btn btn-primary btn-sm col-md-12" href="{{ path('affecter_numerise', { 'id': entity.objet_id }) }}">NUMERISER LE CERTIFICAT</a>
+                            
+                          {% endif %}
+                     
+                    
+                </td>
+          </tr>
+         {% endif %}
+      {% endfor %}
+      </tbody>
+  </table>
+  </div>
+</div>
+
+    {% endblock %}

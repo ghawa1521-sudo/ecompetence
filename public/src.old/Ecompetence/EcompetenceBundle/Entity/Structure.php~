@@ -1,0 +1,38 @@
+<?php
+
+namespace Ecompetence\EcompetenceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Structure
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Ecompetence\EcompetenceBundle\Repository\StructureRepository")
+ */
+class Structure
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="LibStructure", type="string", length=125)
+     */
+    private $libStructure;
+
+          /**
+     * @ORM\ManyToOne(targetEntity="Secteur")
+     * @ORM\JoinColumn(name="secteur_id", referencedColumnName="id", nullable=true)
+     */
+    private $secteur; 
+   
+}
+

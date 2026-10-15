@@ -1,0 +1,96 @@
+{% extends '::base.html.twig' %}
+
+{% block css %}
+    <link href="{{ asset('design/css/style.css') }}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{{asset('ediligence/assets/css/bootstrap-select.min.css')}}">
+{% endblock %}
+
+
+
+{% block titre_page %}   
+
+{% endblock %}
+
+{% block datatableCss %}
+    {% include "::sections_app/datatableCss.html.twig" %}
+    <style>
+        th{
+            text-align: left !important;
+        }
+        .dataTables_filter{
+            width: auto !important;
+        }
+    </style>
+{% endblock %}
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+
+{% block body -%}
+    <div class="row">
+        <div class="">
+            {% if app.request.hasPreviousSession %}
+                {% for type, messages in app.session.flashbag.all() %}
+                    <div class="alert alert-{{ type }}">
+                        <ul>
+                            {% for message in messages %}
+                                <li>
+                                    {{ message }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <h1>ENREGISTRER SAAF</h1><br>
+        {{ form_start(form,{'attr':{'id':'form_chk'}}) }}
+        <div class="col-md-4">
+            {{ form_errors(form) }}
+            <div>
+                {{ form_row(form.agent) }}
+            </div>
+            <div>
+                {{ form_widget(form.Enregistrer) }}
+            </div>
+        </div>
+        <div class="col-md-8 table-responsive"> 
+            <table class="records_chk table table-striped responsive-utilities jambo_table table-responsive" id="datatable" >
+                <thead>
+
+                    <tr class="headings">
+                        <th>
+                        </th>
+                        <th>Matricule</th>
+                        <th>Nom et prénoms</th>
+                        <th>Etat</th>
+                        <th>Date création</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for saaf in listesaaf %}
+                        <tr>
+                            <td></td>
+                            <td>{{saaf.designer.matricule}}</td>
+                            <td>{{saaf.designer.concatNom}}</td>
+                            <td>{#{saaf.etat}#}ACTIF</td>
+                            <td>{{saaf.datecreation|date('d-m-Y')}}</td> 
+                            <td><a href="{{ path('mutation_saaf', { 'id': saaf.id }) }}" class="btn btn-success btn-sm col-md-12" data-confirm="Etes-vous <strong>certain</strong> de vouloir Valider cette demande ?">Annuler</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {#{ form_widget(form._token) }#}
+        {{ form_end(form, {'render_rest': true}) }}
+    </div>
+{% endblock %}
+
+{% block javascript %}
+
+    <script src="{{ asset('design/js/style.js') }}"></script>
+    <script src="{{ asset('ediligence/assets/js/bootstrap-select.min.js') }}"></script>
+{% endblock %}

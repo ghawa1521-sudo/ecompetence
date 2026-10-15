@@ -1,0 +1,121 @@
+{% extends '::base.html.twig' %}
+{% block css %}
+   <link href="{{ asset('design/css/style.css') }}" rel="stylesheet"/>
+
+{% endblock %}
+
+{% block datatableJs %}
+    {% include "::sections_app/datatableJs.html.twig" %}
+{% endblock %}
+
+
+{% block body -%}
+<div class="row" >
+    <div class="col-md-6">
+      <div align="center"><h3>Demande d'autorisation d'abscence exceptionnelle</h3> </div>
+      {{ form_start(form) }}
+      {{ form_errors(form) }}
+
+      {{ form_label(form.typeDemande)}} <label style="color:red;"><bold>***</bold></label>
+      {{ form_errors(form.typeDemande) }}
+      {{ form_widget(form.typeDemande, {'attr' : {'onClick' : 'openBlock()','onChange' : 'openBlock()'}}) }} 
+      
+      {{ form_label(form.dateDeb)}}
+      {{ form_errors(form.dateDeb) }}
+      {{ form_widget(form.dateDeb) }}
+      <div id="masquer1" style="display:none;">
+      {{ form_label(form.dateFin)}}
+      {{ form_errors(form.dateFin) }}
+      {{ form_widget(form.dateFin) }}
+      </div>
+      {{ form_label(form.objet)}}
+      {{ form_errors(form.objet) }}
+      {{ form_widget(form.objet) }}
+      <div id="masquer" style="display:none;"><label>Pièce Justificative</label>
+        {{form_widget(form.piecejointe) }}
+      </div>
+      {{ form_label(form.emmeteur)}}
+      {{ form_errors(form.emmeteur) }}
+      {{ form_widget(form.emmeteur) }}
+      <br><br>
+      {{ form_widget(form.submit) }}
+      {{ form_row(form._token) }}
+      {{ form_end(form) }}
+   </div>
+   <div class="col-md-6 table-responsive">
+     <table class="records_list table table-striped responsive-utilities jambo_table bulk_action" >
+                <thead>
+
+                    <tr class="headings">
+                        <th>
+                        </th>
+                        <th>Agent</th>
+                        <th>Date debut</th>
+                        <th>Date fin</th>
+                        <th>Type Absence</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for listeabscences in listeabscence %}
+                        <tr>
+                            <td></td>
+                            <td>{{listeabscences.emmeteur.concatNommatricule}}</td>
+                            <td>{{listeabscences.dateDeb|date('d-m-Y')}}</td>
+                            <td>{{listeabscences.dateFin|date('d-m-Y')}}</td>
+                            <td>{{listeabscences.typeDemande.libelle}}</td>
+                            <td>
+                               <a href="{{ path('demande_abscence', { 'id': listeabscences.id }) }}" class="btn btn-danger btn-sm col-md-12" data-confirm="Etes-vous <strong>certain</strong> de vouloir modifier ?">Modifier</a>
+                            </td>
+                                
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+   </div>
+</div>
+
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript">
+$(function(){
+  // On cache le div a afficher :
+//  $("#masquer").hide();
+openBlock();
+});
+function openBlock()
+{
+  combo = document.getElementById('demandes_demandesbundle_demande_typeDemande');
+
+  if(combo.value != "")
+  { 
+    if(combo.value == 7)
+    {
+      document.getElementById('masquer1').style.display='block';
+      $("#demandes_demandesbundle_demande_dateFin").prop("disabled", false);
+      document.getElementById('masquer').style.display='block';
+      $("#demandes_demandesbundle_demande_piecejointe_imageFile_file").prop("disabled", false);
+    }
+    else if(combo.value == 6){
+      document.getElementById('masquer').style.display='none';
+      $("#demandes_demandesbundle_demande_piecejointe_imageFile_file").prop("disabled", true);
+      document.getElementById('masquer1').style.display='none';
+      $("#demandes_demandesbundle_demande_dateFin").prop("disabled", true);
+    }
+    else{
+      document.getElementById('masquer').style.display='none';
+      $("#demandes_demandesbundle_demande_piecejointe_imageFile_file").prop("disabled", true);
+      document.getElementById('masquer1').style.display='none';
+      $("#demandes_demandesbundle_demande_dateFin").prop("disabled", true);
+    }
+  }
+  else {
+    document.getElementById('masquer').style.display='none';
+    $("#demandes_demandesbundle_demande_piecejointe_imageFile_file").prop("disabled", true);
+    document.getElementById('masquer1').style.display='none';
+    $("#demandes_demandesbundle_demande_dateFin").prop("disabled", true);
+  }
+
+}
+</script>
+{% endblock %}

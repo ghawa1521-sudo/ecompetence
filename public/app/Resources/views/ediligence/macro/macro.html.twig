@@ -1,0 +1,570 @@
+{% macro directiongenerale(roleBase, dg_imput) %}
+    <div class="form-group bien">
+        <font size="+1"><b>A</b></font>
+        <br>
+        {% set y=0 %}
+        {% for line in dg_imput %}
+            {% set y=y+1 %}
+            <input id="A{{y}}" name="Dest" value="{{line.codeDc}}" onclick="return checkboxhide('A{{y}}', 'A{{y}}h');" type="checkbox">
+            <input id="A{{y}}h" name="DestHide[]" value="{{line.codeDc}}" style="display:none;" type="checkbox">
+            <label for="A{{y}}">{{line.sigle}}</label>
+        {% endfor %}
+    </div>
+{% endmacro %}
+{%macro directioncentrale(roleBase, dc_imput) %}
+    <div class="form-group bien">
+        <font size="+1"><b>DIRECTIONS CENTRALES</b></font>
+        <br>
+        {% set z=0 %}
+        {% for line in dc_imput %}
+            {% set z=z+1 %}
+            <input id="B{{z}}" name="Dest" value="{{line.codeDc}}" onclick="return checkboxhide('B{{z}}', 'B{{z}}h');" type="checkbox">
+            <input id="B{{z}}h" name="DestHide[]" value="{{line.codeDc}}" style="display:none;" type="checkbox">
+            <label for="B{{z}}">{{line.sigle}}</label>
+            <br>
+        {% endfor %}
+    </div>
+{% endmacro %}
+{%macro cadretechnique(roleBase, conseiller_imput, charge_etudes, assistant) %}
+    <div class="form-group bien">
+        <font size="+1"><b>CADRES TECHNIQUES</b></font>
+        <br>
+        <div class="row" style="vertical-align: middle;"><span class="col-md-4" style=" line-height: 270%;"><b>CONSEILLERS</b></span>
+            <span class="col-md-8">
+                {% set u=0 %}
+                <select class="selectpicker form-control" id="conseiller" multiple onchange=" selectboxhide(this.value, 'conseiller');" data-live-search="true" title="Choisir un conseillers">
+                    {% for line in conseiller_imput %}
+                        {% set u=u+1 %}
+                        <option  value={{u}}> {{line.nom}} {{line.prenoms}} {{line.nomJeuneFille}}</option>
+
+                    {% endfor %}
+                </select>
+                {% set q=0 %}
+                {% for line in conseiller_imput %}
+                    {% set q=q+1 %}
+                    <input id="Z{{q}}" name="Dest" value="{{line.matricule}}" style="display:none;" type="checkbox">
+                    <input id="Z{{q}}h" name="DestHide[]" value="{{line.matricule}}" style="display:none;" type="checkbox">
+
+                {% endfor %}
+            </span>
+        </div>
+        <div class="row" style="vertical-align: middle;"><span class="col-md-4" style=" line-height: 270%;"><b>ASSISTANTS</b></span>
+            <span class="col-md-8" >
+                {% set u1=0 %}
+                <select class="selectpicker form-control" id="assistant" multiple onchange=" selectboxhide(this.value, 'assistant');" data-live-search="true" title="Choisir un assistant">
+                    {% for line in assistant %}
+                        {% set u=u+1 %}
+                        <option  value={{u}}> {{line.nom}} {{line.prenoms}} {{line.nomJeuneFille}}</option>
+
+                    {% endfor %}
+                </select>
+                {% set q1=0 %}
+                {% for line in assistant %}
+                    {% set q=q+1 %}
+                    <input id="Z{{q}}" name="Dest" value="{{line.matricule}}" style="display:none;" type="checkbox">
+                    <input id="Z{{q}}h" name="DestHide[]" value="{{line.matricule}}" style="display:none;" type="checkbox">
+
+                {% endfor %}
+            </span>
+        </div>
+        <div class="row" style="vertical-align: middle;"><span class="col-md-4" style=" line-height: 270%;"><b>CHARGES D'ETUDES</b></span>
+            <span class="col-md-8">
+                {% set u2=0 %}
+                <select class="selectpicker form-control" id="chargeetudes" multiple onchange=" selectboxhide(this.value, 'chargeetudes');" data-live-search="true" title="Choisir un chargé d'étude">
+                    {% for line in charge_etudes %}
+                        {% set u=u+1 %}
+                        <option  value={{u}}> {{line.nom}} {{line.prenoms}} {{line.nomJeuneFille}}</option>
+
+                    {% endfor %}
+                </select>
+                {% set q2=0 %}
+                {% for line in charge_etudes %}
+                    {% set q=q+1 %}
+                    <input id="Z{{q}}" name="Dest" value="{{line.matricule}}" style="display:none;" type="checkbox">
+                    <input id="Z{{q}}h" name="DestHide[]" value="{{line.matricule}}" style="display:none;" type="checkbox">
+
+                {% endfor %}
+            </span>
+        </div>
+    </div>
+{% endmacro %}
+{%macro serviceratache(roleBase, scerattache_imput) %}
+    <div class="form-group bien">
+        <font size="+1"><b>SERVICES RATTACHES</b></font>
+        <br>
+        {% set w=0 %}
+        {% for line in scerattache_imput %}
+            {% set w=w+1 %}
+            <input id="D{{w}}" name="Dest" value="{{line.codeDc}}" onclick="return checkboxhide('D{{w}}', 'D{{w}}h');" type="checkbox">
+            <input id="D{{w}}h" name="DestHide[]" value="{{line.codeDc}}" style="display:none;" type="checkbox">
+            <label for="D{{w}}">{{line.sigle}}</label>
+            <br>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% macro entete_imput1(fonction, agent_srv) %}
+
+    {% if fonction in [3] %} {#chef de section #}
+        <div class="form-group bien">
+            <font size="+1"><b>CHARGE D'ETUDES</b></font>
+            <br>
+            {% set z=0 %}
+            {% for line in agent_srv %}
+                {% if(line.Fonction.id in [1,2]) %}
+                    {% set z=z+1 %}
+                    <input id="B{{z}}" name="Dest" value="{{line.matricule}}" onclick="return checkboxhide('B{{z}}', 'B{{z}}h');" type="checkbox">
+                    <input id="B{{z}}h" name="DestHide[]" value="{{line.matricule}}" style="display:none;" type="checkbox">
+                    <label for="B{{z}}">{{line.nom}}&nbsp;{{line.prenoms}}</label>
+                    <br>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if fonction in [4,5] %}{#chef de service#}
+        <div class="form-group bien">
+            <font size="+1"><b>CHEF DE SECTION</b></font>
+            <br>
+            {% set y=0 %}
+            {% for line in agent_srv %}
+                {% if(line.Fonction.id ==3) %}
+                    {% set y=y+1 %}
+                    <input id="A{{y}}" name="Dest" value="{{line.matricule}}" onclick="return checkboxhide('A{{y}}', 'A{{y}}h');" type="checkbox">
+                    <input id="A{{y}}h" name="DestHide[]" value="{{line.matricule}}" style="display:none;" type="checkbox">
+                    <label for="A{{y}}">{{line.nom}}&nbsp;{{line.prenoms}}</label>
+                    <br>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="form-group bien">
+            <font size="+1"><b>CHARGE D'ETUDES</b></font>
+            <br>
+            {% set z=0 %}
+            {% for line in agent_srv %}
+                {% if(line.Fonction.id in [1,2]) %}
+                    {% set z=z+1 %}
+                    <input id="B{{z}}" name="Dest" value="{{line.matricule}}" onclick="return checkboxhide('B{{z}}', 'B{{z}}h');" type="checkbox">
+                    <input id="B{{z}}h" name="DestHide[]" value="{{line.matricule}}" style="display:none;" type="checkbox">
+                    <label for="B{{z}}">{{line.nom}}&nbsp;{{line.prenoms}}</label>
+                    <br>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if fonction in [6] %}{#sous directeurs #}
+        <div class="form-group bien">
+            <font size="+1"><b>CHEF DE SERVICE</b></font>
+            <br>
+            {% set y=0 %}
+            {% for line in agent_srv %}
+                {% if(line.Fonction.id in [4,5]) %}
+                    {% set y=y+1 %}
+                    <input id="A{{y}}" name="Dest" value="{{line.matricule}}" onclick="return checkboxhide('A{{y}}', 'A{{y}}h');" type="checkbox">
+                    <input id="A{{y}}h" name="DestHide[]" value="{{line.matricule}}" style="display:none;" type="checkbox">
+                    <label for="A{{y}}">{{line.nom}}&nbsp;{{line.prenoms}}</label>
+                    <br>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="form-group bien">
+            <font size="+1"><b>CHEF DE SECTION</b></font>
+            <br>
+            {% set z=0 %}
+            {% for line in agent_srv %}
+                {% if(line.Fonction.id ==3) %}
+                    {% set z=z+1 %}
+                    <input id="B{{z}}" name="Dest" value="{{line.matricule}}" onclick="return checkboxhide('B{{z}}', 'B{{z}}h');" type="checkbox">
+                    <input id="B{{z}}h" name="DestHide[]" value="{{line.matricule}}" style="display:none;" type="checkbox">
+                    <label for="B{{z}}">{{line.nom}}&nbsp;{{line.prenoms}}</label>
+                    <br>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="form-group bien">
+            <font size="+1"><b>CHARGE D'ETUDES</b></font>
+            <br>
+            {% set w=0 %}
+            {% for line in agent_srv %}
+                {% if(line.Fonction.id in [1,2]) %}
+                    {% set w=w+1 %}
+                    <input id="D{{w}}" name="Dest" value="{{line.matricule}}" onclick="return checkboxhide('D{{w}}', 'D{{w}}h');" type="checkbox">
+                    <input id="D{{w}}h" name="DestHide[]" value="{{line.matricule}}" style="display:none;" type="checkbox">
+                    <label for="D{{w}}">{{line.nom}}&nbsp;{{line.prenoms}}</label>
+                    <br>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if fonction in [7,8,9,10] %}{#directeur #}
+        <div class="form-group bien">
+            <font size="+1"><b>SOUS DIRECTEURS</b></font>
+            <br>
+            {% set k=0 %}
+            {% for line in agent_srv %}
+                {% if(line.Fonction.id ==6) %}
+                    {% set k=k+1 %}
+                    <input id="A{{k}}" name="Dest" value="{{line.matricule}}" onclick="return checkboxhide('A{{k}}', 'A{{k}}h');" type="checkbox">
+                    <input id="A{{k}}h" name="DestHide[]" value="{{line.matricule}}" style="display:none;" type="checkbox">
+                    <label for="A{{k}}">{{line.nom}}&nbsp;{{line.prenoms}}</label>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="form-group bien">
+            <font size="+1"><b>CHEF DE SERVICE</b></font>
+            <br>
+            {% set y=0 %}
+            {% for line in agent_srv %}
+                {% if(line.Fonction.id in [4,5]) %}
+                    {% set y=y+1 %}
+                    <input id="A{{y}}" name="Dest" value="{{line.matricule}}" onclick="return checkboxhide('A{{y}}', 'A{{y}}h');" type="checkbox">
+                    <input id="A{{y}}h" name="DestHide[]" value="{{line.matricule}}" style="display:none;" type="checkbox">
+                    <label for="A{{y}}">{{line.nom}}&nbsp;{{line.prenoms}}</label>
+                    <br>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="form-group bien">
+            <font size="+1"><b>CHEF DE SECTION</b></font>
+            <br>
+            {% set z=0 %}
+            {% for line in agent_srv %}
+                {% if(line.Fonction.id ==3) %}
+                    {% set z=z+1 %}
+                    <input id="B{{z}}" name="Dest" value="{{line.matricule}}" onclick="return checkboxhide('B{{z}}', 'B{{z}}h');" type="checkbox">
+                    <input id="B{{z}}h" name="DestHide[]" value="{{line.matricule}}" style="display:none;" type="checkbox">
+                    <label for="B{{z}}">{{line.nom}}&nbsp;{{line.prenoms}}</label>
+                    <br>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="form-group bien">
+            <font size="+1"><b>CHARGE D'ETUDES</b></font>
+            <br>
+            {% set w=0 %}
+            {% for line in agent_srv %}
+                {% if(line.Fonction.id in [1,2]) %}
+                    {% set w=w+1 %}
+                    <input id="D{{w}}" name="Dest" value="{{line.matricule}}" onclick="return checkboxhide('D{{w}}', 'D{{w}}h');" type="checkbox">
+                    <input id="D{{w}}h" name="DestHide[]" value="{{line.matricule}}" style="display:none;" type="checkbox">
+                    <label for="D{{w}}">{{line.nom}}&nbsp;{{line.prenoms}}</label>
+                    <br>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+{% endmacro %}
+
+{% macro entete_imput_i(fonction, agent_srv) %}
+
+    {% if fonction in [3] %} {#chef de section #}
+        <div class="form-group bien">
+            <font size="+1"><b>CHARGE D'ETUDES</b></font>
+            <div class="row" style="vertical-align: middle;"><span class="col-md-12" style=" line-height: 270%;"><b>&nbsp;</b></span>
+                <span class="col-md-12">
+                    {% set u=0 %}
+                    <select class="selectpicker form-control" multiple onchange=" selectboxhide(this.value);" data-live-search="true" title="Choisir un chargé d'étude">
+                        {% for line in agent_srv %}
+                            {% if(line.Fonction.id in [3,2,1]) %}
+                                {% set u=u+1 %}
+                                <option  value={{u}}> {{line.nom}} {{line.prenoms}} {{line.nomJeuneFille}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    {% set q=0 %}
+                    {% for line in agent_srv %}
+                        {% if(line.Fonction.id in [3,2,1]) %}
+                            {% set q=q+1 %}
+                            <input id="Z{{q}}" name="Dest" value="{{line.matricule}}" style="display:none;" type="checkbox">
+                            <input id="Z{{q}}h" name="DestHide[]" value="{{line.matricule}}" style="display:none;" type="checkbox">
+                        {% endif %}
+                    {% endfor %}
+                </span>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if fonction in [4,5] %}{#chef de service#}
+        <div class="form-group bien">
+            <font size="+1"><b>CHEF DE SERVICES</b></font>
+            <br>
+            {% set y=0 %}
+            {% for line in agent_srv %}
+                {% if(line.Fonction.id in [3]) %}
+                    {% set y=y+1 %}
+                    <input id="A{{y}}" name="Dest" value="{{line.matricule}}" onclick="return checkboxhide('A{{y}}', 'A{{y}}h');" type="checkbox">
+                    <input id="A{{y}}h" name="DestHide[]" value="{{line.matricule}}" style="display:none;" type="checkbox">
+                    <label for="A{{y}}">{{line.nom}}&nbsp;{{line.prenoms}}</label>
+                    <br>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="form-group bien">
+            <font size="+1"><b>CHARGE D'ETUDES</b></font>
+            <div class="row" style="vertical-align: middle;"><span class="col-md-12" style=" line-height: 270%;"><b>&nbsp;</b></span>
+                <span class="col-md-12">
+                    {% set u=0 %}
+                    <select class="selectpicker form-control" multiple onchange=" selectboxhide(this.value);" data-live-search="true" title="Choisir un chargé d'étude">
+                        {% for line in agent_srv %}
+                            {% if(line.Fonction.id in [2,1]) %}
+                                {% set u=u+1 %}
+                                <option  value={{u}}> {{line.nom}} {{line.prenoms}} {{line.nomJeuneFille}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    {% set q=0 %}
+                    {% for line in agent_srv %}
+                        {% if(line.Fonction.id in [2,1]) %}
+                            {% set q=q+1 %}
+                            <input id="Z{{q}}" name="Dest" value="{{line.matricule}}" style="display:none;" type="checkbox">
+                            <input id="Z{{q}}h" name="DestHide[]" value="{{line.matricule}}" style="display:none;" type="checkbox">
+                        {% endif %}
+                    {% endfor %}
+                </span>
+            </div>
+        </div>
+
+    {% endif %}
+
+    {% if fonction in [6] %}{#sous directeurs #}
+        <div class="form-group bien">
+            <font size="+1"><b>CHEF DE SERVICES</b></font>
+            <br>
+            {% set y=0 %}
+            {% for line in agent_srv %}
+                {% if(line.Fonction.id in [4,5]) %}
+                    {% set y=y+1 %}
+                    <input id="A{{y}}" name="Dest" value="{{line.matricule}}" onclick="return checkboxhide('A{{y}}', 'A{{y}}h');" type="checkbox">
+                    <input id="A{{y}}h" name="DestHide[]" value="{{line.matricule}}" style="display:none;" type="checkbox">
+                    <label for="A{{y}}">{{line.nom}}&nbsp;{{line.prenoms}}</label>
+                    <br>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="form-group bien">
+            <font size="+1"><b>CHARGE D'ETUDES</b></font>
+            <div class="row" style="vertical-align: middle;"><span class="col-md-12" style=" line-height: 270%;"><b>&nbsp;</b></span>
+                <span class="col-md-12">
+                    {% set u=0 %}
+                    <select class="selectpicker form-control" multiple onchange=" selectboxhide(this.value);" data-live-search="true" title="Choisir un chargé d'étude">
+                        {% for line in agent_srv %}
+                            {% if(line.Fonction.id in [3,2,1]) %}
+                                {% set u=u+1 %}
+                                <option  value={{u}}> {{line.nom}} {{line.prenoms}} {{line.nomJeuneFille}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    {% set q=0 %}
+                    {% for line in agent_srv %}
+                        {% if(line.Fonction.id in [3,2,1]) %}
+                            {% set q=q+1 %}
+                            <input id="Z{{q}}" name="Dest" value="{{line.matricule}}" style="display:none;" type="checkbox">
+                            <input id="Z{{q}}h" name="DestHide[]" value="{{line.matricule}}" style="display:none;" type="checkbox">
+                        {% endif %}
+                    {% endfor %}
+                </span>
+            </div>
+        </div>
+
+    {% endif %}
+
+    {% if fonction in [7,8,9,10] %}{#directeur #}
+        <div class="form-group bien">
+            <font size="+1"><b>SOUS DIRECTEURS</b></font>
+            <br>
+            {% set k=0 %}
+            {% for line in agent_srv %}
+                {% if(line.Fonction.id ==6) %}
+                    {% set k=k+1 %}
+                    <input id="A{{k}}" name="Dest" value="{{line.matricule}}" onclick="return checkboxhide('A{{k}}', 'A{{k}}h');" type="checkbox">
+                    <input id="A{{k}}h" name="DestHide[]" value="{{line.matricule}}" style="display:none;" type="checkbox">
+                    <label for="A{{k}}">{{line.nom}}&nbsp;{{line.prenoms}}</label><br>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="form-group bien">
+            <font size="+1"><b>CHEF DE SERVICES</b></font>
+            <br>
+            {% set y=0 %}
+            {% for line in agent_srv %}
+                {% if(line.Fonction.id in [4,5]) %}
+                    {% set y=y+1 %}
+                    <input id="A{{y}}" name="Dest" value="{{line.matricule}}" onclick="return checkboxhide('A{{y}}', 'A{{y}}h');" type="checkbox">
+                    <input id="A{{y}}h" name="DestHide[]" value="{{line.matricule}}" style="display:none;" type="checkbox">
+                    <label for="A{{y}}">{{line.nom}}&nbsp;{{line.prenoms}}</label>
+                    <br>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="form-group bien">
+            <font size="+1"><b>CHARGE D'ETUDES</b></font>
+            <div class="row" style="vertical-align: middle;"><span class="col-md-12" style=" line-height: 270%;"><b>&nbsp;</b></span>
+                <span class="col-md-12">
+                    {% set u=0 %}
+                    <select class="selectpicker form-control" multiple onchange=" selectboxhide(this.value);" data-live-search="true" title="Choisir un chargé d'étude">
+                        {% for line in agent_srv %}
+                            {% if(line.Fonction.id in [3,2,1]) %}
+                                {% set u=u+1 %}
+                                <option  value={{u}}> {{line.nom}} {{line.prenoms}} {{line.nomJeuneFille}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    {% set q=0 %}
+                    {% for line in agent_srv %}
+                        {% if(line.Fonction.id in [3,2,1]) %}
+                            {% set q=q+1 %}
+                            <input id="Z{{q}}" name="Dest" value="{{line.matricule}}" style="display:none;" type="checkbox">
+                            <input id="Z{{q}}h" name="DestHide[]" value="{{line.matricule}}" style="display:none;" type="checkbox">
+                        {% endif %}
+                    {% endfor %}
+                </span>
+            </div>
+        </div>
+
+
+    {% endif %}
+
+{% endmacro %}
+
+{% macro notif_menu_gauche(countval,tabb) %}
+    {% if countval != null and countval is defined %}
+        <span class="label label-danger label-indicator animation-floating">{{tabb[countval]}}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro entete_departimput(niveauservice, dirservice) %}
+    {% set z=0 %}
+    {% if niveauservice in [0] %} {#service rattache #}
+        <div class="form-group bien">
+            <font size="+1"><b>SERVICE RATTACHES</b></font>
+            <br>
+
+            {% for line in dirservice %}
+                {% if(line.etatDirection in [0] and app.user.agent.direction.id !=line.id ) %}
+                    {% set z=z+1 %}
+                    <input id="B{{z}}" name="Dest[]" value="{{line.codeDc}}" type="checkbox">
+                    <label for="B{{z}}">{{line.sigle}}</label>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if niveauservice in [1] %}{#DIRECTION CENTRALES#}
+        <div class="form-group bien">
+            <font size="+1"><b>DIRECTION CENTRALES</b></font>
+            <br>
+
+            {% for line in dirservice %}
+                {% if(line.etatDirection in [1] and app.user.agent.direction.id !=line.id ) %}
+                    {% set z=z+1 %}
+                    <input id="B{{z}}" name="Dest[]" value="{{line.codeDc}}" type="checkbox">
+                    <label for="B{{z}}">{{line.sigle}}</label>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="form-group bien">
+            <font size="+1"><b>SERVICE RATTACHES</b></font>
+            <br>
+
+            {% for line in dirservice %}
+                {% if(line.etatDirection in [0] and app.user.agent.direction.id !=line.id ) %}
+                    {% set z=z+1 %}
+                    <input id="B{{z}}" name="Dest[]" value="{{line.codeDc}}" type="checkbox">
+                    <label for="B{{z}}">{{line.sigle}}</label>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if niveauservice in [2] %}{#DIRECTION CENTRALES#}
+        <div class="form-group bien">
+            <font size="+1"><b>DIRECTION CENTRALES</b></font>
+            <br>
+
+            {% for line in dirservice %}
+                {% if(line.etatDirection in [1] and app.user.agent.direction.id !=line.id ) %}
+                    {% set z=z+1 %}
+                    <input id="B{{z}}" name="Dest[]" value="{{line.codeDc}}" type="checkbox">
+                    <label for="B{{z}}">{{line.sigle}}</label>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="form-group bien">
+            <font size="+1"><b>SERVICE RATTACHES</b></font>
+            <br>
+
+            {% for line in dirservice %}
+                {% if(line.etatDirection in [0] and app.user.agent.direction.id !=line.id ) %}
+                    {% set z=z+1 %}
+                    <input id="B{{z}}" name="Dest[]" value="{{line.codeDc}}" type="checkbox">
+                    <label for="B{{z}}">{{line.sigle}}</label>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+
+
+
+{% endmacro %}
+
+{% macro apercu(piecejointe) %}
+    {% if piecejointe !=null and piecejointe is defined %}
+        <a target="_blank" href="{{vich_uploader_asset(piecejointe, 'imageFile')}}" title="Télécharger" class="red tooltip-info" data-rel="tooltip" data-original-title="Télécharger"><i class="ace-icon fa fa-download bigger-130"></i>Télécharger</a>
+            &nbsp;&nbsp;{{fonctionbase.testonline(piecejointe.imageName,vich_uploader_asset(piecejointe, 'imageFile'))|raw}}
+        {% endif %}
+{% endmacro %}
+{% macro div_apercu() %}
+    <script type="text/javascript">
+        function pop_apercu(txt) {
+            var chkbox = document.getElementById("lg1234");
+            var chks = "<iframe style='height: 100% !important; width: 100% !important' class='iframepop' src='" + txt + "'></iframe>";
+            chkbox.innerHTML = chks;
+            $("a#alg123").fancybox({"hideOnContentClick": false}).trigger("click");
+        }
+    </script>
+    <div id="titlediv123"><a id="alg123" href="#lg1234" title=""></div>
+    <div id="lg1234" style="display: none; height: 1000px !important; width: 1000px !important"></div>
+
+{% endmacro%}
+{% macro remaining_time(timelimit, todaysdate) %}
+
+{% set difference = date(timelimit).diff(date(todaysdate)) %}
+{% set leftDays = difference.d %}
+{% set leftMonths = difference.m %}
+{% set leftYears = difference.y %}
+
+{% set etat = '' %}
+{% set etatmois = '' %}
+{% set etatday = '' %}
+
+    
+                {% if leftYears == 1 %}
+				{% set etat= leftYears ~ ' an'%}
+        
+                {% elseif leftYears >= 2  %} 
+				{% set etat= leftYears ~ ' ans'%}
+                {% endif %}
+
+                {% if leftMonths >= 1 %}
+				{% set etatmois = leftMonths ~ ' mois'%}
+                {% endif %}
+				
+				
+                {% if leftDays == 0 or leftDays == 1 %}
+				{% set etatday = leftDays ~ ' jour'%} 
+                {% elseif leftDays > 1 %}
+                {% set etatday = leftDays ~ ' jours'%} 
+                {% endif %}
+				
+
+	{% if timelimit|date("Y-m-d") >= todaysdate|date("Y-m-d") %}
+		<font color="blue"><b>{{etat}} {{etatmois}} {{etatday}} restant</b></font>
+	{% elseif timelimit|date("Y-m-d") < todaysdate|date("Y-m-d") %}
+		<font color="red">expiré depuis {{etat}} {{etatmois}} {{etatday}} </font>
+    {% endif %}
+
+{% endmacro %}
